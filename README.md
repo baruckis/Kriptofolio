@@ -20,7 +20,7 @@ In the first part we learn and plan our project instead of writing new code. Tha
 
 ## License
 
-    Copyright 2018 Andrius Baruckis www.baruckis.com | www.mycryptocoinsapp.com
+    Copyright 2018 Andrius Baruckis www.baruckis.com | mycryptocoins.baruckis.com
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
