@@ -14,7 +14,7 @@ Blog posts series: https://www.baruckis.com/android/my-crypto-coins-app-series
 
 ## License
 
-    Copyright 2018 Andrius Baruckis www.baruckis.com | www.mycryptocoinsapp.com
+    Copyright 2018 Andrius Baruckis www.baruckis.com | mycryptocoins.baruckis.com
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
