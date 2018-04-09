@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright 2018 Andrius Baruckis www.baruckis.com | www.mycryptocoinsapp.com
+  ~ Copyright 2018 Andrius Baruckis www.baruckis.com | mycryptocoins.baruckis.com
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -16,7 +16,26 @@
   -->
 
 <resources>
+
+    <color name="colorForMainTopBar">@color/colorPrimary</color>
+
+    <color name="colorForMainCollapsingBar">@color/colorPrimary</color>
+    <color name="colorForMainCollapsingBarScrim">@color/colorPrimaryDark</color>
+
+    <color name="colorForMainColumnNames">@color/colorNavy</color>
+    <color name="colorForMainColumnNamesText">@color/colorWhite</color>
+
+    <color name="colorForMainListBackground">@color/colorLightGrey</color>
+    <color name="colorForMainListItemBackground">@color/colorWhite</color>
+    <color name="colorForMainListItemText">@android:color/tertiary_text_dark</color>
+
     <color name="colorPrimary">#009688</color>
     <color name="colorPrimaryDark">#00796B</color>
     <color name="colorAccent">#FF4081</color>
+
+    <color name="colorWhite">#ffffffff</color>
+    <color name="colorLightGrey">#f5f5f5</color>
+    <color name="colorDarkGrey">#aaa</color>
+    <color name="colorNavy">#01385e</color>
+
 </resources>

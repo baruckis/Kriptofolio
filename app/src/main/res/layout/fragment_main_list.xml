@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright 2018 Andrius Baruckis www.baruckis.com | mycryptocoins.baruckis.com
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.baruckis.mycryptocoins.MainList.MainActivityListFragment"
+    tools:showIn="@layout/activity_main">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/cardview_column_names_height"
+        android:layout_marginEnd="@dimen/cardview_column_names_outer_margin"
+        android:layout_marginStart="@dimen/cardview_column_names_outer_margin"
+        android:layout_marginTop="@dimen/cardview_column_names_outer_margin"
+        app:cardBackgroundColor="@color/colorForMainColumnNames">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="@dimen/cardview_column_names_inner_margin"
+            android:layout_marginStart="@dimen/cardview_column_names_inner_margin"
+            android:paddingTop="@dimen/cardview_column_names_outer_margin"
+            android:paddingBottom="@dimen/cardview_column_names_outer_margin">
+
+            <android.support.constraint.Guideline
+                android:id="@+id/guideline1_fixed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_begin="@dimen/cardview_list_item_image_icon_width_height" />
+
+            <android.support.constraint.Guideline
+                android:id="@+id/guideline1_percent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="@dimen/guide1_percent" />
+
+            <android.support.constraint.Guideline
+                android:id="@+id/guideline2_percent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="@dimen/guide2_percent" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/text_column_coin_ranking"
+                style="@style/MainListColumnNamesText"
+                android:lines="1"
+                android:text="@string/string_column_coin_ranking"
+                android:textStyle="bold"
+                android:textAlignment="center"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/guideline1_fixed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/text_column_coin_name_amount_symbol"
+                style="@style/MainListColumnNamesText"
+                android:layout_marginEnd="@dimen/cardview_column_names_text_between_margin"
+                android:layout_marginStart="@dimen/cardview_column_names_outer_margin"
+                android:text="@string/string_column_coin_crypto_hold_amount_symbol"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/guideline1_percent"
+                app:layout_constraintStart_toEndOf="@+id/guideline1_fixed"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/text_column_coin_fiat_btc_price"
+                style="@style/MainListColumnNamesText"
+                android:layout_marginEnd="@dimen/cardview_column_names_text_between_margin"
+                android:layout_marginStart="@dimen/cardview_column_names_text_between_margin"
+                android:text="@string/string_column_coin_fiat_price_amount"
+                android:textAlignment="center"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/guideline2_percent"
+                app:layout_constraintStart_toStartOf="@+id/guideline1_percent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/text_column_coin_change_24h_1h_7d"
+                style="@style/MainListColumnNamesText"
+                android:layout_marginStart="@dimen/cardview_column_names_text_between_margin"
+                android:text="@string/string_column_coin_change_24h_1h_7d"
+                android:lines="3"
+                android:textAlignment="textEnd"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/guideline2_percent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </android.support.constraint.ConstraintLayout>
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rec_fragment_main_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorForMainListBackground"
+            android:clipToPadding="false"
+            android:paddingBottom="72dp"
+            android:paddingTop="5dp"
+            android:scrollbarStyle="outsideOverlay"
+            android:scrollbars="vertical" />
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+</LinearLayout>

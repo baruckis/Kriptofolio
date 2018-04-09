@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2018 Andrius Baruckis www.baruckis.com | www.mycryptocoinsapp.com
+  ~ Copyright 2018 Andrius Baruckis www.baruckis.com | mycryptocoins.baruckis.com
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -15,5 +15,27 @@
   -->
 
 <resources>
+
+    <dimen name="app_bar_layout_height">250dp</dimen>
+
+    <dimen name="collapsing_toolbar_layout_inner_margin">20dp</dimen>
+    <dimen name="collapsing_toolbar_layout_text_between_margin">8dp</dimen>
+    <dimen name="collapsing_toolbar_layout_spinner_dropdown_width">60dp</dimen>
+
+    <dimen name="cardview_column_names_height">60dp</dimen>
+    <dimen name="cardview_column_names_outer_margin">8dp</dimen>
+    <dimen name="cardview_column_names_inner_margin">12dp</dimen>
+    <dimen name="cardview_column_names_text_between_margin">4dp</dimen>
+
+    <dimen name="cardview_list_item_outer_start_end_margin">12dp</dimen>
+    <dimen name="cardview_list_item_outer_top_bottom_margin">5dp</dimen>
+    <dimen name="cardview_list_item_inner_margin">8dp</dimen>
+    <dimen name="cardview_list_item_text_between_margin">4dp</dimen>
+    <dimen name="cardview_list_item_image_icon_width_height">40dp</dimen>
+
+    <dimen name="guide1_percent">0.42</dimen>
+    <dimen name="guide2_percent">0.75</dimen>
+
     <dimen name="fab_margin">16dp</dimen>
+
 </resources>

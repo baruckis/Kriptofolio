@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2018 Andrius Baruckis www.baruckis.com | www.mycryptocoinsapp.com
+  ~ Copyright 2018 Andrius Baruckis www.baruckis.com | mycryptocoins.baruckis.com
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.baruckis.mycryptocoins.MainActivity">
+    tools:context="com.baruckis.mycryptocoins.MainList.MainActivity">
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"

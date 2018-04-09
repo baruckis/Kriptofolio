@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2018 Andrius Baruckis www.baruckis.com | www.mycryptocoinsapp.com
+  ~ Copyright 2018 Andrius Baruckis www.baruckis.com | mycryptocoins.baruckis.com
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -15,6 +15,69 @@
   -->
 
 <resources>
-    <string name="app_name">My Crypto Coins</string>
-    <string name="action_settings">Settings</string>
+    <string name="app_name">"My Crypto Coins"</string>
+    <string name="action_settings">"Settings"</string>
+
+    <string name="string_total_value_on_date_time">"Total holdings value"</string>
+    <string name="string_total_value_change_24h">"24h $ 0.00"</string>
+    <string name="string_separator_value">"/"</string>
+    <string name="string_crypto_value">"₿ 0.00000000"</string>
+    <string name="string_fiat_value">"$ 0.00"</string>
+    <string name="string_separator_code">"/"</string>
+    <string name="string_crypto_code">"BTC"</string>
+
+    <string name="string_column_coin_ranking">"↑↓"</string>
+    <string name="string_column_coin_crypto_hold_amount_symbol">"Crypto coin\nAmount &amp; symbol"</string>
+    <string name="string_column_coin_fiat_price_amount">"Price $\nAmount $"</string>
+    <string name="string_column_coin_change_24h_1h_7d">"± price % 1h / 7d\n± price % 24h\n± amount $ 24h"</string>
+
+    <string name="sample_text_total_value_on_date_time">"Total holdings value (11/03/2018 12:55:08)"</string>
+    <string name="sample_text_total_value_change_24h">"24h $ +1538.00"</string>
+    <string name="sample_text_crypto_value">"₿ 1.00000000"</string>
+    <string name="sample_text_fiat_value">"$ 7,618.85"</string>
+
+    <string name="sample_text_item_name">"Quantum Resistant Ledger"</string>
+    <string name="sample_text_item_ranking">"1001"</string>
+    <string name="sample_text_item_amount_symbol">"0.56822348 BITSILVER"</string>
+    <string name="sample_text_item_price_fiat">"94,893,149,774.13 USD"</string>
+    <string name="sample_text_item_amount_fiat">"20,758,463.13 USD"</string>
+    <string name="sample_text_item_price_percent_change_1h_7d">"-901.94% / -10909.09%"</string>
+    <string name="sample_text_item_price_percent_change_24h">"+4.25%"</string>
+    <string name="sample_text_item_amount_fiat_change_24h">"+1,053.12 USD"</string>
+
+    <string-array name="fiat_currency_array">
+        <item>"USD"</item>
+        <item>"AUD"</item>
+        <item>"BRL"</item>
+        <item>"CAD"</item>
+        <item>"CHF"</item>
+        <item>"CLP"</item>
+        <item>"CNY"</item>
+        <item>"CZK"</item>
+        <item>"DKK"</item>
+        <item>"EUR"</item>
+        <item>"GBP"</item>
+        <item>"HKD"</item>
+        <item>"HUF"</item>
+        <item>"IDR"</item>
+        <item>"ILS"</item>
+        <item>"INR"</item>
+        <item>"JPY"</item>
+        <item>"KRW"</item>
+        <item>"MXN"</item>
+        <item>"MYR"</item>
+        <item>"NOK"</item>
+        <item>"NZD"</item>
+        <item>"PHP"</item>
+        <item>"PKR"</item>
+        <item>"PLN"</item>
+        <item>"RUB"</item>
+        <item>"SEK"</item>
+        <item>"SGD"</item>
+        <item>"THB"</item>
+        <item>"TRY"</item>
+        <item>"TWD"</item>
+        <item>"ZAR"</item>
+    </string-array>
+
 </resources>

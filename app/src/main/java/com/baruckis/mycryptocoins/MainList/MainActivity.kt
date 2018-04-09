@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Andrius Baruckis www.baruckis.com | www.mycryptocoinsapp.com
+ * Copyright 2018 Andrius Baruckis www.baruckis.com | mycryptocoins.baruckis.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-package com.baruckis.mycryptocoins
+package com.baruckis.mycryptocoins.MainList
 
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import com.baruckis.mycryptocoins.R
 
 import kotlinx.android.synthetic.main.activity_main.*
 
