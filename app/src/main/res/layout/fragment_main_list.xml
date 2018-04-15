@@ -25,40 +25,40 @@
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="@dimen/cardview_column_names_height"
-        android:layout_marginEnd="@dimen/cardview_column_names_outer_margin"
-        android:layout_marginStart="@dimen/cardview_column_names_outer_margin"
-        android:layout_marginTop="@dimen/cardview_column_names_outer_margin"
+        android:layout_height="@dimen/main_cardview_column_names_height"
+        android:layout_marginEnd="@dimen/main_cardview_column_names_outer_margin"
+        android:layout_marginStart="@dimen/main_cardview_column_names_outer_margin"
+        android:layout_marginTop="@dimen/main_cardview_column_names_outer_margin"
         app:cardBackgroundColor="@color/colorForMainColumnNames">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginEnd="@dimen/cardview_column_names_inner_margin"
-            android:layout_marginStart="@dimen/cardview_column_names_inner_margin"
-            android:paddingTop="@dimen/cardview_column_names_outer_margin"
-            android:paddingBottom="@dimen/cardview_column_names_outer_margin">
+            android:layout_marginEnd="@dimen/main_cardview_column_names_inner_margin"
+            android:layout_marginStart="@dimen/main_cardview_column_names_inner_margin"
+            android:paddingTop="@dimen/main_cardview_column_names_outer_margin"
+            android:paddingBottom="@dimen/main_cardview_column_names_outer_margin">
 
             <android.support.constraint.Guideline
                 android:id="@+id/guideline1_fixed"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_begin="@dimen/cardview_list_item_image_icon_width_height" />
+                app:layout_constraintGuide_begin="@dimen/main_cardview_list_item_image_icon_width_height" />
 
             <android.support.constraint.Guideline
                 android:id="@+id/guideline1_percent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_percent="@dimen/guide1_percent" />
+                app:layout_constraintGuide_percent="@dimen/main_guide1_percent" />
 
             <android.support.constraint.Guideline
                 android:id="@+id/guideline2_percent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_percent="@dimen/guide2_percent" />
+                app:layout_constraintGuide_percent="@dimen/main_guide2_percent" />
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/text_column_coin_ranking"
@@ -75,8 +75,8 @@
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/text_column_coin_name_amount_symbol"
                 style="@style/MainListColumnNamesText"
-                android:layout_marginEnd="@dimen/cardview_column_names_text_between_margin"
-                android:layout_marginStart="@dimen/cardview_column_names_outer_margin"
+                android:layout_marginEnd="@dimen/main_cardview_column_names_text_between_margin"
+                android:layout_marginStart="@dimen/main_cardview_column_names_outer_margin"
                 android:text="@string/string_column_coin_crypto_hold_amount_symbol"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/guideline1_percent"
@@ -86,8 +86,8 @@
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/text_column_coin_fiat_btc_price"
                 style="@style/MainListColumnNamesText"
-                android:layout_marginEnd="@dimen/cardview_column_names_text_between_margin"
-                android:layout_marginStart="@dimen/cardview_column_names_text_between_margin"
+                android:layout_marginEnd="@dimen/main_cardview_column_names_text_between_margin"
+                android:layout_marginStart="@dimen/main_cardview_column_names_text_between_margin"
                 android:text="@string/string_column_coin_fiat_price_amount"
                 android:textAlignment="center"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -98,7 +98,7 @@
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/text_column_coin_change_24h_1h_7d"
                 style="@style/MainListColumnNamesText"
-                android:layout_marginStart="@dimen/cardview_column_names_text_between_margin"
+                android:layout_marginStart="@dimen/main_cardview_column_names_text_between_margin"
                 android:text="@string/string_column_coin_change_24h_1h_7d"
                 android:lines="3"
                 android:textAlignment="textEnd"

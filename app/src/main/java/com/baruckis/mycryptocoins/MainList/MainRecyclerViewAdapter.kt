@@ -24,15 +24,15 @@ import android.widget.TextView
 import com.baruckis.mycryptocoins.R
 
 
-class MainCustomAdapter(val dataList: ArrayList<String>) : RecyclerView.Adapter<MainCustomAdapter.CustomViewHolder>() {
+class MainRecyclerViewAdapter(val dataList: ArrayList<String>) : RecyclerView.Adapter<MainRecyclerViewAdapter.CustomViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolder {
-        val v = LayoutInflater.from(parent?.context).inflate(R.layout.fragment_main_list_item, parent, false)
+        val v = LayoutInflater.from(parent.context).inflate(R.layout.fragment_main_list_item, parent, false)
         return CustomViewHolder(v)
     }
 
     override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
-        holder?.txtName?.text = dataList[position]
+        holder.txtName?.text = dataList[position]
     }
 
     override fun getItemCount(): Int {
@@ -40,7 +40,7 @@ class MainCustomAdapter(val dataList: ArrayList<String>) : RecyclerView.Adapter<
     }
 
 
-    class CustomViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class CustomViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         val txtName = itemView.findViewById<TextView>(R.id.item_name)
     }

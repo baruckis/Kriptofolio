@@ -29,6 +29,12 @@
     <color name="colorForMainListItemBackground">@color/colorWhite</color>
     <color name="colorForMainListItemText">@android:color/tertiary_text_dark</color>
 
+    <color name="colorForAddSearchListItemText">@android:color/tertiary_text_dark</color>
+
+    <color name="colorTintForFab">@color/colorWhite</color>
+    <color name="colorTintForSearchToolbar">@color/colorWhite</color>
+    <color name="colorForPreferenceIcon">@color/colorPrimary</color>
+
     <color name="colorPrimary">#009688</color>
     <color name="colorPrimaryDark">#00796B</color>
     <color name="colorAccent">#FF4081</color>

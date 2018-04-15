@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright 2018 Andrius Baruckis www.baruckis.com | mycryptocoins.baruckis.com
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/add_search_list_item_inner_margin">
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/item_ranking"
+        style="@style/AddSearchListItemText"
+        android:layout_width="40dp"
+        android:layout_marginEnd="@dimen/add_search_list_item_text_between_margin"
+        android:text="@string/sample_text_item_ranking"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/item_image_icon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/sample_text_item_ranking" />
+
+    <ImageView
+        android:id="@+id/item_image_icon"
+        android:layout_width="@dimen/main_cardview_list_item_image_icon_width_height"
+        android:layout_height="@dimen/main_cardview_list_item_image_icon_width_height"
+        android:layout_marginEnd="@dimen/add_search_list_item_text_between_margin"
+        android:layout_marginStart="@dimen/add_search_list_item_text_between_margin"
+        android:background="@color/colorDarkGrey"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/item_name"
+        app:layout_constraintStart_toEndOf="@+id/item_ranking"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/item_name"
+        style="@style/AddSearchListItemText"
+        android:layout_marginEnd="@dimen/add_search_list_item_text_between_margin_2x"
+        android:layout_marginStart="@dimen/add_search_list_item_text_between_margin"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/item_symbol"
+        app:layout_constraintStart_toEndOf="@+id/item_image_icon"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/sample_text_item_name" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/item_symbol"
+        style="@style/AddSearchListItemText"
+        android:text="@string/sample_text_item_symbol"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/sample_text_item_symbol" />
+
+</android.support.constraint.ConstraintLayout>

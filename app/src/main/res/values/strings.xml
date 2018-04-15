@@ -14,8 +14,16 @@
   ~ limitations under the License.
   -->
 
+<!DOCTYPE resources [<!ENTITY app_version "1.0"><!ENTITY usd "USD"><!ENTITY aud "AUD"><!ENTITY brl "BRL"><!ENTITY cad "CAD"><!ENTITY chf "CHF"><!ENTITY clp "CLP"><!ENTITY cny "CNY"><!ENTITY czk "CZK"><!ENTITY dkk "DKK"><!ENTITY eur "EUR"><!ENTITY gbp "GBP"><!ENTITY hkd "HKD"><!ENTITY huf "HUF"><!ENTITY idr "IDR"><!ENTITY ils "ILS"><!ENTITY inr "INR"><!ENTITY jpy "JPY"><!ENTITY krw "KRW"><!ENTITY mxn "MXN"><!ENTITY myr "MYR"><!ENTITY nok "NOK"><!ENTITY nzd "NZD"><!ENTITY php "PHP"><!ENTITY pkr "PKR"><!ENTITY pln "PLN"><!ENTITY rub "RUB"><!ENTITY sek "SEK"><!ENTITY sgd "SGD"><!ENTITY thb "THB"><!ENTITY try "TRY"><!ENTITY twd "TWD"><!ENTITY zar "ZAR">]>
+
 <resources>
+
+    <!-- Strings related to Main Activity -->
+
     <string name="app_name">"My Crypto Coins"</string>
+
+    <string name="app_version">&app_version;</string>
+
     <string name="action_settings">"Settings"</string>
 
     <string name="string_total_value_on_date_time">"Total holdings value"</string>
@@ -46,38 +54,200 @@
     <string name="sample_text_item_amount_fiat_change_24h">"+1,053.12 USD"</string>
 
     <string-array name="fiat_currency_array">
-        <item>"USD"</item>
-        <item>"AUD"</item>
-        <item>"BRL"</item>
-        <item>"CAD"</item>
-        <item>"CHF"</item>
-        <item>"CLP"</item>
-        <item>"CNY"</item>
-        <item>"CZK"</item>
-        <item>"DKK"</item>
-        <item>"EUR"</item>
-        <item>"GBP"</item>
-        <item>"HKD"</item>
-        <item>"HUF"</item>
-        <item>"IDR"</item>
-        <item>"ILS"</item>
-        <item>"INR"</item>
-        <item>"JPY"</item>
-        <item>"KRW"</item>
-        <item>"MXN"</item>
-        <item>"MYR"</item>
-        <item>"NOK"</item>
-        <item>"NZD"</item>
-        <item>"PHP"</item>
-        <item>"PKR"</item>
-        <item>"PLN"</item>
-        <item>"RUB"</item>
-        <item>"SEK"</item>
-        <item>"SGD"</item>
-        <item>"THB"</item>
-        <item>"TRY"</item>
-        <item>"TWD"</item>
-        <item>"ZAR"</item>
+        <item>"&usd;"</item>
+        <item>"&aud;"</item>
+        <item>"&brl;"</item>
+        <item>"&cad;"</item>
+        <item>"&chf;"</item>
+        <item>"&clp;"</item>
+        <item>"&cny;"</item>
+        <item>"&czk;"</item>
+        <item>"&dkk;"</item>
+        <item>"&eur;"</item>
+        <item>"&gbp;"</item>
+        <item>"&hkd;"</item>
+        <item>"&huf;"</item>
+        <item>"&idr;"</item>
+        <item>"&ils;"</item>
+        <item>"&inr;"</item>
+        <item>"&jpy;"</item>
+        <item>"&krw;"</item>
+        <item>"&mxn;"</item>
+        <item>"&myr;"</item>
+        <item>"&nok;"</item>
+        <item>"&nzd;"</item>
+        <item>"&php;"</item>
+        <item>"&pkr;"</item>
+        <item>"&pln;"</item>
+        <item>"&rub;"</item>
+        <item>"&sek;"</item>
+        <item>"&sgd;"</item>
+        <item>"&thb;"</item>
+        <item>"&try;"</item>
+        <item>"&twd;"</item>
+        <item>"&zar;"</item>
     </string-array>
+
+
+    <!-- Strings related to Add Search Activity -->
+
+    <string name="activity_add_search_title">"Add crypto coin(-s)"</string>
+    <string name="activity_add_search_subtitle">"All cryptocurrencies by ranking"</string>
+
+    <string name="action_search">"Search"</string>
+
+    <string name="search_hint">"Search for specific coin…"</string>
+
+    <string name="sample_text_item_symbol">"BITSILVER"</string>
+
+    <string name="title_activity_settings">"Settings"</string>
+
+
+    <!-- Strings related to Settings -->
+
+    <string name="pref_general_category_title">"General"</string>
+
+    <string name="pref_language_title">"Language"</string>
+
+    <string name="pref_default_language_entry">"English"</string>
+    <string name="pref_default_language_value">"EN"</string>
+
+    <string-array name="pref_language_list_entries">
+        <item>"English"</item>
+        <item>"Lietuvių"</item>
+    </string-array>
+
+    <string-array name="pref_language_list_values">
+        <item>"EN"</item>
+        <item>"LT"</item>
+    </string-array>
+
+
+    <string name="pref_fiat_currency_title">"Fiat currency"</string>
+
+    <string name="pref_default_fiat_currency_entry">"&eur; - Euro"</string>
+    <string name="pref_default_fiat_currency_value">"&eur;"</string>
+
+    <string-array name="pref_fiat_currency_list_entries">
+        <item>"&usd; - US Dollar"</item>
+        <item>"&aud; - Australian Dollar"</item>
+        <item>"&brl; - Brazilian Real"</item>
+        <item>"&cad; - Canadian Dollar"</item>
+        <item>"&chf; - Swiss Franc"</item>
+        <item>"&clp; - Chilean Peso"</item>
+        <item>"&cny; - Chinese Yuan Renminbi"</item>
+        <item>"&czk; - Czech Koruna"</item>
+        <item>"&dkk; - Danish Krone"</item>
+        <item>"&eur; - Euro"</item>
+        <item>"&gbp; - British Pound"</item>
+        <item>"&hkd; - Hong Kong Dollar"</item>
+        <item>"&huf; - Hungarian Forint"</item>
+        <item>"&idr; - Indonesian Rupiah"</item>
+        <item>"&ils; - Israeli Shekel"</item>
+        <item>"&inr; - Indian Rupee"</item>
+        <item>"&jpy; - Japanese Yen"</item>
+        <item>"&krw; - South Korean Won"</item>
+        <item>"&mxn; - Mexican Peso"</item>
+        <item>"&myr; - Malaysian Ringgit"</item>
+        <item>"&nok; - Norwegian Krone"</item>
+        <item>"&nzd; - New Zealand Dollar"</item>
+        <item>"&php; - Philippine Piso"</item>
+        <item>"&pkr; - Pakistani Rupee"</item>
+        <item>"&pln; - Polish Zloty"</item>
+        <item>"&rub; - Russian Ruble"</item>
+        <item>"&sek; - Swedish Krona"</item>
+        <item>"&sgd; - Singapore Dollar"</item>
+        <item>"&thb; - Thai Baht"</item>
+        <item>"&try; - Turkish Lira"</item>
+        <item>"&twd; - Taiwan New Dollar"</item>
+        <item>"&zar; - South African Rand"</item>
+    </string-array>
+
+    <string-array name="pref_fiat_currency_list_values">
+        <item>"&usd;"</item>
+        <item>"&aud;"</item>
+        <item>"&brl;"</item>
+        <item>"&cad;"</item>
+        <item>"&chf;"</item>
+        <item>"&clp;"</item>
+        <item>"&cny;"</item>
+        <item>"&czk;"</item>
+        <item>"&dkk;"</item>
+        <item>"&eur;"</item>
+        <item>"&gbp;"</item>
+        <item>"&hkd;"</item>
+        <item>"&huf;"</item>
+        <item>"&idr;"</item>
+        <item>"&ils;"</item>
+        <item>"&inr;"</item>
+        <item>"&jpy;"</item>
+        <item>"&krw;"</item>
+        <item>"&mxn;"</item>
+        <item>"&myr;"</item>
+        <item>"&nok;"</item>
+        <item>"&nzd;"</item>
+        <item>"&php;"</item>
+        <item>"&pkr;"</item>
+        <item>"&pln;"</item>
+        <item>"&rub;"</item>
+        <item>"&sek;"</item>
+        <item>"&sgd;"</item>
+        <item>"&thb;"</item>
+        <item>"&try;"</item>
+        <item>"&twd;"</item>
+        <item>"&zar;"</item>
+    </string-array>
+
+
+    <string name="pref_date_format_title">"Date format"</string>
+
+    <string name="pref_default_date_format_entry">"12/31/2017"</string>
+    <string name="pref_default_date_format_value">"dd/mm/yyyy"</string>
+
+    <string-array name="pref_date_format_list_entries">
+        <item>"12/31/2017"</item>
+        <item>"2017/12/31"</item>
+    </string-array>
+
+    <string-array name="pref_date_format_list_values">
+        <item>"dd/mm/yyyy"</item>
+        <item>"yyyy/mm/dd"</item>
+    </string-array>
+
+    <string name="pref_24h_switch_title">"Use 24-hour format"</string>
+    <string name="pref_24h_switch_summary">"00:00"</string>
+
+
+    <string name="pref_support_category_title">"Support"</string>
+
+    <string name="pref_rate_app_title">"Rate app in Google Play"</string>
+
+    <string name="pref_share_app_title">"Share with your friends"</string>
+
+    <string name="pref_donate_view_title">"Donate your view"</string>
+    <string name="pref_donate_view_summary">"Just watch short video ad"</string>
+
+    <string name="pref_donate_crypto_title">"Donate with crypto"</string>
+    <string name="pref_donate_crypto_summary">"Send your Bitcoin or Etherium"</string>
+
+
+    <string name="pref_support_about_title">"About"</string>
+
+    <string name="pref_website_title">"Website"</string>
+    <string name="pref_website_summary">"mycryptocoins.baruckis.com"</string>
+
+    <string name="pref_author_title">"Author Andrius Baruckis"</string>
+    <string name="pref_author_summary">"www.baruckis.com"</string>
+
+    <string name="pref_source_title">"View source on"</string>
+    <string name="pref_source_summary">"GitHub"</string>
+
+    <string name="pref_open_source_title">"Used open source licenses"</string>
+
+    <string name="pref_license_title">"License"</string>
+    <string name="pref_license_summary">"Copyright"</string>
+
+    <string name="pref_app_title">@string/app_name</string>
+    <string name="pref_app_summary">"Version: &app_version;"</string>
 
 </resources>

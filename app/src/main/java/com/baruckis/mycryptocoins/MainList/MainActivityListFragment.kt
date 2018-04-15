@@ -16,8 +16,8 @@
 
 package com.baruckis.mycryptocoins.MainList
 
-import android.support.v4.app.Fragment
 import android.os.Bundle
+import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -31,7 +31,7 @@ import com.baruckis.mycryptocoins.R
 class MainActivityListFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
-    private lateinit var recyclerAdapter: MainCustomAdapter
+    private lateinit var recyclerAdapter: MainRecyclerViewAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -73,7 +73,7 @@ class MainActivityListFragment : Fragment() {
         data.add("Verge")
 
         recyclerView.layoutManager = LinearLayoutManager(activity)
-        recyclerAdapter = MainCustomAdapter(data)
+        recyclerAdapter = MainRecyclerViewAdapter(data)
         recyclerView.adapter = recyclerAdapter
     }
 }

@@ -23,7 +23,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.1.0'
+        classpath 'com.android.tools.build:gradle:3.1.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 
         // NOTE: Do not place your application dependencies here; they belong
@@ -47,8 +47,8 @@ ext {
     // 3rd party libraries
 
     // Android
-    supportLibraryVersion = '27.1.0'
-    constraintLayoutVersion = '1.0.2'
+    supportLibraryVersion = '27.1.1'
+    constraintLayoutVersion = '1.1.0'
     archLifecycleVersion = '1.0.3'
     archLifecycleCompilerVersion = '1.0.0'
     archLifecycleExtensionsVersion = '1.0.0'

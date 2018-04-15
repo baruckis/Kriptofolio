@@ -46,6 +46,10 @@
         <item name="android:textColor">@color/colorForMainListItemText</item>
     </style>
 
+    <style name="AddSearchListItemText" parent="AutoSizeText">
+        <item name="android:textColor">@color/colorForAddSearchListItemText</item>
+    </style>
+
     <style name="AutoSizeText">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>

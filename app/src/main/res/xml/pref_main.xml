@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright 2018 Andrius Baruckis www.baruckis.com | mycryptocoins.baruckis.com
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <PreferenceCategory android:title="@string/pref_general_category_title">
+        <ListPreference
+            android:defaultValue="@string/pref_default_language_value"
+            android:entries="@array/pref_language_list_entries"
+            android:entryValues="@array/pref_language_list_values"
+            android:icon="@drawable/ic_translate"
+            android:key="language_list"
+            android:summary="@string/pref_default_language_entry"
+            android:title="@string/pref_language_title"
+            tools:summary="@string/pref_default_language_entry" />
+
+        <ListPreference
+            android:defaultValue="@string/pref_default_fiat_currency_value"
+            android:entries="@array/pref_fiat_currency_list_entries"
+            android:entryValues="@array/pref_fiat_currency_list_values"
+            android:icon="@drawable/ic_cash"
+            android:key="fiat_currency_list"
+            android:summary="@string/pref_default_fiat_currency_entry"
+            android:title="@string/pref_fiat_currency_title"
+            tools:summary="@string/pref_default_fiat_currency_entry" />
+
+        <ListPreference
+            android:defaultValue="@string/pref_default_date_format_value"
+            android:entries="@array/pref_date_format_list_entries"
+            android:entryValues="@array/pref_date_format_list_values"
+            android:icon="@drawable/ic_date_range"
+            android:key="date_format_list"
+            android:summary="@string/pref_default_date_format_entry"
+            android:title="@string/pref_date_format_title"
+            tools:summary="@string/pref_default_date_format_entry" />
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:icon="@drawable/ic_calendar_clock"
+            android:key="24h_switch"
+            android:summary="@string/pref_24h_switch_summary"
+            android:title="@string/pref_24h_switch_title" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/pref_support_category_title">
+
+        <Preference
+            android:icon="@drawable/ic_star"
+            android:title="@string/pref_rate_app_title" />
+
+        <Preference
+            android:icon="@drawable/ic_share"
+            android:title="@string/pref_share_app_title" />
+
+        <Preference
+            android:icon="@drawable/ic_attach_money"
+            android:summary="@string/pref_donate_view_summary"
+            android:title="@string/pref_donate_view_title" />
+
+        <Preference
+            android:icon="@drawable/ic_currency_btc"
+            android:summary="@string/pref_donate_crypto_summary"
+            android:title="@string/pref_donate_crypto_title" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/pref_support_about_title">
+
+        <Preference
+            android:icon="@drawable/ic_web"
+            android:summary="@string/pref_website_summary"
+            android:title="@string/pref_website_title" />
+
+        <Preference
+            android:icon="@drawable/ic_human_greeting"
+            android:summary="@string/pref_author_summary"
+            android:title="@string/pref_author_title" />
+
+        <Preference
+            android:icon="@drawable/ic_github_circle"
+            android:summary="@string/pref_source_summary"
+            android:title="@string/pref_source_title" />
+
+        <Preference
+            android:icon="@drawable/ic_file_multiple"
+            android:title="@string/pref_open_source_title" />
+
+        <Preference
+            android:icon="@drawable/ic_copyright"
+            android:summary="@string/pref_license_summary"
+            android:title="@string/pref_license_title" />
+
+        <Preference
+            android:icon="@drawable/ic_info_outline"
+            android:summary="@string/pref_app_summary"
+            android:title="@string/pref_app_title" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>
