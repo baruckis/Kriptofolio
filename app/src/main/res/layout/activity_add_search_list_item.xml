@@ -34,25 +34,22 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@string/sample_text_item_ranking" />
 
-    <ImageView
+    <eu.davidea.flipview.FlipView
         android:id="@+id/item_image_icon"
-        android:layout_width="@dimen/main_cardview_list_item_image_icon_width_height"
-        android:layout_height="@dimen/main_cardview_list_item_image_icon_width_height"
+        style="@style/FlipView"
         android:layout_marginEnd="@dimen/add_search_list_item_text_between_margin"
         android:layout_marginStart="@dimen/add_search_list_item_text_between_margin"
-        android:background="@color/colorDarkGrey"
+        android:clickable="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/item_name"
         app:layout_constraintStart_toEndOf="@+id/item_ranking"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="ContentDescription" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/item_name"
-        style="@style/AddSearchListItemText"
+        style="@style/AddSearchListItemPrimeText"
         android:layout_marginEnd="@dimen/add_search_list_item_text_between_margin_2x"
         android:layout_marginStart="@dimen/add_search_list_item_text_between_margin"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/item_symbol"
         app:layout_constraintStart_toEndOf="@+id/item_image_icon"
@@ -62,6 +59,7 @@
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/item_symbol"
         style="@style/AddSearchListItemText"
+        android:layout_marginEnd="@dimen/add_search_list_item_text_between_margin"
         android:text="@string/sample_text_item_symbol"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

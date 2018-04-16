@@ -23,6 +23,9 @@
     android:layout_marginEnd="@dimen/main_cardview_list_item_outer_start_end_margin"
     android:layout_marginStart="@dimen/main_cardview_list_item_outer_start_end_margin"
     android:layout_marginTop="@dimen/main_cardview_list_item_outer_top_bottom_margin"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true"
     app:cardBackgroundColor="@color/colorForMainListItemBackground">
 
     <android.support.constraint.ConstraintLayout
@@ -44,23 +47,22 @@
             android:orientation="vertical"
             app:layout_constraintGuide_percent="@dimen/main_guide2_percent" />
 
-        <ImageView
+        <eu.davidea.flipview.FlipView
             android:id="@+id/item_image_icon"
-            android:layout_width="@dimen/main_cardview_list_item_image_icon_width_height"
-            android:layout_height="@dimen/main_cardview_list_item_image_icon_width_height"
-            android:background="@color/colorDarkGrey"
+            style="@style/FlipView"
+            android:clickable="true"
+            android:focusable="true"
             app:layout_constraintBottom_toTopOf="@+id/item_ranking"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="ContentDescription" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/item_ranking"
             style="@style/MainListItemText"
-            android:text="@string/sample_text_item_ranking"
-            android:textAlignment="center"
             android:layout_marginEnd="@dimen/main_cardview_list_item_text_between_margin"
             android:layout_marginStart="@dimen/main_cardview_list_item_text_between_margin"
+            android:text="@string/sample_text_item_ranking"
+            android:textAlignment="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/item_image_icon"
             app:layout_constraintStart_toStartOf="@+id/item_image_icon"
@@ -69,10 +71,9 @@
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/item_name"
-            style="@style/MainListItemText"
+            style="@style/MainListItemPrimeText"
             android:layout_marginEnd="@dimen/main_cardview_list_item_text_between_margin"
             android:layout_marginStart="@dimen/main_cardview_list_item_inner_margin"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             app:layout_constraintBottom_toTopOf="@+id/item_amount_symbol"
             app:layout_constraintEnd_toStartOf="@+id/guideline1_percent"
             app:layout_constraintStart_toEndOf="@+id/item_image_icon"
@@ -90,6 +91,7 @@
             app:layout_constraintEnd_toStartOf="@+id/guideline1_percent"
             app:layout_constraintStart_toEndOf="@+id/item_image_icon"
             app:layout_constraintTop_toBottomOf="@+id/item_name"
+            android:textColor="@android:color/black"
             tools:text="@string/sample_text_item_amount_symbol" />
 
         <android.support.v7.widget.AppCompatTextView

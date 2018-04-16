@@ -44,6 +44,7 @@
     <string name="sample_text_crypto_value">"₿ 1.00000000"</string>
     <string name="sample_text_fiat_value">"$ 7,618.85"</string>
 
+    <string name="sample_text_item_icon">"MMM"</string>
     <string name="sample_text_item_name">"Quantum Resistant Ledger"</string>
     <string name="sample_text_item_ranking">"1001"</string>
     <string name="sample_text_item_amount_symbol">"0.56822348 BITSILVER"</string>

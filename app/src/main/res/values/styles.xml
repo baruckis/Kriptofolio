@@ -39,11 +39,23 @@
         <item name="android:lines">2</item>
         <item name="android:textAppearance">@style/TextAppearance.AppCompat.Small</item>
         <item name="android:textColor">@color/colorForMainColumnNamesText</item>
+        <item name="autoSizeMaxTextSize">14sp</item>
+    </style>
+
+    <style name="MainListItemPrimeText" parent="AutoSizeText">
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Medium</item>
+        <item name="android:textColor">@color/colorForMainListItemPrimeText</item>
     </style>
 
     <style name="MainListItemText" parent="AutoSizeText">
         <item name="android:textAppearance">@style/TextAppearance.AppCompat.Small</item>
         <item name="android:textColor">@color/colorForMainListItemText</item>
+        <item name="autoSizeMaxTextSize">14sp</item>
+    </style>
+
+    <style name="AddSearchListItemPrimeText" parent="AutoSizeText">
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Medium</item>
+        <item name="android:textColor">@color/colorForAddSearchListItemPrimeText</item>
     </style>
 
     <style name="AddSearchListItemText" parent="AutoSizeText">
@@ -59,6 +71,19 @@
         <item name="android:gravity">center_vertical</item>
         <item name="autoSizeTextType">uniform</item>
         <item name="autoSizeMinTextSize">7sp</item>
+    </style>
+
+    <style name="FlipView">
+        <item name="android:layout_height">@dimen/main_cardview_list_item_image_icon_width_height</item>
+        <item name="android:layout_width">@dimen/main_cardview_list_item_image_icon_width_height</item>
+        <item name="android:padding">4dp</item>
+        <item name="android:clipToPadding">false</item>
+        <item name="checked">false</item>
+        <item name="frontBackgroundColor">@color/colorForImageIconFrontBackground</item>
+        <item name="frontLayout">@layout/flipview_front_custom_text</item>
+        <item name="rearBackgroundColor">@color/colorForImageIconRearBackground</item>
+        <item name="rearImageAnimationDelay">0</item>
+        <item name="enableInitialAnimation">false</item>
     </style>
 
 </resources>

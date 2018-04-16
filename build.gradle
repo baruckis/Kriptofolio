@@ -44,7 +44,8 @@ task clean(type: Delete) {
 
 ext {
 
-    // 3rd party libraries
+    // 3rd party
+    flipViewVersion = '1.1.3'
 
     // Android
     supportLibraryVersion = '27.1.1'

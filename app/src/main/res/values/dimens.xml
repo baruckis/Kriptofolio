@@ -31,7 +31,7 @@
     <dimen name="main_cardview_list_item_outer_top_bottom_margin">5dp</dimen>
     <dimen name="main_cardview_list_item_inner_margin">8dp</dimen>
     <dimen name="main_cardview_list_item_text_between_margin">4dp</dimen>
-    <dimen name="main_cardview_list_item_image_icon_width_height">40dp</dimen>
+    <dimen name="main_cardview_list_item_image_icon_width_height">48dp</dimen>
 
     <dimen name="main_guide1_percent">0.42</dimen>
     <dimen name="main_guide2_percent">0.75</dimen>
