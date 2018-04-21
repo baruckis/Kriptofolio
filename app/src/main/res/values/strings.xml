@@ -14,7 +14,7 @@
   ~ limitations under the License.
   -->
 
-<!DOCTYPE resources [<!ENTITY app_version "1.0"><!ENTITY usd "USD"><!ENTITY aud "AUD"><!ENTITY brl "BRL"><!ENTITY cad "CAD"><!ENTITY chf "CHF"><!ENTITY clp "CLP"><!ENTITY cny "CNY"><!ENTITY czk "CZK"><!ENTITY dkk "DKK"><!ENTITY eur "EUR"><!ENTITY gbp "GBP"><!ENTITY hkd "HKD"><!ENTITY huf "HUF"><!ENTITY idr "IDR"><!ENTITY ils "ILS"><!ENTITY inr "INR"><!ENTITY jpy "JPY"><!ENTITY krw "KRW"><!ENTITY mxn "MXN"><!ENTITY myr "MYR"><!ENTITY nok "NOK"><!ENTITY nzd "NZD"><!ENTITY php "PHP"><!ENTITY pkr "PKR"><!ENTITY pln "PLN"><!ENTITY rub "RUB"><!ENTITY sek "SEK"><!ENTITY sgd "SGD"><!ENTITY thb "THB"><!ENTITY try "TRY"><!ENTITY twd "TWD"><!ENTITY zar "ZAR">]>
+<!DOCTYPE resources [<!ENTITY usd "USD"><!ENTITY aud "AUD"><!ENTITY brl "BRL"><!ENTITY cad "CAD"><!ENTITY chf "CHF"><!ENTITY clp "CLP"><!ENTITY cny "CNY"><!ENTITY czk "CZK"><!ENTITY dkk "DKK"><!ENTITY eur "EUR"><!ENTITY gbp "GBP"><!ENTITY hkd "HKD"><!ENTITY huf "HUF"><!ENTITY idr "IDR"><!ENTITY ils "ILS"><!ENTITY inr "INR"><!ENTITY jpy "JPY"><!ENTITY krw "KRW"><!ENTITY mxn "MXN"><!ENTITY myr "MYR"><!ENTITY nok "NOK"><!ENTITY nzd "NZD"><!ENTITY php "PHP"><!ENTITY pkr "PKR"><!ENTITY pln "PLN"><!ENTITY rub "RUB"><!ENTITY sek "SEK"><!ENTITY sgd "SGD"><!ENTITY thb "THB"><!ENTITY try "TRY"><!ENTITY twd "TWD"><!ENTITY zar "ZAR">]>
 
 <resources>
 
@@ -22,39 +22,39 @@
 
     <string name="app_name">"My Crypto Coins"</string>
 
-    <string name="app_version">&app_version;</string>
+    <string name="app_version" translatable="false">"v1.0.0"</string>
 
     <string name="action_settings">"Settings"</string>
 
     <string name="string_total_value_on_date_time">"Total holdings value"</string>
-    <string name="string_total_value_change_24h">"24h $ 0.00"</string>
-    <string name="string_separator_value">"/"</string>
-    <string name="string_crypto_value">"₿ 0.00000000"</string>
-    <string name="string_fiat_value">"$ 0.00"</string>
-    <string name="string_separator_code">"/"</string>
-    <string name="string_crypto_code">"BTC"</string>
+    <string name="string_total_value_change_24h">24 h $ 0.00</string>
+    <string name="string_separator_value" translatable="false">"/"</string>
+    <string name="string_crypto_value" translatable="false">"₿ 0.00000000"</string>
+    <string name="string_fiat_value" translatable="false">"$ 0.00"</string>
+    <string name="string_separator_code" translatable="false">"/"</string>
+    <string name="string_crypto_code" translatable="false">"BTC"</string>
 
-    <string name="string_column_coin_ranking">"↑↓"</string>
-    <string name="string_column_coin_crypto_hold_amount_symbol">"Crypto coin\nAmount &amp; symbol"</string>
+    <string name="string_column_coin_ranking" translatable="false">"↑↓"</string>
+    <string name="string_column_coin_crypto_hold_amount_symbol">"Crypto coin\nAmount &#38; symbol"</string>
     <string name="string_column_coin_fiat_price_amount">"Price $\nAmount $"</string>
-    <string name="string_column_coin_change_24h_1h_7d">"± price % 1h / 7d\n± price % 24h\n± amount $ 24h"</string>
+    <string name="string_column_coin_change_24h_1h_7d">"± price % 1 h / 7 d\n± price % 24 h\n± amount $ 24 h"</string>
 
     <string name="sample_text_total_value_on_date_time">"Total holdings value (11/03/2018 12:55:08)"</string>
-    <string name="sample_text_total_value_change_24h">"24h $ +1538.00"</string>
-    <string name="sample_text_crypto_value">"₿ 1.00000000"</string>
-    <string name="sample_text_fiat_value">"$ 7,618.85"</string>
+    <string name="sample_text_total_value_change_24h">"24 h $ +1538.00"</string>
+    <string name="sample_text_crypto_value" translatable="false">"₿ 1.00000000"</string>
+    <string name="sample_text_fiat_value" translatable="false">"$ 7,618.85"</string>
 
-    <string name="sample_text_item_icon">"MMM"</string>
-    <string name="sample_text_item_name">"Quantum Resistant Ledger"</string>
-    <string name="sample_text_item_ranking">"1001"</string>
-    <string name="sample_text_item_amount_symbol">"0.56822348 BITSILVER"</string>
-    <string name="sample_text_item_price_fiat">"94,893,149,774.13 USD"</string>
-    <string name="sample_text_item_amount_fiat">"20,758,463.13 USD"</string>
-    <string name="sample_text_item_price_percent_change_1h_7d">"-901.94% / -10909.09%"</string>
-    <string name="sample_text_item_price_percent_change_24h">"+4.25%"</string>
-    <string name="sample_text_item_amount_fiat_change_24h">"+1,053.12 USD"</string>
+    <string name="sample_text_item_icon" translatable="false">"MMM"</string>
+    <string name="sample_text_item_name" translatable="false">"Quantum Resistant Ledger"</string>
+    <string name="sample_text_item_ranking" translatable="false">"1001"</string>
+    <string name="sample_text_item_amount_symbol" translatable="false">"0.56822348 BITSILVER"</string>
+    <string name="sample_text_item_price_fiat" translatable="false">"94,893,149,774.13 USD"</string>
+    <string name="sample_text_item_amount_fiat" translatable="false">"20,758,463.13 USD"</string>
+    <string name="sample_text_item_price_percent_change_1h_7d" translatable="false">"-901.94% / -10909.09%"</string>
+    <string name="sample_text_item_price_percent_change_24h" translatable="false">"+4.25%"</string>
+    <string name="sample_text_item_amount_fiat_change_24h" translatable="false">"+1,053.12 USD"</string>
 
-    <string-array name="fiat_currency_array">
+    <string-array name="fiat_currency_array" translatable="false">
         <item>"&usd;"</item>
         <item>"&aud;"</item>
         <item>"&brl;"</item>
@@ -99,7 +99,7 @@
 
     <string name="search_hint">"Search for specific coin…"</string>
 
-    <string name="sample_text_item_symbol">"BITSILVER"</string>
+    <string name="sample_text_item_symbol" translatable="false">"BITSILVER"</string>
 
     <string name="title_activity_settings">"Settings"</string>
 
@@ -113,21 +113,22 @@
     <string name="pref_default_language_entry">"English"</string>
     <string name="pref_default_language_value">"EN"</string>
 
-    <string-array name="pref_language_list_entries">
+    <string-array name="pref_language_list_entries" translatable="false">
         <item>"English"</item>
+        <item>"עִברִית"</item>
         <item>"Lietuvių"</item>
     </string-array>
 
-    <string-array name="pref_language_list_values">
+    <string-array name="pref_language_list_values" translatable="false">
         <item>"EN"</item>
+        <item>"HE"</item>
         <item>"LT"</item>
     </string-array>
 
-
     <string name="pref_fiat_currency_title">"Fiat currency"</string>
 
-    <string name="pref_default_fiat_currency_entry">"&eur; - Euro"</string>
-    <string name="pref_default_fiat_currency_value">"&eur;"</string>
+    <string name="pref_default_fiat_currency_entry">"&usd; - US Dollar"</string>
+    <string name="pref_default_fiat_currency_value">"&usd;"</string>
 
     <string-array name="pref_fiat_currency_list_entries">
         <item>"&usd; - US Dollar"</item>
@@ -164,7 +165,7 @@
         <item>"&zar; - South African Rand"</item>
     </string-array>
 
-    <string-array name="pref_fiat_currency_list_values">
+    <string-array name="pref_fiat_currency_list_values" translatable="false">
         <item>"&usd;"</item>
         <item>"&aud;"</item>
         <item>"&brl;"</item>
@@ -199,24 +200,23 @@
         <item>"&zar;"</item>
     </string-array>
 
-
     <string name="pref_date_format_title">"Date format"</string>
 
-    <string name="pref_default_date_format_entry">"12/31/2017"</string>
-    <string name="pref_default_date_format_value">"dd/mm/yyyy"</string>
+    <string name="pref_default_date_format_entry" translatable="false">"12/31/2017"</string>
+    <string name="pref_default_date_format_value" translatable="false">"dd/mm/yyyy"</string>
 
-    <string-array name="pref_date_format_list_entries">
+    <string-array name="pref_date_format_list_entries" translatable="false">
         <item>"12/31/2017"</item>
         <item>"2017/12/31"</item>
     </string-array>
 
-    <string-array name="pref_date_format_list_values">
+    <string-array name="pref_date_format_list_values" translatable="false">
         <item>"dd/mm/yyyy"</item>
         <item>"yyyy/mm/dd"</item>
     </string-array>
 
     <string name="pref_24h_switch_title">"Use 24-hour format"</string>
-    <string name="pref_24h_switch_summary">"00:00"</string>
+    <string name="pref_24h_switch_summary" translatable="false">"00:00"</string>
 
 
     <string name="pref_support_category_title">"Support"</string>
@@ -238,17 +238,17 @@
     <string name="pref_website_summary">"mycryptocoins.baruckis.com"</string>
 
     <string name="pref_author_title">"Author Andrius Baruckis"</string>
-    <string name="pref_author_summary">"www.baruckis.com"</string>
+    <string name="pref_author_summary" translatable="false">"www.baruckis.com"</string>
 
     <string name="pref_source_title">"View source on"</string>
-    <string name="pref_source_summary">"GitHub"</string>
+    <string name="pref_source_summary" translatable="false">"GitHub"</string>
 
     <string name="pref_open_source_title">"Used open source licenses"</string>
 
     <string name="pref_license_title">"License"</string>
     <string name="pref_license_summary">"Copyright"</string>
 
-    <string name="pref_app_title">@string/app_name</string>
-    <string name="pref_app_summary">"Version: &app_version;"</string>
+    <string name="pref_app_title" translatable="false">@string/app_name</string>
+    <string name="pref_app_summary" translatable="false">@string/app_version</string>
 
 </resources>

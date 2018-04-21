@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2018 Andrius Baruckis www.baruckis.com | mycryptocoins.baruckis.com
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+
+    <!-- Strings related to Main Activity -->
+
+    <string name="app_name">"Mano Kripto Monetos"</string>
+
+    <string name="action_settings">"Nustatymai"</string>
+
+    <string name="string_total_value_on_date_time">"Bendra turima vertė"</string>
+    <string name="string_total_value_change_24h">"24 val $ 0.00"</string>
+
+    <string name="string_column_coin_crypto_hold_amount_symbol">"Kripto moneta\nKiekis &#38; simbolis"</string>
+    <string name="string_column_coin_fiat_price_amount">"Kaina $\nKiekis $"</string>
+    <string name="string_column_coin_change_24h_1h_7d">"± kaina % 1 val / 7 d\n± kaina % 24 val\n± kiekis $ 24 val"</string>
+
+    <string name="sample_text_total_value_on_date_time">"Bendra turima vertė (11/03/2018 12:55:08)"</string>
+    <string name="sample_text_total_value_change_24h">"24 val $ +1538.00"</string>
+
+
+    <!-- Strings related to Add Search Activity -->
+
+    <string name="activity_add_search_title">"Pridėk kripto monetą(-as)"</string>
+    <string name="activity_add_search_subtitle">"Visos kripto valiutos pagal reitingą"</string>
+
+    <string name="action_search">"Ieškoti"</string>
+
+    <string name="search_hint">"Ieškok konkrečios monetos…"</string>
+
+    <string name="title_activity_settings">"Nustatymai"</string>
+
+
+    <!-- Strings related to Settings -->
+
+    <string name="pref_general_category_title">"Bendrieji"</string>
+
+    <string name="pref_language_title">"Kalba"</string>
+
+    <string name="pref_default_language_entry">"Lietuvių"</string>
+    <string name="pref_default_language_value">"LT"</string>
+
+    <string name="pref_fiat_currency_title">"„Fiat“ valiuta"</string>
+
+    <string name="pref_default_fiat_currency_entry">"EUR - Euras"</string>
+    <string name="pref_default_fiat_currency_value">"EUR"</string>
+
+    <string-array name="pref_fiat_currency_list_entries">
+        <item>"USD - JAV doleris"</item>
+        <item>"AUD - Australijos doleris"</item>
+        <item>"BRL - Brazilijos realas"</item>
+        <item>"CAD - Kanados doleris"</item>
+        <item>"CHF - Šveicarijos frankas"</item>
+        <item>"CLP - Čilės pesas"</item>
+        <item>"CNY - Kinijos ženminbi juanis"</item>
+        <item>"CZK - Čekijos krona"</item>
+        <item>"DKK - Danijos krona"</item>
+        <item>"EUR - Euras"</item>
+        <item>"GBP - Didžiosios Britanijos svaras sterlingų"</item>
+        <item>"HKD - Honkongo doleris"</item>
+        <item>"HUF - Vengrijos forintas"</item>
+        <item>"IDR - Indonezijos rupija"</item>
+        <item>"ILS - Izraelio šekelis"</item>
+        <item>"INR - Indijos rupija"</item>
+        <item>"JPY - Japonijos jena"</item>
+        <item>"KRW - Pietų Korėjos vonas"</item>
+        <item>"MXN - Meksikos pesas"</item>
+        <item>"MYR - Malaizijos ringitas"</item>
+        <item>"NOK - Norvegijos krona"</item>
+        <item>"NZD - Naujosios Zelandijos doleris"</item>
+        <item>"PHP - Filipinų pesas"</item>
+        <item>"PKR - Pakistano rupija"</item>
+        <item>"PLN - Lenkijos zlotas"</item>
+        <item>"RUB - Rusijos rublis"</item>
+        <item>"SEK - Švedijos krona"</item>
+        <item>"SGD - Singapūro doleris"</item>
+        <item>"THB - Tailando batas"</item>
+        <item>"TRY - Turkijos lira"</item>
+        <item>"TWD - Taivano naujasis doleris"</item>
+        <item>"ZAR - Pietų Afrikos Respublikos randas"</item>
+    </string-array>
+
+    <string name="pref_date_format_title">"Datos formatas"</string>
+
+    <string name="pref_24h_switch_title">"Naudoti 24 valandų formatą"</string>
+
+
+    <string name="pref_support_category_title">"Parama"</string>
+
+    <string name="pref_rate_app_title">"Įvertink programą Google Play"</string>
+
+    <string name="pref_share_app_title">"Pasidalink su draugais"</string>
+
+    <string name="pref_donate_view_title">"Dovanok savo peržiūrą"</string>
+    <string name="pref_donate_view_summary">"Tiesiog peržiūrėk trumpą video reklamą"</string>
+
+    <string name="pref_donate_crypto_title">"Paaukok kripto"</string>
+    <string name="pref_donate_crypto_summary">"Pervesk savo Bitcoin arba Etherium"</string>
+
+
+    <string name="pref_support_about_title">"Apie"</string>
+
+    <string name="pref_website_title">"Interneto svetainė"</string>
+    <string name="pref_website_summary">"mycryptocoins.baruckis.com/lt"</string>
+
+    <string name="pref_author_title">"Autorius Andrius Baruckis"</string>
+
+    <string name="pref_source_title">"Pamatyk kodą"</string>
+
+    <string name="pref_open_source_title">"Naudojamo atvirojo kodo licencijos"</string>
+
+    <string name="pref_license_title">"Licencija"</string>
+    <string name="pref_license_summary">"Autorinės teisės"</string>
+
+</resources>
