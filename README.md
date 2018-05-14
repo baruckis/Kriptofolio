@@ -1,7 +1,8 @@
 # My Crypto Coins 
 ## Open source cryptocurrencies portfolio app for Android
+### Part 2: Mockups, UI, XML layouts
 
-![my_crypto_coins_app](https://user-images.githubusercontent.com/2387056/36569657-516115ea-1837-11e8-8403-29ae9b471566.jpg)
+![my_crypto_coins_app_layouts](https://user-images.githubusercontent.com/2387056/39997484-c30dbb1a-578b-11e8-8aba-4dd8d9fb83d2.png)
 I decided to create an app which would be your portfolio of what cryptocurrencies you hold and let you know how much they are worth converted to fiat money.
 The important thing for the user is that this app is going to ensure 100% trust as it will not require any login/registration process and won’t collect user’s data by sending it to the server. I guess nobody would feel comfortable sharing information online about owned money. User’s provided data about cryptocurrency investments will be only stored inside local database that is kept inside Android device. However to know portfolio value converted to the fiat money app is going to use internet to get the latest conversion rates. Money topic for people is so sensitive information, that is why to ensure even more trust I will be developing this app openly by creating blog posts series and making project code available for everyone to see that there is nothing to hide.
 
@@ -10,6 +11,11 @@ The important thing for the user is that this app is going to ensure 100% trust 
 I am creating modern Android sample app using best tools and practices available in year 2018. I am doing this because I want to cover all main hottest topics in Android world and acquire knowledge in them by teaching you. If you follow blog posts series you will learn how the app is being developed from the scratch.
 
 Blog posts series: https://www.baruckis.com/android/my-crypto-coins-app-series
+
+#### This repository branch is created for blog post "Part 2: Mockups, UI, XML layouts"
+https://www.baruckis.com/android/my-crypto-coins-app-series-part-2
+
+In the second part all the UI layouts with some initial code were created based on detailed mockups. 
 
 
 ## License
