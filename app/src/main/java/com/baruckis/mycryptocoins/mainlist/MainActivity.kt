@@ -14,17 +14,18 @@
  * limitations under the License.
  */
 
-package com.baruckis.mycryptocoins.MainList
+package com.baruckis.mycryptocoins.mainlist
 
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
-import com.baruckis.mycryptocoins.AddSearchList.AddSearchActivity
+import com.baruckis.mycryptocoins.addsearchlist.AddSearchActivity
 import com.baruckis.mycryptocoins.R
-import com.baruckis.mycryptocoins.Settings.SettingsActivity
+import com.baruckis.mycryptocoins.settings.SettingsActivity
 import kotlinx.android.synthetic.main.activity_main.*
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -51,7 +52,7 @@ class MainActivity : AppCompatActivity() {
         // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
             R.id.action_settings -> {
-                startActivity(Intent(this@MainActivity, SettingsActivity::class.java));
+                startActivity(Intent(this@MainActivity, SettingsActivity::class.java))
                 return true
             }
             else -> super.onOptionsItemSelected(item)

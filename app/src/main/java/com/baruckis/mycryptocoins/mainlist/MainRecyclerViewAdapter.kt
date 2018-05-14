@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.baruckis.mycryptocoins.MainList
+package com.baruckis.mycryptocoins.mainlist
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater

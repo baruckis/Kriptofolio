@@ -24,14 +24,13 @@
     <string name="action_settings">"Nustatymai"</string>
 
     <string name="string_total_value_on_date_time">"Bendra turima vertė"</string>
-    <string name="string_total_value_change_24h">"24 val $ 0.00"</string>
+    <string name="string_total_value_change_24h_label">"24 val "</string>
 
     <string name="string_column_coin_crypto_hold_amount_symbol">"Kripto moneta\nKiekis &#38; simbolis"</string>
     <string name="string_column_coin_fiat_price_amount">"Kaina $\nKiekis $"</string>
     <string name="string_column_coin_change_24h_1h_7d">"± kaina % 1 val / 7 d\n± kaina % 24 val\n± kiekis $ 24 val"</string>
 
     <string name="sample_text_total_value_on_date_time">"Bendra turima vertė (11/03/2018 12:55:08)"</string>
-    <string name="sample_text_total_value_change_24h">"24 val $ +1538.00"</string>
 
 
     <!-- Strings related to Add Search Activity -->

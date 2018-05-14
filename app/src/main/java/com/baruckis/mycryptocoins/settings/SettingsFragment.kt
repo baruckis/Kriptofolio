@@ -14,14 +14,12 @@
  * limitations under the License.
  */
 
-package com.baruckis.mycryptocoins.Settings
-
+package com.baruckis.mycryptocoins.settings
 
 import android.os.Bundle
 import android.preference.PreferenceFragment
 import android.support.v4.app.Fragment
 import com.baruckis.mycryptocoins.R
-
 
 /**
  * A simple [Fragment] subclass.
@@ -31,6 +29,6 @@ class SettingsFragment : PreferenceFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        addPreferencesFromResource(R.xml.pref_main);
+        addPreferencesFromResource(R.xml.pref_main)
     }
 }

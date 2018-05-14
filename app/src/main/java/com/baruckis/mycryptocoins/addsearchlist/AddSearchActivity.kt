@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.baruckis.mycryptocoins.AddSearchList
+package com.baruckis.mycryptocoins.addsearchlist
 
 import android.app.SearchManager
 import android.content.Context

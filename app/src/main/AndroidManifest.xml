@@ -24,7 +24,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainList.MainActivity"
+            android:name=".mainlist.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -34,25 +34,24 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".AddSearchList.AddSearchActivity"
+            android:name=".addsearchlist.AddSearchActivity"
             android:launchMode="singleTop"
-            android:parentActivityName=".MainList.MainActivity"
+            android:parentActivityName=".mainlist.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
-
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
         </activity>
         <activity
-            android:name=".Settings.SettingsActivity"
+            android:name=".settings.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".MainList.MainActivity">
+            android:parentActivityName=".mainlist.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.baruckis.mycryptocoins.MainList.MainActivity" />
+                android:value="com.baruckis.mycryptocoins.mainlist.MainActivity" />
         </activity>
     </application>
 

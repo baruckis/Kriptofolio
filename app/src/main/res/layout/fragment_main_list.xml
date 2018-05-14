@@ -20,7 +20,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.baruckis.mycryptocoins.MainList.MainActivityListFragment"
+    tools:context="com.baruckis.mycryptocoins.mainlist.MainActivityListFragment"
     tools:showIn="@layout/activity_main">
 
     <android.support.v7.widget.CardView
@@ -36,8 +36,8 @@
             android:layout_height="match_parent"
             android:layout_marginEnd="@dimen/main_cardview_column_names_inner_margin"
             android:layout_marginStart="@dimen/main_cardview_column_names_inner_margin"
-            android:paddingTop="@dimen/main_cardview_column_names_outer_margin"
-            android:paddingBottom="@dimen/main_cardview_column_names_outer_margin">
+            android:paddingBottom="@dimen/main_cardview_column_names_outer_margin"
+            android:paddingTop="@dimen/main_cardview_column_names_outer_margin">
 
             <android.support.constraint.Guideline
                 android:id="@+id/guideline1_fixed"
@@ -65,8 +65,8 @@
                 style="@style/MainListColumnNamesText"
                 android:lines="1"
                 android:text="@string/string_column_coin_ranking"
-                android:textStyle="bold"
                 android:textAlignment="center"
+                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/guideline1_fixed"
                 app:layout_constraintStart_toStartOf="parent"
@@ -78,6 +78,7 @@
                 android:layout_marginEnd="@dimen/main_cardview_column_names_text_between_margin"
                 android:layout_marginStart="@dimen/main_cardview_column_names_outer_margin"
                 android:text="@string/string_column_coin_crypto_hold_amount_symbol"
+                android:textAlignment="viewStart"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/guideline1_percent"
                 app:layout_constraintStart_toEndOf="@+id/guideline1_fixed"
@@ -99,9 +100,9 @@
                 android:id="@+id/text_column_coin_change_24h_1h_7d"
                 style="@style/MainListColumnNamesText"
                 android:layout_marginStart="@dimen/main_cardview_column_names_text_between_margin"
-                android:text="@string/string_column_coin_change_24h_1h_7d"
                 android:lines="3"
-                android:textAlignment="textEnd"
+                android:text="@string/string_column_coin_change_24h_1h_7d"
+                android:textAlignment="viewEnd"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/guideline2_percent"
@@ -116,7 +117,7 @@
         android:layout_height="match_parent">
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/rec_fragment_main_list"
+            android:id="@+id/recyclerview_fragment_main_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorForMainListBackground"

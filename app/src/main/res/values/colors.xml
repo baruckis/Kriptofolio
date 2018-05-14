@@ -22,6 +22,9 @@
     <color name="colorForMainCollapsingBar">@color/colorPrimary</color>
     <color name="colorForMainCollapsingBarScrim">@color/colorPrimaryDark</color>
 
+    <color name="colorForValueChangePositive">@color/colorGreen</color>
+    <color name="colorForValueChangeNegative">@color/colorRed</color>
+
     <color name="colorForMainColumnNames">@color/colorNavy</color>
     <color name="colorForMainColumnNamesText">@color/colorWhite</color>
 
@@ -50,5 +53,8 @@
     <color name="colorLightGrey">#f5f5f5</color>
     <color name="colorDarkGrey">#ff888888</color>
     <color name="colorNavy">#01385e</color>
+
+    <color name="colorRed">#C62828</color>
+    <color name="colorGreen">#2E7D32</color>
 
 </resources>

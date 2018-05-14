@@ -21,7 +21,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".AddSearchList.AddSearchActivity"
+    tools:context=".addsearchlist.AddSearchActivity"
     tools:showIn="@layout/activity_add_search">
 
     <android.support.v4.widget.SwipeRefreshLayout

@@ -23,9 +23,9 @@
     android:layout_marginEnd="@dimen/main_cardview_list_item_outer_start_end_margin"
     android:layout_marginStart="@dimen/main_cardview_list_item_outer_start_end_margin"
     android:layout_marginTop="@dimen/main_cardview_list_item_outer_top_bottom_margin"
-    android:foreground="?android:attr/selectableItemBackground"
     android:clickable="true"
     android:focusable="true"
+    android:foreground="?android:attr/selectableItemBackground"
     app:cardBackgroundColor="@color/colorForMainListItemBackground">
 
     <android.support.constraint.ConstraintLayout
@@ -74,6 +74,7 @@
             style="@style/MainListItemPrimeText"
             android:layout_marginEnd="@dimen/main_cardview_list_item_text_between_margin"
             android:layout_marginStart="@dimen/main_cardview_list_item_inner_margin"
+            android:textAlignment="viewStart"
             app:layout_constraintBottom_toTopOf="@+id/item_amount_symbol"
             app:layout_constraintEnd_toStartOf="@+id/guideline1_percent"
             app:layout_constraintStart_toEndOf="@+id/item_image_icon"
@@ -87,11 +88,13 @@
             android:layout_marginEnd="@dimen/main_cardview_list_item_text_between_margin"
             android:layout_marginStart="@dimen/main_cardview_list_item_inner_margin"
             android:text="@string/sample_text_item_amount_symbol"
+            android:textAlignment="viewStart"
+            android:textColor="@color/colorForMainListItemPrimeText"
+            android:textDirection="locale"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/guideline1_percent"
             app:layout_constraintStart_toEndOf="@+id/item_image_icon"
             app:layout_constraintTop_toBottomOf="@+id/item_name"
-            android:textColor="@android:color/black"
             tools:text="@string/sample_text_item_amount_symbol" />
 
         <android.support.v7.widget.AppCompatTextView
@@ -126,36 +129,42 @@
             style="@style/MainListItemText"
             android:layout_marginStart="@dimen/main_cardview_list_item_text_between_margin"
             android:text="@string/sample_text_item_price_percent_change_1h_7d"
-            android:textAlignment="textEnd"
+            android:textAlignment="viewEnd"
+            android:textColor="@color/colorForValueChangeNegative"
             app:layout_constraintBottom_toTopOf="@+id/item_price_percent_change_24h"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/guideline2_percent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="@string/sample_text_item_price_percent_change_1h_7d" />
+            tools:text="@string/sample_text_item_price_percent_change_1h_7d"
+            tools:textColor="@color/colorForValueChangeNegative" />
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/item_price_percent_change_24h"
             style="@style/MainListItemText"
             android:layout_marginStart="@dimen/main_cardview_list_item_text_between_margin"
             android:text="@string/sample_text_item_price_percent_change_24h"
-            android:textAlignment="textEnd"
+            android:textAlignment="viewEnd"
+            android:textColor="@color/colorForValueChangePositive"
             app:layout_constraintBottom_toTopOf="@+id/item_amount_fiat_change_24h"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/guideline2_percent"
             app:layout_constraintTop_toBottomOf="@+id/item_price_percent_change_1h_7d"
-            tools:text="@string/sample_text_item_price_percent_change_24h" />
+            tools:text="@string/sample_text_item_price_percent_change_24h"
+            tools:textColor="@color/colorForValueChangePositive" />
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/item_amount_fiat_change_24h"
             style="@style/MainListItemText"
             android:layout_marginStart="@dimen/main_cardview_list_item_text_between_margin"
             android:text="@string/sample_text_item_amount_fiat_change_24h"
-            android:textAlignment="textEnd"
+            android:textAlignment="viewEnd"
+            android:textColor="@color/colorForValueChangePositive"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/guideline2_percent"
             app:layout_constraintTop_toBottomOf="@+id/item_price_percent_change_24h"
-            tools:text="@string/sample_text_item_amount_fiat_change_24h" />
+            tools:text="@string/sample_text_item_amount_fiat_change_24h"
+            tools:textColor="@color/colorForValueChangePositive" />
 
     </android.support.constraint.ConstraintLayout>
 

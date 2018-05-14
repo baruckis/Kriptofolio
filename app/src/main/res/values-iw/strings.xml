@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2018 Andrius Baruckis www.baruckis.com | mycryptocoins.baruckis.com
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+
+    <!-- Strings related to Main Activity -->
+
+    <string name="app_name">"מטבעות האנוסים שלימטבעות האנוסים שלי"</string>
+
+    <string name="action_settings">"הגדרות"</string>
+
+    <string name="string_total_value_on_date_time">"ערך אחזקות סה\"כ"</string>
+    <string name="string_total_value_change_24h_label">" h 24"</string>
+
+    <string name="string_column_coin_crypto_hold_amount_symbol"> מטבע אנוסים\nסכום"&amp;"סמל </string>
+    <string name="string_column_coin_fiat_price_amount">"$ מחיר\n$ סכום"</string>
+    <string name="string_column_coin_change_24h_1h_7d">"מחיר% ± 1 h / 7 ד\nh המחיר% ± 24\nסכום ± 24 $ h"</string>
+
+    <string name="sample_text_total_value_on_date_time">"ערך אחזקות סה\"כ (2018/11/03 00:55:08)"</string>
+
+
+    <!-- Strings related to Add Search Activity -->
+
+    <string name="activity_add_search_title">"הוספת מטבע הצפנה (-s)"</string>
+    <string name="activity_add_search_subtitle">"כל cryptocurrencies ידי דירוג"</string>
+
+    <string name="action_search">"לחפש"</string>
+
+    <string name="search_hint">"חפש מטבע ספציפי …"</string>
+
+    <string name="title_activity_settings">"הגדרות"</string>
+
+
+    <!-- Strings related to Settings -->
+
+    <string name="pref_general_category_title">"כללי"</string>
+
+    <string name="pref_language_title">"שפה"</string>
+
+    <string name="pref_default_language_entry">"עִברִית"</string>
+    <string name="pref_default_language_value">"HE"</string>
+
+    <string name="pref_fiat_currency_title">"מטבע פיאט"</string>
+
+    <string name="pref_default_fiat_currency_entry">"ILS - שקל ישראלי"</string>
+    <string name="pref_default_fiat_currency_value">"ILS"</string>
+
+    <string-array name="pref_fiat_currency_list_entries">
+        <item>"USD - דולר אמריקאי"</item>
+        <item>"AUD - דולר אוסטרלי"</item>
+        <item>"BRL - ריאל ברזילאי"</item>
+        <item>"CAD - דולר קנדי"</item>
+        <item>"CHF - פרנק שוויצרי"</item>
+        <item>"CLP - פזו צ\'יליאני"</item>
+        <item>"CNY - יואן"</item>
+        <item>"CZK - קורונה הצ\'כית"</item>
+        <item>"DKK - קרונה דנית"</item>
+        <item>"EUR - אירו"</item>
+        <item>"GBP - לירה שטרלינג"</item>
+        <item>"HKD - דולר הונג קונגי"</item>
+        <item>"HUF - פורינט הונגרי"</item>
+        <item>"IDR - רופיה האינדונזיים"</item>
+        <item>"ILS - שקל ישראלי"</item>
+        <item>"INR - רופי הודי"</item>
+        <item>"JPY - ין יפני"</item>
+        <item>"KRW - וון דרום קוראני"</item>
+        <item>"MXN - פזו מקסיקני"</item>
+        <item>"MYR - רינגיט מלזי"</item>
+        <item>"NOK - כתר נורבגי"</item>
+        <item>"NZD - דולר ניו זילנדי"</item>
+        <item>"PHP - פיליפיני Piso"</item>
+        <item>"PKR - רופי פקיסטני"</item>
+        <item>"PLN - זלוטי פולני"</item>
+        <item>"RUB - רובל רוסי"</item>
+        <item>"SEK - כתר שוודי"</item>
+        <item>"SGD - דולר סינגפורי"</item>
+        <item>"THB - באט תאילנדי"</item>
+        <item>"TRY - לירה טורקית"</item>
+        <item>"TWD - טייוואן דולר ניו"</item>
+        <item>"ZAR - ראנד דרום אפריקאי"</item>
+    </string-array>
+
+    <string name="pref_date_format_title">"פורמט תאריך"</string>
+
+    <string name="pref_24h_switch_title">"השתמש בתבנית 24 שעות ביממה"</string>
+
+
+    <string name="pref_support_category_title">"תמיכה"</string>
+
+    <string name="pref_rate_app_title">"דרג את האפליקציה ב- Google Play"</string>
+
+    <string name="pref_share_app_title">"שתף עם החברים שלך"</string>
+
+    <string name="pref_donate_view_title">"תרום את תצוגת"</string>
+    <string name="pref_donate_view_summary">"רק לצפות מודעות וידאו קצרות"</string>
+
+    <string name="pref_donate_crypto_title">"תרום עם הצפנה"</string>
+    <string name="pref_donate_crypto_summary">"שלח Bitcoin שלך או Etherium"</string>
+
+
+    <string name="pref_support_about_title">"על אודות"</string>
+
+    <string name="pref_website_title">"אתר אינטרנט"</string>
+    <string name="pref_website_summary">"mycryptocoins.baruckis.com/he"</string>
+
+    <string name="pref_author_title">"מחבר Andrius Baruckis"</string>
+
+    <string name="pref_source_title">"הצג מקור על"</string>
+
+    <string name="pref_open_source_title">"רישיונות בשימוש בקוד פתוח"</string>
+
+    <string name="pref_license_title">"רישיון"</string>
+    <string name="pref_license_summary">"זכויות יוצרים"</string>
+
+</resources>

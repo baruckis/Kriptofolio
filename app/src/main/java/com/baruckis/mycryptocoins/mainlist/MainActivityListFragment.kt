@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.baruckis.mycryptocoins.MainList
+package com.baruckis.mycryptocoins.mainlist
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -37,7 +37,7 @@ class MainActivityListFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         val v: View = inflater.inflate(R.layout.fragment_main_list, container, false)
 
-        recyclerView = v.findViewById(R.id.rec_fragment_main_list)
+        recyclerView = v.findViewById(R.id.recyclerview_fragment_main_list)
 
         return v
     }

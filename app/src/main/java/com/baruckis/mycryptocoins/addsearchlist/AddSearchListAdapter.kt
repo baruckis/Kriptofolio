@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.baruckis.mycryptocoins.AddSearchList
+package com.baruckis.mycryptocoins.addsearchlist
 
 import android.content.Context
 import android.support.v7.widget.AppCompatTextView
@@ -59,7 +59,7 @@ class AddSearchListAdapter(context: Context, private val dataSource: ArrayList<S
     }
 
     override fun getItemId(position: Int): Long {
-        return position.toLong();
+        return position.toLong()
     }
 
     override fun getCount(): Int {

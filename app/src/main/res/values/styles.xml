@@ -45,21 +45,25 @@
     <style name="MainListItemPrimeText" parent="AutoSizeText">
         <item name="android:textAppearance">@style/TextAppearance.AppCompat.Medium</item>
         <item name="android:textColor">@color/colorForMainListItemPrimeText</item>
+        <item name="android:textDirection">firstStrongLtr</item>
     </style>
 
     <style name="MainListItemText" parent="AutoSizeText">
         <item name="android:textAppearance">@style/TextAppearance.AppCompat.Small</item>
         <item name="android:textColor">@color/colorForMainListItemText</item>
+        <item name="android:textDirection">firstStrongLtr</item>
         <item name="autoSizeMaxTextSize">14sp</item>
     </style>
 
     <style name="AddSearchListItemPrimeText" parent="AutoSizeText">
         <item name="android:textAppearance">@style/TextAppearance.AppCompat.Medium</item>
         <item name="android:textColor">@color/colorForAddSearchListItemPrimeText</item>
+        <item name="android:textDirection">firstStrongLtr</item>
     </style>
 
     <style name="AddSearchListItemText" parent="AutoSizeText">
         <item name="android:textColor">@color/colorForAddSearchListItemText</item>
+        <item name="android:textDirection">firstStrongLtr</item>
     </style>
 
     <style name="AutoSizeText">

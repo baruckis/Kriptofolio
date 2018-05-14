@@ -19,7 +19,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.baruckis.mycryptocoins.MainList.MainActivity">
+    tools:context="com.baruckis.mycryptocoins.mainlist.MainActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -50,7 +50,7 @@
                     android:id="@+id/textview_total_value_on_date_time"
                     style="@style/AutoSizeText"
                     android:gravity="center"
-                    android:text="@string/string_total_value_on_date_time"
+                    android:text="@string/sample_text_total_value_on_date_time"
                     android:textAlignment="center"
                     app:layout_constraintBottom_toTopOf="@+id/textview_total_value_change_24h"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -58,14 +58,31 @@
                     tools:text="@string/sample_text_total_value_on_date_time" />
 
                 <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/textview_total_value_change_24h"
+                    android:id="@+id/textview_total_value_change_24h_label"
                     style="@style/AutoSizeText"
+                    android:layout_width="wrap_content"
                     android:gravity="center"
-                    android:text="@string/string_total_value_change_24h"
+                    android:text="@string/string_total_value_change_24h_label"
                     android:textAlignment="center"
                     app:layout_constraintBottom_toTopOf="@+id/textview_separator_value"
+                    app:layout_constraintEnd_toStartOf="@+id/textview_total_value_change_24h"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/textview_total_value_change_24h"
+                    style="@style/AutoSizeText"
+                    android:layout_width="wrap_content"
+                    android:background="@color/colorForValueChangePositive"
+                    android:gravity="center"
+                    android:text="@string/sample_text_total_value_change_24h"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorWhite"
+                    android:textDirection="firstStrongLtr"
+                    app:layout_constraintBottom_toTopOf="@+id/textview_separator_value"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/textview_total_value_change_24h_label"
+                    tools:background="@color/colorForValueChangePositive"
                     tools:text="@string/sample_text_total_value_change_24h" />
 
                 <TextView
@@ -86,9 +103,10 @@
                     style="@style/AutoSizeText"
                     android:gravity="center_vertical|end"
                     android:paddingEnd="@dimen/main_collapsing_toolbar_layout_text_between_margin"
-                    android:text="@string/string_crypto_value"
+                    android:text="@string/sample_text_crypto_value"
                     android:textAlignment="viewEnd"
                     android:textAppearance="@android:style/TextAppearance.Large"
+                    android:textDirection="firstStrongLtr"
                     app:layout_constraintBottom_toBottomOf="@+id/textview_separator_value"
                     app:layout_constraintEnd_toStartOf="@+id/textview_separator_code"
                     app:layout_constraintStart_toStartOf="parent"
@@ -101,9 +119,10 @@
                     style="@style/AutoSizeText"
                     android:gravity="center_vertical|start"
                     android:paddingStart="@dimen/main_collapsing_toolbar_layout_text_between_margin"
-                    android:text="@string/string_fiat_value"
+                    android:text="@string/sample_text_fiat_value"
                     android:textAlignment="viewStart"
                     android:textAppearance="@android:style/TextAppearance.Large"
+                    android:textDirection="firstStrongLtr"
                     app:layout_constraintBottom_toBottomOf="@+id/textview_separator_value"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/textview_separator_code"
