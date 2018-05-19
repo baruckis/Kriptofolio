@@ -15,17 +15,17 @@
  */
 
 apply plugin: 'com.android.application'
-
 apply plugin: 'kotlin-android'
-
 apply plugin: 'kotlin-android-extensions'
 
+// Version values at Project level versions.gradle.
+
 android {
-    compileSdkVersion 27
+    compileSdkVersion versions.compile_sdk
     defaultConfig {
         applicationId "com.baruckis.mycryptocoins"
-        minSdkVersion 23
-        targetSdkVersion 27
+        minSdkVersion versions.min_sdk
+        targetSdkVersion versions.target_sdk
         versionCode 1
         versionName "@string/app_version"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -40,21 +40,43 @@ android {
 
 dependencies {
 
-    // Version values at Project level build.gradle.
-
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    // Android
-    implementation "com.android.support:appcompat-v7:$rootProject.supportLibraryVersion"
-    implementation "com.android.support:cardview-v7:$rootProject.supportLibraryVersion"
-    implementation "com.android.support:design:$rootProject.supportLibraryVersion"
-    implementation "com.android.support.constraint:constraint-layout:$rootProject.constraintLayoutVersion"
 
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    // Kotlin
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$versions.kotlin"
+
+
+    /* Android */
+
+    // Support libraries
+    implementation "com.android.support:appcompat-v7:$versions.support"
+    implementation "com.android.support:cardview-v7:$versions.support"
+    implementation "com.android.support:design:$versions.support"
+
+    // Constraint layout
+    implementation "com.android.support.constraint:constraint-layout:$versions.constraint_layout"
+
+    // Android KTX
+    implementation "androidx.core:core-ktx:$versions.core"
+
+    // Architecture components
+    // LiveData + ViewModel
+    implementation "android.arch.lifecycle:extensions:$versions.lifecycle"
+
+    // Android Testing Support Library's runner and rules
+    androidTestImplementation "com.android.support.test:runner:$versions.atsl_runner"
+
+    // Espresso UI Testing
+    androidTestImplementation "com.android.support.test.espresso:espresso-core:$versions.espresso"
+
+
+    /* Other */
+
+    // Dependencies for local unit tests
+    testImplementation "junit:junit:$versions.junit"
 
     // 3rd party
-    implementation "eu.davidea:flipview:$rootProject.flipViewVersion"
+    // UI
+    implementation "eu.davidea:flipview:$versions.flip_view"
 }

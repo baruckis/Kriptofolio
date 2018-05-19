@@ -16,6 +16,8 @@
 
 package com.baruckis.mycryptocoins.mainlist
 
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -28,10 +30,12 @@ import com.baruckis.mycryptocoins.R
 /**
  * A placeholder fragment containing a simple view.
  */
-class MainActivityListFragment : Fragment() {
+class MainListFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var recyclerAdapter: MainRecyclerViewAdapter
+
+    private lateinit var viewModel: MainViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -47,33 +51,22 @@ class MainActivityListFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         setupList()
+
+        // Obtain ViewModel from ViewModelProviders, using this fragment as LifecycleOwner.
+        viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
+
+        // Observe data on the ViewModel, exposed as a LiveData
+        viewModel.data.observe(this, Observer { data ->
+            // Set the data exposed by the LiveData
+            if (data != null) {
+                recyclerAdapter.setData(data)
+            }
+        })
     }
 
     private fun setupList() {
-
-        val data = ArrayList<String>()
-        data.add("Bitcoin")
-        data.add("Etherium")
-        data.add("Ripple")
-        data.add("Bitcoin Cash")
-        data.add("Litecoin")
-        data.add("NEO")
-        data.add("Stellar")
-        data.add("EOS")
-        data.add("Cardano")
-        data.add("Stellar")
-        data.add("IOTA")
-        data.add("Dash")
-        data.add("Monero")
-        data.add("TRON")
-        data.add("NEM")
-        data.add("ICON")
-        data.add("Bitcoin Gold")
-        data.add("Zcash")
-        data.add("Verge")
-
         recyclerView.layoutManager = LinearLayoutManager(activity)
-        recyclerAdapter = MainRecyclerViewAdapter(data)
+        recyclerAdapter = MainRecyclerViewAdapter()
         recyclerView.adapter = recyclerAdapter
     }
 }

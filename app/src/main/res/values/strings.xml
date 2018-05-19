@@ -39,6 +39,7 @@
     <string name="string_column_coin_crypto_hold_amount_symbol">"Crypto coin\nAmount &#38; symbol"</string>
     <string name="string_column_coin_fiat_price_amount">"Price $\nAmount $"</string>
     <string name="string_column_coin_change_24h_1h_7d">"± price % 1 h / 7 d\n± price % 24 h\n± amount $ 24 h"</string>
+    <string name="string_column_coin_separator_change" translatable="false">" / "</string>
 
     <string name="sample_text_total_value_on_date_time">"Total holdings value (11/03/2018 12:55:08)"</string>
     <string name="sample_text_total_value_change_24h" translatable="false">" $ +1538.00 "</string>
@@ -54,6 +55,7 @@
     <string name="sample_text_item_price_percent_change_1h_7d" translatable="false">"-901.94% / -10909.09%"</string>
     <string name="sample_text_item_price_percent_change_24h" translatable="false">"+4.25%"</string>
     <string name="sample_text_item_amount_fiat_change_24h" translatable="false">"+1,053.12 USD"</string>
+
 
     <string-array name="fiat_currency_array" translatable="false">
         <item>"&usd;"</item>
