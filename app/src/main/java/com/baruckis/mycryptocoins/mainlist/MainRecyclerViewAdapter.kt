@@ -23,16 +23,15 @@ import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.core.text.plusAssign
 import androidx.core.text.toSpannable
 import com.baruckis.mycryptocoins.R
 import com.baruckis.mycryptocoins.data.Cryptocurrency
+import com.baruckis.mycryptocoins.databinding.FragmentMainListItemBinding
 
 
-class MainRecyclerViewAdapter() : RecyclerView.Adapter<MainRecyclerViewAdapter.CustomViewHolder>() {
+class MainRecyclerViewAdapter() : RecyclerView.Adapter<MainRecyclerViewAdapter.BindingViewHolder>() {
 
     private lateinit var dataList: ArrayList<Cryptocurrency>
 
@@ -40,32 +39,20 @@ class MainRecyclerViewAdapter() : RecyclerView.Adapter<MainRecyclerViewAdapter.C
         dataList = newDataList
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolder {
-        val v = LayoutInflater.from(parent.context).inflate(R.layout.fragment_main_list_item, parent, false)
-        return CustomViewHolder(v)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BindingViewHolder {
+        val inflater = LayoutInflater.from(parent.context)
+        val binding = FragmentMainListItemBinding.inflate(inflater, parent, false)
+
+        return BindingViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
-        holder.txtName?.text = dataList[position].name
-        holder.txtRanking?.text = String.format("${dataList[position].rank}")
-        holder.txtAmountAndSymbol?.text = String.format("${dataList[position].amount} ${dataList[position].symbol}")
-        holder.txtPrice?.text = String.format("${dataList[position].price} ${holder.context.getString(R.string.pref_default_fiat_currency_value)}")
-        holder.txtAmountFiat?.text = String.format("${dataList[position].amountFiat} ${holder.context.getString(R.string.pref_default_fiat_currency_value)}")
-        holder.txtPricePercentChange1hAnd7d?.text =
-                SpannableStringBuilder(getChangeValueStyled(dataList[position].pricePercentChange1h, holder.context))
-                        .append(holder.context.getString(R.string.string_column_coin_separator_change))
-                        .append(getChangeValueStyled(dataList[position].pricePercentChange7d, holder.context))
-        holder.txtPricePercentChange24h?.text = getChangeValueStyled(dataList[position].pricePercentChange24h, holder.context)
-        holder.txtAmountFiatChange24h?.text = getChangeValueStyled(dataList[position].amountFiatChange24h, holder.context, true)
-    }
+    override fun onBindViewHolder(holder: BindingViewHolder, position: Int) = holder.bind(dataList[position])
 
-    override fun getItemCount(): Int {
-        return dataList.size
-    }
+    override fun getItemCount(): Int = dataList.size
 
-    private fun getChangeValueStyled(value:Double, context:Context, isFiat:Boolean = false): Spannable {
-        val valueString:String = String.format("$value").plus(if (isFiat) " ${context.getString(R.string.pref_default_fiat_currency_value)}" else "%")
-        val valueSpannable:Spannable
+    private fun getChangeValueStyled(value: Double, context: Context, isFiat: Boolean = false): Spannable {
+        val valueString: String = String.format("$value").plus(if (isFiat) " ${context.getString(R.string.pref_default_fiat_currency_value)}" else "%")
+        val valueSpannable: Spannable
 
         when {
             value > 0 -> {
@@ -84,18 +71,21 @@ class MainRecyclerViewAdapter() : RecyclerView.Adapter<MainRecyclerViewAdapter.C
         return valueSpannable
     }
 
+    inner class BindingViewHolder(var binding: FragmentMainListItemBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(cryptocurrency: Cryptocurrency) {
+            binding.cryptocurrency = cryptocurrency
 
-    inner class CustomViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+            binding.itemRanking.text = String.format("${cryptocurrency.rank}")
+            binding.itemAmountSymbol.text = String.format("${cryptocurrency.amount} ${cryptocurrency.symbol}")
+            binding.itemPrice.text = String.format("${cryptocurrency.price} ${binding.root.context.getString(R.string.pref_default_fiat_currency_value)}")
+            binding.itemAmountFiat.text = String.format("${cryptocurrency.amountFiat} ${binding.root.context.getString(R.string.pref_default_fiat_currency_value)}")
+            binding.itemPricePercentChange1h7d.text = SpannableStringBuilder(getChangeValueStyled(cryptocurrency.pricePercentChange1h, binding.root.context))
+                    .append(binding.root.context.getString(R.string.string_column_coin_separator_change))
+                    .append(getChangeValueStyled(cryptocurrency.pricePercentChange7d, binding.root.context))
+            binding.itemPricePercentChange24h.text = getChangeValueStyled(cryptocurrency.pricePercentChange24h, binding.root.context)
+            binding.itemAmountFiatChange24h.text = getChangeValueStyled(cryptocurrency.amountFiatChange24h, binding.root.context, true)
 
-        val context:Context = itemView.context
-
-        val txtName = itemView.findViewById<TextView>(R.id.item_name)
-        val txtRanking = itemView.findViewById<TextView>(R.id.item_ranking)
-        val txtAmountAndSymbol = itemView.findViewById<TextView>(R.id.item_amount_symbol)
-        val txtPrice = itemView.findViewById<TextView>(R.id.item_price)
-        val txtAmountFiat = itemView.findViewById<TextView>(R.id.item_amount_fiat)
-        val txtPricePercentChange1hAnd7d = itemView.findViewById<TextView>(R.id.item_price_percent_change_1h_7d)
-        val txtPricePercentChange24h = itemView.findViewById<TextView>(R.id.item_price_percent_change_24h)
-        val txtAmountFiatChange24h = itemView.findViewById<TextView>(R.id.item_amount_fiat_change_24h)
+            binding.executePendingBindings()
+        }
     }
 }
