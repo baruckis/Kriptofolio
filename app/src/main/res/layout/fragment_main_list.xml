@@ -116,16 +116,45 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerview_fragment_main_list"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorForMainListBackground"
-            android:clipToPadding="false"
-            android:paddingBottom="72dp"
-            android:paddingTop="5dp"
-            android:scrollbarStyle="outsideOverlay"
-            android:scrollbars="vertical" />
+            android:layout_height="match_parent"
+            android:background="@color/colorForMainListBackground">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerview_fragment_main_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clipToPadding="false"
+                android:paddingBottom="72dp"
+                android:paddingTop="5dp"
+                android:scrollbarStyle="outsideOverlay"
+                android:scrollbars="vertical"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:id="@+id/layout_fragment_main_list_empty"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="20dp"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/text_primary_empty"
+                    style="@style/MainListEmptyText.Primary"
+                    android:text="@string/string_crypto_list_empty_primary" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/text_secondary_empty"
+                    style="@style/MainListEmptyText.Secondary"
+                    android:text="@string/string_crypto_list_empty_secondary" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
 
     </android.support.v4.widget.SwipeRefreshLayout>
 

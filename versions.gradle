@@ -16,7 +16,7 @@
 
 def versions = [:]
 
-versions.kotlin = "1.2.41"
+versions.kotlin = "1.2.51"
 versions.android_gradle_plugin = "3.1.2"
 
 versions.min_sdk = 21
@@ -25,10 +25,12 @@ versions.target_sdk = 27
 
 
 versions.support = "27.1.1"
-versions.constraint_layout = "1.1.0"
+versions.constraint_layout = "1.1.2"
 
 versions.core = "0.3"
 versions.lifecycle = "1.1.1"
+
+versions.room = "1.1.1"
 
 
 versions.atsl_runner = "1.0.2"

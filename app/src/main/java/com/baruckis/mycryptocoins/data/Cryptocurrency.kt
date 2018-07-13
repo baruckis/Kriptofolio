@@ -16,9 +16,17 @@
 
 package com.baruckis.mycryptocoins.data
 
+import android.arch.persistence.room.Entity
+import android.arch.persistence.room.PrimaryKey
+
+/**
+ * Entity object for Room database.
+ */
+@Entity
 data class Cryptocurrency(val name: String,
                           val rank: Short,
                           val amount: Double,
+                          @PrimaryKey
                           val symbol: String,
                           val price: Double,
                           val amountFiat: Double,

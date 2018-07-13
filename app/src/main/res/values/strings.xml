@@ -35,6 +35,9 @@
     <string name="string_separator_code" translatable="false">"/"</string>
     <string name="string_crypto_code" translatable="false">"BTC"</string>
 
+    <string name="string_crypto_list_empty_primary">"Your owned crypto coins list is empty!"</string>
+    <string name="string_crypto_list_empty_secondary">"Add your crypto via the + button below."</string>
+
     <string name="string_column_coin_ranking" translatable="false">"↑↓"</string>
     <string name="string_column_coin_crypto_hold_amount_symbol">"Crypto coin\nAmount &#38; symbol"</string>
     <string name="string_column_coin_fiat_price_amount">"Price $\nAmount $"</string>

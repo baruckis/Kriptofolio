@@ -26,6 +26,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.baruckis.mycryptocoins.R
+import com.baruckis.mycryptocoins.data.Cryptocurrency
+import com.baruckis.mycryptocoins.utilities.InjectorUtils
 
 /**
  * A placeholder fragment containing a simple view.
@@ -33,6 +35,7 @@ import com.baruckis.mycryptocoins.R
 class MainListFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
+    private lateinit var emptyListView: View
     private lateinit var recyclerAdapter: MainRecyclerViewAdapter
 
     private lateinit var viewModel: MainViewModel
@@ -42,6 +45,7 @@ class MainListFragment : Fragment() {
         val v: View = inflater.inflate(R.layout.fragment_main_list, container, false)
 
         recyclerView = v.findViewById(R.id.recyclerview_fragment_main_list)
+        emptyListView = v.findViewById(R.id.layout_fragment_main_list_empty)
 
         return v
     }
@@ -51,17 +55,7 @@ class MainListFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         setupList()
-
-        // Obtain ViewModel from ViewModelProviders, using this fragment as LifecycleOwner.
-        viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
-
-        // Observe data on the ViewModel, exposed as a LiveData
-        viewModel.data.observe(this, Observer { data ->
-            // Set the data exposed by the LiveData
-            if (data != null) {
-                recyclerAdapter.setData(data)
-            }
-        })
+        subscribeUi()
     }
 
     private fun setupList() {
@@ -69,4 +63,26 @@ class MainListFragment : Fragment() {
         recyclerAdapter = MainRecyclerViewAdapter()
         recyclerView.adapter = recyclerAdapter
     }
+
+    private fun subscribeUi() {
+
+        val factory = InjectorUtils.provideMainViewModelFactory(requireContext())
+
+        // Obtain ViewModel from ViewModelProviders, using this fragment as LifecycleOwner.
+        viewModel = ViewModelProviders.of(this, factory).get(MainViewModel::class.java)
+
+        // Update the list when the data changes by observing data on the ViewModel, exposed as a LiveData.
+        viewModel.liveData.observe(this, Observer<List<Cryptocurrency>> { data ->
+            if (data != null && data.isNotEmpty()) {
+                emptyListView.visibility = View.GONE
+                recyclerView.visibility = View.VISIBLE
+                recyclerAdapter.setData(data)
+            } else {
+                recyclerView.visibility = View.GONE
+                emptyListView.visibility = View.VISIBLE
+            }
+        })
+
+    }
+
 }

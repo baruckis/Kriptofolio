@@ -14,12 +14,21 @@
  * limitations under the License.
  */
 
-package com.baruckis.mycryptocoins.mainlist
+package com.baruckis.mycryptocoins.data
 
-import android.arch.lifecycle.ViewModel
-import com.baruckis.mycryptocoins.data.MyCryptocurrencyRepository
+import android.arch.lifecycle.LiveData
+import android.arch.persistence.room.*
+import android.arch.persistence.room.Dao
 
-class MainViewModel(myCryptocurrencyRepository: MyCryptocurrencyRepository) : ViewModel() {
+/**
+ * The Data Access Object for the [Cryptocurrency] class.
+ */
+@Dao
+interface MyCryptocurrencyDao {
 
-    val liveData = myCryptocurrencyRepository.getMyCryptocurrencyLiveDataList()
+    @Query("SELECT * FROM Cryptocurrency")
+    fun getMyCryptocurrencyLiveDataList(): LiveData<List<Cryptocurrency>>
+
+    @Insert
+    fun insertDataToMyCryptocurrencyList(data: List<Cryptocurrency>)
 }

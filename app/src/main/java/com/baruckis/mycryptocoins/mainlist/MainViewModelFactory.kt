@@ -17,9 +17,16 @@
 package com.baruckis.mycryptocoins.mainlist
 
 import android.arch.lifecycle.ViewModel
+import android.arch.lifecycle.ViewModelProvider
 import com.baruckis.mycryptocoins.data.MyCryptocurrencyRepository
 
-class MainViewModel(myCryptocurrencyRepository: MyCryptocurrencyRepository) : ViewModel() {
+/**
+ * Factory for creating a [MainViewModel] with a constructor that takes a
+ * [MyCryptocurrencyRepository].
+ */
+class MainViewModelFactory(private val repository: MyCryptocurrencyRepository) : ViewModelProvider.NewInstanceFactory() {
 
-    val liveData = myCryptocurrencyRepository.getMyCryptocurrencyLiveDataList()
+    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        return MainViewModel(repository) as T
+    }
 }

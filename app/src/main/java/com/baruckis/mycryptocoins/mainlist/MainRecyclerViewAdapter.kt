@@ -33,10 +33,11 @@ import com.baruckis.mycryptocoins.databinding.FragmentMainListItemBinding
 
 class MainRecyclerViewAdapter() : RecyclerView.Adapter<MainRecyclerViewAdapter.BindingViewHolder>() {
 
-    private lateinit var dataList: ArrayList<Cryptocurrency>
+    private var dataList: List<Cryptocurrency> = ArrayList<Cryptocurrency>()
 
-    fun setData(newDataList: ArrayList<Cryptocurrency>) {
+    fun setData(newDataList: List<Cryptocurrency>) {
         dataList = newDataList
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BindingViewHolder {

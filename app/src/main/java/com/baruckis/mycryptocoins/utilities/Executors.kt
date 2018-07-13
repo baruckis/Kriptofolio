@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-package com.baruckis.mycryptocoins.mainlist
+package com.baruckis.mycryptocoins.utilities
 
-import android.arch.lifecycle.ViewModel
-import com.baruckis.mycryptocoins.data.MyCryptocurrencyRepository
+import java.util.concurrent.Executors
 
-class MainViewModel(myCryptocurrencyRepository: MyCryptocurrencyRepository) : ViewModel() {
+private val IO_EXECUTOR = Executors.newSingleThreadExecutor()
 
-    val liveData = myCryptocurrencyRepository.getMyCryptocurrencyLiveDataList()
+// Utility method to run blocks on a dedicated background thread, used for io/database work.
+fun ioThread(f : () -> Unit) {
+    IO_EXECUTOR.execute(f)
 }

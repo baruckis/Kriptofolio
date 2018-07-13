@@ -14,12 +14,9 @@
  * limitations under the License.
  */
 
-package com.baruckis.mycryptocoins.mainlist
+package com.baruckis.mycryptocoins.utilities
 
-import android.arch.lifecycle.ViewModel
-import com.baruckis.mycryptocoins.data.MyCryptocurrencyRepository
-
-class MainViewModel(myCryptocurrencyRepository: MyCryptocurrencyRepository) : ViewModel() {
-
-    val liveData = myCryptocurrencyRepository.getMyCryptocurrencyLiveDataList()
-}
+/**
+ * Constants used throughout the app.
+ */
+const val DATABASE_NAME = "my-crypto-coins-db"

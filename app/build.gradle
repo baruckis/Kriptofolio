@@ -67,6 +67,15 @@ dependencies {
     // Architecture components
     // LiveData + ViewModel
     implementation "android.arch.lifecycle:extensions:$versions.lifecycle"
+    annotationProcessor "android.arch.lifecycle:compiler:$versions.lifecycle"
+
+    // Room
+    implementation "android.arch.persistence.room:runtime:$versions.room"
+    annotationProcessor "android.arch.persistence.room:compiler:$versions.room"
+    kapt "android.arch.persistence.room:compiler:$versions.room"
+
+    // Room testing
+    androidTestImplementation "android.arch.persistence.room:testing:$versions.room"
 
     // Android Testing Support Library's runner and rules
     androidTestImplementation "com.android.support.test:runner:$versions.atsl_runner"

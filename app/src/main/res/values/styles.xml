@@ -55,6 +55,22 @@
         <item name="autoSizeMaxTextSize">14sp</item>
     </style>
 
+    <style name="MainListEmptyText">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:layout_marginEnd">@dimen/main_cardview_column_names_outer_margin</item>
+        <item name="android:layout_marginStart">@dimen/main_cardview_column_names_outer_margin
+        </item>
+    </style>
+
+    <style name="MainListEmptyText.Primary" parent="MainListEmptyText">
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Medium</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="MainListEmptyText.Secondary" parent="MainListEmptyText"/>
+
     <style name="AddSearchListItemPrimeText" parent="AutoSizeText">
         <item name="android:textAppearance">@style/TextAppearance.AppCompat.Medium</item>
         <item name="android:textColor">@color/colorForAddSearchListItemPrimeText</item>
@@ -78,8 +94,10 @@
     </style>
 
     <style name="FlipView">
-        <item name="android:layout_height">@dimen/main_cardview_list_item_image_icon_width_height</item>
-        <item name="android:layout_width">@dimen/main_cardview_list_item_image_icon_width_height</item>
+        <item name="android:layout_height">@dimen/main_cardview_list_item_image_icon_width_height
+        </item>
+        <item name="android:layout_width">@dimen/main_cardview_list_item_image_icon_width_height
+        </item>
         <item name="android:padding">4dp</item>
         <item name="android:clipToPadding">false</item>
         <item name="checked">false</item>

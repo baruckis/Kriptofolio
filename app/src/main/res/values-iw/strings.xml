@@ -26,6 +26,9 @@
     <string name="string_total_value_on_date_time">"ערך אחזקות סה\"כ"</string>
     <string name="string_total_value_change_24h_label">" h 24"</string>
 
+    <string name="string_crypto_list_empty_primary">"Your owned crypto coins list is empty!"</string> <!-- TODO translate to HE -->
+    <string name="string_crypto_list_empty_secondary">"Add your crypto via the + button below."</string> <!-- TODO translate to HE -->
+
     <string name="string_column_coin_crypto_hold_amount_symbol"> מטבע אנוסים\nסכום"&amp;"סמל </string>
     <string name="string_column_coin_fiat_price_amount">"$ מחיר\n$ סכום"</string>
     <string name="string_column_coin_change_24h_1h_7d">"מחיר% ± 1 h / 7 ד\nh המחיר% ± 24\nסכום ± 24 $ h"</string>
