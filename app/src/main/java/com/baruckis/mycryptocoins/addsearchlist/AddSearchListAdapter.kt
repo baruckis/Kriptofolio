@@ -17,13 +17,14 @@
 package com.baruckis.mycryptocoins.addsearchlist
 
 import android.content.Context
-import android.support.v7.widget.AppCompatTextView
+import android.databinding.DataBindingUtil
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import com.baruckis.mycryptocoins.R
 import com.baruckis.mycryptocoins.data.Cryptocurrency
+import com.baruckis.mycryptocoins.databinding.ActivityAddSearchListItemBinding
 
 class AddSearchListAdapter(context: Context) : BaseAdapter() {
 
@@ -36,32 +37,27 @@ class AddSearchListAdapter(context: Context) : BaseAdapter() {
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-        val view: View
-        val holder: CustomViewHolder
+        var view = convertView
+        val itemBinding: ActivityAddSearchListItemBinding
 
-        if (convertView == null) {
+        if (view == null) {
 
             view = inflater.inflate(R.layout.activity_add_search_list_item, parent, false)
-
-            holder = CustomViewHolder()
-            holder.rankingTextView = view.findViewById(R.id.item_ranking)
-            holder.nameTextView = view.findViewById(R.id.item_name)
-            holder.symbolTextView = view.findViewById(R.id.item_symbol)
-
-            view.tag = holder
+            itemBinding = DataBindingUtil.bind<ActivityAddSearchListItemBinding>(view)!!
+            view.tag = itemBinding
 
         } else {
 
-            view = convertView
-            holder = convertView.tag as CustomViewHolder
+            itemBinding = view.tag as ActivityAddSearchListItemBinding
         }
 
         val cryptocurrency = getItem(position) as Cryptocurrency
-        holder.rankingTextView.text = cryptocurrency.rank.toString()
-        holder.nameTextView.text = cryptocurrency.name
-        holder.symbolTextView.text = cryptocurrency.symbol
+        itemBinding.cryptocurrency = cryptocurrency
+        itemBinding.itemRanking.text = String.format("${cryptocurrency.rank}")
+        itemBinding.itemName.text = cryptocurrency.name
+        itemBinding.itemSymbol.text = cryptocurrency.symbol
 
-        return view
+        return itemBinding.root
     }
 
     override fun getItem(position: Int): Any {
@@ -75,12 +71,4 @@ class AddSearchListAdapter(context: Context) : BaseAdapter() {
     override fun getCount(): Int {
         return dataList.size
     }
-
-
-    inner class CustomViewHolder {
-        lateinit var rankingTextView: AppCompatTextView
-        lateinit var nameTextView: AppCompatTextView
-        lateinit var symbolTextView: AppCompatTextView
-    }
-
 }

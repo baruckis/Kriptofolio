@@ -13,59 +13,67 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="@dimen/add_search_list_item_inner_margin">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <android.support.v7.widget.AppCompatTextView
-        android:id="@+id/item_ranking"
-        style="@style/AddSearchListItemText"
-        android:layout_width="40dp"
-        android:layout_marginEnd="@dimen/add_search_list_item_text_between_margin"
-        android:text="@string/sample_text_item_ranking"
-        android:textAlignment="center"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/item_image_icon"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="@string/sample_text_item_ranking" />
+    <data>
 
-    <eu.davidea.flipview.FlipView
-        android:id="@+id/item_image_icon"
-        style="@style/FlipView"
-        android:layout_marginEnd="@dimen/add_search_list_item_text_between_margin"
-        android:layout_marginStart="@dimen/add_search_list_item_text_between_margin"
-        android:clickable="false"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/item_name"
-        app:layout_constraintStart_toEndOf="@+id/item_ranking"
-        app:layout_constraintTop_toTopOf="parent" />
+        <variable
+            name="cryptocurrency"
+            type="com.baruckis.mycryptocoins.data.Cryptocurrency" />
+    </data>
 
-    <android.support.v7.widget.AppCompatTextView
-        android:id="@+id/item_name"
-        style="@style/AddSearchListItemPrimeText"
-        android:layout_marginEnd="@dimen/add_search_list_item_text_between_margin_2x"
-        android:layout_marginStart="@dimen/add_search_list_item_text_between_margin"
-        android:textAlignment="viewStart"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/item_symbol"
-        app:layout_constraintStart_toEndOf="@+id/item_image_icon"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="@string/sample_text_item_name" />
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/add_search_list_item_inner_margin">
 
-    <android.support.v7.widget.AppCompatTextView
-        android:id="@+id/item_symbol"
-        style="@style/AddSearchListItemText"
-        android:layout_marginEnd="@dimen/add_search_list_item_text_between_margin"
-        android:text="@string/sample_text_item_symbol"
-        android:textAlignment="viewEnd"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="@string/sample_text_item_symbol" />
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/item_ranking"
+            style="@style/AddSearchListItemText"
+            android:layout_width="40dp"
+            android:layout_marginEnd="@dimen/add_search_list_item_text_between_margin"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/item_image_icon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="@string/sample_text_item_ranking" />
 
-</android.support.constraint.ConstraintLayout>
+        <eu.davidea.flipview.FlipView
+            android:id="@+id/item_image_icon"
+            style="@style/FlipView"
+            android:layout_marginEnd="@dimen/add_search_list_item_text_between_margin"
+            android:layout_marginStart="@dimen/add_search_list_item_text_between_margin"
+            android:clickable="false"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/item_name"
+            app:layout_constraintStart_toEndOf="@+id/item_ranking"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/item_name"
+            style="@style/AddSearchListItemPrimeText"
+            android:layout_marginEnd="@dimen/add_search_list_item_text_between_margin_2x"
+            android:layout_marginStart="@dimen/add_search_list_item_text_between_margin"
+            android:textAlignment="viewStart"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/item_symbol"
+            app:layout_constraintStart_toEndOf="@+id/item_image_icon"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="@string/sample_text_item_name" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/item_symbol"
+            style="@style/AddSearchListItemText"
+            android:layout_marginEnd="@dimen/add_search_list_item_text_between_margin"
+            android:textAlignment="viewEnd"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="@string/sample_text_item_symbol" />
+
+    </android.support.constraint.ConstraintLayout>
+
+</layout>
