@@ -21,25 +21,29 @@ import android.arch.lifecycle.LiveData
 /**
  * The class for managing multiple data sources.
  */
-class MyCryptocurrencyRepository private constructor(
-        private val myCryptocurrencyDao: MyCryptocurrencyDao
+class CryptocurrencyRepository private constructor(
+        private val cryptocurrencyDao: CryptocurrencyDao
 ) {
 
     fun getMyCryptocurrencyLiveDataList(): LiveData<List<Cryptocurrency>> {
-        return myCryptocurrencyDao.getMyCryptocurrencyLiveDataList()
+        return cryptocurrencyDao.getMyCryptocurrencyLiveDataList()
+    }
+
+    fun getAllCryptocurrencyLiveDataList(): LiveData<List<Cryptocurrency>> {
+        return cryptocurrencyDao.getAllCryptocurrencyLiveDataList()
     }
 
     companion object {
 
         // Marks the JVM backing field of the annotated property as volatile, meaning that writes to this field are immediately made visible to other threads.
         @Volatile
-        private var instance: MyCryptocurrencyRepository? = null
+        private var instance: CryptocurrencyRepository? = null
 
         // For Singleton instantiation.
-        fun getInstance(myCryptocurrencyDao: MyCryptocurrencyDao) =
+        fun getInstance(cryptocurrencyDao: CryptocurrencyDao) =
                 instance ?: synchronized(this) {
                     instance
-                            ?: MyCryptocurrencyRepository(myCryptocurrencyDao).also { instance = it }
+                            ?: CryptocurrencyRepository(cryptocurrencyDao).also { instance = it }
                 }
     }
 }

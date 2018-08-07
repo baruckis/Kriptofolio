@@ -14,21 +14,16 @@
  * limitations under the License.
  */
 
-package com.baruckis.mycryptocoins.data
+package com.baruckis.mycryptocoins
 
-import android.arch.lifecycle.LiveData
-import android.arch.persistence.room.*
-import android.arch.persistence.room.Dao
+import android.app.Application
+import com.facebook.stetho.Stetho
 
-/**
- * The Data Access Object for the [Cryptocurrency] class.
- */
-@Dao
-interface MyCryptocurrencyDao {
 
-    @Query("SELECT * FROM Cryptocurrency")
-    fun getMyCryptocurrencyLiveDataList(): LiveData<List<Cryptocurrency>>
+class App : Application() {
 
-    @Insert
-    fun insertDataToMyCryptocurrencyList(data: List<Cryptocurrency>)
+    override fun onCreate() {
+        super.onCreate()
+        Stetho.initializeWithDefaults(this);
+    }
 }

@@ -17,19 +17,27 @@
 package com.baruckis.mycryptocoins.addsearchlist
 
 import android.app.SearchManager
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.SearchView
 import android.view.Menu
+import android.view.View
 import android.widget.ListView
 import com.baruckis.mycryptocoins.R
+import com.baruckis.mycryptocoins.data.Cryptocurrency
+import com.baruckis.mycryptocoins.utilities.InjectorUtils
 import kotlinx.android.synthetic.main.activity_add_search.*
 
 
 class AddSearchActivity : AppCompatActivity() {
 
     private lateinit var listView: ListView
+    private lateinit var listAdapter: AddSearchListAdapter
+
+    private lateinit var viewModel: AddSearchViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,31 +45,33 @@ class AddSearchActivity : AppCompatActivity() {
         setSupportActionBar(toolbar2)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        val data = ArrayList<String>()
-        data.add("Bitcoin")
-        data.add("Etherium")
-        data.add("Ripple")
-        data.add("Bitcoin Cash")
-        data.add("Litecoin")
-        data.add("NEO")
-        data.add("Stellar")
-        data.add("EOS")
-        data.add("Cardano")
-        data.add("Stellar")
-        data.add("IOTA")
-        data.add("Dash")
-        data.add("Monero")
-        data.add("TRON")
-        data.add("NEM")
-        data.add("ICON")
-        data.add("Bitcoin Gold")
-        data.add("Zcash")
-        data.add("Verge")
-
-        val adapter = AddSearchListAdapter(this, data)
-
         listView = findViewById(R.id.listview_activity_add_search)
-        listView.adapter = adapter
+
+        setupList()
+        subscribeUi()
+    }
+
+    private fun setupList() {
+        listAdapter = AddSearchListAdapter(this)
+        listView.adapter = listAdapter
+    }
+
+    private fun subscribeUi() {
+
+        val factory = InjectorUtils.provideAddSearchViewModelFactory(this)
+
+        // Obtain ViewModel from ViewModelProviders, using this fragment as LifecycleOwner.
+        viewModel = ViewModelProviders.of(this, factory).get(AddSearchViewModel::class.java)
+
+        // Update the list when the data changes by observing data on the ViewModel, exposed as a LiveData.
+        viewModel.liveData.observe(this, Observer<List<Cryptocurrency>> { data ->
+            if (data != null && data.isNotEmpty()) {
+                listView.visibility = View.VISIBLE
+                listAdapter.setData(data)
+            } else {
+                listView.visibility = View.GONE
+            }
+        })
 
     }
 

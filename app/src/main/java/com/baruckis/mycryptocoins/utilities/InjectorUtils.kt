@@ -17,8 +17,9 @@
 package com.baruckis.mycryptocoins.utilities
 
 import android.content.Context
+import com.baruckis.mycryptocoins.addsearchlist.AddSearchViewModelFactory
 import com.baruckis.mycryptocoins.data.AppDatabase
-import com.baruckis.mycryptocoins.data.MyCryptocurrencyRepository
+import com.baruckis.mycryptocoins.data.CryptocurrencyRepository
 import com.baruckis.mycryptocoins.mainlist.MainViewModelFactory
 
 /**
@@ -26,15 +27,22 @@ import com.baruckis.mycryptocoins.mainlist.MainViewModelFactory
  */
 object InjectorUtils {
 
+    private fun getCryptocurrencyRepository(context: Context): CryptocurrencyRepository {
+        return CryptocurrencyRepository.getInstance(
+                AppDatabase.getInstance(context).cryptocurrencyDao())
+    }
+
     fun provideMainViewModelFactory(
             context: Context
     ): MainViewModelFactory {
-        val repository = getMyCryptocurrencyRepository(context)
+        val repository = getCryptocurrencyRepository(context)
         return MainViewModelFactory(repository)
     }
 
-    private fun getMyCryptocurrencyRepository(context: Context): MyCryptocurrencyRepository {
-        return MyCryptocurrencyRepository.getInstance(
-                AppDatabase.getInstance(context).myCryptocurrencyDao())
+    fun provideAddSearchViewModelFactory(
+            context: Context
+    ): AddSearchViewModelFactory {
+        val repository = getCryptocurrencyRepository(context)
+        return AddSearchViewModelFactory(repository)
     }
 }

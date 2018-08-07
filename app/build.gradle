@@ -92,4 +92,7 @@ dependencies {
     // 3rd party
     // UI
     implementation "eu.davidea:flipview:$versions.flip_view"
+
+    //Debug bridge
+    implementation "com.facebook.stetho:stetho:$versions.stetho"
 }

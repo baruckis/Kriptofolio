@@ -17,9 +17,10 @@
 package com.baruckis.mycryptocoins.mainlist
 
 import android.arch.lifecycle.ViewModel
-import com.baruckis.mycryptocoins.data.MyCryptocurrencyRepository
+import com.baruckis.mycryptocoins.data.CryptocurrencyRepository
 
-class MainViewModel(myCryptocurrencyRepository: MyCryptocurrencyRepository) : ViewModel() {
 
-    val liveData = myCryptocurrencyRepository.getMyCryptocurrencyLiveDataList()
+class MainViewModel(cryptocurrencyRepository: CryptocurrencyRepository) : ViewModel() {
+
+    val liveData = cryptocurrencyRepository.getMyCryptocurrencyLiveDataList()
 }

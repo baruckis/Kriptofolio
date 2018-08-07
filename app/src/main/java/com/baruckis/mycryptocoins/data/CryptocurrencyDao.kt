@@ -14,20 +14,25 @@
  * limitations under the License.
  */
 
-package com.baruckis.mycryptocoins.mainlist
+package com.baruckis.mycryptocoins.data
 
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProvider
-import com.baruckis.mycryptocoins.data.CryptocurrencyRepository
+import android.arch.lifecycle.LiveData
+import android.arch.persistence.room.Dao
+import android.arch.persistence.room.Insert
+import android.arch.persistence.room.Query
 
 /**
- * Factory for creating a [MainViewModel] with a constructor that takes a
- * [CryptocurrencyRepository].
+ * The Data Access Object for the [Cryptocurrency] class.
  */
-class MainViewModelFactory(private val repository: CryptocurrencyRepository) : ViewModelProvider.NewInstanceFactory() {
+@Dao
+interface CryptocurrencyDao {
 
-    @Suppress("UNCHECKED_CAST")
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return MainViewModel(repository) as T
-    }
+    @Query("SELECT * FROM cryptocurrencies WHERE amount > 0")
+    fun getMyCryptocurrencyLiveDataList(): LiveData<List<Cryptocurrency>>
+
+    @Query("SELECT * FROM cryptocurrencies")
+    fun getAllCryptocurrencyLiveDataList(): LiveData<List<Cryptocurrency>>
+
+    @Insert
+    fun insertDataToAllCryptocurrencyList(data: List<Cryptocurrency>)
 }

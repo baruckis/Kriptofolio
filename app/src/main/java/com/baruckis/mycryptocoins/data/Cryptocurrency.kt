@@ -17,12 +17,13 @@
 package com.baruckis.mycryptocoins.data
 
 import android.arch.persistence.room.Entity
+import android.arch.persistence.room.Ignore
 import android.arch.persistence.room.PrimaryKey
 
 /**
  * Entity object for Room database.
  */
-@Entity
+@Entity(tableName = "cryptocurrencies")
 data class Cryptocurrency(val name: String,
                           val rank: Short,
                           val amount: Double,

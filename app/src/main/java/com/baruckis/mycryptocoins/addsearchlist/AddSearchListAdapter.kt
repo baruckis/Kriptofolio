@@ -23,10 +23,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import com.baruckis.mycryptocoins.R
+import com.baruckis.mycryptocoins.data.Cryptocurrency
 
-class AddSearchListAdapter(context: Context, private val dataSource: ArrayList<String>) : BaseAdapter() {
+class AddSearchListAdapter(context: Context) : BaseAdapter() {
 
+    private var dataList: List<Cryptocurrency> = ArrayList<Cryptocurrency>()
     private val inflater: LayoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+
+    fun setData(newDataList: List<Cryptocurrency>) {
+        dataList = newDataList
+        notifyDataSetChanged()
+    }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val view: View
@@ -37,7 +44,9 @@ class AddSearchListAdapter(context: Context, private val dataSource: ArrayList<S
             view = inflater.inflate(R.layout.activity_add_search_list_item, parent, false)
 
             holder = CustomViewHolder()
+            holder.rankingTextView = view.findViewById(R.id.item_ranking)
             holder.nameTextView = view.findViewById(R.id.item_name)
+            holder.symbolTextView = view.findViewById(R.id.item_symbol)
 
             view.tag = holder
 
@@ -47,15 +56,16 @@ class AddSearchListAdapter(context: Context, private val dataSource: ArrayList<S
             holder = convertView.tag as CustomViewHolder
         }
 
-        val nameTextView = holder.nameTextView
-
-        nameTextView.text = getItem(position) as String
+        val cryptocurrency = getItem(position) as Cryptocurrency
+        holder.rankingTextView.text = cryptocurrency.rank.toString()
+        holder.nameTextView.text = cryptocurrency.name
+        holder.symbolTextView.text = cryptocurrency.symbol
 
         return view
     }
 
     override fun getItem(position: Int): Any {
-        return dataSource[position]
+        return dataList[position]
     }
 
     override fun getItemId(position: Int): Long {
@@ -63,12 +73,14 @@ class AddSearchListAdapter(context: Context, private val dataSource: ArrayList<S
     }
 
     override fun getCount(): Int {
-        return dataSource.size
+        return dataList.size
     }
 
 
     inner class CustomViewHolder {
+        lateinit var rankingTextView: AppCompatTextView
         lateinit var nameTextView: AppCompatTextView
+        lateinit var symbolTextView: AppCompatTextView
     }
 
 }

@@ -14,33 +14,20 @@
  * limitations under the License.
  */
 
-def versions = [:]
+package com.baruckis.mycryptocoins.addsearchlist
 
-versions.kotlin = "1.2.60"
-versions.android_gradle_plugin = "3.1.4"
+import android.arch.lifecycle.ViewModel
+import android.arch.lifecycle.ViewModelProvider
+import com.baruckis.mycryptocoins.data.CryptocurrencyRepository
 
-versions.min_sdk = 21
-versions.compile_sdk = 28
-versions.target_sdk = 28
+/**
+ * Factory for creating a [AddSearchViewModel] with a constructor that takes a
+ * [CryptocurrencyRepository].
+ */
+class AddSearchViewModelFactory(private val repository: CryptocurrencyRepository) : ViewModelProvider.NewInstanceFactory() {
 
-
-versions.support = "27.1.1"
-versions.constraint_layout = "1.1.2"
-
-versions.core = "0.3"
-versions.lifecycle = "1.1.1"
-
-versions.room = "1.1.1"
-
-
-versions.atsl_runner = "1.0.2"
-versions.espresso = "3.0.2"
-
-versions.junit = "4.12"
-
-versions.flip_view = "1.1.3"
-
-versions.stetho = "1.5.0"
-
-
-ext.versions = versions
+    @Suppress("UNCHECKED_CAST")
+    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        return AddSearchViewModel(repository) as T
+    }
+}
