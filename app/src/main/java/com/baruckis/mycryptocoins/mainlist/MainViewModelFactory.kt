@@ -16,6 +16,7 @@
 
 package com.baruckis.mycryptocoins.mainlist
 
+import android.app.Application
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
 import com.baruckis.mycryptocoins.data.CryptocurrencyRepository
@@ -24,10 +25,11 @@ import com.baruckis.mycryptocoins.data.CryptocurrencyRepository
  * Factory for creating a [MainViewModel] with a constructor that takes a
  * [CryptocurrencyRepository].
  */
-class MainViewModelFactory(private val repository: CryptocurrencyRepository) : ViewModelProvider.NewInstanceFactory() {
+class MainViewModelFactory(private val application: Application, private val repository: CryptocurrencyRepository) : ViewModelProvider.NewInstanceFactory() {
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return MainViewModel(repository) as T
+        return MainViewModel(application, repository) as T
     }
+
 }

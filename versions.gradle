@@ -16,7 +16,7 @@
 
 def versions = [:]
 
-versions.kotlin = "1.2.60"
+versions.kotlin = "1.2.61"
 versions.android_gradle_plugin = "3.1.4"
 
 versions.min_sdk = 21

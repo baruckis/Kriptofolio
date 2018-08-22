@@ -16,19 +16,17 @@
 
 package com.baruckis.mycryptocoins.mainlist
 
-import android.content.Context
-import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
-import android.text.Spannable
 import android.text.SpannableStringBuilder
-import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.text.plusAssign
-import androidx.core.text.toSpannable
 import com.baruckis.mycryptocoins.R
 import com.baruckis.mycryptocoins.data.Cryptocurrency
 import com.baruckis.mycryptocoins.databinding.FragmentMainListItemBinding
+import com.baruckis.mycryptocoins.utilities.SpannableValueColorStyle
+import com.baruckis.mycryptocoins.utilities.ValueType
+import com.baruckis.mycryptocoins.utilities.getSpannableValueStyled
+import com.baruckis.mycryptocoins.utilities.roundValue
 
 
 class MainRecyclerViewAdapter() : RecyclerView.Adapter<MainRecyclerViewAdapter.BindingViewHolder>() {
@@ -51,40 +49,18 @@ class MainRecyclerViewAdapter() : RecyclerView.Adapter<MainRecyclerViewAdapter.B
 
     override fun getItemCount(): Int = dataList.size
 
-    private fun getChangeValueStyled(value: Double, context: Context, isFiat: Boolean = false): Spannable {
-        val valueString: String = String.format("$value").plus(if (isFiat) " ${context.getString(R.string.pref_default_fiat_currency_value)}" else "%")
-        val valueSpannable: Spannable
-
-        when {
-            value > 0 -> {
-                valueSpannable = "+$valueString".toSpannable()
-                valueSpannable.plusAssign(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorForValueChangePositive)))
-            }
-            value < 0 -> {
-                valueSpannable = valueString.toSpannable()
-                valueSpannable.plusAssign(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorForValueChangeNegative)))
-            }
-            else -> {
-                valueSpannable = valueString.toSpannable()
-                valueSpannable.plusAssign(ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorForMainListItemText)))
-            }
-        }
-        return valueSpannable
-    }
-
     inner class BindingViewHolder(var binding: FragmentMainListItemBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(cryptocurrency: Cryptocurrency) {
             binding.cryptocurrency = cryptocurrency
 
             binding.itemRanking.text = String.format("${cryptocurrency.rank}")
-            binding.itemAmountSymbol.text = String.format("${cryptocurrency.amount} ${cryptocurrency.symbol}")
-            binding.itemPrice.text = String.format("${cryptocurrency.price} ${binding.root.context.getString(R.string.pref_default_fiat_currency_value)}")
-            binding.itemAmountFiat.text = String.format("${cryptocurrency.amountFiat} ${binding.root.context.getString(R.string.pref_default_fiat_currency_value)}")
-            binding.itemPricePercentChange1h7d.text = SpannableStringBuilder(getChangeValueStyled(cryptocurrency.pricePercentChange1h, binding.root.context))
-                    .append(binding.root.context.getString(R.string.string_column_coin_separator_change))
-                    .append(getChangeValueStyled(cryptocurrency.pricePercentChange7d, binding.root.context))
-            binding.itemPricePercentChange24h.text = getChangeValueStyled(cryptocurrency.pricePercentChange24h, binding.root.context)
-            binding.itemAmountFiatChange24h.text = getChangeValueStyled(cryptocurrency.amountFiatChange24h, binding.root.context, true)
+            binding.itemAmountCode.text = String.format("${roundValue(cryptocurrency.amount, ValueType.Crypto)} ${cryptocurrency.symbol}")
+            binding.itemPrice.text = String.format("${roundValue(cryptocurrency.priceFiat, ValueType.Fiat)} ${cryptocurrency.currencyFiat}")
+            binding.itemAmountFiat.text = String.format("${roundValue(cryptocurrency.amountFiat, ValueType.Fiat)} ${cryptocurrency.currencyFiat}")
+            binding.itemPricePercentChange1h7d.text = SpannableStringBuilder(getSpannableValueStyled(binding.root.context, cryptocurrency.pricePercentChange1h, SpannableValueColorStyle.Foreground, ValueType.Percent, "", "%"))
+                    .append(binding.root.context.getString(R.string.string_column_coin_separator_change)).append(getSpannableValueStyled(binding.root.context, cryptocurrency.pricePercentChange7d, SpannableValueColorStyle.Foreground, ValueType.Fiat, "", "%" ))
+            binding.itemPricePercentChange24h.text = getSpannableValueStyled(binding.root.context, cryptocurrency.pricePercentChange24h, SpannableValueColorStyle.Foreground, ValueType.Percent, "", "%")
+            binding.itemAmountFiatChange24h.text = getSpannableValueStyled(binding.root.context, cryptocurrency.amountFiatChange24h, SpannableValueColorStyle.Foreground, ValueType.Percent, "", " ${cryptocurrency.currencyFiat}")
 
             binding.executePendingBindings()
         }

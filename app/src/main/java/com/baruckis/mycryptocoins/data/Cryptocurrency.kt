@@ -17,7 +17,6 @@
 package com.baruckis.mycryptocoins.data
 
 import android.arch.persistence.room.Entity
-import android.arch.persistence.room.Ignore
 import android.arch.persistence.room.PrimaryKey
 
 /**
@@ -27,9 +26,10 @@ import android.arch.persistence.room.PrimaryKey
 data class Cryptocurrency(val name: String,
                           val rank: Short,
                           val amount: Double,
-                          @PrimaryKey
+                          @PrimaryKey(autoGenerate = false)
                           val symbol: String,
-                          val price: Double,
+                          val currencyFiat: String,
+                          val priceFiat: Double,
                           val amountFiat: Double,
                           val pricePercentChange1h: Double,
                           val pricePercentChange7d: Double,

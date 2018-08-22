@@ -72,7 +72,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="@string/sample_text_item_symbol" />
+            tools:text="@string/sample_text_item_code" />
 
     </android.support.constraint.ConstraintLayout>
 

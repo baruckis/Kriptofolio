@@ -18,8 +18,10 @@ package com.baruckis.mycryptocoins.mainlist
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -28,6 +30,7 @@ import android.view.ViewGroup
 import com.baruckis.mycryptocoins.R
 import com.baruckis.mycryptocoins.data.Cryptocurrency
 import com.baruckis.mycryptocoins.utilities.InjectorUtils
+import com.baruckis.mycryptocoins.databinding.FragmentMainListBinding
 
 /**
  * A placeholder fragment containing a simple view.
@@ -40,9 +43,13 @@ class MainListFragment : Fragment() {
 
     private lateinit var viewModel: MainViewModel
 
+    lateinit var binding: FragmentMainListBinding
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val v: View = inflater.inflate(R.layout.fragment_main_list, container, false)
+        // Manage fragment with data binding.
+        binding = DataBindingUtil.inflate(inflater ,R.layout.fragment_main_list, container, false)
+        val v: View  = binding.root
 
         recyclerView = v.findViewById(R.id.recyclerview_fragment_main_list)
         emptyListView = v.findViewById(R.id.layout_fragment_main_list_empty)
@@ -55,7 +62,7 @@ class MainListFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         setupList()
-        subscribeUi()
+        subscribeUi(activity!!)
     }
 
     private fun setupList() {
@@ -64,15 +71,17 @@ class MainListFragment : Fragment() {
         recyclerView.adapter = recyclerAdapter
     }
 
-    private fun subscribeUi() {
+    private fun subscribeUi(activity: FragmentActivity) {
 
-        val factory = InjectorUtils.provideMainViewModelFactory(requireContext())
+        val factory = InjectorUtils.provideMainViewModelFactory(activity.application)
 
-        // Obtain ViewModel from ViewModelProviders, using this fragment as LifecycleOwner.
-        viewModel = ViewModelProviders.of(this, factory).get(MainViewModel::class.java)
+        // Obtain ViewModel from ViewModelProviders, using parent activity as LifecycleOwner.
+        viewModel = ViewModelProviders.of(activity, factory).get(MainViewModel::class.java)
+
+        binding.viewmodel = viewModel
 
         // Update the list when the data changes by observing data on the ViewModel, exposed as a LiveData.
-        viewModel.liveData.observe(this, Observer<List<Cryptocurrency>> { data ->
+        viewModel.liveDataMyCryptocurrencyList.observe(this, Observer<List<Cryptocurrency>> { data ->
             if (data != null && data.isNotEmpty()) {
                 emptyListView.visibility = View.GONE
                 recyclerView.visibility = View.VISIBLE

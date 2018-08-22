@@ -60,7 +60,7 @@ class AddSearchActivity : AppCompatActivity() {
 
         val factory = InjectorUtils.provideAddSearchViewModelFactory(this)
 
-        // Obtain ViewModel from ViewModelProviders, using this fragment as LifecycleOwner.
+        // Obtain ViewModel from ViewModelProviders, using parent activity as LifecycleOwner.
         viewModel = ViewModelProviders.of(this, factory).get(AddSearchViewModel::class.java)
 
         // Update the list when the data changes by observing data on the ViewModel, exposed as a LiveData.

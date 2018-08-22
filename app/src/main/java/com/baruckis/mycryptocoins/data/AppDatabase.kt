@@ -63,11 +63,11 @@ abstract class AppDatabase : RoomDatabase() {
         }
 
         // Sample data.
-        val btc: Cryptocurrency = Cryptocurrency("Bitcoin", 1, 0.56822348, "BTC", 6972.90, 3962.16, 0.25, -14.05, -0.55, -21.79)
-        val eth: Cryptocurrency = Cryptocurrency("Etherium", 2, 6.0, "ETH", 407.45, 2444.70, 0.31, -10.96, 0.13, 3.17)
-        val xrp: Cryptocurrency = Cryptocurrency("XRP", 3, 0.0, "XRP", 0.423225, 0.0, -0.02, -5.30, -1.38, 0.0)
-        val bch: Cryptocurrency = Cryptocurrency("Bitcoin Cash", 4, 0.0, "BCH", 693.52, 0.0, 0.30, -14.40, -0.46, 0.0)
-        val eos: Cryptocurrency = Cryptocurrency("EOS", 5, 0.0, "EOS", 7.01, 0.0, 0.18, -11.80, -0.11, 0.0)
+        val btc: Cryptocurrency = Cryptocurrency("Bitcoin", 1, 0.56822348, "BTC","USD",6972.90,3962.16, 0.25, -14.05, -0.55, -21.79)
+        val eth: Cryptocurrency = Cryptocurrency("Etherium", 2, 6.0, "ETH","USD", 407.45, 2444.70, 0.31, -10.96, 0.13, 3.17)
+        val xrp: Cryptocurrency = Cryptocurrency("XRP", 3, 0.0, "XRP","USD", 0.423225, 0.0, -0.02, -5.30, -1.38, 0.0)
+        val bch: Cryptocurrency = Cryptocurrency("Bitcoin Cash", 4, 0.0, "BCH","USD", 693.52, 0.0, 0.30, -14.40, -0.46, 0.0)
+        val eos: Cryptocurrency = Cryptocurrency("EOS", 5, 0.0, "EOS","USD", 7.01, 0.0, 0.18, -11.80, -0.11, 0.0)
 
         val PREPOPULATE_DATA = listOf(btc, eth, xrp, bch, eos)
     }

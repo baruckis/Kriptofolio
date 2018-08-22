@@ -33,6 +33,11 @@ class CryptocurrencyRepository private constructor(
         return cryptocurrencyDao.getAllCryptocurrencyLiveDataList()
     }
 
+    fun getSpecificCryptocurrencyLiveData(specificCryptoCode: String): LiveData<Cryptocurrency> {
+        return cryptocurrencyDao.getSpecificCryptocurrencyLiveData(specificCryptoCode)
+    }
+
+
     companion object {
 
         // Marks the JVM backing field of the annotated property as volatile, meaning that writes to this field are immediately made visible to other threads.

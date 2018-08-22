@@ -33,6 +33,9 @@ interface CryptocurrencyDao {
     @Query("SELECT * FROM cryptocurrencies")
     fun getAllCryptocurrencyLiveDataList(): LiveData<List<Cryptocurrency>>
 
+    @Query("SELECT * FROM cryptocurrencies WHERE symbol = :specificCryptoCode")
+    fun getSpecificCryptocurrencyLiveData(specificCryptoCode: String): LiveData<Cryptocurrency>
+
     @Insert
     fun insertDataToAllCryptocurrencyList(data: List<Cryptocurrency>)
 }

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ Copyright 2018 Andrius Baruckis www.baruckis.com | mycryptocoins.baruckis.com
   ~
@@ -30,8 +30,10 @@
     <string name="string_crypto_list_empty_secondary">"Add your crypto via the + button below."</string> <!-- TODO translate to HE -->
 
     <string name="string_column_coin_crypto_hold_amount_symbol"> מטבע אנוסים\nסכום"&amp;"סמל </string>
-    <string name="string_column_coin_fiat_price_amount">"$ מחיר\n$ סכום"</string>
+    <string name="string_column_coin_fiat_price_amount">"%2$s מחיר\n%1$s סכום"</string>
     <string name="string_column_coin_change_24h_1h_7d">"מחיר% ± 1 h / 7 ד\nh המחיר% ± 24\nסכום ± 24 $ h"</string>
+
+    <string name="sample_text_column_coin_fiat_price_amount">"$ מחיר\n$ סכום"</string>
 
     <string name="sample_text_total_value_on_date_time">"ערך אחזקות סה\"כ (2018/11/03 00:55:08)"</string>
 

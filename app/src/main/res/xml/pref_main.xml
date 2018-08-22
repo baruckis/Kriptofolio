@@ -22,7 +22,7 @@
             android:entries="@array/pref_language_list_entries"
             android:entryValues="@array/pref_language_list_values"
             android:icon="@drawable/ic_translate"
-            android:key="language_list"
+            android:key="@string/pref_language_key"
             android:summary="@string/pref_default_language_entry"
             android:title="@string/pref_language_title"
             tools:summary="@string/pref_default_language_entry" />
@@ -32,7 +32,7 @@
             android:entries="@array/pref_fiat_currency_list_entries"
             android:entryValues="@array/pref_fiat_currency_list_values"
             android:icon="@drawable/ic_cash"
-            android:key="fiat_currency_list"
+            android:key="@string/pref_fiat_currency_key"
             android:summary="@string/pref_default_fiat_currency_entry"
             android:title="@string/pref_fiat_currency_title"
             tools:summary="@string/pref_default_fiat_currency_entry" />

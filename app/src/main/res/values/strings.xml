@@ -35,14 +35,19 @@
     <string name="string_separator_code" translatable="false">"/"</string>
     <string name="string_crypto_code" translatable="false">"BTC"</string>
 
+    <string name="default_crypto_code" translatable="false">"BTC"</string>
+    <string name="default_crypto_sign" translatable="false">"₿"</string>
+
     <string name="string_crypto_list_empty_primary">"Your owned crypto coins list is empty!"</string>
     <string name="string_crypto_list_empty_secondary">"Add your crypto via the + button below."</string>
 
     <string name="string_column_coin_ranking" translatable="false">"↑↓"</string>
     <string name="string_column_coin_crypto_hold_amount_symbol">"Crypto coin\nAmount &#38; symbol"</string>
-    <string name="string_column_coin_fiat_price_amount">"Price $\nAmount $"</string>
+    <string name="string_column_coin_fiat_price_amount">"Price %1$s\nAmount %2$s"</string>
     <string name="string_column_coin_change_24h_1h_7d">"± price % 1 h / 7 d\n± price % 24 h\n± amount $ 24 h"</string>
     <string name="string_column_coin_separator_change" translatable="false">" / "</string>
+
+    <string name="sample_text_column_coin_fiat_price_amount">"Price $\nAmount $"</string>
 
     <string name="sample_text_total_value_on_date_time">"Total holdings value (11/03/2018 12:55:08)"</string>
     <string name="sample_text_total_value_change_24h" translatable="false">" $ +1538.00 "</string>
@@ -52,7 +57,7 @@
     <string name="sample_text_item_icon" translatable="false">"MMM"</string>
     <string name="sample_text_item_name" translatable="false">"Quantum Resistant Ledger"</string>
     <string name="sample_text_item_ranking" translatable="false">"1001"</string>
-    <string name="sample_text_item_amount_symbol" translatable="false">"0.56822348 BITSILVER"</string>
+    <string name="sample_text_item_amount_code" translatable="false">"0.56822348 BITSILVER"</string>
     <string name="sample_text_item_price_fiat" translatable="false">"94,893,149,774.13 USD"</string>
     <string name="sample_text_item_amount_fiat" translatable="false">"20,758,463.13 USD"</string>
     <string name="sample_text_item_price_percent_change_1h_7d" translatable="false">"-901.94% / -10909.09%"</string>
@@ -60,7 +65,7 @@
     <string name="sample_text_item_amount_fiat_change_24h" translatable="false">"+1,053.12 USD"</string>
 
 
-    <string-array name="fiat_currency_array" translatable="false">
+    <string-array name="fiat_currency_code_array" translatable="false">
         <item>"&usd;"</item>
         <item>"&aud;"</item>
         <item>"&brl;"</item>
@@ -95,6 +100,41 @@
         <item>"&zar;"</item>
     </string-array>
 
+    <string-array name="fiat_currency_sign_array" translatable="false">
+        <item>"$"</item>
+        <item>"A$"</item>
+        <item>"R$"</item>
+        <item>"C$"</item>
+        <item>"Fr."</item>
+        <item>"$"</item>
+        <item>"¥"</item>
+        <item>"Kč"</item>
+        <item>"Kr."</item>
+        <item>"€"</item>
+        <item>"£"</item>
+        <item>"HK$"</item>
+        <item>"Ft"</item>
+        <item>"Rp"</item>
+        <item>"₪"</item>
+        <item>"₹"</item>
+        <item>"JP¥"</item>
+        <item>"₩"</item>
+        <item>"Mex$"</item>
+        <item>"RM"</item>
+        <item>"kr"</item>
+        <item>"NZ$"</item>
+        <item>"₱"</item>
+        <item>"₨"</item>
+        <item>"zł"</item>
+        <item>"₽"</item>
+        <item>"kr"</item>
+        <item>"S$"</item>
+        <item>"฿"</item>
+        <item>"₺"</item>
+        <item>"NT$"</item>
+        <item>"R"</item>
+    </string-array>
+
 
     <!-- Strings related to Add Search Activity -->
 
@@ -105,7 +145,7 @@
 
     <string name="search_hint">"Search for specific coin…"</string>
 
-    <string name="sample_text_item_symbol" translatable="false">"BITSILVER"</string>
+    <string name="sample_text_item_code" translatable="false">"BITSILVER"</string>
 
     <string name="title_activity_settings">"Settings"</string>
 
@@ -115,6 +155,8 @@
     <string name="pref_general_category_title">"General"</string>
 
     <string name="pref_language_title">"Language"</string>
+
+    <string name="pref_language_key" translatable="false">"preference language"</string>
 
     <string name="pref_default_language_entry">"English"</string>
     <string name="pref_default_language_value">"EN"</string>
@@ -132,6 +174,8 @@
     </string-array>
 
     <string name="pref_fiat_currency_title">"Fiat currency"</string>
+
+    <string name="pref_fiat_currency_key" translatable="false">"preference fiat currency"</string>
 
     <string name="pref_default_fiat_currency_entry">"&usd; - US Dollar"</string>
     <string name="pref_default_fiat_currency_value">"&usd;"</string>

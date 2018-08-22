@@ -16,11 +16,13 @@
 
 package com.baruckis.mycryptocoins.utilities
 
+import android.app.Application
 import android.content.Context
 import com.baruckis.mycryptocoins.addsearchlist.AddSearchViewModelFactory
 import com.baruckis.mycryptocoins.data.AppDatabase
 import com.baruckis.mycryptocoins.data.CryptocurrencyRepository
 import com.baruckis.mycryptocoins.mainlist.MainViewModelFactory
+
 
 /**
  * Static methods used to inject classes needed for various Activities and Fragments.
@@ -33,10 +35,10 @@ object InjectorUtils {
     }
 
     fun provideMainViewModelFactory(
-            context: Context
+            application: Application
     ): MainViewModelFactory {
-        val repository = getCryptocurrencyRepository(context)
-        return MainViewModelFactory(repository)
+        val repository = getCryptocurrencyRepository(application)
+        return MainViewModelFactory(application, repository)
     }
 
     fun provideAddSearchViewModelFactory(

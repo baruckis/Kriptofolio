@@ -16,14 +16,19 @@
 
 package com.baruckis.mycryptocoins.mainlist
 
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.support.v7.app.AppCompatActivity
+import android.text.SpannableString
 import android.view.Menu
 import android.view.MenuItem
 import com.baruckis.mycryptocoins.addsearchlist.AddSearchActivity
 import com.baruckis.mycryptocoins.R
 import com.baruckis.mycryptocoins.settings.SettingsActivity
+import com.baruckis.mycryptocoins.utilities.InjectorUtils
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -31,6 +36,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Load the default values only for the first time when the user still hasn't used the preferences-screen.
+        PreferenceManager.setDefaultValues(this, R.xml.pref_main, false);
+
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
@@ -38,6 +47,8 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this@MainActivity, AddSearchActivity::class.java)
             startActivity(intent)
         }
+
+        subscribeUi()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -57,5 +68,31 @@ class MainActivity : AppCompatActivity() {
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun subscribeUi() {
+
+        val factory = InjectorUtils.provideMainViewModelFactory(application)
+
+        // Obtain ViewModel from ViewModelProviders, using this activity as LifecycleOwner.
+        val viewModel: MainViewModel = ViewModelProviders.of(this, factory).get(MainViewModel::class.java)
+
+
+        // Update the all these separate text fields when the data changes by observing data on the ViewModel, exposed as a LiveData.
+
+        viewModel.liveDataTotalHoldingsValueFiat24hText.observe(this, Observer<SpannableString> { data ->
+            textview_total_value_change_24h.text = data
+        })
+
+        viewModel.liveDataTotalHoldingsValueFiatText.observe(this, Observer<String> { data ->
+            textview_fiat_value.text = data
+            textview_fiat_value.requestLayout() // After text view size changed, force it to refresh to align vertically in the center correctly.
+        })
+
+        viewModel.liveDataTotalHoldingsValueCryptoText.observe(this, Observer<String> { data ->
+            textview_crypto_value.text = data
+            textview_crypto_value.requestLayout() // After text view size changed, force it to refresh to align vertically in the center correctly.
+        })
+
     }
 }
