@@ -31,5 +31,5 @@ class MainViewModelFactory(private val application: Application, private val rep
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         return MainViewModel(application, repository) as T
     }
-    
+
 }
