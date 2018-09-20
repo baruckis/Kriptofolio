@@ -14,22 +14,21 @@
  * limitations under the License.
  */
 
-package com.baruckis.mycryptocoins.mainlist
+package com.baruckis.mycryptocoins.dependencyinjection
 
-import android.app.Application
 import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProvider
-import com.baruckis.mycryptocoins.data.CryptocurrencyRepository
+import dagger.MapKey
+import kotlin.reflect.KClass
 
 /**
- * Factory for creating a [MainViewModel] with a constructor that takes a
- * [CryptocurrencyRepository].
+ * An annotation class which tells dagger that it can be used to determine keys in multi bound maps.
  */
-class MainViewModelFactory(private val application: Application, private val repository: CryptocurrencyRepository) : ViewModelProvider.NewInstanceFactory() {
-
-    @Suppress("UNCHECKED_CAST")
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return MainViewModel(application, repository) as T
-    }
-    
-}
+@MustBeDocumented
+@Target(
+        AnnotationTarget.FUNCTION,
+        AnnotationTarget.PROPERTY_GETTER,
+        AnnotationTarget.PROPERTY_SETTER
+)
+@Retention(AnnotationRetention.RUNTIME)
+@MapKey
+annotation class ViewModelKey(val value: KClass<out ViewModel>) // We might use only those classes which inherit from ViewModel.

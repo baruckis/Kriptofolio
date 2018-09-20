@@ -14,36 +14,18 @@
  * limitations under the License.
  */
 
-def versions = [:]
+package com.baruckis.mycryptocoins.dependencyinjection
 
-versions.kotlin = "1.2.70"
-versions.android_gradle_plugin = "3.1.4"
+import com.baruckis.mycryptocoins.mainlist.MainListFragment
+import dagger.Module
+import dagger.android.ContributesAndroidInjector
 
-versions.min_sdk = 21
-versions.compile_sdk = 28
-versions.target_sdk = 28
+/**
+ * All fragments related to MainActivity intended to use Dagger @Inject should be listed here.
+ */
+@Module
+abstract class MainListFragmetBuildersModule {
 
-
-versions.support = "27.1.1"
-versions.constraint_layout = "1.1.3"
-
-versions.core = "0.3"
-versions.lifecycle = "1.1.1"
-
-versions.room = "1.1.1"
-
-
-versions.atsl_runner = "1.0.2"
-versions.espresso = "3.0.2"
-
-
-versions.dagger = "2.17"
-
-versions.junit = "4.12"
-
-versions.flip_view = "1.1.3"
-
-versions.stetho = "1.5.0"
-
-
-ext.versions = versions
+    @ContributesAndroidInjector() // Attaches fragment to Dagger graph.
+    abstract fun contributeMainListFragment(): MainListFragment
+}

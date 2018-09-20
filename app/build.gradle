@@ -16,8 +16,8 @@
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
-apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-android-extensions' // To implement view binding
+apply plugin: 'kotlin-kapt' // For annotation processing
 
 // Version values at Project level versions.gradle.
 
@@ -85,6 +85,13 @@ dependencies {
 
 
     /* Other */
+
+    // Dagger for dependency injection
+    implementation "com.google.dagger:dagger:$versions.dagger"
+    implementation "com.google.dagger:dagger-android:$versions.dagger"
+    implementation "com.google.dagger:dagger-android-support:$versions.dagger"
+    kapt "com.google.dagger:dagger-compiler:$versions.dagger"
+    kapt "com.google.dagger:dagger-android-processor:$versions.dagger"
 
     // Dependencies for local unit tests
     testImplementation "junit:junit:$versions.junit"

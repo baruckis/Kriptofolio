@@ -17,25 +17,50 @@
 package com.baruckis.mycryptocoins.mainlist
 
 import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.preference.PreferenceManager
+import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.text.SpannableString
 import android.view.Menu
 import android.view.MenuItem
-import com.baruckis.mycryptocoins.addsearchlist.AddSearchActivity
 import com.baruckis.mycryptocoins.R
+import com.baruckis.mycryptocoins.addsearchlist.AddSearchActivity
 import com.baruckis.mycryptocoins.settings.SettingsActivity
-import com.baruckis.mycryptocoins.utilities.InjectorUtils
+import dagger.android.AndroidInjector
+import dagger.android.DispatchingAndroidInjector
+import dagger.android.support.HasSupportFragmentInjector
 import kotlinx.android.synthetic.main.activity_main.*
+import javax.inject.Inject
 
+// To support injecting fragments which belongs to this activity we need to implement HasSupportFragmentInjector.
+// We would not need to implement it, if our activity did not contain any fragments or the fragments did not need to inject anything.
+class MainActivity : AppCompatActivity(), HasSupportFragmentInjector {
 
-class MainActivity : AppCompatActivity() {
+    @Inject
+    lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Fragment>
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+    private lateinit var mainViewModel: MainViewModel
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
+
+
+        // this is the old way how we were injecting code before using Dagger.
+        //val factory = InjectorUtils.provideMainViewModelFactory(application)
+
+        // Obtain ViewModel from ViewModelProviders, using this activity as LifecycleOwner.
+
+
+        mainViewModel = ViewModelProviders.of(this, viewModelFactory).get(MainViewModel::class.java)
+
 
         // Load the default values only for the first time when the user still hasn't used the preferences-screen.
         PreferenceManager.setDefaultValues(this, R.xml.pref_main, false);
@@ -70,26 +95,23 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun supportFragmentInjector(): AndroidInjector<Fragment> = dispatchingAndroidInjector
+
+
     private fun subscribeUi() {
-
-        val factory = InjectorUtils.provideMainViewModelFactory(application)
-
-        // Obtain ViewModel from ViewModelProviders, using this activity as LifecycleOwner.
-        val viewModel: MainViewModel = ViewModelProviders.of(this, factory).get(MainViewModel::class.java)
-
 
         // Update the all these separate text fields when the data changes by observing data on the ViewModel, exposed as a LiveData.
 
-        viewModel.liveDataTotalHoldingsValueFiat24hText.observe(this, Observer<SpannableString> { data ->
+        mainViewModel.liveDataTotalHoldingsValueFiat24hText.observe(this, Observer<SpannableString> { data ->
             textview_total_value_change_24h.text = data
         })
 
-        viewModel.liveDataTotalHoldingsValueFiatText.observe(this, Observer<String> { data ->
+        mainViewModel.liveDataTotalHoldingsValueFiatText.observe(this, Observer<String> { data ->
             textview_fiat_value.text = data
             textview_fiat_value.requestLayout() // After text view size changed, force it to refresh to align vertically in the center correctly.
         })
 
-        viewModel.liveDataTotalHoldingsValueCryptoText.observe(this, Observer<String> { data ->
+        mainViewModel.liveDataTotalHoldingsValueCryptoText.observe(this, Observer<String> { data ->
             textview_crypto_value.text = data
             textview_crypto_value.requestLayout() // After text view size changed, force it to refresh to align vertically in the center correctly.
         })

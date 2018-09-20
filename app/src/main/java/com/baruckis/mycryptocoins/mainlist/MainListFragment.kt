@@ -17,6 +17,7 @@
 package com.baruckis.mycryptocoins.mainlist
 
 import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil
 import android.os.Bundle
@@ -29,18 +30,21 @@ import android.view.View
 import android.view.ViewGroup
 import com.baruckis.mycryptocoins.R
 import com.baruckis.mycryptocoins.data.Cryptocurrency
-import com.baruckis.mycryptocoins.utilities.InjectorUtils
 import com.baruckis.mycryptocoins.databinding.FragmentMainListBinding
+import com.baruckis.mycryptocoins.dependencyinjection.Injectable
+import javax.inject.Inject
 
 /**
  * A placeholder fragment containing a simple view.
  */
-class MainListFragment : Fragment() {
+class MainListFragment : Fragment(), Injectable {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var emptyListView: View
     private lateinit var recyclerAdapter: MainRecyclerViewAdapter
 
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
     private lateinit var viewModel: MainViewModel
 
     lateinit var binding: FragmentMainListBinding
@@ -48,8 +52,8 @@ class MainListFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Manage fragment with data binding.
-        binding = DataBindingUtil.inflate(inflater ,R.layout.fragment_main_list, container, false)
-        val v: View  = binding.root
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_main_list, container, false)
+        val v: View = binding.root
 
         recyclerView = v.findViewById(R.id.recyclerview_fragment_main_list)
         emptyListView = v.findViewById(R.id.layout_fragment_main_list_empty)
@@ -58,7 +62,6 @@ class MainListFragment : Fragment() {
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
-
         super.onActivityCreated(savedInstanceState)
 
         setupList()
@@ -73,10 +76,11 @@ class MainListFragment : Fragment() {
 
     private fun subscribeUi(activity: FragmentActivity) {
 
-        val factory = InjectorUtils.provideMainViewModelFactory(activity.application)
+        // this is the old way how we were injecting code before using Dagger.
+        //viewModelFactory = InjectorUtils.provideMainViewModelFactory(activity.application)
 
         // Obtain ViewModel from ViewModelProviders, using parent activity as LifecycleOwner.
-        viewModel = ViewModelProviders.of(activity, factory).get(MainViewModel::class.java)
+        viewModel = ViewModelProviders.of(activity, viewModelFactory).get(MainViewModel::class.java)
 
         binding.viewmodel = viewModel
 

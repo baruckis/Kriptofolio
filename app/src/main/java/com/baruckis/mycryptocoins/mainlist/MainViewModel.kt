@@ -16,7 +16,6 @@
 
 package com.baruckis.mycryptocoins.mainlist
 
-import android.app.Application
 import android.arch.lifecycle.*
 import android.content.Context
 import android.preference.PreferenceManager
@@ -28,6 +27,7 @@ import com.baruckis.mycryptocoins.utilities.SpannableValueColorStyle
 import com.baruckis.mycryptocoins.utilities.ValueType
 import com.baruckis.mycryptocoins.utilities.getSpannableValueStyled
 import com.baruckis.mycryptocoins.utilities.roundValue
+import javax.inject.Inject
 
 
 /**
@@ -35,8 +35,8 @@ import com.baruckis.mycryptocoins.utilities.roundValue
  * The ViewModel class allows data to survive configuration changes such as screen rotations.
  */
 
-// Instead of ViewModel extend AndroidViewModel as it supplies an application singleton for use as a context.
-class MainViewModel(application: Application, cryptocurrencyRepository: CryptocurrencyRepository) : AndroidViewModel(application) {
+// ViewModel will require a CryptocurrencyRepository so we add @Inject code into ViewModel constructor.
+class MainViewModel @Inject constructor(context: Context, cryptocurrencyRepository: CryptocurrencyRepository) : ViewModel() {
 
     private var currentCryptoCurrencyCode: String
     private var currentCryptoCurrencySign: String
@@ -55,11 +55,11 @@ class MainViewModel(application: Application, cryptocurrencyRepository: Cryptocu
 
 
     init {
-        currentCryptoCurrencyCode = application.getString(R.string.default_crypto_code)
-        currentCryptoCurrencySign = application.getString(R.string.default_crypto_sign)
+        currentCryptoCurrencyCode = context.getString(R.string.default_crypto_code)
+        currentCryptoCurrencySign = context.getString(R.string.default_crypto_sign)
 
-        currentFiatCurrencyCode = PreferenceManager.getDefaultSharedPreferences(application).getString(application.resources.getString(R.string.pref_fiat_currency_key), application.resources.getString(R.string.pref_default_fiat_currency_value))!!
-        currentFiatCurrencySign = getSupportedFiatCurrencySymbols(application).asSequence().filter { it.key.equals(currentFiatCurrencyCode) }.first().value
+        currentFiatCurrencyCode = PreferenceManager.getDefaultSharedPreferences(context).getString(context.resources.getString(R.string.pref_fiat_currency_key), context.resources.getString(R.string.pref_default_fiat_currency_value))!!
+        currentFiatCurrencySign = getSupportedFiatCurrencySymbols(context).asSequence().filter { it.key.equals(currentFiatCurrencyCode) }.first().value
 
         liveDataMyCryptocurrencyList = cryptocurrencyRepository.getMyCryptocurrencyLiveDataList()
         liveDataCurrentCryptocurrency = cryptocurrencyRepository.getSpecificCryptocurrencyLiveData(currentCryptoCurrencyCode)
@@ -70,7 +70,7 @@ class MainViewModel(application: Application, cryptocurrencyRepository: Cryptocu
         liveDataTotalHoldingsValueCrypto = countTotalHoldingsValueCrypto(liveDataTotalHoldingsValueFiat, liveDataCurrentCryptocurrency)
 
         liveDataTotalHoldingsValueFiat24hText = Transformations.switchMap(liveDataTotalHoldingsValueFiat24h) {
-            MutableLiveData<SpannableString>().apply { value = getSpannableValueStyled(getApplication(), liveDataTotalHoldingsValueFiat24h.value!!, SpannableValueColorStyle.Background, ValueType.Fiat, " $currentFiatCurrencySign ", " ") } }
+            MutableLiveData<SpannableString>().apply { value = getSpannableValueStyled(context, liveDataTotalHoldingsValueFiat24h.value!!, SpannableValueColorStyle.Background, ValueType.Fiat, " $currentFiatCurrencySign ", " ") } }
         liveDataTotalHoldingsValueCryptoText = Transformations.switchMap(liveDataTotalHoldingsValueCrypto) { MutableLiveData<String>().apply { value = String.format("$currentCryptoCurrencySign ${roundValue(liveDataTotalHoldingsValueCrypto.value!!, ValueType.Crypto)}") } }
         liveDataTotalHoldingsValueFiatText = Transformations.switchMap(liveDataTotalHoldingsValueFiat) { MutableLiveData<String>().apply { value = String.format("$currentFiatCurrencySign ${roundValue(liveDataTotalHoldingsValueFiat.value!!, ValueType.Fiat)}") } }
     }

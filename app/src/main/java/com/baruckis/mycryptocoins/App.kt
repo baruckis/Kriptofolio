@@ -16,14 +16,31 @@
 
 package com.baruckis.mycryptocoins
 
+import android.app.Activity
 import android.app.Application
+import com.baruckis.mycryptocoins.dependencyinjection.AppInjector
 import com.facebook.stetho.Stetho
+import dagger.android.AndroidInjector
+import dagger.android.DispatchingAndroidInjector
+import dagger.android.HasActivityInjector
+import javax.inject.Inject
 
 
-class App : Application() {
+class App : Application(), HasActivityInjector {
+
+    @Inject // It implements Dagger machinery of finding appropriate injector factory for a type.
+    lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Activity>
 
     override fun onCreate() {
         super.onCreate()
+
+        // Initialize in order to automatically inject activities and fragments if they implement Injectable interface.
+        AppInjector.init(this)
+
         Stetho.initializeWithDefaults(this);
     }
+
+
+    // This is required by HasActivityInjector interface to setup Dagger for Activity.
+    override fun activityInjector(): AndroidInjector<Activity> = dispatchingAndroidInjector
 }
