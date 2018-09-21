@@ -67,7 +67,7 @@ object AppInjector {
     }
 
     private fun handleActivity(activity: Activity) {
-        if (activity is HasSupportFragmentInjector) {
+        if (activity is HasSupportFragmentInjector || activity is Injectable) {
             // Calling inject() method will cause Dagger to locate the singletons in the dependency graph to try to find a matching return type.
             // If it finds one, it assigns the references to the respective fields.
             AndroidInjection.inject(activity)

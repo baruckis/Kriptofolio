@@ -18,6 +18,7 @@ package com.baruckis.mycryptocoins.dependencyinjection
 
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
+import com.baruckis.mycryptocoins.addsearchlist.AddSearchViewModel
 import com.baruckis.mycryptocoins.mainlist.MainViewModel
 import dagger.Binds
 import dagger.Module
@@ -34,6 +35,11 @@ abstract class ViewModelsModule {
     @IntoMap
     @ViewModelKey(MainViewModel::class) // We use a restriction on multibound map defined with @ViewModelKey annotation, and if don't need any, we should use @ClassKey annotation provided by Dagger.
     abstract fun bindMainViewModel(mainViewModel: MainViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(AddSearchViewModel::class)
+    abstract fun bindAddSearchViewModel(addSearchViewModel: AddSearchViewModel): ViewModel
 
     @Binds
     abstract fun bindViewModelFactory(factory: ViewModelFactory): ViewModelProvider.Factory

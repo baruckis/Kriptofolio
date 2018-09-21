@@ -108,10 +108,10 @@ class MainViewModel @Inject constructor(context: Context, cryptocurrencyReposito
 
         val result = MediatorLiveData<Double>()
 
-        result.addSource(totalHoldingsValueFiat) { value ->
+        result.addSource(totalHoldingsValueFiat) { _ ->
             result.value = combineLatestData()
         }
-        result.addSource(currentCryptocurrency) { value ->
+        result.addSource(currentCryptocurrency) { _ ->
             result.value = combineLatestData()
         }
 

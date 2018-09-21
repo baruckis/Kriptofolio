@@ -49,21 +49,13 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
 
-
-        // this is the old way how we were injecting code before using Dagger.
-        //val factory = InjectorUtils.provideMainViewModelFactory(application)
-
         // Obtain ViewModel from ViewModelProviders, using this activity as LifecycleOwner.
-
-
         mainViewModel = ViewModelProviders.of(this, viewModelFactory).get(MainViewModel::class.java)
 
-
         // Load the default values only for the first time when the user still hasn't used the preferences-screen.
-        PreferenceManager.setDefaultValues(this, R.xml.pref_main, false);
+        PreferenceManager.setDefaultValues(this, R.xml.pref_main, false)
 
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)

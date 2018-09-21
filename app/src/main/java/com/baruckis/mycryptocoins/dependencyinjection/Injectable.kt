@@ -17,6 +17,6 @@
 package com.baruckis.mycryptocoins.dependencyinjection
 
 /**
- * It is just a plain empty marker interface, which tells to automatically inject fragments if they implement it.
+ * It is just a plain empty marker interface, which tells to automatically inject activities or fragments if they implement it.
  */
 interface Injectable

@@ -16,6 +16,7 @@
 
 package com.baruckis.mycryptocoins.dependencyinjection
 
+import com.baruckis.mycryptocoins.addsearchlist.AddSearchActivity
 import com.baruckis.mycryptocoins.mainlist.MainActivity
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
@@ -28,4 +29,7 @@ abstract class ActivityBuildersModule {
 
     @ContributesAndroidInjector(modules = [MainListFragmetBuildersModule::class]) // Where to apply the injection.
     abstract fun contributeMainActivity(): MainActivity
+
+    @ContributesAndroidInjector
+    abstract fun contributeAddSearchActivity(): AddSearchActivity
 }

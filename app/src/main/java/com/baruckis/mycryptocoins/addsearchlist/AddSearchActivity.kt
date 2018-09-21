@@ -18,6 +18,7 @@ package com.baruckis.mycryptocoins.addsearchlist
 
 import android.app.SearchManager
 import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.os.Bundle
@@ -28,15 +29,18 @@ import android.view.View
 import android.widget.ListView
 import com.baruckis.mycryptocoins.R
 import com.baruckis.mycryptocoins.data.Cryptocurrency
-import com.baruckis.mycryptocoins.utilities.InjectorUtils
+import com.baruckis.mycryptocoins.dependencyinjection.Injectable
 import kotlinx.android.synthetic.main.activity_add_search.*
+import javax.inject.Inject
 
 
-class AddSearchActivity : AppCompatActivity() {
+class AddSearchActivity : AppCompatActivity(), Injectable {
 
     private lateinit var listView: ListView
     private lateinit var listAdapter: AddSearchListAdapter
 
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
     private lateinit var viewModel: AddSearchViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,10 +62,8 @@ class AddSearchActivity : AppCompatActivity() {
 
     private fun subscribeUi() {
 
-        val factory = InjectorUtils.provideAddSearchViewModelFactory(this)
-
         // Obtain ViewModel from ViewModelProviders, using parent activity as LifecycleOwner.
-        viewModel = ViewModelProviders.of(this, factory).get(AddSearchViewModel::class.java)
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(AddSearchViewModel::class.java)
 
         // Update the list when the data changes by observing data on the ViewModel, exposed as a LiveData.
         viewModel.liveData.observe(this, Observer<List<Cryptocurrency>> { data ->

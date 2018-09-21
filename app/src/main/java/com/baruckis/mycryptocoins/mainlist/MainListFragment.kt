@@ -76,9 +76,6 @@ class MainListFragment : Fragment(), Injectable {
 
     private fun subscribeUi(activity: FragmentActivity) {
 
-        // this is the old way how we were injecting code before using Dagger.
-        //viewModelFactory = InjectorUtils.provideMainViewModelFactory(activity.application)
-
         // Obtain ViewModel from ViewModelProviders, using parent activity as LifecycleOwner.
         viewModel = ViewModelProviders.of(activity, viewModelFactory).get(MainViewModel::class.java)
 
