@@ -16,10 +16,10 @@
 
 package com.baruckis.mycryptocoins.mainlist
 
-import android.support.v7.widget.RecyclerView
 import android.text.SpannableStringBuilder
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import com.baruckis.mycryptocoins.R
 import com.baruckis.mycryptocoins.data.Cryptocurrency
 import com.baruckis.mycryptocoins.databinding.FragmentMainListItemBinding
@@ -58,7 +58,7 @@ class MainRecyclerViewAdapter() : RecyclerView.Adapter<MainRecyclerViewAdapter.B
             binding.itemPrice.text = String.format("${roundValue(cryptocurrency.priceFiat, ValueType.Fiat)} ${cryptocurrency.currencyFiat}")
             binding.itemAmountFiat.text = String.format("${roundValue(cryptocurrency.amountFiat, ValueType.Fiat)} ${cryptocurrency.currencyFiat}")
             binding.itemPricePercentChange1h7d.text = SpannableStringBuilder(getSpannableValueStyled(binding.root.context, cryptocurrency.pricePercentChange1h, SpannableValueColorStyle.Foreground, ValueType.Percent, "", "%"))
-                    .append(binding.root.context.getString(R.string.string_column_coin_separator_change)).append(getSpannableValueStyled(binding.root.context, cryptocurrency.pricePercentChange7d, SpannableValueColorStyle.Foreground, ValueType.Fiat, "", "%" ))
+                    .append(binding.root.context.getString(R.string.string_column_coin_separator_change)).append(getSpannableValueStyled(binding.root.context, cryptocurrency.pricePercentChange7d, SpannableValueColorStyle.Foreground, ValueType.Fiat, "", "%"))
             binding.itemPricePercentChange24h.text = getSpannableValueStyled(binding.root.context, cryptocurrency.pricePercentChange24h, SpannableValueColorStyle.Foreground, ValueType.Percent, "", "%")
             binding.itemAmountFiatChange24h.text = getSpannableValueStyled(binding.root.context, cryptocurrency.amountFiatChange24h, SpannableValueColorStyle.Foreground, ValueType.Percent, "", " ${cryptocurrency.currencyFiat}")
 

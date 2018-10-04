@@ -16,17 +16,17 @@
 
 package com.baruckis.mycryptocoins.mainlist
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProvider
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.preference.PreferenceManager
-import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
 import android.text.SpannableString
 import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import com.baruckis.mycryptocoins.R
 import com.baruckis.mycryptocoins.addsearchlist.AddSearchActivity
 import com.baruckis.mycryptocoins.settings.SettingsActivity

@@ -16,7 +16,7 @@
 
 package com.baruckis.mycryptocoins.data
 
-import android.arch.lifecycle.LiveData
+import androidx.lifecycle.LiveData
 
 /**
  * The class for managing multiple data sources.

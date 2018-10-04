@@ -24,12 +24,12 @@
             type="com.baruckis.mycryptocoins.data.Cryptocurrency" />
     </data>
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="@dimen/add_search_list_item_inner_margin">
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/item_ranking"
             style="@style/AddSearchListItemText"
             android:layout_width="40dp"
@@ -52,7 +52,7 @@
             app:layout_constraintStart_toEndOf="@+id/item_ranking"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/item_name"
             style="@style/AddSearchListItemPrimeText"
             android:layout_marginEnd="@dimen/add_search_list_item_text_between_margin_2x"
@@ -64,7 +64,7 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:text="@string/sample_text_item_name" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/item_symbol"
             style="@style/AddSearchListItemText"
             android:layout_marginEnd="@dimen/add_search_list_item_text_between_margin"
@@ -74,6 +74,6 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:text="@string/sample_text_item_code" />
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

@@ -24,7 +24,7 @@
             type="com.baruckis.mycryptocoins.data.Cryptocurrency" />
     </data>
 
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/main_cardview_list_item_outer_top_bottom_margin"
@@ -36,19 +36,19 @@
         android:foreground="?android:attr/selectableItemBackground"
         app:cardBackgroundColor="@color/colorForMainListItemBackground">
 
-        <android.support.constraint.ConstraintLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="@dimen/main_cardview_list_item_inner_margin">
 
-            <android.support.constraint.Guideline
+            <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline1_percent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 app:layout_constraintGuide_percent="@dimen/main_guide1_percent" />
 
-            <android.support.constraint.Guideline
+            <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline2_percent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -64,7 +64,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/item_ranking"
                 style="@style/MainListItemText"
                 android:layout_marginEnd="@dimen/main_cardview_list_item_text_between_margin"
@@ -76,7 +76,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/item_image_icon"
                 tools:text="@string/sample_text_item_ranking" />
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/item_name"
                 style="@style/MainListItemPrimeText"
                 android:layout_marginEnd="@dimen/main_cardview_list_item_text_between_margin"
@@ -90,7 +90,7 @@
                 app:layout_constraintVertical_chainStyle="spread"
                 tools:text="@string/sample_text_item_name" />
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/item_amount_code"
                 style="@style/MainListItemText"
                 android:layout_marginEnd="@dimen/main_cardview_list_item_text_between_margin"
@@ -104,7 +104,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/item_name"
                 tools:text="@string/sample_text_item_amount_code" />
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/item_price"
                 style="@style/MainListItemText"
                 android:layout_marginEnd="@dimen/main_cardview_list_item_text_between_margin"
@@ -117,7 +117,7 @@
                 app:layout_constraintVertical_chainStyle="spread"
                 tools:text="@string/sample_text_item_price_fiat" />
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/item_amount_fiat"
                 style="@style/MainListItemText"
                 android:layout_marginEnd="@dimen/main_cardview_list_item_text_between_margin"
@@ -129,7 +129,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/item_price"
                 tools:text="@string/sample_text_item_amount_fiat" />
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/item_price_percent_change_1h_7d"
                 style="@style/MainListItemText"
                 android:layout_marginStart="@dimen/main_cardview_list_item_text_between_margin"
@@ -141,7 +141,7 @@
                 tools:text="@string/sample_text_item_price_percent_change_1h_7d"
                 tools:textColor="@color/colorForValueChangeNegative" />
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/item_price_percent_change_24h"
                 style="@style/MainListItemText"
                 android:layout_marginStart="@dimen/main_cardview_list_item_text_between_margin"
@@ -153,7 +153,7 @@
                 tools:text="@string/sample_text_item_price_percent_change_24h"
                 tools:textColor="@color/colorForValueChangePositive" />
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/item_amount_fiat_change_24h"
                 style="@style/MainListItemText"
                 android:layout_marginStart="@dimen/main_cardview_list_item_text_between_margin"
@@ -165,7 +165,7 @@
                 tools:text="@string/sample_text_item_amount_fiat_change_24h"
                 tools:textColor="@color/colorForValueChangePositive" />
 
-        </android.support.constraint.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 </layout>

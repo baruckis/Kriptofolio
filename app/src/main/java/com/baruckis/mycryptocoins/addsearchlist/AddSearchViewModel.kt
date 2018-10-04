@@ -16,7 +16,7 @@
 
 package com.baruckis.mycryptocoins.addsearchlist
 
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.ViewModel
 import com.baruckis.mycryptocoins.data.CryptocurrencyRepository
 import javax.inject.Inject
 

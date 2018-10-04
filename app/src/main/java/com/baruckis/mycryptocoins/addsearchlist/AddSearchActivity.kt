@@ -17,16 +17,16 @@
 package com.baruckis.mycryptocoins.addsearchlist
 
 import android.app.SearchManager
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProvider
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.SearchView
 import android.view.Menu
 import android.view.View
 import android.widget.ListView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import com.baruckis.mycryptocoins.R
 import com.baruckis.mycryptocoins.data.Cryptocurrency
 import com.baruckis.mycryptocoins.dependencyinjection.Injectable
@@ -45,6 +45,7 @@ class AddSearchActivity : AppCompatActivity(), Injectable {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_add_search)
         setSupportActionBar(toolbar2)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)

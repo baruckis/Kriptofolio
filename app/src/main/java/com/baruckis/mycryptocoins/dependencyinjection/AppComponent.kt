@@ -31,7 +31,7 @@ import javax.inject.Singleton
 @Component(
         modules = [
             // AndroidSupportInjectionModule is a class of Dagger and we don't need to create it.
-            // If you want to use injection in v4.fragment then you should use AndroidSupportInjectionModule.class else use AndroidInjectionModule.
+            // If you want to use injection in fragment then you should use AndroidSupportInjectionModule.class else use AndroidInjectionModule.
             AndroidSupportInjectionModule::class,
             AppModule::class,
             ActivityBuildersModule::class

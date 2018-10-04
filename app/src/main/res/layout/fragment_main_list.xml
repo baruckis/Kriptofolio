@@ -32,7 +32,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <android.support.v7.widget.CardView
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="@dimen/main_cardview_column_names_height"
             android:layout_marginEnd="@dimen/main_cardview_column_names_outer_margin"
@@ -40,7 +40,7 @@
             android:layout_marginTop="@dimen/main_cardview_column_names_outer_margin"
             app:cardBackgroundColor="@color/colorForMainColumnNames">
 
-            <android.support.constraint.ConstraintLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginEnd="@dimen/main_cardview_column_names_inner_margin"
@@ -48,28 +48,28 @@
                 android:paddingBottom="@dimen/main_cardview_column_names_outer_margin"
                 android:paddingTop="@dimen/main_cardview_column_names_outer_margin">
 
-                <android.support.constraint.Guideline
+                <androidx.constraintlayout.widget.Guideline
                     android:id="@+id/guideline1_fixed"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     app:layout_constraintGuide_begin="@dimen/main_cardview_list_item_image_icon_width_height" />
 
-                <android.support.constraint.Guideline
+                <androidx.constraintlayout.widget.Guideline
                     android:id="@+id/guideline1_percent"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     app:layout_constraintGuide_percent="@dimen/main_guide1_percent" />
 
-                <android.support.constraint.Guideline
+                <androidx.constraintlayout.widget.Guideline
                     android:id="@+id/guideline2_percent"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     app:layout_constraintGuide_percent="@dimen/main_guide2_percent" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/text_column_coin_ranking"
                     style="@style/MainListColumnNamesText"
                     android:lines="1"
@@ -81,7 +81,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/text_column_coin_name_amount_symbol"
                     style="@style/MainListColumnNamesText"
                     android:layout_marginEnd="@dimen/main_cardview_column_names_text_between_margin"
@@ -93,7 +93,7 @@
                     app:layout_constraintStart_toEndOf="@+id/guideline1_fixed"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/text_column_coin_fiat_btc_price"
                     style="@style/MainListColumnNamesText"
                     android:layout_marginEnd="@dimen/main_cardview_column_names_text_between_margin"
@@ -106,7 +106,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="@string/sample_text_column_coin_fiat_price_amount" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/text_column_coin_change_24h_1h_7d"
                     style="@style/MainListColumnNamesText"
                     android:layout_marginStart="@dimen/main_cardview_column_names_text_between_margin"
@@ -118,11 +118,11 @@
                     app:layout_constraintStart_toStartOf="@+id/guideline2_percent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-            </android.support.constraint.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </android.support.v7.widget.CardView>
+        </androidx.cardview.widget.CardView>
 
-        <android.support.v4.widget.SwipeRefreshLayout
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -131,7 +131,7 @@
                 android:layout_height="match_parent"
                 android:background="@color/colorForMainListBackground">
 
-                <android.support.v7.widget.RecyclerView
+                <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerview_fragment_main_list"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -151,12 +151,12 @@
                     android:orientation="vertical"
                     android:visibility="visible">
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/text_primary_empty"
                         style="@style/MainListEmptyText.Primary"
                         android:text="@string/string_crypto_list_empty_primary" />
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/text_secondary_empty"
                         style="@style/MainListEmptyText.Secondary"
                         android:text="@string/string_crypto_list_empty_secondary" />
@@ -166,7 +166,7 @@
             </RelativeLayout>
 
 
-        </android.support.v4.widget.SwipeRefreshLayout>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     </LinearLayout>
 

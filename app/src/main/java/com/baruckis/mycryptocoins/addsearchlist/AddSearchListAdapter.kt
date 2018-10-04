@@ -17,11 +17,11 @@
 package com.baruckis.mycryptocoins.addsearchlist
 
 import android.content.Context
-import android.databinding.DataBindingUtil
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
+import androidx.databinding.DataBindingUtil
 import com.baruckis.mycryptocoins.R
 import com.baruckis.mycryptocoins.data.Cryptocurrency
 import com.baruckis.mycryptocoins.databinding.ActivityAddSearchListItemBinding

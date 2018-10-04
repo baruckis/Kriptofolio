@@ -16,10 +16,10 @@
 
 package com.baruckis.mycryptocoins.mainlist
 
-import android.arch.lifecycle.*
 import android.content.Context
 import android.preference.PreferenceManager
 import android.text.SpannableString
+import androidx.lifecycle.*
 import com.baruckis.mycryptocoins.R
 import com.baruckis.mycryptocoins.data.Cryptocurrency
 import com.baruckis.mycryptocoins.data.CryptocurrencyRepository
@@ -70,7 +70,8 @@ class MainViewModel @Inject constructor(context: Context, cryptocurrencyReposito
         liveDataTotalHoldingsValueCrypto = countTotalHoldingsValueCrypto(liveDataTotalHoldingsValueFiat, liveDataCurrentCryptocurrency)
 
         liveDataTotalHoldingsValueFiat24hText = Transformations.switchMap(liveDataTotalHoldingsValueFiat24h) {
-            MutableLiveData<SpannableString>().apply { value = getSpannableValueStyled(context, liveDataTotalHoldingsValueFiat24h.value!!, SpannableValueColorStyle.Background, ValueType.Fiat, " $currentFiatCurrencySign ", " ") } }
+            MutableLiveData<SpannableString>().apply { value = getSpannableValueStyled(context, liveDataTotalHoldingsValueFiat24h.value!!, SpannableValueColorStyle.Background, ValueType.Fiat, " $currentFiatCurrencySign ", " ") }
+        }
         liveDataTotalHoldingsValueCryptoText = Transformations.switchMap(liveDataTotalHoldingsValueCrypto) { MutableLiveData<String>().apply { value = String.format("$currentCryptoCurrencySign ${roundValue(liveDataTotalHoldingsValueCrypto.value!!, ValueType.Crypto)}") } }
         liveDataTotalHoldingsValueFiatText = Transformations.switchMap(liveDataTotalHoldingsValueFiat) { MutableLiveData<String>().apply { value = String.format("$currentFiatCurrencySign ${roundValue(liveDataTotalHoldingsValueFiat.value!!, ValueType.Fiat)}") } }
     }

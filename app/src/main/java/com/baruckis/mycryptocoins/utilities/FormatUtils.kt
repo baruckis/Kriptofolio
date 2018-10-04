@@ -17,12 +17,12 @@
 package com.baruckis.mycryptocoins.utilities
 
 import android.content.Context
-import android.support.v4.content.ContextCompat
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.BackgroundColorSpan
 import android.text.style.CharacterStyle
 import android.text.style.ForegroundColorSpan
+import androidx.core.content.ContextCompat
 import com.baruckis.mycryptocoins.R
 import java.math.RoundingMode
 import java.text.DecimalFormat

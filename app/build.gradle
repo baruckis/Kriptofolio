@@ -29,7 +29,7 @@ android {
         targetSdkVersion versions.target_sdk
         versionCode 1
         versionName "@string/app_version"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
@@ -54,34 +54,34 @@ dependencies {
     /* Android */
 
     // Support libraries
-    implementation "com.android.support:appcompat-v7:$versions.support"
-    implementation "com.android.support:cardview-v7:$versions.support"
-    implementation "com.android.support:design:$versions.support"
+    implementation "androidx.appcompat:appcompat:$versions.support_library"
+    implementation "androidx.cardview:cardview:$versions.support_library"
+    implementation "com.google.android.material:material:$versions.support_library"
 
     // Constraint layout
-    implementation "com.android.support.constraint:constraint-layout:$versions.constraint_layout"
+    implementation "androidx.constraintlayout:constraintlayout:$versions.constraint_layout"
 
     // Android KTX
-    implementation "androidx.core:core-ktx:$versions.core"
+    implementation "androidx.core:core-ktx:$versions.ktx"
 
     // Architecture components
     // LiveData + ViewModel
-    implementation "android.arch.lifecycle:extensions:$versions.lifecycle"
-    annotationProcessor "android.arch.lifecycle:compiler:$versions.lifecycle"
+    implementation "androidx.lifecycle:lifecycle-extensions:$versions.lifecycle"
+    annotationProcessor "androidx.lifecycle:lifecycle-compiler:$versions.lifecycle"
 
     // Room
-    implementation "android.arch.persistence.room:runtime:$versions.room"
-    annotationProcessor "android.arch.persistence.room:compiler:$versions.room"
-    kapt "android.arch.persistence.room:compiler:$versions.room"
+    implementation "androidx.room:room-runtime:$versions.room"
+    annotationProcessor "androidx.room:room-compiler:$versions.room"
+    kapt "androidx.room:room-compiler:$versions.room"
 
     // Room testing
-    androidTestImplementation "android.arch.persistence.room:testing:$versions.room"
+    androidTestImplementation "androidx.room:room-testing:$versions.room"
 
     // Android Testing Support Library's runner and rules
-    androidTestImplementation "com.android.support.test:runner:$versions.atsl_runner"
+    androidTestImplementation "androidx.test:runner:$versions.runner"
 
     // Espresso UI Testing
-    androidTestImplementation "com.android.support.test.espresso:espresso-core:$versions.espresso"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$versions.espresso"
 
 
     /* Other */

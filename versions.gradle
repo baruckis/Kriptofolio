@@ -16,33 +16,24 @@
 
 def versions = [:]
 
-versions.kotlin = "1.2.70"
-versions.android_gradle_plugin = "3.1.4"
-
-versions.min_sdk = 21
+// Sdk and tools
 versions.compile_sdk = 28
+versions.min_sdk = 21
 versions.target_sdk = 28
 
-
-versions.support = "27.1.1"
-versions.constraint_layout = "1.1.3"
-
-versions.core = "0.3"
-versions.lifecycle = "1.1.1"
-
-versions.room = "1.1.1"
-
-
-versions.atsl_runner = "1.0.2"
-versions.espresso = "3.0.2"
-
-
-versions.dagger = "2.17"
-
-versions.junit = "4.12"
-
+// App dependencies
+versions.constraint_layout = "2.0.0-alpha2"
+versions.dagger = "2.16"
+versions.espresso = "3.1.0-alpha4"
 versions.flip_view = "1.1.3"
-
+versions.gradle = '3.2.0'
+versions.junit = "4.12"
+versions.kotlin = "1.2.71"
+versions.ktx = "1.0.0"
+versions.lifecycle = "2.0.0"
+versions.room = "2.0.0"
+versions.runner = "1.1.0-alpha4"
+versions.support_library = "1.0.0"
 versions.stetho = "1.5.0"
 
 
