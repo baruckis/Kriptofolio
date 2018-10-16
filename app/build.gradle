@@ -97,6 +97,11 @@ dependencies {
     testImplementation "junit:junit:$versions.junit"
 
     // 3rd party
+    // HTTP client - Retrofit with OkHttp
+    implementation "com.squareup.retrofit2:retrofit:$versions.retrofit"
+    // JSON converter Gson for JSON to Java object mapping
+    implementation "com.squareup.retrofit2:converter-gson:$versions.retrofit"
+
     // UI
     implementation "eu.davidea:flipview:$versions.flip_view"
 

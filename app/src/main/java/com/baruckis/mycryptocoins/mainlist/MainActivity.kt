@@ -36,6 +36,7 @@ import dagger.android.support.HasSupportFragmentInjector
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
+
 // To support injecting fragments which belongs to this activity we need to implement HasSupportFragmentInjector.
 // We would not need to implement it, if our activity did not contain any fragments or the fragments did not need to inject anything.
 class MainActivity : AppCompatActivity(), HasSupportFragmentInjector {
@@ -66,6 +67,7 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector {
         }
 
         subscribeUi()
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

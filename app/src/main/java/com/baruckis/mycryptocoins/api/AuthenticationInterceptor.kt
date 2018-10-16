@@ -14,28 +14,24 @@
  * limitations under the License.
  */
 
-def versions = [:]
+package com.baruckis.mycryptocoins.api
 
-// Sdk and tools
-versions.compile_sdk = 28
-versions.min_sdk = 21
-versions.target_sdk = 28
+import okhttp3.Interceptor
+import okhttp3.Response
 
-// App dependencies
-versions.constraint_layout = "2.0.0-alpha2"
-versions.dagger = "2.16"
-versions.espresso = "3.1.0-alpha4"
-versions.flip_view = "1.1.3"
-versions.gradle = '3.2.1'
-versions.junit = "4.12"
-versions.kotlin = "1.2.71"
-versions.ktx = "1.0.0"
-versions.lifecycle = "2.0.0"
-versions.retrofit = "2.4.0"
-versions.room = "2.0.0"
-versions.runner = "1.1.0-alpha4"
-versions.support_library = "1.0.0"
-versions.stetho = "1.5.0"
+/**
+ * Interceptor used to intercept the actual request and
+ * to supply your API Key in REST API calls via a custom header.
+ */
+class AuthenticationInterceptor : Interceptor {
 
+    override fun intercept(chain: Interceptor.Chain): Response {
 
-ext.versions = versions
+        val newRequest = chain.request().newBuilder()
+                // TODO: Use your API Key provided by CoinMarketCap Professional API Developer Portal.
+                .addHeader("X-CMC_PRO_API_KEY", "CMC_PRO_API_KEY")
+                .build()
+
+        return chain.proceed(newRequest)
+    }
+}
