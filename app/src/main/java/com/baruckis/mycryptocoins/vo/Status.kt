@@ -14,29 +14,17 @@
  * limitations under the License.
  */
 
-def versions = [:]
+package com.baruckis.mycryptocoins.vo
 
-// Sdk and tools
-versions.compile_sdk = 28
-versions.min_sdk = 21
-versions.target_sdk = 28
-
-// App dependencies
-versions.app_compat = "1.0.2"
-versions.cardview = "1.0.0"
-versions.constraint_layout = "2.0.0-alpha2"
-versions.dagger = "2.16"
-versions.design = "1.0.0"
-versions.espresso = "3.1.0-alpha4"
-versions.flip_view = "1.1.3"
-versions.gradle = '3.2.1'
-versions.junit = "4.12"
-versions.kotlin = "1.3.0"
-versions.ktx = "1.0.1"
-versions.lifecycle = "2.0.0"
-versions.retrofit = "2.4.0"
-versions.room = "2.0.0"
-versions.runner = "1.1.0-alpha4"
-versions.stetho = "1.5.0"
-
-ext.versions = versions
+/**
+ * Status of a resource that is provided to the UI.
+ *
+ *
+ * These are usually created by the Repository classes where they return
+ * `LiveData<Resource<T>>` to pass back the latest data to the UI with its fetch status.
+ */
+enum class Status {
+    SUCCESS,
+    ERROR,
+    LOADING
+}

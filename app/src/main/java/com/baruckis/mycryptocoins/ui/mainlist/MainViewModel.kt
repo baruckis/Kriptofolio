@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.baruckis.mycryptocoins.mainlist
+package com.baruckis.mycryptocoins.ui.mainlist
 
 import android.content.Context
 import android.preference.PreferenceManager
@@ -22,7 +22,7 @@ import android.text.SpannableString
 import androidx.lifecycle.*
 import com.baruckis.mycryptocoins.R
 import com.baruckis.mycryptocoins.data.Cryptocurrency
-import com.baruckis.mycryptocoins.data.CryptocurrencyRepository
+import com.baruckis.mycryptocoins.repository.CryptocurrencyRepository
 import com.baruckis.mycryptocoins.utilities.SpannableValueColorStyle
 import com.baruckis.mycryptocoins.utilities.ValueType
 import com.baruckis.mycryptocoins.utilities.getSpannableValueStyled
@@ -36,7 +36,7 @@ import javax.inject.Inject
  */
 
 // ViewModel will require a CryptocurrencyRepository so we add @Inject code into ViewModel constructor.
-class MainViewModel @Inject constructor(context: Context, cryptocurrencyRepository: CryptocurrencyRepository) : ViewModel() {
+class MainViewModel @Inject constructor(var context: Context, cryptocurrencyRepository: CryptocurrencyRepository) : ViewModel() {
 
     private var currentCryptoCurrencyCode: String
     private var currentCryptoCurrencySign: String

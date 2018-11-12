@@ -16,8 +16,8 @@
 
 package com.baruckis.mycryptocoins.dependencyinjection
 
-import com.baruckis.mycryptocoins.addsearchlist.AddSearchActivity
-import com.baruckis.mycryptocoins.mainlist.MainActivity
+import com.baruckis.mycryptocoins.ui.addsearchlist.AddSearchActivity
+import com.baruckis.mycryptocoins.ui.mainlist.MainActivity
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 

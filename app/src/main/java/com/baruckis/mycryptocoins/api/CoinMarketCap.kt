@@ -16,23 +16,27 @@
 
 package com.baruckis.mycryptocoins.api
 
-import com.baruckis.mycryptocoins.utilities.API_SERVICE_AUTHENTICATION_KEY
-import com.baruckis.mycryptocoins.utilities.API_SERVICE_AUTHENTICATION_NAME
-import okhttp3.Interceptor
-import okhttp3.Response
+import com.google.gson.annotations.SerializedName
 
 /**
- * Interceptor used to intercept the actual request and
- * to supply your API Key in REST API calls via a custom header.
+ * Data class to handle the response from the server.
  */
-class AuthenticationInterceptor : Interceptor {
+data class CoinMarketCap<Type>(
+        val status: Status?,
+        val data: Type?,
+        val statusCode: Int?,
+        val error: String?,
+        val message: String?
+) {
 
-    override fun intercept(chain: Interceptor.Chain): Response {
-
-        val newRequest = chain.request().newBuilder()
-                .addHeader(API_SERVICE_AUTHENTICATION_NAME, API_SERVICE_AUTHENTICATION_KEY)
-                .build()
-
-        return chain.proceed(newRequest)
-    }
+    data class Status(
+            val timestamp: String,
+            @SerializedName("error_code")
+            val errorCode: Int,
+            @SerializedName("error_message")
+            val errorMessage: String,
+            val elapsed: Int,
+            @SerializedName("credit_count")
+            val creditCount: Int
+    )
 }

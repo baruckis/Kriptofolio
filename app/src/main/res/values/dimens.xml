@@ -43,4 +43,7 @@
     <dimen name="add_search_list_item_text_between_margin">4dp</dimen>
     <dimen name="add_search_list_item_text_between_margin_2x">8dp</dimen>
 
+
+    <dimen name="loading_state_margin">8dp</dimen>
+
 </resources>

@@ -19,6 +19,7 @@ package com.baruckis.mycryptocoins.data
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 
 /**
@@ -36,6 +37,6 @@ interface CryptocurrencyDao {
     @Query("SELECT * FROM cryptocurrencies WHERE symbol = :specificCryptoCode")
     fun getSpecificCryptocurrencyLiveData(specificCryptoCode: String): LiveData<Cryptocurrency>
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertDataToAllCryptocurrencyList(data: List<Cryptocurrency>)
 }

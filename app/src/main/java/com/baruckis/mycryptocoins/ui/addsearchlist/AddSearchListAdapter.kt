@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.baruckis.mycryptocoins.addsearchlist
+package com.baruckis.mycryptocoins.ui.addsearchlist
 
 import android.content.Context
 import android.view.LayoutInflater

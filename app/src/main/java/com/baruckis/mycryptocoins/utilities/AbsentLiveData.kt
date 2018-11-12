@@ -14,29 +14,23 @@
  * limitations under the License.
  */
 
-def versions = [:]
+package com.baruckis.mycryptocoins.utilities
 
-// Sdk and tools
-versions.compile_sdk = 28
-versions.min_sdk = 21
-versions.target_sdk = 28
+import androidx.lifecycle.LiveData
 
-// App dependencies
-versions.app_compat = "1.0.2"
-versions.cardview = "1.0.0"
-versions.constraint_layout = "2.0.0-alpha2"
-versions.dagger = "2.16"
-versions.design = "1.0.0"
-versions.espresso = "3.1.0-alpha4"
-versions.flip_view = "1.1.3"
-versions.gradle = '3.2.1'
-versions.junit = "4.12"
-versions.kotlin = "1.3.0"
-versions.ktx = "1.0.1"
-versions.lifecycle = "2.0.0"
-versions.retrofit = "2.4.0"
-versions.room = "2.0.0"
-versions.runner = "1.1.0-alpha4"
-versions.stetho = "1.5.0"
+/**
+ * A LiveData class that has `null` value.
+ */
+class AbsentLiveData<T : Any?> private constructor() : LiveData<T>() {
 
-ext.versions = versions
+    init {
+        // Use post instead of set since this can be created on any thread.
+        postValue(null)
+    }
+
+    companion object {
+        fun <T> create(): LiveData<T> {
+            return AbsentLiveData()
+        }
+    }
+}

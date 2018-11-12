@@ -18,8 +18,8 @@ package com.baruckis.mycryptocoins.dependencyinjection
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.baruckis.mycryptocoins.addsearchlist.AddSearchViewModel
-import com.baruckis.mycryptocoins.mainlist.MainViewModel
+import com.baruckis.mycryptocoins.ui.addsearchlist.AddSearchViewModel
+import com.baruckis.mycryptocoins.ui.mainlist.MainViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap

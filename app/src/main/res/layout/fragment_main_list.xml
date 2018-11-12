@@ -17,14 +17,14 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.baruckis.mycryptocoins.mainlist.MainListFragment"
+    tools:context=".ui.mainlist.MainListFragment"
     tools:showIn="@layout/activity_main">
 
     <data>
 
         <variable
             name="viewmodel"
-            type="com.baruckis.mycryptocoins.mainlist.MainViewModel" />
+            type="com.baruckis.mycryptocoins.ui.mainlist.MainViewModel" />
     </data>
 
     <LinearLayout

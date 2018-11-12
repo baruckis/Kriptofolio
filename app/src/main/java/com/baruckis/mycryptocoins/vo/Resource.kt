@@ -14,13 +14,24 @@
  * limitations under the License.
  */
 
-package com.baruckis.mycryptocoins.utilities
+package com.baruckis.mycryptocoins.vo
 
-import java.util.concurrent.Executors
+/**
+ * A generic class that holds a value with its loading status.
+ * @param <T>
+</T> */
+data class Resource<out T>(val status: Status, val data: T?, val message: String?) {
+    companion object {
+        fun <T> success(data: T?): Resource<T> {
+            return Resource(Status.SUCCESS, data, null)
+        }
 
-private val IO_EXECUTOR = Executors.newSingleThreadExecutor()
+        fun <T> error(msg: String, data: T?): Resource<T> {
+            return Resource(Status.ERROR, data, msg)
+        }
 
-// Utility method to run blocks on a dedicated background thread, used for io/database work.
-fun ioThread(f: () -> Unit) {
-    IO_EXECUTOR.execute(f)
+        fun <T> loading(data: T?): Resource<T> {
+            return Resource(Status.LOADING, data, null)
+        }
+    }
 }

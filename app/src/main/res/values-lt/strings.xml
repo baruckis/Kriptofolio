@@ -17,11 +17,14 @@
 
 <resources>
 
-    <!-- Strings related to Main Activity -->
-
     <string name="app_name">"Mano Kripto Monetos"</string>
 
     <string name="action_settings">"Nustatymai"</string>
+
+    <string name="retry">"Bandyti dar kartą"</string>
+    <string name="unknown_error">"Nežinoma klaida!"</string>
+
+    <!-- Strings related to Main Activity -->
 
     <string name="string_total_value_on_date_time">"Bendra turima vertė"</string>
     <string name="string_total_value_change_24h_label">"24 val "</string>

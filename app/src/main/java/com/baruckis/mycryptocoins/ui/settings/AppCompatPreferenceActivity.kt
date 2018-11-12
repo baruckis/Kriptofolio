@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.baruckis.mycryptocoins.settings
+package com.baruckis.mycryptocoins.ui.settings
 
 import android.content.res.Configuration
 import android.os.Bundle

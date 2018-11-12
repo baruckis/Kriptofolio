@@ -17,11 +17,20 @@
 package com.baruckis.mycryptocoins.dependencyinjection
 
 import android.content.Context
+import androidx.room.Room
 import com.baruckis.mycryptocoins.App
+import com.baruckis.mycryptocoins.api.ApiService
+import com.baruckis.mycryptocoins.api.AuthenticationInterceptor
 import com.baruckis.mycryptocoins.data.AppDatabase
-import com.baruckis.mycryptocoins.data.CryptocurrencyRepository
+import com.baruckis.mycryptocoins.data.CryptocurrencyDao
+import com.baruckis.mycryptocoins.utilities.API_SERVICE_BASE_URL
+import com.baruckis.mycryptocoins.utilities.DATABASE_NAME
+import com.baruckis.mycryptocoins.utilities.LiveDataCallAdapterFactory
 import dagger.Module
 import dagger.Provides
+import okhttp3.OkHttpClient
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 /**
@@ -31,13 +40,47 @@ import javax.inject.Singleton
 @Module(includes = [ViewModelsModule::class])
 class AppModule() {
 
-    @Singleton // Annotation informs Dagger compiler that the instance should be created only once in the entire lifecycle of the application.
     @Provides // Annotation informs Dagger compiler that this method is the constructor for the Context return type.
+    @Singleton // Annotation informs Dagger compiler that the instance should be created only once in the entire lifecycle of the application.
     fun provideContext(app: App): Context = app // Using provide as a prefix is a common convention but not a requirement.
 
-    @Singleton
     @Provides
-    fun provideCryptocurrencyRepository(context: Context): CryptocurrencyRepository {
-        return CryptocurrencyRepository.getInstance(AppDatabase.getInstance(context).cryptocurrencyDao())
+    @Singleton
+    fun provideHttpClient(): OkHttpClient {
+        // We need to prepare a custom OkHttp client because need to use our custom call interceptor.
+        // to be able to authenticate our requests.
+        val builder = OkHttpClient.Builder()
+        // We add the interceptor to OkHttpClient.
+        // It will add authentication headers to every call we make.
+        builder.interceptors().add(AuthenticationInterceptor())
+        return builder.build()
     }
+
+    @Provides
+    @Singleton
+    fun provideApiService(httpClient: OkHttpClient): ApiService {
+        return Retrofit.Builder() // Create retrofit builder.
+                .baseUrl(API_SERVICE_BASE_URL) // Base url for the api has to end with a slash.
+                .addConverterFactory(GsonConverterFactory.create()) // Use GSON converter for JSON to POJO object mapping.
+                .addCallAdapterFactory(LiveDataCallAdapterFactory())
+                .client(httpClient) // Here we set the custom OkHttp client we just created.
+                .build().create(ApiService::class.java) // We create an API using the interface we defined.
+    }
+
+    @Provides
+    @Singleton
+    fun provideDb(app: App): AppDatabase {
+        return Room
+                .databaseBuilder(app, AppDatabase::class.java, DATABASE_NAME)
+                // At current moment we don't want to provide migrations and specifically want database to be cleared when upgrade the version.
+                .fallbackToDestructiveMigration()
+                .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideCryptocurrencyDao(db: AppDatabase): CryptocurrencyDao {
+        return db.cryptocurrencyDao()
+    }
+
 }

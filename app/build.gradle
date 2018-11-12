@@ -54,9 +54,9 @@ dependencies {
     /* Android */
 
     // Support libraries
-    implementation "androidx.appcompat:appcompat:$versions.support_library"
-    implementation "androidx.cardview:cardview:$versions.support_library"
-    implementation "com.google.android.material:material:$versions.support_library"
+    implementation "androidx.appcompat:appcompat:$versions.app_compat"
+    implementation "androidx.cardview:cardview:$versions.cardview"
+    implementation "com.google.android.material:material:$versions.design"
 
     // Constraint layout
     implementation "androidx.constraintlayout:constraintlayout:$versions.constraint_layout"

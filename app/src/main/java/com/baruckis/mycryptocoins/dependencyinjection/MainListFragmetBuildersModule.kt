@@ -16,7 +16,7 @@
 
 package com.baruckis.mycryptocoins.dependencyinjection
 
-import com.baruckis.mycryptocoins.mainlist.MainListFragment
+import com.baruckis.mycryptocoins.ui.mainlist.MainListFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 

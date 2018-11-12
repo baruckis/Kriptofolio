@@ -17,11 +17,14 @@
 
 <resources>
 
-    <!-- Strings related to Main Activity -->
-
     <string name="app_name">"מטבעות האנוסים שלימטבעות האנוסים שלי"</string>
 
     <string name="action_settings">"הגדרות"</string>
+
+    <string name="retry">"Retry"</string> <!-- TODO translate to HE -->
+    <string name="unknown_error">"Unknown error!"</string> <!-- TODO translate to HE -->
+
+    <!-- Strings related to Main Activity -->
 
     <string name="string_total_value_on_date_time">"ערך אחזקות סה\"כ"</string>
     <string name="string_total_value_change_24h_label">" h 24"</string>

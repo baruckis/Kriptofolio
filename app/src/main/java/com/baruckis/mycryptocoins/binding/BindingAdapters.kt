@@ -14,14 +14,18 @@
  * limitations under the License.
  */
 
-package com.baruckis.mycryptocoins.addsearchlist
+package com.baruckis.mycryptocoins.binding
 
-import androidx.lifecycle.ViewModel
-import com.baruckis.mycryptocoins.data.CryptocurrencyRepository
-import javax.inject.Inject
+import android.view.View
+import androidx.databinding.BindingAdapter
 
-
-class AddSearchViewModel @Inject constructor(cryptocurrencyRepository: CryptocurrencyRepository) : ViewModel() {
-
-    val liveData = cryptocurrencyRepository.getAllCryptocurrencyLiveDataList()
+/**
+ * Data Binding adapters specific to the app.
+ */
+object BindingAdapters {
+    @JvmStatic
+    @BindingAdapter("visibleGone")
+    fun showHide(view: View, show: Boolean) {
+        view.visibility = if (show) View.VISIBLE else View.GONE
+    }
 }

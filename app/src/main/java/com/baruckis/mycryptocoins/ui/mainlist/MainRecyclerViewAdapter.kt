@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.baruckis.mycryptocoins.mainlist
+package com.baruckis.mycryptocoins.ui.mainlist
 
 import android.text.SpannableStringBuilder
 import android.view.LayoutInflater

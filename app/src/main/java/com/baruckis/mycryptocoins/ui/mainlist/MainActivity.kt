@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.baruckis.mycryptocoins.mainlist
+package com.baruckis.mycryptocoins.ui.mainlist
 
 import android.content.Intent
 import android.os.Bundle
@@ -28,8 +28,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.baruckis.mycryptocoins.R
-import com.baruckis.mycryptocoins.addsearchlist.AddSearchActivity
-import com.baruckis.mycryptocoins.settings.SettingsActivity
+import com.baruckis.mycryptocoins.ui.addsearchlist.AddSearchActivity
+import com.baruckis.mycryptocoins.ui.settings.SettingsActivity
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
