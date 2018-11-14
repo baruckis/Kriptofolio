@@ -36,42 +36,48 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:context=".ui.addsearchlist.AddSearchActivity"
         tools:showIn="@layout/activity_add_search">
 
+        <TextView
+            android:id="@+id/last_updated_activity_add_search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorForAddSearchListLastUpdatedBackground"
+            android:ellipsize="start"
+            android:padding="@dimen/add_search_list_item_last_updated_padding"
+            android:singleLine="true"
+            android:text="Last updated 11/03/2018 12:55:08 UTC"
+            android:textAlignment="center"
+            android:textColor="@color/colorForAddSearchListLastUpdatedText"
+            app:visibleGone="@{listResource.data != null}" />
+
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swiperefresh_activity_add_search"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/last_updated_activity_add_search"
             app:visibleGone="@{listResource.data != null}">
 
             <ListView
                 android:id="@+id/listview_activity_add_search"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scrollbars="vertical"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_height="wrap_content"
+                android:scrollbars="vertical" />
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         <include
             layout="@layout/loading_state"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/add_search_list_item_inner_margin"
+            android:layout_marginTop="@dimen/add_search_list_item_inner_margin"
+            android:layout_marginEnd="@dimen/add_search_list_item_inner_margin"
+            android:layout_marginBottom="@dimen/add_search_list_item_inner_margin"
             app:callback="@{() -> retryCallback.retry()}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             app:resource="@{listResource}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

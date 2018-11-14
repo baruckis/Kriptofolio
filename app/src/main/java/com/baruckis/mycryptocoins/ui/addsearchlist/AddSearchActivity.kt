@@ -29,6 +29,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.baruckis.mycryptocoins.R
+import com.baruckis.mycryptocoins.data.Cryptocurrency
 import com.baruckis.mycryptocoins.databinding.ActivityAddSearchBinding
 import com.baruckis.mycryptocoins.dependencyinjection.Injectable
 import com.baruckis.mycryptocoins.ui.common.RetryCallback
@@ -64,7 +65,7 @@ class AddSearchActivity : AppCompatActivity(), Injectable {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         // Setup ListView.
-        listAdapter = AddSearchListAdapter(this)
+        listAdapter = AddSearchListAdapter(this) { cryptocurrency -> cryptocurrencyClick(cryptocurrency) }
         listview_activity_add_search.adapter = listAdapter
 
         swipeRefreshLayout = swiperefresh_activity_add_search
@@ -90,6 +91,20 @@ class AddSearchActivity : AppCompatActivity(), Injectable {
 
     private fun retry() {
         Handler().postDelayed({ viewModel.retry(true) }, DELAY_MILLISECONDS)
+    }
+
+    private fun cryptocurrencyClick(cryptocurrency: Cryptocurrency) {
+
+        val cryptocurrencyAmountDialog =
+                CryptocurrencyAmountDialog.newInstance(
+                        title = String.format(getString(R.string.dialog_cryptocurrency_amount_title), cryptocurrency.name),
+                        hint = getString(R.string.dialog_cryptocurrency_amount_hint),
+                        confirmButton = getString(R.string.dialog_cryptocurrency_amount_confirm_button),
+                        cancelButton = getString(R.string.dialog_cryptocurrency_amount_cancel_button))
+        cryptocurrencyAmountDialog.onConfirm = { viewModel.addCryptocurrency(cryptocurrency) }
+
+        // Display the alert dialog.
+        cryptocurrencyAmountDialog.show(supportFragmentManager, DIALOG_CRYPTOCURRENCY_AMOUNT_TAG)
     }
 
     private fun subscribeUi() {

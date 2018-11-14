@@ -37,6 +37,8 @@
     <color name="colorForImageIconRearBackground">@color/colorDarkGrey</color>
     <color name="colorForImageIconText">@color/colorWhite</color>
 
+    <color name="colorForAddSearchListLastUpdatedBackground">@color/colorNavy</color>
+    <color name="colorForAddSearchListLastUpdatedText">@color/colorWhite</color>
     <color name="colorForAddSearchListItemPrimeText">@color/colorBlack</color>
     <color name="colorForAddSearchListItemText">@android:color/tertiary_text_dark</color>
 

@@ -50,10 +50,15 @@
 
     <string name="search_hint">"חפש מטבע ספציפי …"</string>
 
-    <string name="title_activity_settings">"הגדרות"</string>
+    <string name="dialog_cryptocurrency_amount_title">"How many %1$s coins do you have?"</string> <!-- TODO translate to HE -->
+    <string name="dialog_cryptocurrency_amount_hint">"Enter amount"</string> <!-- TODO translate to HE -->
+    <string name="dialog_cryptocurrency_amount_confirm_button">"OK"</string> <!-- TODO translate to HE -->
+    <string name="dialog_cryptocurrency_amount_cancel_button">"Cancel"</string> <!-- TODO translate to HE -->
 
 
     <!-- Strings related to Settings -->
+
+    <string name="title_activity_settings">"הגדרות"</string>
 
     <string name="pref_general_category_title">"כללי"</string>
 

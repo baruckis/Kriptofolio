@@ -16,22 +16,21 @@
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="@dimen/main_cardview_list_item_image_icon_width_height"
-    android:layout_height="@dimen/main_cardview_list_item_image_icon_width_height">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="?dialogPreferredPadding"
+    android:paddingRight="?dialogPreferredPadding">
 
-    <TextView
-        android:id="@+id/textview_front"
-        android:layout_width="wrap_content"
+    <EditText
+        android:id="@+id/edit_text_amount"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:contentDescription="@null"
-        android:ems="3"
-        android:gravity="center"
-        android:lines="1"
-        android:text="@string/sample_text_item_icon"
-        android:textAllCaps="true"
-        android:textColor="@color/colorForImageIconText"
-        android:textSize="12sp"
-        tools:text="@string/sample_text_item_icon" />
+        android:importantForAutofill="no"
+        android:inputType="number"
+        tools:ignore="LabelFor"
+        tools:targetApi="o">
+
+        <requestFocus />
+    </EditText>
 
 </FrameLayout>

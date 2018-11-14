@@ -25,13 +25,15 @@ import androidx.databinding.DataBindingUtil
 import com.baruckis.mycryptocoins.R
 import com.baruckis.mycryptocoins.data.Cryptocurrency
 import com.baruckis.mycryptocoins.databinding.ActivityAddSearchListItemBinding
+import com.baruckis.mycryptocoins.utilities.FLIPVIEW_CHARACTER_LIMIT
 
-class AddSearchListAdapter(context: Context) : BaseAdapter() {
+class AddSearchListAdapter(context: Context, private val cryptocurrencyClickCallback: ((Cryptocurrency) -> Unit)?) : BaseAdapter() {
 
     private var dataList: List<Cryptocurrency> = ArrayList<Cryptocurrency>()
     private val inflater: LayoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-
+    
     fun setData(newDataList: List<Cryptocurrency>) {
+
         dataList = newDataList
         notifyDataSetChanged()
     }
@@ -44,6 +46,13 @@ class AddSearchListAdapter(context: Context) : BaseAdapter() {
 
             view = inflater.inflate(R.layout.activity_add_search_list_item, parent, false)
             itemBinding = DataBindingUtil.bind<ActivityAddSearchListItemBinding>(view)!!
+
+            itemBinding.root.setOnClickListener {
+                itemBinding.cryptocurrency?.let {
+                    cryptocurrencyClickCallback?.invoke(it)
+                }
+            }
+
             view.tag = itemBinding
 
         } else {
@@ -54,6 +63,12 @@ class AddSearchListAdapter(context: Context) : BaseAdapter() {
         val cryptocurrency = getItem(position) as Cryptocurrency
         itemBinding.cryptocurrency = cryptocurrency
         itemBinding.itemRanking.text = String.format("${cryptocurrency.rank}")
+
+        var flipViewIconChars: String = cryptocurrency.symbol
+        // Show only first 3 characters of symbol. If symbol has less than 3 characters than show less.
+        flipViewIconChars = flipViewIconChars.substring(0, Math.min(flipViewIconChars.length, FLIPVIEW_CHARACTER_LIMIT))
+
+        itemBinding.itemImageIcon.setFrontText(flipViewIconChars)
         itemBinding.itemName.text = cryptocurrency.name
         itemBinding.itemSymbol.text = cryptocurrency.symbol
 

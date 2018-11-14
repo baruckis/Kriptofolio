@@ -24,6 +24,7 @@ const val CRYPTO_FORMAT_PATTERN = "#,##0.00000000"
 const val FIAT_FORMAT_PATTERN = "#,##0.00"
 const val PERCENT_FORMAT_PATTERN = "##0.00"
 const val DELAY_MILLISECONDS: Long = 1000
+const val FLIPVIEW_CHARACTER_LIMIT = 3
 const val API_SERVICE_BASE_URL = "https://sandbox-api.coinmarketcap.com/"
 const val API_SERVICE_AUTHENTICATION_NAME = "X-CMC_PRO_API_KEY"
 const val API_SERVICE_AUTHENTICATION_KEY = "" // TODO: Use your API Key provided by CoinMarketCap Professional API Developer Portal.

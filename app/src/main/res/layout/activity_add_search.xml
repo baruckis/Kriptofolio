@@ -36,7 +36,6 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-
         tools:context=".ui.addsearchlist.AddSearchActivity">
 
         <com.google.android.material.appbar.AppBarLayout

@@ -50,10 +50,15 @@
 
     <string name="search_hint">"Ieškok konkrečios monetos…"</string>
 
-    <string name="title_activity_settings">"Nustatymai"</string>
+    <string name="dialog_cryptocurrency_amount_title">"Kiek turite %1$s monetų?"</string>
+    <string name="dialog_cryptocurrency_amount_hint">"Įveskite kiekį"</string>
+    <string name="dialog_cryptocurrency_amount_confirm_button">"Gerai"</string>
+    <string name="dialog_cryptocurrency_amount_cancel_button">"Atšaukti"</string>
 
 
     <!-- Strings related to Settings -->
+
+    <string name="title_activity_settings">"Nustatymai"</string>
 
     <string name="pref_general_category_title">"Bendrieji"</string>
 

@@ -149,11 +149,16 @@
     <string name="search_hint">"Search for specific coin…"</string>
 
     <string name="sample_text_item_code" translatable="false">"BITSILVER"</string>
-
-    <string name="title_activity_settings">"Settings"</string>
-
+    
+    <string name="dialog_cryptocurrency_amount_title">"How many %1$s coins do you have?"</string>
+    <string name="dialog_cryptocurrency_amount_hint">"Enter amount"</string>
+    <string name="dialog_cryptocurrency_amount_confirm_button">"OK"</string>
+    <string name="dialog_cryptocurrency_amount_cancel_button">"Cancel"</string>
+    
 
     <!-- Strings related to Settings -->
+
+    <string name="title_activity_settings">"Settings"</string>
 
     <string name="pref_general_category_title">"General"</string>
 

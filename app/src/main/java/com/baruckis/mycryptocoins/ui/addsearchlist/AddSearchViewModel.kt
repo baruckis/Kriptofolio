@@ -40,4 +40,8 @@ class AddSearchViewModel @Inject constructor(var cryptocurrencyRepository: Crypt
         mediatorLiveData.addSource(liveData) { mediatorLiveData.value = it }
     }
 
+    fun addCryptocurrency(cryptocurrency: Cryptocurrency) {
+
+    }
+
 }
