@@ -25,6 +25,7 @@ versions.target_sdk = 28
 versions.app_compat = "1.0.2"
 versions.cardview = "1.0.0"
 versions.constraint_layout = "2.0.0-alpha2"
+versions.coroutines = "1.0.1"
 versions.dagger = "2.16"
 versions.design = "1.0.0"
 versions.espresso = "3.1.0-alpha4"

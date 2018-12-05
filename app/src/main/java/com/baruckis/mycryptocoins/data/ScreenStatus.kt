@@ -18,21 +18,16 @@ package com.baruckis.mycryptocoins.data
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.google.gson.annotations.SerializedName
+import java.util.*
 
 /**
  * Entity object for Room database.
+ * It stores common data about each screen of the app.
  */
-@Entity(tableName = "cryptocurrencies")
-data class Cryptocurrency(@PrimaryKey
-                          val id: Int,
-                          val name: String,
-                          val rank: Short,
-                          var amount: Double?,
-                          val symbol: String,
-                          val currencyFiat: String,
-                          val priceFiat: Double,
-                          var amountFiat: Double?,
-                          val pricePercentChange1h: Double,
-                          val pricePercentChange7d: Double,
-                          val pricePercentChange24h: Double,
-                          var amountFiatChange24h: Double?)
+@Entity(tableName = "screen_status")
+data class ScreenStatus(@PrimaryKey
+                        val id: String,
+                        @SerializedName("timestamp")
+                        val timestamp: Date
+)

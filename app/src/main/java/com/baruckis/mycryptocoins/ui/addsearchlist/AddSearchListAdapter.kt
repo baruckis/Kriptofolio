@@ -26,6 +26,7 @@ import com.baruckis.mycryptocoins.R
 import com.baruckis.mycryptocoins.data.Cryptocurrency
 import com.baruckis.mycryptocoins.databinding.ActivityAddSearchListItemBinding
 import com.baruckis.mycryptocoins.utilities.FLIPVIEW_CHARACTER_LIMIT
+import com.baruckis.mycryptocoins.utilities.getTextFirstChars
 
 class AddSearchListAdapter(context: Context, private val cryptocurrencyClickCallback: ((Cryptocurrency) -> Unit)?) : BaseAdapter() {
 
@@ -64,11 +65,9 @@ class AddSearchListAdapter(context: Context, private val cryptocurrencyClickCall
         itemBinding.cryptocurrency = cryptocurrency
         itemBinding.itemRanking.text = String.format("${cryptocurrency.rank}")
 
-        var flipViewIconChars: String = cryptocurrency.symbol
         // Show only first 3 characters of symbol. If symbol has less than 3 characters than show less.
-        flipViewIconChars = flipViewIconChars.substring(0, Math.min(flipViewIconChars.length, FLIPVIEW_CHARACTER_LIMIT))
+        itemBinding.itemImageIcon.setFrontText(getTextFirstChars(cryptocurrency.symbol, FLIPVIEW_CHARACTER_LIMIT))
 
-        itemBinding.itemImageIcon.setFrontText(flipViewIconChars)
         itemBinding.itemName.text = cryptocurrency.name
         itemBinding.itemSymbol.text = cryptocurrency.symbol
 

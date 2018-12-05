@@ -23,6 +23,7 @@ import android.os.Handler
 import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -32,14 +33,20 @@ import com.baruckis.mycryptocoins.R
 import com.baruckis.mycryptocoins.data.Cryptocurrency
 import com.baruckis.mycryptocoins.databinding.ActivityAddSearchBinding
 import com.baruckis.mycryptocoins.dependencyinjection.Injectable
+import com.baruckis.mycryptocoins.ui.addsearchlist.CryptocurrencyAmountDialog.Companion.DIALOG_CRYPTOCURRENCY_AMOUNT_TAG
 import com.baruckis.mycryptocoins.ui.common.RetryCallback
 import com.baruckis.mycryptocoins.utilities.DELAY_MILLISECONDS
+import com.baruckis.mycryptocoins.utilities.onActionButtonClick
+import com.baruckis.mycryptocoins.utilities.onDismissedActionOrManual
+import com.baruckis.mycryptocoins.utilities.showSnackbar
 import com.baruckis.mycryptocoins.vo.Status
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.content_add_search.*
 import javax.inject.Inject
 
-
+/**
+ * UI for add crypto coins screen.
+ */
 class AddSearchActivity : AppCompatActivity(), Injectable {
 
     @Inject
@@ -51,7 +58,8 @@ class AddSearchActivity : AppCompatActivity(), Injectable {
 
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
     private lateinit var listAdapter: AddSearchListAdapter
-    private lateinit var snackbar: Snackbar
+
+    private var snackbar: Snackbar? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,7 +68,6 @@ class AddSearchActivity : AppCompatActivity(), Injectable {
         // Manage activity with data binding.
         binding = DataBindingUtil.setContentView(this, R.layout.activity_add_search)
 
-        //setContentView(R.layout.activity_add_search)
         setSupportActionBar(binding.toolbar2)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
@@ -70,14 +77,9 @@ class AddSearchActivity : AppCompatActivity(), Injectable {
 
         swipeRefreshLayout = swiperefresh_activity_add_search
         swipeRefreshLayout.setOnRefreshListener {
-            snackbar.dismiss()
-            retry()
-        }
-
-        snackbar = Snackbar.make(findViewById(android.R.id.content), "Error", Snackbar.LENGTH_INDEFINITE)
-        snackbar.setAction("Retry") {
-            swipeRefreshLayout.isRefreshing = true
-            retry()
+            if (snackbar?.isShown == true) {
+                snackbar?.dismiss()
+            } else retry()
         }
 
         binding.myRetryCallback = object : RetryCallback {
@@ -101,7 +103,16 @@ class AddSearchActivity : AppCompatActivity(), Injectable {
                         hint = getString(R.string.dialog_cryptocurrency_amount_hint),
                         confirmButton = getString(R.string.dialog_cryptocurrency_amount_confirm_button),
                         cancelButton = getString(R.string.dialog_cryptocurrency_amount_cancel_button))
-        cryptocurrencyAmountDialog.onConfirm = { viewModel.addCryptocurrency(cryptocurrency) }
+        cryptocurrencyAmountDialog.onConfirm = {
+
+            val amount = cryptocurrencyAmountDialog.editTextAmount.text.toString().toDouble()
+
+            cryptocurrency.amount = amount
+            cryptocurrency.amountFiat = amount * cryptocurrency.priceFiat
+            cryptocurrency.amountFiatChange24h = cryptocurrency.amountFiat!! * (cryptocurrency.pricePercentChange24h / (100))
+
+            viewModel.addCryptocurrency(cryptocurrency)
+        }
 
         // Display the alert dialog.
         cryptocurrencyAmountDialog.show(supportFragmentManager, DIALOG_CRYPTOCURRENCY_AMOUNT_TAG)
@@ -124,9 +135,17 @@ class AddSearchActivity : AppCompatActivity(), Injectable {
             listResource.data?.let { listAdapter.setData(it) }
 
             if (listResource.status == Status.ERROR && listResource.data != null) {
-                snackbar.show()
+
+                snackbar = findViewById<CoordinatorLayout>(R.id.coordinator_add_search).showSnackbar(R.string.unable_refresh) {
+                    onActionButtonClick { swipeRefreshLayout.isRefreshing = true }
+                    onDismissedActionOrManual { retry() }
+                }
             }
 
+        })
+
+        viewModel.liveDataLastUpdated.observe(this, Observer<String> { data ->
+            last_updated_activity_add_search.text = StringBuilder(getString(R.string.string_last_updated_on_date_time, data)).toString()
         })
 
     }

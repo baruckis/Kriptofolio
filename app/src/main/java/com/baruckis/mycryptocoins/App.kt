@@ -43,4 +43,5 @@ class App : Application(), HasActivityInjector {
 
     // This is required by HasActivityInjector interface to setup Dagger for Activity.
     override fun activityInjector(): AndroidInjector<Activity> = dispatchingAndroidInjector
+
 }

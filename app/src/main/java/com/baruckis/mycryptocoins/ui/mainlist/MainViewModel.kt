@@ -23,10 +23,9 @@ import androidx.lifecycle.*
 import com.baruckis.mycryptocoins.R
 import com.baruckis.mycryptocoins.data.Cryptocurrency
 import com.baruckis.mycryptocoins.repository.CryptocurrencyRepository
-import com.baruckis.mycryptocoins.utilities.SpannableValueColorStyle
-import com.baruckis.mycryptocoins.utilities.ValueType
-import com.baruckis.mycryptocoins.utilities.getSpannableValueStyled
-import com.baruckis.mycryptocoins.utilities.roundValue
+import com.baruckis.mycryptocoins.utilities.*
+import com.baruckis.mycryptocoins.vo.Resource
+import kotlinx.coroutines.*
 import javax.inject.Inject
 
 
@@ -36,7 +35,7 @@ import javax.inject.Inject
  */
 
 // ViewModel will require a CryptocurrencyRepository so we add @Inject code into ViewModel constructor.
-class MainViewModel @Inject constructor(var context: Context, cryptocurrencyRepository: CryptocurrencyRepository) : ViewModel() {
+class MainViewModel @Inject constructor(context: Context, private val cryptocurrencyRepository: CryptocurrencyRepository) : ViewModel() {
 
     private var currentCryptoCurrencyCode: String
     private var currentCryptoCurrencySign: String
@@ -48,7 +47,10 @@ class MainViewModel @Inject constructor(var context: Context, cryptocurrencyRepo
     private val liveDataTotalHoldingsValueCrypto: LiveData<Double>
     private val liveDataTotalHoldingsValueFiat24h: LiveData<Double>
 
-    val liveDataMyCryptocurrencyList: LiveData<List<Cryptocurrency>>
+    val mediatorLiveDataMyCryptocurrencyList = MediatorLiveData<Resource<List<Cryptocurrency>>>()
+    private var liveDataMyCryptocurrencyList: LiveData<Resource<List<Cryptocurrency>>>
+
+    val liveDataTotalHoldingsValueOnDateText: LiveData<String>
     val liveDataTotalHoldingsValueFiat24hText: LiveData<SpannableString>
     val liveDataTotalHoldingsValueCryptoText: LiveData<String>
     val liveDataTotalHoldingsValueFiatText: LiveData<String>
@@ -61,13 +63,20 @@ class MainViewModel @Inject constructor(var context: Context, cryptocurrencyRepo
         currentFiatCurrencyCode = PreferenceManager.getDefaultSharedPreferences(context).getString(context.resources.getString(R.string.pref_fiat_currency_key), context.resources.getString(R.string.pref_default_fiat_currency_value))!!
         currentFiatCurrencySign = getSupportedFiatCurrencySymbols(context).asSequence().filter { it.key.equals(currentFiatCurrencyCode) }.first().value
 
-        liveDataMyCryptocurrencyList = cryptocurrencyRepository.getMyCryptocurrencyLiveDataList()
+
+        liveDataMyCryptocurrencyList = cryptocurrencyRepository.getMyCryptocurrencyLiveDataResourceList()
+
+        mediatorLiveDataMyCryptocurrencyList.addSource(liveDataMyCryptocurrencyList) { mediatorLiveDataMyCryptocurrencyList.value = it }
+
+
         liveDataCurrentCryptocurrency = cryptocurrencyRepository.getSpecificCryptocurrencyLiveData(currentCryptoCurrencyCode)
 
         // swithMap returns a new LiveData object rather than a value, i.e. it switches the actual LiveData for a new one.
-        liveDataTotalHoldingsValueFiat24h = Transformations.switchMap(liveDataMyCryptocurrencyList) { _ -> MutableLiveData<Double>().apply { value = liveDataMyCryptocurrencyList.value?.sumByDouble { it.amountFiatChange24h } } }
-        liveDataTotalHoldingsValueFiat = Transformations.switchMap(liveDataMyCryptocurrencyList) { _ -> MutableLiveData<Double>().apply { value = liveDataMyCryptocurrencyList.value?.sumByDouble { it.amountFiat } } }
+        liveDataTotalHoldingsValueFiat24h = Transformations.switchMap(liveDataMyCryptocurrencyList) { _ -> MutableLiveData<Double>().apply { value = liveDataMyCryptocurrencyList.value?.data?.sumByDouble { it.amountFiatChange24h ?: 0.0 } ?: 0.0 } }
+        liveDataTotalHoldingsValueFiat = Transformations.switchMap(liveDataMyCryptocurrencyList) { _ -> MutableLiveData<Double>().apply { value = liveDataMyCryptocurrencyList.value?.data?.sumByDouble { it.amountFiat ?: 0.0 } ?: 0.0 } }
         liveDataTotalHoldingsValueCrypto = countTotalHoldingsValueCrypto(liveDataTotalHoldingsValueFiat, liveDataCurrentCryptocurrency)
+
+        liveDataTotalHoldingsValueOnDateText = Transformations.switchMap(cryptocurrencyRepository.getSpecificScreenStatusLiveData(DB_ID_SCREEN_MAIN_LIST)) { screenStatus -> MutableLiveData<String>().apply { value = formatDate(screenStatus?.timestamp, DATE_FORMAT_PATTERN) } }
 
         liveDataTotalHoldingsValueFiat24hText = Transformations.switchMap(liveDataTotalHoldingsValueFiat24h) {
             MutableLiveData<SpannableString>().apply { value = getSpannableValueStyled(context, liveDataTotalHoldingsValueFiat24h.value!!, SpannableValueColorStyle.Background, ValueType.Fiat, " $currentFiatCurrencySign ", " ") }
@@ -117,6 +126,50 @@ class MainViewModel @Inject constructor(var context: Context, cryptocurrencyRepo
         }
 
         return result
+    }
+
+    // In Kotlin, all coroutines run inside a CoroutineScope.
+    // A scope controls the lifetime of coroutines through its job.
+    private val viewModelJob = Job()
+    // Since uiScope has a default dispatcher of Dispatchers.Main, this coroutine will be launched
+    // in the main thread.
+    private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
+
+    /**
+     * On retry we need to run sequential code. First we need to get owned crypto coins ids from
+     * local database, wait for response and only after it use these ids to make a call with
+     * retrofit to get updated owned crypto values. This can be done using Kotlin Coroutines.
+     */
+    fun retry(shouldFetch: Boolean) {
+        // Launch a coroutine in uiScope.
+        uiScope.launch {
+            // The function withContext is a suspend function. The withContext immediately shifts
+            // execution of the block into different thread inside the block, and back when it
+            // completes. IO dispatcher is suitable for execution the network requests in IO thread.
+            val myCryptocurrencyIds = withContext(Dispatchers.IO) {
+                // Suspend until getMyCryptocurrencyIds() returns a result.
+                cryptocurrencyRepository.getMyCryptocurrencyIds()
+            }
+            // Here we come back to main worker thread. As soon as myCryptocurrencyIds has a result
+            // and main looper is available, coroutine resumes on main thread, and
+            // getMyCryptocurrencyLiveDataResourceList(shouldFetch, myCryptocurrencyIds) is called.
+            // We wait for background operations to complete, without blocking the original thread.
+            mediatorLiveDataMyCryptocurrencyList.removeSource(liveDataMyCryptocurrencyList)
+            liveDataMyCryptocurrencyList = cryptocurrencyRepository.getMyCryptocurrencyLiveDataResourceList(shouldFetch, myCryptocurrencyIds)
+            mediatorLiveDataMyCryptocurrencyList.addSource(liveDataMyCryptocurrencyList) { mediatorLiveDataMyCryptocurrencyList.value = it }
+        }
+
+    }
+
+    // onCleared is called when the ViewModel is no longer used and will be destroyed.
+    // This typically happens when the user navigates away from the Activity or Fragment that was
+    // using the ViewModel.
+    override fun onCleared() {
+        super.onCleared()
+        // When you cancel the job of a scope, it cancels all coroutines started in that scope.
+        // It's important to cancel any coroutines that are no longer required to avoid unnecessary
+        // work and memory leaks.
+        viewModelJob.cancel()
     }
 
 }

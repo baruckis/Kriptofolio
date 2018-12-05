@@ -24,10 +24,16 @@ import com.baruckis.mycryptocoins.api.CoinMarketCap
 import com.baruckis.mycryptocoins.api.CryptocurrencyLatest
 import com.baruckis.mycryptocoins.data.Cryptocurrency
 import com.baruckis.mycryptocoins.data.CryptocurrencyDao
+import com.baruckis.mycryptocoins.data.ScreenStatus
+import com.baruckis.mycryptocoins.data.ScreenStatusDao
 import com.baruckis.mycryptocoins.utilities.AbsentLiveData
+import com.baruckis.mycryptocoins.utilities.DB_ID_SCREEN_ADD_SEARCH_LIST
+import com.baruckis.mycryptocoins.utilities.DB_ID_SCREEN_MAIN_LIST
 import com.baruckis.mycryptocoins.vo.Resource
+import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.collections.ArrayList
 
 
 /**
@@ -37,15 +43,51 @@ import javax.inject.Singleton
 class CryptocurrencyRepository @Inject constructor(
         private val appExecutors: AppExecutors,
         private val cryptocurrencyDao: CryptocurrencyDao,
+        private val screenStatusDao: ScreenStatusDao,
         private val api: ApiService
 ) {
 
-    fun getMyCryptocurrencyLiveDataList(): LiveData<List<Cryptocurrency>> {
-        return cryptocurrencyDao.getMyCryptocurrencyLiveDataList()
+    fun getMyCryptocurrencyLiveDataResourceList(shouldFetch: Boolean = false, myCryptocurrenciesIds: String? = null): LiveData<Resource<List<Cryptocurrency>>> {
+        return object : NetworkBoundResource<List<Cryptocurrency>, CoinMarketCap<HashMap<String, CryptocurrencyLatest>>>(appExecutors) {
+
+            override fun saveCallResult(item: CoinMarketCap<HashMap<String, CryptocurrencyLatest>>) {
+
+                val list: MutableList<CryptocurrencyLatest> = ArrayList<CryptocurrencyLatest>()
+
+                // We iterate over hashmap to make a list of CryptocurrencyLatest.
+                if (!item.data.isNullOrEmpty()) {
+                    for ((key, value) in item.data) {
+                        list.add(value)
+                    }
+                }
+
+                // Than we use common function to convert list response to the list compatible with
+                // our created upsert function in dao.
+                cryptocurrencyDao.upsert(getCryptocurrencyListFromResponse(list))
+
+                if (item.status != null) {
+                    screenStatusDao.update(ScreenStatus(DB_ID_SCREEN_MAIN_LIST, item.status.timestamp))
+                }
+            }
+
+            override fun shouldFetch(data: List<Cryptocurrency>?): Boolean {
+                return shouldFetch
+            }
+
+            override fun loadFromDb(): LiveData<List<Cryptocurrency>> {
+                return cryptocurrencyDao.getMyCryptocurrencyLiveDataList()
+            }
+
+            override fun createCall(): LiveData<ApiResponse<CoinMarketCap<HashMap<String, CryptocurrencyLatest>>>> {
+                return if (!myCryptocurrenciesIds.isNullOrEmpty()) api.getCryptocurrenciesById("EUR", myCryptocurrenciesIds) else AbsentLiveData.create()
+            }
+
+        }.asLiveData()
     }
 
-    fun getSpecificCryptocurrencyLiveData(specificCryptoCode: String): LiveData<Cryptocurrency> {
-        return cryptocurrencyDao.getSpecificCryptocurrencyLiveData(specificCryptoCode)
+
+    fun getMyCryptocurrencyIds(): String? {
+        return cryptocurrencyDao.getMyCryptocurrencyIds()
     }
 
 
@@ -55,19 +97,12 @@ class CryptocurrencyRepository @Inject constructor(
 
             // Here we save the data fetched from web-service.
             override fun saveCallResult(item: CoinMarketCap<List<CryptocurrencyLatest>>) {
+                cryptocurrencyDao.upsert(getCryptocurrencyListFromResponse(item.data))
 
-                val allCryptocurrencyList: MutableList<Cryptocurrency> = ArrayList<Cryptocurrency>()
-
-                item.data?.forEach {
-                    val cryptocurrency = Cryptocurrency(it.name, it.cmcRank.toShort(),
-                            0.0, it.symbol, "EUR", it.quote.currency.price,
-                            0.0, it.quote.currency.percentChange1h,
-                            it.quote.currency.percentChange7d, it.quote.currency.percentChange24h,
-                            0.0)
-                    allCryptocurrencyList.add(cryptocurrency)
+                if (item.status != null) {
+                    screenStatusDao.update(ScreenStatus(DB_ID_SCREEN_ADD_SEARCH_LIST, item.status.timestamp))
+                    screenStatusDao.update(ScreenStatus(DB_ID_SCREEN_MAIN_LIST, item.status.timestamp))
                 }
-
-                cryptocurrencyDao.insertDataToAllCryptocurrencyList(allCryptocurrencyList)
             }
 
             // Returns boolean indicating if to fetch data from web or not, true means fetch the data from web.
@@ -91,6 +126,40 @@ class CryptocurrencyRepository @Inject constructor(
             override fun createCall(): LiveData<ApiResponse<CoinMarketCap<List<CryptocurrencyLatest>>>> = api.getAllCryptocurrencies("EUR")
 
         }.asLiveData()
+    }
+
+
+    fun getSpecificCryptocurrencyLiveData(specificCryptoCode: String): LiveData<Cryptocurrency> {
+        return cryptocurrencyDao.getSpecificCryptocurrencyLiveData(specificCryptoCode)
+    }
+
+
+    fun updateCryptocurrencyFromList(cryptocurrency: Cryptocurrency) {
+        appExecutors.diskIO().execute {
+            cryptocurrencyDao.updateCryptocurrency(cryptocurrency)
+        }
+    }
+
+
+    fun getSpecificScreenStatusLiveData(specificScreenStatusId: String): LiveData<ScreenStatus> {
+        return screenStatusDao.getSpecificScreenStatusLiveData(specificScreenStatusId)
+    }
+
+
+    private fun getCryptocurrencyListFromResponse(responseList: List<CryptocurrencyLatest>?): ArrayList<Cryptocurrency> {
+
+        val cryptocurrencyList: MutableList<Cryptocurrency> = ArrayList<Cryptocurrency>()
+
+        responseList?.forEach {
+            val cryptocurrency = Cryptocurrency(it.id, it.name, it.cmcRank.toShort(),
+                    null, it.symbol, "EUR", it.quote.currency.price,
+                    null, it.quote.currency.percentChange1h,
+                    it.quote.currency.percentChange7d, it.quote.currency.percentChange24h,
+                    null)
+            cryptocurrencyList.add(cryptocurrency)
+        }
+
+        return cryptocurrencyList as ArrayList<Cryptocurrency>
     }
 
 }

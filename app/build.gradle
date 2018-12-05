@@ -96,6 +96,12 @@ dependencies {
     // Dependencies for local unit tests
     testImplementation "junit:junit:$versions.junit"
 
+    // Dependencies for coroutines
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$versions.coroutines"
+    // Dependency is for the special UI context that can be passed to coroutine builders that use
+    // the main thread dispatcher to dispatch events on the main thread.
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$versions.coroutines"
+
     // 3rd party
     // HTTP client - Retrofit with OkHttp
     implementation "com.squareup.retrofit2:retrofit:$versions.retrofit"

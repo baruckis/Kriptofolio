@@ -23,6 +23,7 @@ import com.baruckis.mycryptocoins.api.ApiService
 import com.baruckis.mycryptocoins.api.AuthenticationInterceptor
 import com.baruckis.mycryptocoins.data.AppDatabase
 import com.baruckis.mycryptocoins.data.CryptocurrencyDao
+import com.baruckis.mycryptocoins.data.ScreenStatusDao
 import com.baruckis.mycryptocoins.utilities.API_SERVICE_BASE_URL
 import com.baruckis.mycryptocoins.utilities.DATABASE_NAME
 import com.baruckis.mycryptocoins.utilities.LiveDataCallAdapterFactory
@@ -81,6 +82,12 @@ class AppModule() {
     @Singleton
     fun provideCryptocurrencyDao(db: AppDatabase): CryptocurrencyDao {
         return db.cryptocurrencyDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideStatusDao(db: AppDatabase): ScreenStatusDao {
+        return db.statusDao()
     }
 
 }

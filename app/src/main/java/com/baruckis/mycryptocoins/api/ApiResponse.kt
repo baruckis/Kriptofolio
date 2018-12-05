@@ -20,7 +20,6 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import retrofit2.Response
 
-
 /**
  * Common class used by API responses. ApiResponse is a simple wrapper around the Retrofit2.Call
  * class that convert responses to instances of LiveData.
@@ -30,7 +29,7 @@ import retrofit2.Response
 sealed class ApiResponse<CoinMarketCapType> {
     companion object {
         fun <CoinMarketCapType> create(error: Throwable): ApiErrorResponse<CoinMarketCapType> {
-            return ApiErrorResponse(error.message ?: "Unknown error!!!")
+            return ApiErrorResponse(error.message ?: "Unknown error.")
         }
 
         fun <CoinMarketCapType> create(response: Response<CoinMarketCapType>): ApiResponse<CoinMarketCapType> {

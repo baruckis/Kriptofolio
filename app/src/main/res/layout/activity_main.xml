@@ -17,8 +17,10 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinator_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorForMainListBackground"
     tools:context=".ui.mainlist.MainActivity">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -40,9 +42,9 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:foregroundGravity="center"
-                android:paddingEnd="@dimen/main_collapsing_toolbar_layout_inner_margin"
                 android:paddingStart="@dimen/main_collapsing_toolbar_layout_inner_margin"
                 android:paddingTop="?android:attr/actionBarSize"
+                android:paddingEnd="@dimen/main_collapsing_toolbar_layout_inner_margin"
                 app:layout_collapseMode="parallax"
                 app:layout_collapseParallaxMultiplier="0.5">
 
@@ -50,7 +52,7 @@
                     android:id="@+id/textview_total_value_on_date_time"
                     style="@style/AutoSizeText"
                     android:gravity="center"
-                    android:text="@string/string_total_value_on_date_time"
+                    android:text="@string/string_total_value_holdings"
                     android:textAlignment="center"
                     app:layout_constraintBottom_toTopOf="@+id/textview_total_value_change_24h"
                     app:layout_constraintEnd_toEndOf="parent"

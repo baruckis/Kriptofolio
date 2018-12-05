@@ -25,11 +25,14 @@
     <string name="action_settings">"Settings"</string>
 
     <string name="retry">"Retry"</string>
-    <string name="unknown_error">"Unknown error!"</string>
+    <string name="unable_refresh">"Unable to refresh."</string>
+    <string name="unable_get_data">"Unable to get data. Please press retry button to try again."</string>
+    <string name="unknown_error">"Unknown error."</string>
 
     <!-- Strings related to Main Activity -->
 
-    <string name="string_total_value_on_date_time">"Total holdings value"</string>
+    <string name="string_total_value_holdings">"Total holdings value"</string>
+    <string name="string_total_value_on_date_time">" (%1$s UTC)"</string>
     <string name="string_total_value_change_24h_label">"24 h "</string>
     <string name="string_total_value_change_24h" translatable="false">" $ 0.00 "</string>
     <string name="string_separator_value" translatable="false">"/"</string>
@@ -52,7 +55,7 @@
 
     <string name="sample_text_column_coin_fiat_price_amount">"Price $\nAmount $"</string>
 
-    <string name="sample_text_total_value_on_date_time">"Total holdings value (11/03/2018 12:55:08)"</string>
+    <string name="sample_text_total_value_on_date_time">"Total holdings value (11/03/2018 12:55:08 UTC)"</string>
     <string name="sample_text_total_value_change_24h" translatable="false">" $ +1538.00 "</string>
     <string name="sample_text_crypto_value" translatable="false">"₿ 1.00000000"</string>
     <string name="sample_text_fiat_value" translatable="false">"$ 7,618.85"</string>
@@ -144,10 +147,13 @@
     <string name="activity_add_search_title">"Add crypto coin(-s)"</string>
     <string name="activity_add_search_subtitle">"All cryptocurrencies by ranking"</string>
 
+    <string name="string_last_updated_on_date_time">"Last updated (%1$s UTC)"</string>
+
     <string name="action_search">"Search"</string>
 
     <string name="search_hint">"Search for specific coin…"</string>
 
+    <string name="sample_text_last_updated_on_date_time">"Last updated (11/03/2018 12:55:08 UTC)"</string>
     <string name="sample_text_item_code" translatable="false">"BITSILVER"</string>
     
     <string name="dialog_cryptocurrency_amount_title">"How many %1$s coins do you have?"</string>

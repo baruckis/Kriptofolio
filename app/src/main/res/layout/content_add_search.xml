@@ -48,17 +48,18 @@
             android:ellipsize="start"
             android:padding="@dimen/add_search_list_item_last_updated_padding"
             android:singleLine="true"
-            android:text="Last updated 11/03/2018 12:55:08 UTC"
+            android:text="@string/string_last_updated_on_date_time"
             android:textAlignment="center"
             android:textColor="@color/colorForAddSearchListLastUpdatedText"
-            app:visibleGone="@{listResource.data != null}" />
+            app:visibleGone="@{listResource.data != null}"
+            tools:text="@string/sample_text_last_updated_on_date_time" />
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swiperefresh_activity_add_search"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/last_updated_activity_add_search"
+            app:layout_constraintTop_toBottomOf="@id/last_updated_activity_add_search"
             app:visibleGone="@{listResource.data != null}">
 
             <ListView

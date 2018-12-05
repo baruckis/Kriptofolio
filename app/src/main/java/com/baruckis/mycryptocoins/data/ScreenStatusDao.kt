@@ -16,23 +16,21 @@
 
 package com.baruckis.mycryptocoins.data
 
-import androidx.room.Database
-import androidx.room.RoomDatabase
-import androidx.room.TypeConverters
+import androidx.lifecycle.LiveData
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
 
 /**
- * The Room database for this app.
+ * The Data Access Object for the [ScreenStatus] class.
  */
-@Database(entities = [Cryptocurrency::class, ScreenStatus::class], version = 1, exportSchema = false)
+@Dao
+interface ScreenStatusDao {
 
-// App needs to use a custom data type whose value you would like to store in a single database
-// column. To add this kind of support for custom types, you provide a TypeConverter, which converts
-// a custom class to and from a known type that Room can persist.
-@TypeConverters(Converters::class)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun update(status: ScreenStatus)
 
-abstract class AppDatabase : RoomDatabase() {
-
-    abstract fun cryptocurrencyDao(): CryptocurrencyDao
-
-    abstract fun statusDao(): ScreenStatusDao
+    @Query("SELECT * FROM screen_status WHERE id = :specificScreenStatusId LIMIT 1")
+    fun getSpecificScreenStatusLiveData(specificScreenStatusId: String): LiveData<ScreenStatus>
 }

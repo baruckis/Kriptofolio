@@ -28,3 +28,7 @@ const val FLIPVIEW_CHARACTER_LIMIT = 3
 const val API_SERVICE_BASE_URL = "https://sandbox-api.coinmarketcap.com/"
 const val API_SERVICE_AUTHENTICATION_NAME = "X-CMC_PRO_API_KEY"
 const val API_SERVICE_AUTHENTICATION_KEY = "" // TODO: Use your API Key provided by CoinMarketCap Professional API Developer Portal.
+const val API_SERVICE_RESULTS_LIMIT = 5000 // This is max number from CoinMarketCap API.
+const val DB_ID_SCREEN_MAIN_LIST = "main_list"
+const val DB_ID_SCREEN_ADD_SEARCH_LIST = "add_search_list"
+const val DATE_FORMAT_PATTERN = "MM/dd/yyyy HH:mm:ss"

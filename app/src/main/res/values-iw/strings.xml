@@ -22,11 +22,14 @@
     <string name="action_settings">"הגדרות"</string>
 
     <string name="retry">"Retry"</string> <!-- TODO translate to HE -->
-    <string name="unknown_error">"Unknown error!"</string> <!-- TODO translate to HE -->
+    <string name="unable_refresh">"Unable to refresh."</string> <!-- TODO translate to HE -->
+    <string name="unable_get_data">"Unable to get data. Please press retry button to try again."</string> <!-- TODO translate to HE -->
+    <string name="unknown_error">"Unknown error."</string> <!-- TODO translate to HE -->
 
     <!-- Strings related to Main Activity -->
 
-    <string name="string_total_value_on_date_time">"ערך אחזקות סה\"כ"</string>
+    <string name="string_total_value_holdings">"ערך אחזקות סה\"כ"</string>
+    <string name="string_total_value_on_date_time">" (UTC %1$s)"</string>
     <string name="string_total_value_change_24h_label">" h 24"</string>
 
     <string name="string_crypto_list_empty_primary">"Your owned crypto coins list is empty!"</string> <!-- TODO translate to HE -->
@@ -38,7 +41,7 @@
 
     <string name="sample_text_column_coin_fiat_price_amount">"$ מחיר\n$ סכום"</string>
 
-    <string name="sample_text_total_value_on_date_time">"ערך אחזקות סה\"כ (2018/11/03 00:55:08)"</string>
+    <string name="sample_text_total_value_on_date_time">"ערך אחזקות סה\"כ (2018/11/03 UTC 00:55:08)"</string>
 
 
     <!-- Strings related to Add Search Activity -->
@@ -46,9 +49,13 @@
     <string name="activity_add_search_title">"הוספת מטבע הצפנה (-s)"</string>
     <string name="activity_add_search_subtitle">"כל cryptocurrencies ידי דירוג"</string>
 
+    <string name="string_last_updated_on_date_time">"Last updated (%1$s UTC)"</string> <!-- TODO translate to HE -->
+
     <string name="action_search">"לחפש"</string>
 
     <string name="search_hint">"חפש מטבע ספציפי …"</string>
+
+    <string name="sample_text_last_updated_on_date_time">"Last updated (11/03/2018 12:55:08 UTC)"</string> <!-- TODO translate to HE -->
 
     <string name="dialog_cryptocurrency_amount_title">"How many %1$s coins do you have?"</string> <!-- TODO translate to HE -->
     <string name="dialog_cryptocurrency_amount_hint">"Enter amount"</string> <!-- TODO translate to HE -->

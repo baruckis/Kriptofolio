@@ -16,23 +16,23 @@
 
 package com.baruckis.mycryptocoins.data
 
-import androidx.room.Database
-import androidx.room.RoomDatabase
-import androidx.room.TypeConverters
+import androidx.room.TypeConverter
+import java.util.*
 
 /**
- * The Room database for this app.
+ * With converters, you can use your custom types in queries, just as you would use primitive types.
  */
-@Database(entities = [Cryptocurrency::class, ScreenStatus::class], version = 1, exportSchema = false)
+class Converters {
 
-// App needs to use a custom data type whose value you would like to store in a single database
-// column. To add this kind of support for custom types, you provide a TypeConverter, which converts
-// a custom class to and from a known type that Room can persist.
-@TypeConverters(Converters::class)
+    // If we want to persist instances of Date, we can write the following TypeConverter to store
+    // the equivalent Unix timestamp in the database.
+    @TypeConverter
+    fun fromTimestamp(value: Long?): Date? {
+        return value?.let { Date(it) }
+    }
 
-abstract class AppDatabase : RoomDatabase() {
-
-    abstract fun cryptocurrencyDao(): CryptocurrencyDao
-
-    abstract fun statusDao(): ScreenStatusDao
+    @TypeConverter
+    fun dateToTimestamp(date: Date?): Long? {
+        return date?.time?.toLong()
+    }
 }

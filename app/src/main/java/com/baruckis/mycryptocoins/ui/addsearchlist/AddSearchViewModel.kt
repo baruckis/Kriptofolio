@@ -16,11 +16,12 @@
 
 package com.baruckis.mycryptocoins.ui.addsearchlist
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.baruckis.mycryptocoins.data.Cryptocurrency
 import com.baruckis.mycryptocoins.repository.CryptocurrencyRepository
+import com.baruckis.mycryptocoins.utilities.DATE_FORMAT_PATTERN
+import com.baruckis.mycryptocoins.utilities.DB_ID_SCREEN_ADD_SEARCH_LIST
+import com.baruckis.mycryptocoins.utilities.formatDate
 import com.baruckis.mycryptocoins.vo.Resource
 import javax.inject.Inject
 
@@ -29,9 +30,13 @@ class AddSearchViewModel @Inject constructor(var cryptocurrencyRepository: Crypt
     val mediatorLiveData = MediatorLiveData<Resource<List<Cryptocurrency>>>()
     private var liveData: LiveData<Resource<List<Cryptocurrency>>> = cryptocurrencyRepository.getAllCryptocurrencyLiveDataList()
 
+    val liveDataLastUpdated: LiveData<String>
+
     init {
         // A mediator to observe the changes. Room will automatically notify all active observers when the data changes.
         mediatorLiveData.addSource(liveData) { mediatorLiveData.value = it }
+
+        liveDataLastUpdated = Transformations.switchMap(cryptocurrencyRepository.getSpecificScreenStatusLiveData(DB_ID_SCREEN_ADD_SEARCH_LIST)) { screenStatus -> MutableLiveData<String>().apply { value = formatDate(screenStatus?.timestamp, DATE_FORMAT_PATTERN) } }
     }
 
     fun retry(shouldFetch: Boolean) {
@@ -41,7 +46,7 @@ class AddSearchViewModel @Inject constructor(var cryptocurrencyRepository: Crypt
     }
 
     fun addCryptocurrency(cryptocurrency: Cryptocurrency) {
-
+        cryptocurrencyRepository.updateCryptocurrencyFromList(cryptocurrency)
     }
 
 }

@@ -21,29 +21,33 @@ import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
 import android.view.WindowManager
+import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import com.baruckis.mycryptocoins.R
 import kotlinx.android.synthetic.main.dialog_add_crypto_amount.view.*
 
-const val DIALOG_CRYPTOCURRENCY_AMOUNT_TAG = "cryptocurrency_amount_dialog"
-
+/**
+ * UI for add crypto coins screen dialog where you enter amount of the coins that you have.
+ */
 class CryptocurrencyAmountDialog() : DialogFragment() {
 
     companion object {
 
-        private const val TITLE = "title"
-        private const val HINT = "hint"
-        private const val CONFIRM_BUTTON = "confirm_button"
-        private const val CANCEL_BUTTON = "cancel_button"
+        const val DIALOG_CRYPTOCURRENCY_AMOUNT_TAG = "cryptocurrency_amount_dialog"
+
+        private const val EXTRA_TITLE = "title"
+        private const val EXTRA_HINT = "hint"
+        private const val EXTRA_CONFIRM_BUTTON = "confirm_button"
+        private const val EXTRA_CANCEL_BUTTON = "cancel_button"
 
         fun newInstance(title: String, hint: String, confirmButton: String, cancelButton: String): CryptocurrencyAmountDialog {
             val dialog = CryptocurrencyAmountDialog()
             val args = Bundle().apply {
-                putString(TITLE, title)
-                putString(HINT, hint)
-                putString(CONFIRM_BUTTON, confirmButton)
-                putString(CANCEL_BUTTON, cancelButton)
+                putString(EXTRA_TITLE, title)
+                putString(EXTRA_HINT, hint)
+                putString(EXTRA_CONFIRM_BUTTON, confirmButton)
+                putString(EXTRA_CANCEL_BUTTON, cancelButton)
             }
             dialog.arguments = args
             return dialog
@@ -51,16 +55,17 @@ class CryptocurrencyAmountDialog() : DialogFragment() {
 
     }
 
+    lateinit var editTextAmount: EditText
     var onConfirm: (() -> Unit)? = null
     var onCancel: (() -> Unit)? = null
 
     @SuppressLint("InflateParams")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
-        val title = arguments?.getString(TITLE)
-        val hint = arguments?.getString(HINT)
-        val confirmButton = arguments?.getString(CONFIRM_BUTTON)
-        val cancelButton = arguments?.getString(CANCEL_BUTTON)
+        val title = arguments?.getString(EXTRA_TITLE)
+        val hint = arguments?.getString(EXTRA_HINT)
+        val confirmButton = arguments?.getString(EXTRA_CONFIRM_BUTTON)
+        val cancelButton = arguments?.getString(EXTRA_CANCEL_BUTTON)
 
         val dialog = activity?.let {
             val builder = AlertDialog.Builder(it)
@@ -70,6 +75,8 @@ class CryptocurrencyAmountDialog() : DialogFragment() {
 
             // Pass null as the parent view because its going in the dialog layout.
             val dialogView = it.layoutInflater.inflate(R.layout.dialog_add_crypto_amount, null)
+
+            editTextAmount = dialogView.edit_text_amount
 
             // Set hint for edit text.
             dialogView.edit_text_amount.hint = hint
@@ -94,5 +101,6 @@ class CryptocurrencyAmountDialog() : DialogFragment() {
 
         return dialog
     }
+
 
 }

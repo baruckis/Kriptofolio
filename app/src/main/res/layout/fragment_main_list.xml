@@ -22,31 +22,46 @@
 
     <data>
 
+        <import type="com.baruckis.mycryptocoins.vo.Status" />
+
+        <import type="com.baruckis.mycryptocoins.vo.Resource" />
+
+        <variable
+            name="listResource"
+            type="Resource" />
+
+        <variable
+            name="retryCallback"
+            type="com.baruckis.mycryptocoins.ui.common.RetryCallback" />
+
         <variable
             name="viewmodel"
             type="com.baruckis.mycryptocoins.ui.mainlist.MainViewModel" />
     </data>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/cardview_labels"
             android:layout_width="match_parent"
             android:layout_height="@dimen/main_cardview_column_names_height"
-            android:layout_marginEnd="@dimen/main_cardview_column_names_outer_margin"
             android:layout_marginStart="@dimen/main_cardview_column_names_outer_margin"
             android:layout_marginTop="@dimen/main_cardview_column_names_outer_margin"
-            app:cardBackgroundColor="@color/colorForMainColumnNames">
+            android:layout_marginEnd="@dimen/main_cardview_column_names_outer_margin"
+            app:cardBackgroundColor="@color/colorForMainColumnNames"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginEnd="@dimen/main_cardview_column_names_inner_margin"
                 android:layout_marginStart="@dimen/main_cardview_column_names_inner_margin"
-                android:paddingBottom="@dimen/main_cardview_column_names_outer_margin"
-                android:paddingTop="@dimen/main_cardview_column_names_outer_margin">
+                android:layout_marginEnd="@dimen/main_cardview_column_names_inner_margin"
+                android:paddingTop="@dimen/main_cardview_column_names_outer_margin"
+                android:paddingBottom="@dimen/main_cardview_column_names_outer_margin">
 
                 <androidx.constraintlayout.widget.Guideline
                     android:id="@+id/guideline1_fixed"
@@ -84,8 +99,8 @@
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/text_column_coin_name_amount_symbol"
                     style="@style/MainListColumnNamesText"
-                    android:layout_marginEnd="@dimen/main_cardview_column_names_text_between_margin"
                     android:layout_marginStart="@dimen/main_cardview_column_names_outer_margin"
+                    android:layout_marginEnd="@dimen/main_cardview_column_names_text_between_margin"
                     android:text="@string/string_column_coin_crypto_hold_amount_symbol"
                     android:textAlignment="viewStart"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -96,8 +111,8 @@
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/text_column_coin_fiat_btc_price"
                     style="@style/MainListColumnNamesText"
-                    android:layout_marginEnd="@dimen/main_cardview_column_names_text_between_margin"
                     android:layout_marginStart="@dimen/main_cardview_column_names_text_between_margin"
+                    android:layout_marginEnd="@dimen/main_cardview_column_names_text_between_margin"
                     android:text="@{@string/string_column_coin_fiat_price_amount(viewmodel.currentFiatCurrencySign, viewmodel.currentFiatCurrencySign)}"
                     android:textAlignment="center"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -122,52 +137,71 @@
 
         </androidx.cardview.widget.CardView>
 
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        <LinearLayout
+            android:id="@+id/layout_fragment_main_list_empty"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="0dp"
+            android:layout_marginStart="@dimen/add_search_list_item_inner_margin"
+            android:layout_marginTop="@dimen/add_search_list_item_inner_margin"
+            android:layout_marginEnd="@dimen/add_search_list_item_inner_margin"
+            android:layout_marginBottom="@dimen/add_search_list_item_inner_margin"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingTop="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cardview_labels"
+            app:visibleGone="@{listResource.data != null}">
 
-            <RelativeLayout
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/text_primary_empty"
+                style="@style/MainListEmptyText.Primary"
+                android:text="@string/string_crypto_list_empty_primary" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/text_secondary_empty"
+                style="@style/MainListEmptyText.Secondary"
+                android:text="@string/string_crypto_list_empty_secondary" />
+
+        </LinearLayout>
+
+        <include
+            layout="@layout/loading_state"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/add_search_list_item_inner_margin"
+            android:layout_marginTop="@dimen/add_search_list_item_inner_margin"
+            android:layout_marginEnd="@dimen/add_search_list_item_inner_margin"
+            android:layout_marginBottom="@dimen/add_search_list_item_inner_margin"
+            app:callback="@{() -> retryCallback.retry()}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cardview_labels"
+            app:resource="@{listResource}" />
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swiperefresh_fragment_main_list"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cardview_labels"
+            app:visibleGone="@{listResource.data != null}">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerview_fragment_main_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/colorForMainListBackground">
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerview_fragment_main_list"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:clipToPadding="false"
-                    android:paddingBottom="72dp"
-                    android:paddingTop="5dp"
-                    android:scrollbarStyle="outsideOverlay"
-                    android:scrollbars="vertical"
-                    android:visibility="gone" />
-
-                <LinearLayout
-                    android:id="@+id/layout_fragment_main_list_empty"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="20dp"
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical"
-                    android:visibility="visible">
-
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/text_primary_empty"
-                        style="@style/MainListEmptyText.Primary"
-                        android:text="@string/string_crypto_list_empty_primary" />
-
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/text_secondary_empty"
-                        style="@style/MainListEmptyText.Secondary"
-                        android:text="@string/string_crypto_list_empty_secondary" />
-
-                </LinearLayout>
-
-            </RelativeLayout>
-
+                android:clipToPadding="false"
+                android:paddingTop="5dp"
+                android:paddingBottom="72dp"
+                android:scrollbarStyle="outsideOverlay"
+                android:scrollbars="vertical" />
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

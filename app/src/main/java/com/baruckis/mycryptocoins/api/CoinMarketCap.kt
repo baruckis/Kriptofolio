@@ -17,6 +17,7 @@
 package com.baruckis.mycryptocoins.api
 
 import com.google.gson.annotations.SerializedName
+import java.util.*
 
 /**
  * Data class to handle the response from the server.
@@ -30,7 +31,7 @@ data class CoinMarketCap<Type>(
 ) {
 
     data class Status(
-            val timestamp: String,
+            val timestamp: Date,
             @SerializedName("error_code")
             val errorCode: Int,
             @SerializedName("error_message")

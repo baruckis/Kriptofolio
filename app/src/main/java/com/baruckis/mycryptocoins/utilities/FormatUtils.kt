@@ -26,6 +26,8 @@ import androidx.core.content.ContextCompat
 import com.baruckis.mycryptocoins.R
 import java.math.RoundingMode
 import java.text.DecimalFormat
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * Static methods used to format and style financial values.
@@ -45,15 +47,16 @@ sealed class SpannableValueColorStyle {
 }
 
 // Round value depending on it's type by applying specific pattern as we want to set defined number of digits after decimal point.
-fun roundValue(number: Double, type: ValueType): String {
+fun roundValue(number: Double?, type: ValueType): String {
     val df = DecimalFormat(type.pattern)
     df.roundingMode = RoundingMode.DOWN
     return df.format(number)
 }
 
 // Get value formatted and with special style applied.
-fun getSpannableValueStyled(context: Context, value: Double, style: SpannableValueColorStyle, type: ValueType, left: String = "", right: String = ""): SpannableString {
+fun getSpannableValueStyled(context: Context, value: Double?, style: SpannableValueColorStyle, type: ValueType, left: String = "", right: String = ""): SpannableString {
     val valueSpannable: SpannableString
+    var vl = value
     var valueColor = ContextCompat.getColor(context, R.color.colorForMainListItemText)
 
     // Nested function to take program modularization further.
@@ -66,18 +69,37 @@ fun getSpannableValueStyled(context: Context, value: Double, style: SpannableVal
 
     var leftMod = left
 
+    if (vl == null) {
+        vl = 0.0
+    }
+
     when {
-        value > 0 -> {
+        vl > 0 -> {
             valueColor = ContextCompat.getColor(context, R.color.colorForValueChangePositive)
             leftMod = leftMod.plus("+")
         }
-        value < 0 -> {
+        vl < 0 -> {
             valueColor = ContextCompat.getColor(context, R.color.colorForValueChangeNegative)
         }
     }
 
-    valueSpannable = SpannableString("$leftMod${roundValue(value, type)}$right")
+    valueSpannable = SpannableString("$leftMod${roundValue(vl, type)}$right")
     valueSpannable.setSpan(getColorSpan(valueColor), 0, valueSpannable.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
 
     return valueSpannable
+}
+
+// Get first characters of the text. You set the limit of how many characters do you want to get
+// and if less characters available in provided text than show less.
+fun getTextFirstChars(text: String?, charLimit: Int): String {
+    return if (text.isNullOrEmpty()) ""
+    else text.substring(0, Math.min(text.length, charLimit))
+}
+
+
+fun formatDate(timeStamp: Date?, dateFormatPattern: String): String {
+    return if (timeStamp == null) "" else {
+        val sdf = SimpleDateFormat(dateFormatPattern, Locale.getDefault())
+        sdf.format(timeStamp)
+    }
 }

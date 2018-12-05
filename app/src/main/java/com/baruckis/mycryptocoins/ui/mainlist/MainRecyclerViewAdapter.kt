@@ -23,10 +23,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.baruckis.mycryptocoins.R
 import com.baruckis.mycryptocoins.data.Cryptocurrency
 import com.baruckis.mycryptocoins.databinding.FragmentMainListItemBinding
-import com.baruckis.mycryptocoins.utilities.SpannableValueColorStyle
-import com.baruckis.mycryptocoins.utilities.ValueType
-import com.baruckis.mycryptocoins.utilities.getSpannableValueStyled
-import com.baruckis.mycryptocoins.utilities.roundValue
+import com.baruckis.mycryptocoins.utilities.*
 
 
 class MainRecyclerViewAdapter() : RecyclerView.Adapter<MainRecyclerViewAdapter.BindingViewHolder>() {
@@ -54,6 +51,7 @@ class MainRecyclerViewAdapter() : RecyclerView.Adapter<MainRecyclerViewAdapter.B
             binding.cryptocurrency = cryptocurrency
 
             binding.itemRanking.text = String.format("${cryptocurrency.rank}")
+            binding.itemImageIcon.setFrontText(getTextFirstChars(cryptocurrency.symbol, FLIPVIEW_CHARACTER_LIMIT))
             binding.itemAmountCode.text = String.format("${roundValue(cryptocurrency.amount, ValueType.Crypto)} ${cryptocurrency.symbol}")
             binding.itemPrice.text = String.format("${roundValue(cryptocurrency.priceFiat, ValueType.Fiat)} ${cryptocurrency.currencyFiat}")
             binding.itemAmountFiat.text = String.format("${roundValue(cryptocurrency.amountFiat, ValueType.Fiat)} ${cryptocurrency.currencyFiat}")

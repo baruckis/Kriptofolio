@@ -22,15 +22,18 @@
     <string name="action_settings">"Nustatymai"</string>
 
     <string name="retry">"Bandyti dar kartą"</string>
-    <string name="unknown_error">"Nežinoma klaida!"</string>
+    <string name="unable_refresh">"Nepavyko atnaujinti."</string>
+    <string name="unable_get_data">"Nepavyko gauti duomenų. Prašau paspausk kartojimo mygtuką bandyti dar kartą."</string>
+    <string name="unknown_error">"Nežinoma klaida."</string>
 
     <!-- Strings related to Main Activity -->
 
-    <string name="string_total_value_on_date_time">"Bendra turima vertė"</string>
+    <string name="string_total_value_holdings">"Bendra turima vertė"</string>
+    <string name="string_total_value_on_date_time">" (%1$s UTC)"</string>
     <string name="string_total_value_change_24h_label">"24 val "</string>
 
     <string name="string_crypto_list_empty_primary">"Jums priklausančių kripto monetų sąrašas yra tuščias!"</string>
-    <string name="string_crypto_list_empty_secondary">"Pridėkite savo kripto naudodami + mygtuką žemiau."</string>
+    <string name="string_crypto_list_empty_secondary">"Pridėk savo kripto naudojant + mygtuką žemiau."</string>
 
     <string name="string_column_coin_crypto_hold_amount_symbol">"Kripto moneta\nKiekis &#38; simbolis"</string>
     <string name="string_column_coin_fiat_price_amount">"Kaina %1$s\nKiekis %2$s"</string>
@@ -38,7 +41,7 @@
 
     <string name="sample_text_column_coin_fiat_price_amount">"Kaina $\nKiekis $"</string>
 
-    <string name="sample_text_total_value_on_date_time">"Bendra turima vertė (11/03/2018 12:55:08)"</string>
+    <string name="sample_text_total_value_on_date_time">"Bendra turima vertė (11/03/2018 12:55:08 UTC)"</string>
 
 
     <!-- Strings related to Add Search Activity -->
@@ -46,12 +49,16 @@
     <string name="activity_add_search_title">"Pridėk kripto monetą(-as)"</string>
     <string name="activity_add_search_subtitle">"Visos kripto valiutos pagal reitingą"</string>
 
+    <string name="string_last_updated_on_date_time">"Paskutinį kartą atnaujinta (%1$s UTC)"</string>
+
     <string name="action_search">"Ieškoti"</string>
 
     <string name="search_hint">"Ieškok konkrečios monetos…"</string>
 
-    <string name="dialog_cryptocurrency_amount_title">"Kiek turite %1$s monetų?"</string>
-    <string name="dialog_cryptocurrency_amount_hint">"Įveskite kiekį"</string>
+    <string name="sample_text_last_updated_on_date_time">"Paskutinį kartą atnaujinta (11/03/2018 12:55:08 UTC)"</string>
+
+    <string name="dialog_cryptocurrency_amount_title">"Kiek turi %1$s monetų?"</string>
+    <string name="dialog_cryptocurrency_amount_hint">"Įvesk kiekį"</string>
     <string name="dialog_cryptocurrency_amount_confirm_button">"Gerai"</string>
     <string name="dialog_cryptocurrency_amount_cancel_button">"Atšaukti"</string>
 
