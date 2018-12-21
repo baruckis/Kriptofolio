@@ -54,7 +54,7 @@ fun roundValue(number: Double?, type: ValueType): String {
 }
 
 // Get value formatted and with special style applied.
-fun getSpannableValueStyled(context: Context, value: Double?, style: SpannableValueColorStyle, type: ValueType, left: String = "", right: String = ""): SpannableString {
+fun getSpannableValueStyled(context: Context, value: Double?, style: SpannableValueColorStyle, type: ValueType, left: String = "", right: String = "", textIfNaN: String? = ""): SpannableString {
     val valueSpannable: SpannableString
     var vl = value
     var valueColor = ContextCompat.getColor(context, R.color.colorForMainListItemText)
@@ -83,7 +83,9 @@ fun getSpannableValueStyled(context: Context, value: Double?, style: SpannableVa
         }
     }
 
-    valueSpannable = SpannableString("$leftMod${roundValue(vl, type)}$right")
+    valueSpannable = if (vl.isNaN()) SpannableString("$leftMod$textIfNaN$right") else
+        SpannableString("$leftMod${roundValue(vl, type)}$right")
+
     valueSpannable.setSpan(getColorSpan(valueColor), 0, valueSpannable.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
 
     return valueSpannable

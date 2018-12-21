@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.baruckis.mycryptocoins.data
+package com.baruckis.mycryptocoins.db
 
 import androidx.room.Database
 import androidx.room.RoomDatabase

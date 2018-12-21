@@ -17,19 +17,23 @@
 package com.baruckis.mycryptocoins.dependencyinjection
 
 import android.content.Context
+import android.content.SharedPreferences
+import android.preference.PreferenceManager
 import androidx.room.Room
 import com.baruckis.mycryptocoins.App
+import com.baruckis.mycryptocoins.BuildConfig
 import com.baruckis.mycryptocoins.api.ApiService
 import com.baruckis.mycryptocoins.api.AuthenticationInterceptor
-import com.baruckis.mycryptocoins.data.AppDatabase
-import com.baruckis.mycryptocoins.data.CryptocurrencyDao
-import com.baruckis.mycryptocoins.data.ScreenStatusDao
+import com.baruckis.mycryptocoins.db.AppDatabase
+import com.baruckis.mycryptocoins.db.CryptocurrencyDao
+import com.baruckis.mycryptocoins.db.ScreenStatusDao
 import com.baruckis.mycryptocoins.utilities.API_SERVICE_BASE_URL
 import com.baruckis.mycryptocoins.utilities.DATABASE_NAME
 import com.baruckis.mycryptocoins.utilities.LiveDataCallAdapterFactory
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
@@ -54,6 +58,14 @@ class AppModule() {
         // We add the interceptor to OkHttpClient.
         // It will add authentication headers to every call we make.
         builder.interceptors().add(AuthenticationInterceptor())
+        // Log requests and responses.
+        // Add logging as the last interceptor, because this will also log the information which
+        // you added or manipulated with previous interceptors to your request.
+        builder.interceptors().add(HttpLoggingInterceptor().apply {
+            // For production environment to enhance apps performance we will be skipping any
+            // logging operation. We will show logs just for debug builds.
+            level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE
+        })
         return builder.build()
     }
 
@@ -89,5 +101,9 @@ class AppModule() {
     fun provideStatusDao(db: AppDatabase): ScreenStatusDao {
         return db.statusDao()
     }
+
+    @Provides
+    @Singleton
+    fun provideSharedPreferences(app: App): SharedPreferences = PreferenceManager.getDefaultSharedPreferences(app)
 
 }

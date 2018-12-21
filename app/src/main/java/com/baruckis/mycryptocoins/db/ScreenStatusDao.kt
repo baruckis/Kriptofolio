@@ -14,23 +14,26 @@
  * limitations under the License.
  */
 
-package com.baruckis.mycryptocoins.utilities
+package com.baruckis.mycryptocoins.db
 
 import androidx.lifecycle.LiveData
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
 
 /**
- * A LiveData class that has null value.
+ * The Data Access Object for the [ScreenStatus] class.
  */
-class AbsentLiveData<T : Any?> private constructor() : LiveData<T>() {
+@Dao
+interface ScreenStatusDao {
 
-    init {
-        // Use post instead of set since this can be created on any thread.
-        postValue(null)
-    }
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun update(status: ScreenStatus)
 
-    companion object {
-        fun <T> create(): LiveData<T> {
-            return AbsentLiveData()
-        }
-    }
+    @Query("SELECT * FROM screen_status WHERE id = :specificScreenStatusId LIMIT 1")
+    fun getSpecificScreenStatusLiveData(specificScreenStatusId: String): LiveData<ScreenStatus>
+
+    @Query("SELECT * FROM screen_status WHERE id = :specificScreenStatusId LIMIT 1")
+    fun getSpecificScreenStatusData(specificScreenStatusId: String): ScreenStatus
 }

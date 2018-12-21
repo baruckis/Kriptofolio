@@ -17,18 +17,46 @@
 package com.baruckis.mycryptocoins.ui.settings
 
 import android.os.Bundle
-import android.preference.PreferenceFragment
 import androidx.fragment.app.Fragment
+import androidx.preference.ListPreference
+import androidx.preference.Preference
+import androidx.preference.PreferenceFragmentCompat
 import com.baruckis.mycryptocoins.R
+import com.baruckis.mycryptocoins.dependencyinjection.Injectable
+import com.baruckis.mycryptocoins.repository.CryptocurrencyRepository
+import javax.inject.Inject
 
 /**
  * A simple [Fragment] subclass.
  */
-class SettingsFragment : PreferenceFragment() {
+class SettingsFragment : PreferenceFragmentCompat(), Injectable {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    @Inject
+    lateinit var cryptocurrencyRepository: CryptocurrencyRepository
 
-        addPreferencesFromResource(R.xml.pref_main)
+
+    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+        setPreferencesFromResource(R.xml.pref_main, rootKey)
+
+        val preferenceFiatCurrency = findPreference(getString(R.string.pref_fiat_currency_key))
+
+        // Set the initial value for fiat currency preference summary.
+        setListPreferenceSummary(preferenceFiatCurrency, cryptocurrencyRepository.getCurrentFiatCurrencyCode())
+
+        // Change the fiat currency preference summary when preference value changed.
+        preferenceFiatCurrency.setOnPreferenceChangeListener { preference, newValue ->
+            val code: String = newValue.toString()
+            setListPreferenceSummary(preference, code)
+            true
+        }
     }
+
+    private fun setListPreferenceSummary(preference: Preference, value: String) {
+        if (preference is ListPreference) {
+            val index = preference.findIndexOfValue(value)
+            val entry = preference.entries[index]
+            preference.summary = entry
+        }
+    }
+
 }

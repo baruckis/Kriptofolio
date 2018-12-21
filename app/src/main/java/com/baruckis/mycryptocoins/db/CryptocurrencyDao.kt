@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.baruckis.mycryptocoins.data
+package com.baruckis.mycryptocoins.db
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
@@ -41,10 +41,14 @@ abstract class CryptocurrencyDao {
     // LIMIT clause is used to constrain the number of rows returned by the query.
     // We need just one as we search for exact specific cryptocurrency by code.
     @Query("SELECT * FROM cryptocurrencies WHERE symbol = :specificCryptoCode LIMIT 1")
-    abstract fun getSpecificCryptocurrencyLiveData(specificCryptoCode: String): LiveData<Cryptocurrency>
+    abstract fun getSpecificCryptocurrencyLiveDataByCryptoCode(specificCryptoCode: String): LiveData<Cryptocurrency>
 
+    @Query("SELECT * FROM cryptocurrencies WHERE id = :id LIMIT 1")
+    abstract fun getSpecificCryptocurrencyLiveDataById(id: Int): Cryptocurrency
+
+    // Update specific item in the database.
     @Update(onConflict = OnConflictStrategy.REPLACE)
-    abstract fun updateCryptocurrency(cryptocurrency: Cryptocurrency)
+    abstract fun updateCryptocurrency(cryptocurrency: Cryptocurrency): Int
 
 
     /**
@@ -56,21 +60,6 @@ abstract class CryptocurrencyDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     abstract fun insertCryptocurrencyList(itemList: List<Cryptocurrency>): List<Long>
 
-    /**
-     * Update individual fields for specific item in the database.
-     *
-     * @param id the item unique primary key.
-     */
-    @Query("UPDATE cryptocurrencies SET name = :name, rank = :rank, symbol = :symbol, currencyFiat = :currencyFiat, priceFiat = :priceFiat, pricePercentChange1h = :pricePercentChange1h, pricePercentChange7d = :pricePercentChange7d, pricePercentChange24h = :pricePercentChange24h WHERE id = :id")
-    abstract fun updateCryptocurrencyFields(id: Int,
-                                            name: String,
-                                            rank: Short,
-                                            symbol: String,
-                                            currencyFiat: String,
-                                            priceFiat: Double,
-                                            pricePercentChange1h: Double,
-                                            pricePercentChange7d: Double,
-                                            pricePercentChange24h: Double)
 
     // Update database table or insert if rows do not exist.
     @Transaction
@@ -91,9 +80,25 @@ abstract class CryptocurrencyDao {
         // Than we check if we there is anything to update.
         if (!updateList.isEmpty()) {
             // Finally we update items one by one.
-            for (item in updateList) {
-                // We update individual fields for each item.
-                updateCryptocurrencyFields(item.id, item.name, item.rank, item.symbol, item.currencyFiat, item.priceFiat, item.pricePercentChange1h, item.pricePercentChange7d, item.pricePercentChange24h)
+            for (updateItem in updateList) {
+
+                val currentItem = getSpecificCryptocurrencyLiveDataById(updateItem.id)
+
+                currentItem.name = updateItem.name
+                currentItem.rank = updateItem.rank
+                currentItem.symbol = updateItem.symbol
+                currentItem.currencyFiat = updateItem.currencyFiat
+                currentItem.priceFiat = updateItem.priceFiat
+                currentItem.pricePercentChange1h = updateItem.pricePercentChange1h
+                currentItem.pricePercentChange7d = updateItem.pricePercentChange7d
+                currentItem.pricePercentChange24h = updateItem.pricePercentChange24h
+
+                if (currentItem.amount != null) {
+                    currentItem.amountFiat = currentItem.amount!! * updateItem.priceFiat
+                    currentItem.amountFiatChange24h = currentItem.amountFiat!! * (updateItem.pricePercentChange24h / (100))
+                }
+
+                updateCryptocurrency(currentItem)
             }
         }
     }

@@ -18,6 +18,7 @@ package com.baruckis.mycryptocoins.dependencyinjection
 
 import android.app.Activity
 import android.app.Application
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -75,11 +76,13 @@ object AppInjector {
 
         if (activity is FragmentActivity) {
             activity.supportFragmentManager.registerFragmentLifecycleCallbacks(object : FragmentManager.FragmentLifecycleCallbacks() {
-                override fun onFragmentCreated(fragmentManager: FragmentManager, fragment: Fragment, savedInstanceState: Bundle?) {
+
+                override fun onFragmentAttached(fragmentManager: FragmentManager, fragment: Fragment, context: Context) {
                     if (fragment is Injectable) {
                         AndroidSupportInjection.inject(fragment)
                     }
                 }
+                
             }, true)
         }
     }

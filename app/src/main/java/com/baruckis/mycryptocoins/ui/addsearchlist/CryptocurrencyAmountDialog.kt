@@ -97,10 +97,9 @@ class CryptocurrencyAmountDialog() : DialogFragment() {
         } ?: throw IllegalStateException("Activity cannot be null!")
 
         // Show keyboard for amount input when dialog is created.
-        dialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        dialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
 
         return dialog
     }
-
 
 }

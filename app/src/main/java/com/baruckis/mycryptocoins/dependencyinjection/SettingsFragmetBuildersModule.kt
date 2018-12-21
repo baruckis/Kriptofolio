@@ -14,20 +14,18 @@
  * limitations under the License.
  */
 
-package com.baruckis.mycryptocoins.data
+package com.baruckis.mycryptocoins.dependencyinjection
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-import com.google.gson.annotations.SerializedName
-import java.util.*
+import com.baruckis.mycryptocoins.ui.settings.SettingsFragment
+import dagger.Module
+import dagger.android.ContributesAndroidInjector
 
 /**
- * Entity object for Room database.
- * It stores common data about each screen of the app.
+ * All fragments related to SettingsActivity intended to use Dagger @Inject should be listed here.
  */
-@Entity(tableName = "screen_status")
-data class ScreenStatus(@PrimaryKey
-                        val id: String,
-                        @SerializedName("timestamp")
-                        val timestamp: Date
-)
+@Module
+abstract class SettingsFragmetBuildersModule {
+
+    @ContributesAndroidInjector() // Attaches fragment to Dagger graph.
+    abstract fun contributeSettingsFragment(): SettingsFragment
+}

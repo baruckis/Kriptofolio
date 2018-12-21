@@ -17,20 +17,32 @@
 package com.baruckis.mycryptocoins.ui.settings
 
 import android.os.Bundle
-import android.preference.PreferenceActivity
-import android.view.MenuItem
-import androidx.core.app.NavUtils
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import dagger.android.AndroidInjector
+import dagger.android.DispatchingAndroidInjector
+import dagger.android.support.HasSupportFragmentInjector
+import javax.inject.Inject
 
 /**
- * A [PreferenceActivity] that presents a set of application settings.
+ * A [AppCompatActivity] that presents a set of application settings.
  */
-class SettingsActivity : AppCompatPreferenceActivity() {
+class SettingsActivity : AppCompatActivity(), HasSupportFragmentInjector {
+
+    @Inject
+    lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Fragment>
+
+    override fun supportFragmentInjector(): AndroidInjector<Fragment> = dispatchingAndroidInjector
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setupActionBar()
 
-        fragmentManager.beginTransaction().replace(android.R.id.content, SettingsFragment()).commit()
+        supportFragmentManager
+                .beginTransaction()
+                .replace(android.R.id.content, SettingsFragment())
+                .commit()
     }
 
     /**
@@ -40,14 +52,4 @@ class SettingsActivity : AppCompatPreferenceActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
-    override fun onMenuItemSelected(featureId: Int, item: MenuItem): Boolean {
-        val id = item.itemId
-        if (id == android.R.id.home) {
-            if (!super.onMenuItemSelected(featureId, item)) {
-                NavUtils.navigateUpFromSameTask(this)
-            }
-            return true
-        }
-        return super.onMenuItemSelected(featureId, item)
-    }
 }

@@ -14,23 +14,20 @@
  * limitations under the License.
  */
 
-package com.baruckis.mycryptocoins.data
+package com.baruckis.mycryptocoins.db
 
-import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import com.google.gson.annotations.SerializedName
+import java.util.*
 
 /**
- * The Data Access Object for the [ScreenStatus] class.
+ * Entity object for Room database.
+ * It stores common data about each screen of the app.
  */
-@Dao
-interface ScreenStatusDao {
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun update(status: ScreenStatus)
-
-    @Query("SELECT * FROM screen_status WHERE id = :specificScreenStatusId LIMIT 1")
-    fun getSpecificScreenStatusLiveData(specificScreenStatusId: String): LiveData<ScreenStatus>
-}
+@Entity(tableName = "screen_status")
+data class ScreenStatus(@PrimaryKey
+                        val id: String,
+                        @SerializedName("timestamp")
+                        val timestamp: Date
+)

@@ -23,7 +23,7 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import androidx.databinding.DataBindingUtil
 import com.baruckis.mycryptocoins.R
-import com.baruckis.mycryptocoins.data.Cryptocurrency
+import com.baruckis.mycryptocoins.db.Cryptocurrency
 import com.baruckis.mycryptocoins.databinding.ActivityAddSearchListItemBinding
 import com.baruckis.mycryptocoins.utilities.FLIPVIEW_CHARACTER_LIMIT
 import com.baruckis.mycryptocoins.utilities.getTextFirstChars

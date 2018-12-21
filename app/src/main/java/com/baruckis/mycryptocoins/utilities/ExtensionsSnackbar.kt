@@ -69,11 +69,10 @@ fun Snackbar.onActionButtonClick(text: String, color: Int? = null, listener: (Vi
 /**
  * Extension method for the Snackbar to add callback with [callback] action lambda.
  */
-fun Snackbar.onDismissedActionOrManual(callback: () -> Unit) {
+fun Snackbar.onDismissedAction(callback: () -> Unit) {
     addCallback(object : Snackbar.Callback() {
         override fun onDismissed(snackbar: Snackbar?, event: Int) {
-            if (event == Snackbar.Callback.DISMISS_EVENT_ACTION ||
-                    event == Snackbar.Callback.DISMISS_EVENT_MANUAL) {
+            if (event == Snackbar.Callback.DISMISS_EVENT_ACTION) {
                 callback()
             }
         }

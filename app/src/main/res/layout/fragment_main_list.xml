@@ -113,7 +113,6 @@
                     style="@style/MainListColumnNamesText"
                     android:layout_marginStart="@dimen/main_cardview_column_names_text_between_margin"
                     android:layout_marginEnd="@dimen/main_cardview_column_names_text_between_margin"
-                    android:text="@{@string/string_column_coin_fiat_price_amount(viewmodel.currentFiatCurrencySign, viewmodel.currentFiatCurrencySign)}"
                     android:textAlignment="center"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/guideline2_percent"
@@ -126,12 +125,12 @@
                     style="@style/MainListColumnNamesText"
                     android:layout_marginStart="@dimen/main_cardview_column_names_text_between_margin"
                     android:lines="3"
-                    android:text="@string/string_column_coin_change_24h_1h_7d"
                     android:textAlignment="viewEnd"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/guideline2_percent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="@string/sample_text_column_coin_change_24h_1h_7d" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

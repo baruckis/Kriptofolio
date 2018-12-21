@@ -17,7 +17,7 @@
 package com.baruckis.mycryptocoins.ui.addsearchlist
 
 import androidx.lifecycle.*
-import com.baruckis.mycryptocoins.data.Cryptocurrency
+import com.baruckis.mycryptocoins.db.Cryptocurrency
 import com.baruckis.mycryptocoins.repository.CryptocurrencyRepository
 import com.baruckis.mycryptocoins.utilities.DATE_FORMAT_PATTERN
 import com.baruckis.mycryptocoins.utilities.DB_ID_SCREEN_ADD_SEARCH_LIST
@@ -28,7 +28,7 @@ import javax.inject.Inject
 class AddSearchViewModel @Inject constructor(var cryptocurrencyRepository: CryptocurrencyRepository) : ViewModel() {
 
     val mediatorLiveData = MediatorLiveData<Resource<List<Cryptocurrency>>>()
-    private var liveData: LiveData<Resource<List<Cryptocurrency>>> = cryptocurrencyRepository.getAllCryptocurrencyLiveDataList()
+    private var liveData: LiveData<Resource<List<Cryptocurrency>>> = cryptocurrencyRepository.getAllCryptocurrencyLiveDataList(cryptocurrencyRepository.getCurrentFiatCurrencyCode())
 
     val liveDataLastUpdated: LiveData<String>
 
@@ -41,12 +41,8 @@ class AddSearchViewModel @Inject constructor(var cryptocurrencyRepository: Crypt
 
     fun retry(shouldFetch: Boolean) {
         mediatorLiveData.removeSource(liveData)
-        liveData = cryptocurrencyRepository.getAllCryptocurrencyLiveDataList(shouldFetch)
+        liveData = cryptocurrencyRepository.getAllCryptocurrencyLiveDataList(cryptocurrencyRepository.getCurrentFiatCurrencyCode(), shouldFetch)
         mediatorLiveData.addSource(liveData) { mediatorLiveData.value = it }
-    }
-
-    fun addCryptocurrency(cryptocurrency: Cryptocurrency) {
-        cryptocurrencyRepository.updateCryptocurrencyFromList(cryptocurrency)
     }
 
 }

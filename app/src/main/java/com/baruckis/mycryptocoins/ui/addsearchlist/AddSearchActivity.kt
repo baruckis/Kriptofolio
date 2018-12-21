@@ -16,8 +16,10 @@
 
 package com.baruckis.mycryptocoins.ui.addsearchlist
 
+import android.app.Activity
 import android.app.SearchManager
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.view.Menu
@@ -30,15 +32,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.baruckis.mycryptocoins.R
-import com.baruckis.mycryptocoins.data.Cryptocurrency
 import com.baruckis.mycryptocoins.databinding.ActivityAddSearchBinding
+import com.baruckis.mycryptocoins.db.Cryptocurrency
 import com.baruckis.mycryptocoins.dependencyinjection.Injectable
 import com.baruckis.mycryptocoins.ui.addsearchlist.CryptocurrencyAmountDialog.Companion.DIALOG_CRYPTOCURRENCY_AMOUNT_TAG
 import com.baruckis.mycryptocoins.ui.common.RetryCallback
-import com.baruckis.mycryptocoins.utilities.DELAY_MILLISECONDS
-import com.baruckis.mycryptocoins.utilities.onActionButtonClick
-import com.baruckis.mycryptocoins.utilities.onDismissedActionOrManual
-import com.baruckis.mycryptocoins.utilities.showSnackbar
+import com.baruckis.mycryptocoins.utilities.*
 import com.baruckis.mycryptocoins.vo.Status
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.content_add_search.*
@@ -60,6 +59,10 @@ class AddSearchActivity : AppCompatActivity(), Injectable {
     private lateinit var listAdapter: AddSearchListAdapter
 
     private var snackbar: Snackbar? = null
+
+    companion object {
+        const val EXTRA_ADD_TASK_DESCRIPTION = "add_task"
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -111,7 +114,11 @@ class AddSearchActivity : AppCompatActivity(), Injectable {
             cryptocurrency.amountFiat = amount * cryptocurrency.priceFiat
             cryptocurrency.amountFiatChange24h = cryptocurrency.amountFiat!! * (cryptocurrency.pricePercentChange24h / (100))
 
-            viewModel.addCryptocurrency(cryptocurrency)
+            val result = Intent()
+            result.putExtra(EXTRA_ADD_TASK_DESCRIPTION, cryptocurrency)
+            setResult(Activity.RESULT_OK, result)
+
+            finish()
         }
 
         // Display the alert dialog.
@@ -138,7 +145,7 @@ class AddSearchActivity : AppCompatActivity(), Injectable {
 
                 snackbar = findViewById<CoordinatorLayout>(R.id.coordinator_add_search).showSnackbar(R.string.unable_refresh) {
                     onActionButtonClick { swipeRefreshLayout.isRefreshing = true }
-                    onDismissedActionOrManual { retry() }
+                    onDismissedAction { retry() }
                 }
             }
 

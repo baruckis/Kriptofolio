@@ -42,6 +42,12 @@ android {
     }
 }
 
+// We use Parcelize which is an experimental feature at the moment so we need to add the following
+// snippet to our application.
+androidExtensions {
+    experimental = true
+}
+
 dependencies {
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -56,6 +62,7 @@ dependencies {
     // Support libraries
     implementation "androidx.appcompat:appcompat:$versions.app_compat"
     implementation "androidx.cardview:cardview:$versions.cardview"
+    implementation "androidx.preference:preference:$versions.preference"
     implementation "com.google.android.material:material:$versions.design"
 
     // Constraint layout
@@ -77,40 +84,47 @@ dependencies {
     // Room testing
     androidTestImplementation "androidx.room:room-testing:$versions.room"
 
-    // Android Testing Support Library's runner and rules
+    // Android Testing Support Library's runner and rules.
     androidTestImplementation "androidx.test:runner:$versions.runner"
 
-    // Espresso UI Testing
+    // Espresso UI testing
     androidTestImplementation "androidx.test.espresso:espresso-core:$versions.espresso"
 
 
     /* Other */
 
-    // Dagger for dependency injection
+    // Dagger for dependency injection.
     implementation "com.google.dagger:dagger:$versions.dagger"
     implementation "com.google.dagger:dagger-android:$versions.dagger"
     implementation "com.google.dagger:dagger-android-support:$versions.dagger"
     kapt "com.google.dagger:dagger-compiler:$versions.dagger"
     kapt "com.google.dagger:dagger-android-processor:$versions.dagger"
 
-    // Dependencies for local unit tests
+    // Dependencies for local unit tests.
     testImplementation "junit:junit:$versions.junit"
 
-    // Dependencies for coroutines
+    // Dependencies for coroutines.
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$versions.coroutines"
     // Dependency is for the special UI context that can be passed to coroutine builders that use
     // the main thread dispatcher to dispatch events on the main thread.
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$versions.coroutines"
 
-    // 3rd party
-    // HTTP client - Retrofit with OkHttp
-    implementation "com.squareup.retrofit2:retrofit:$versions.retrofit"
-    // JSON converter Gson for JSON to Java object mapping
+    // 3rd party:
+    // HTTP client - Retrofit with OkHttp.
+    implementation ("com.squareup.retrofit2:retrofit:$versions.retrofit") {
+        // Exclude Retrofit’s OkHttp peer-dependency module and define your own module import.
+        exclude module: 'okhttp'
+    }
+    implementation "com.squareup.okhttp3:okhttp:$versions.okhttp"
+    // For providing logs that can be useful for debugging.
+    implementation "com.squareup.okhttp3:logging-interceptor:$versions.okhttp"
+    // JSON converter Gson for JSON to Java object mapping.
     implementation "com.squareup.retrofit2:converter-gson:$versions.retrofit"
 
     // UI
     implementation "eu.davidea:flipview:$versions.flip_view"
 
-    //Debug bridge
+    // Facebook's Stetho project enables you to use Chrome debugging tools to troubleshoot
+    // network traffic, database files, and view layouts.
     implementation "com.facebook.stetho:stetho:$versions.stetho"
 }

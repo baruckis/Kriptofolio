@@ -41,6 +41,8 @@
     <string name="string_separator_code" translatable="false">"/"</string>
     <string name="string_crypto_code" translatable="false">"BTC"</string>
 
+    <string name="string_no_number" translatable="false">"― ― ―"</string>
+
     <string name="default_crypto_code" translatable="false">"BTC"</string>
     <string name="default_crypto_sign" translatable="false">"₿"</string>
 
@@ -50,10 +52,11 @@
     <string name="string_column_coin_ranking" translatable="false">"↑↓"</string>
     <string name="string_column_coin_crypto_hold_amount_symbol">"Crypto coin\nAmount &#38; symbol"</string>
     <string name="string_column_coin_fiat_price_amount">"Price %1$s\nAmount %2$s"</string>
-    <string name="string_column_coin_change_24h_1h_7d">"± price % 1 h / 7 d\n± price % 24 h\n± amount $ 24 h"</string>
+    <string name="string_column_coin_change_24h_1h_7d">"± price %% 1 h / 7 d\n± price %% 24 h\n± amount %1$s 24 h"</string>
     <string name="string_column_coin_separator_change" translatable="false">" / "</string>
 
     <string name="sample_text_column_coin_fiat_price_amount">"Price $\nAmount $"</string>
+    <string name="sample_text_column_coin_change_24h_1h_7d">"± price % 1 h / 7 d\n± price % 24 h\n± amount $ 24 h"</string>
 
     <string name="sample_text_total_value_on_date_time">"Total holdings value (11/03/2018 12:55:08 UTC)"</string>
     <string name="sample_text_total_value_change_24h" translatable="false">" $ +1538.00 "</string>

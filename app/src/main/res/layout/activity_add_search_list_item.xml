@@ -21,7 +21,7 @@
 
         <variable
             name="cryptocurrency"
-            type="com.baruckis.mycryptocoins.data.Cryptocurrency" />
+            type="com.baruckis.mycryptocoins.db.Cryptocurrency" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

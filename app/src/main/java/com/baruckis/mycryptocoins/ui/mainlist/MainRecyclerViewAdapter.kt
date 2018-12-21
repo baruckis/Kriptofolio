@@ -21,7 +21,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.baruckis.mycryptocoins.R
-import com.baruckis.mycryptocoins.data.Cryptocurrency
+import com.baruckis.mycryptocoins.db.Cryptocurrency
 import com.baruckis.mycryptocoins.databinding.FragmentMainListItemBinding
 import com.baruckis.mycryptocoins.utilities.*
 
