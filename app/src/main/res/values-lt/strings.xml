@@ -62,6 +62,7 @@
     <string name="dialog_cryptocurrency_amount_hint">"Įvesk kiekį"</string>
     <string name="dialog_cryptocurrency_amount_confirm_button">"Gerai"</string>
     <string name="dialog_cryptocurrency_amount_cancel_button">"Atšaukti"</string>
+    <string name="dialog_cryptocurrency_amount_error">"Būtinas teisingas skaičius!"</string>
 
 
     <!-- Strings related to Settings -->

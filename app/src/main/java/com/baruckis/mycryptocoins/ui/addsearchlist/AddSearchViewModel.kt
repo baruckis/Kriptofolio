@@ -32,6 +32,11 @@ class AddSearchViewModel @Inject constructor(var cryptocurrencyRepository: Crypt
 
     val liveDataLastUpdated: LiveData<String>
 
+    // Helper variable to store temporary cryptocurrency which user clicked on to add. It is stored
+    // in view model to avoid loosing value during configuration change, e.g. device rotation.
+    var selectedCryptocurrency: Cryptocurrency? = null
+
+
     init {
         // A mediator to observe the changes. Room will automatically notify all active observers when the data changes.
         mediatorLiveData.addSource(liveData) { mediatorLiveData.value = it }
@@ -44,5 +49,4 @@ class AddSearchViewModel @Inject constructor(var cryptocurrencyRepository: Crypt
         liveData = cryptocurrencyRepository.getAllCryptocurrencyLiveDataList(cryptocurrencyRepository.getCurrentFiatCurrencyCode(), shouldFetch)
         mediatorLiveData.addSource(liveData) { mediatorLiveData.value = it }
     }
-
 }

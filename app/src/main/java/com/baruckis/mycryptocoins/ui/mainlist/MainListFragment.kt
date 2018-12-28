@@ -168,6 +168,7 @@ class MainListFragment : Fragment(), Injectable {
                 }
             } else {
                 binding.listResource = listResource
+                binding.emptyList = listResource.data != null && listResource.data.isEmpty()
             }
 
             // We ignore any response where data is null.

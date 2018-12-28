@@ -37,7 +37,10 @@ import com.baruckis.mycryptocoins.db.Cryptocurrency
 import com.baruckis.mycryptocoins.dependencyinjection.Injectable
 import com.baruckis.mycryptocoins.ui.addsearchlist.CryptocurrencyAmountDialog.Companion.DIALOG_CRYPTOCURRENCY_AMOUNT_TAG
 import com.baruckis.mycryptocoins.ui.common.RetryCallback
-import com.baruckis.mycryptocoins.utilities.*
+import com.baruckis.mycryptocoins.utilities.DELAY_MILLISECONDS
+import com.baruckis.mycryptocoins.utilities.onActionButtonClick
+import com.baruckis.mycryptocoins.utilities.onDismissedAction
+import com.baruckis.mycryptocoins.utilities.showSnackbar
 import com.baruckis.mycryptocoins.vo.Status
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.content_add_search.*
@@ -46,7 +49,7 @@ import javax.inject.Inject
 /**
  * UI for add crypto coins screen.
  */
-class AddSearchActivity : AppCompatActivity(), Injectable {
+class AddSearchActivity : AppCompatActivity(), Injectable, CryptocurrencyAmountDialog.CryptocurrencyAmountDialogListener {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -98,28 +101,51 @@ class AddSearchActivity : AppCompatActivity(), Injectable {
         Handler().postDelayed({ viewModel.retry(true) }, DELAY_MILLISECONDS)
     }
 
+
+    // The dialog fragment receives a reference to this Activity through the
+    // Fragment.onAttach() callback, which it uses to call the following methods
+    // defined by the CryptocurrencyAmountDialog.CryptocurrencyAmountDialogListener interface.
+    override fun onCryptocurrencyAmountDialogConfirmButtonClick(cryptocurrencyAmountDialog: CryptocurrencyAmountDialog) {
+        // User touched the dialog's positive button.
+
+        val amount = cryptocurrencyAmountDialog.getAmount()
+
+        viewModel.selectedCryptocurrency?.let {
+            it.amount = amount
+            it.amountFiat = amount * it.priceFiat
+            it.amountFiatChange24h = it.amountFiat!! * (it.pricePercentChange24h / (100))
+        }
+
+        val result = Intent()
+        result.putExtra(EXTRA_ADD_TASK_DESCRIPTION, viewModel.selectedCryptocurrency)
+        setResult(Activity.RESULT_OK, result)
+
+        viewModel.selectedCryptocurrency = null
+
+        cryptocurrencyAmountDialog.dismiss()
+
+        finish()
+    }
+
+    override fun onCryptocurrencyAmountDialogCancel() {
+        // User touched somewhere that dismissed dialog.
+
+        viewModel.selectedCryptocurrency = null
+    }
+
+
     private fun cryptocurrencyClick(cryptocurrency: Cryptocurrency) {
 
+        // Create an instance of the dialog fragment and show it.
         val cryptocurrencyAmountDialog =
                 CryptocurrencyAmountDialog.newInstance(
                         title = String.format(getString(R.string.dialog_cryptocurrency_amount_title), cryptocurrency.name),
                         hint = getString(R.string.dialog_cryptocurrency_amount_hint),
                         confirmButton = getString(R.string.dialog_cryptocurrency_amount_confirm_button),
-                        cancelButton = getString(R.string.dialog_cryptocurrency_amount_cancel_button))
-        cryptocurrencyAmountDialog.onConfirm = {
+                        cancelButton = getString(R.string.dialog_cryptocurrency_amount_cancel_button),
+                        error = getString(R.string.dialog_cryptocurrency_amount_error))
 
-            val amount = cryptocurrencyAmountDialog.editTextAmount.text.toString().toDouble()
-
-            cryptocurrency.amount = amount
-            cryptocurrency.amountFiat = amount * cryptocurrency.priceFiat
-            cryptocurrency.amountFiatChange24h = cryptocurrency.amountFiat!! * (cryptocurrency.pricePercentChange24h / (100))
-
-            val result = Intent()
-            result.putExtra(EXTRA_ADD_TASK_DESCRIPTION, cryptocurrency)
-            setResult(Activity.RESULT_OK, result)
-
-            finish()
-        }
+        viewModel.selectedCryptocurrency = cryptocurrency
 
         // Display the alert dialog.
         cryptocurrencyAmountDialog.show(supportFragmentManager, DIALOG_CRYPTOCURRENCY_AMOUNT_TAG)
@@ -164,7 +190,7 @@ class AddSearchActivity : AppCompatActivity(), Injectable {
         val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
         val searchView = menu?.findItem(R.id.search)?.actionView as SearchView
         searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName))
-        searchView.maxWidth = Integer.MAX_VALUE // expand to full width, to have close button set to the right side.
+        searchView.maxWidth = Integer.MAX_VALUE // Expand to full width, to have close button set to the right side.
 
         return true
     }

@@ -62,6 +62,7 @@
     <string name="dialog_cryptocurrency_amount_hint">"Enter amount"</string> <!-- TODO translate to HE -->
     <string name="dialog_cryptocurrency_amount_confirm_button">"OK"</string> <!-- TODO translate to HE -->
     <string name="dialog_cryptocurrency_amount_cancel_button">"Cancel"</string> <!-- TODO translate to HE -->
+    <string name="dialog_cryptocurrency_amount_error">"Valid number is required!"</string> <!-- TODO translate to HE -->
 
 
     <!-- Strings related to Settings -->
