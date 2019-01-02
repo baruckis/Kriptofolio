@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Andrius Baruckis www.baruckis.com | mycryptocoins.baruckis.com
+ * Copyright 2018-2019 Andrius Baruckis www.baruckis.com | mycryptocoins.baruckis.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,3 +32,6 @@ const val API_SERVICE_RESULTS_LIMIT = 5000 // This is max number from CoinMarket
 const val DB_ID_SCREEN_MAIN_LIST = "main_list"
 const val DB_ID_SCREEN_ADD_SEARCH_LIST = "add_search_list"
 const val DATE_FORMAT_PATTERN = "MM/dd/yyyy HH:mm:ss"
+const val CRYPTOCURRENCY_IMAGE_URL = "https://s2.coinmarketcap.com/static/img/coins"
+const val CRYPTOCURRENCY_IMAGE_SIZE_PX = "128x128"
+const val CRYPTOCURRENCY_IMAGE_FILE = ".png"

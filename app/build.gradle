@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Andrius Baruckis www.baruckis.com | mycryptocoins.baruckis.com
+ * Copyright 2018-2019 Andrius Baruckis www.baruckis.com | mycryptocoins.baruckis.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -116,6 +116,13 @@ dependencies {
         exclude module: 'okhttp'
     }
     implementation "com.squareup.okhttp3:okhttp:$versions.okhttp"
+
+    // Glide
+    implementation "com.github.bumptech.glide:glide:$versions.glide"
+    kapt "com.github.bumptech.glide:compiler:$versions.glide"
+    // Glide's OkHttp3 integration.
+    implementation "com.github.bumptech.glide:okhttp3-integration:$versions.glide"+"@aar"
+
     // For providing logs that can be useful for debugging.
     implementation "com.squareup.okhttp3:logging-interceptor:$versions.okhttp"
     // JSON converter Gson for JSON to Java object mapping.

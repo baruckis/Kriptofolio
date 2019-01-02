@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Andrius Baruckis www.baruckis.com | mycryptocoins.baruckis.com
+ * Copyright 2018-2019 Andrius Baruckis www.baruckis.com | mycryptocoins.baruckis.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -173,7 +173,7 @@ class MainListFragment : Fragment(), Injectable {
 
             // We ignore any response where data is null.
             listResource.data?.let {
-                recyclerAdapter.setData(it)
+                if (listResource.status != Status.LOADING) recyclerAdapter.setData(it)
 
                 // First we check if there was an error from the server.
                 if (listResource.status == Status.ERROR) {

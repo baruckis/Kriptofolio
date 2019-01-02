@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Andrius Baruckis www.baruckis.com | mycryptocoins.baruckis.com
+ * Copyright 2018-2019 Andrius Baruckis www.baruckis.com | mycryptocoins.baruckis.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -165,7 +165,9 @@ class AddSearchActivity : AppCompatActivity(), Injectable, CryptocurrencyAmountD
                 binding.myListResource = listResource
             }
 
-            listResource.data?.let { listAdapter.setData(it) }
+            listResource.data?.let {
+                if (listResource.status != Status.LOADING) listAdapter.setData(it)
+            }
 
             if (listResource.status == Status.ERROR && listResource.data != null) {
 

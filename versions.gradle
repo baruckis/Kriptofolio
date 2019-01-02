@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Andrius Baruckis www.baruckis.com | mycryptocoins.baruckis.com
+ * Copyright 2018-2019 Andrius Baruckis www.baruckis.com | mycryptocoins.baruckis.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,18 +24,19 @@ versions.target_sdk = 28
 // App dependencies
 versions.app_compat = "1.0.2"
 versions.cardview = "1.0.0"
-versions.constraint_layout = "2.0.0-alpha2"
+versions.constraint_layout = "2.0.0-alpha3"
 versions.coroutines = "1.0.1"
 versions.dagger = "2.16"
 versions.design = "1.0.0"
 versions.espresso = "3.1.0-alpha4"
 versions.flip_view = "1.2.0"
 versions.gradle = '3.2.1'
+versions.glide = '4.8.0'
 versions.junit = "4.12"
 versions.kotlin = "1.3.11"
 versions.ktx = "1.0.1"
 versions.lifecycle = "2.0.0"
-versions.preference = "1.1.0-alpha01"
+versions.preference = "1.1.0-alpha02"
 versions.okhttp = "3.12.0"
 versions.retrofit = "2.5.0"
 versions.room = "2.0.0"

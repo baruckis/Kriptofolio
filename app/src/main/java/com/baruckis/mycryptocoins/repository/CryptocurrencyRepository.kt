@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Andrius Baruckis www.baruckis.com | mycryptocoins.baruckis.com
+ * Copyright 2018-2019 Andrius Baruckis www.baruckis.com | mycryptocoins.baruckis.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -68,7 +68,7 @@ class CryptocurrencyRepository @Inject constructor(
 
                 // We iterate over hashmap to make a list of CryptocurrencyLatest.
                 if (!item.data.isNullOrEmpty()) {
-                    for ((key, value) in item.data) {
+                    for ((_, value) in item.data) {
                         list.add(value)
                     }
                 }

@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2018 Andrius Baruckis www.baruckis.com | mycryptocoins.baruckis.com
+  ~ Copyright 2018-2019 Andrius Baruckis www.baruckis.com | mycryptocoins.baruckis.com
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -101,8 +101,8 @@
         <item name="android:padding">4dp</item>
         <item name="android:clipToPadding">false</item>
         <item name="checked">false</item>
-        <item name="frontBackgroundColor">@color/colorForImageIconFrontBackground</item>
-        <item name="frontLayout">@layout/flipview_front_custom_text</item>
+        <item name="frontBackgroundColor">@color/colorForImageIconFrontTextBackground</item>
+        <item name="frontLayout">@layout/flipview_front_custom</item>
         <item name="rearBackgroundColor">@color/colorForImageIconRearBackground</item>
         <item name="rearImageAnimationDelay">0</item>
         <item name="enableInitialAnimation">false</item>

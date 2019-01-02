@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Andrius Baruckis www.baruckis.com | mycryptocoins.baruckis.com
+ * Copyright 2018-2019 Andrius Baruckis www.baruckis.com | mycryptocoins.baruckis.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,24 +17,29 @@
 package com.baruckis.mycryptocoins.ui.addsearchlist
 
 import android.content.Context
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import androidx.databinding.DataBindingUtil
 import com.baruckis.mycryptocoins.R
-import com.baruckis.mycryptocoins.db.Cryptocurrency
 import com.baruckis.mycryptocoins.databinding.ActivityAddSearchListItemBinding
-import com.baruckis.mycryptocoins.utilities.FLIPVIEW_CHARACTER_LIMIT
-import com.baruckis.mycryptocoins.utilities.getTextFirstChars
+import com.baruckis.mycryptocoins.db.Cryptocurrency
+import com.baruckis.mycryptocoins.dependencyinjection.GlideApp
+import com.baruckis.mycryptocoins.utilities.*
+import com.baruckis.mycryptocoins.utilities.glide.WhiteBackground
+import com.bumptech.glide.load.MultiTransformation
+import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import kotlinx.android.synthetic.main.flipview_front_custom.view.*
 
-class AddSearchListAdapter(context: Context, private val cryptocurrencyClickCallback: ((Cryptocurrency) -> Unit)?) : BaseAdapter() {
+
+class AddSearchListAdapter(val context: Context, private val cryptocurrencyClickCallback: ((Cryptocurrency) -> Unit)?) : BaseAdapter() {
 
     private var dataList: List<Cryptocurrency> = ArrayList<Cryptocurrency>()
     private val inflater: LayoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-    
-    fun setData(newDataList: List<Cryptocurrency>) {
 
+    fun setData(newDataList: List<Cryptocurrency>) {
         dataList = newDataList
         notifyDataSetChanged()
     }
@@ -65,14 +70,36 @@ class AddSearchListAdapter(context: Context, private val cryptocurrencyClickCall
         itemBinding.cryptocurrency = cryptocurrency
         itemBinding.itemRanking.text = String.format("${cryptocurrency.rank}")
 
+
         // Show only first 3 characters of symbol. If symbol has less than 3 characters than show less.
-        itemBinding.itemImageIcon.setFrontText(getTextFirstChars(cryptocurrency.symbol, FLIPVIEW_CHARACTER_LIMIT))
+        itemBinding.itemImageIcon.textview_front.text = getTextFirstChars(cryptocurrency.symbol, FLIPVIEW_CHARACTER_LIMIT)
+
+        // We make an Uri of image that we need to load. Every image unique name is its id.
+        val imageUri = Uri.parse(CRYPTOCURRENCY_IMAGE_URL).buildUpon()
+                .appendPath(CRYPTOCURRENCY_IMAGE_SIZE_PX)
+                .appendPath(cryptocurrency.id.toString() + CRYPTOCURRENCY_IMAGE_FILE)
+                .build()
+
+        // Glide generated API from AppGlideModule.
+        GlideApp
+                // We need to provide context to make a call.
+                .with(itemBinding.root)
+                // Here you specify which image should be loaded by providing Uri.
+                .load(imageUri)
+                // The way you combine and execute multiple transformations.
+                // WhiteBackground is our own implemented custom transformation.
+                // CircleCrop is default transformation that Glide ships with.
+                .transform(MultiTransformation(WhiteBackground(), CircleCrop()))
+                // The target ImageView your image is supposed to get displayed in.
+                .into(itemBinding.itemImageIcon.imageview_front)
+
 
         itemBinding.itemName.text = cryptocurrency.name
         itemBinding.itemSymbol.text = cryptocurrency.symbol
 
         return itemBinding.root
     }
+
 
     override fun getItem(position: Int): Any {
         return dataList[position]
@@ -85,4 +112,5 @@ class AddSearchListAdapter(context: Context, private val cryptocurrencyClickCall
     override fun getCount(): Int {
         return dataList.size
     }
+
 }

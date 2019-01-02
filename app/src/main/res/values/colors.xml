@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright 2018 Andrius Baruckis www.baruckis.com | mycryptocoins.baruckis.com
+  ~ Copyright 2018-2019 Andrius Baruckis www.baruckis.com | mycryptocoins.baruckis.com
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -33,7 +33,8 @@
     <color name="colorForMainListItemPrimeText">@color/colorBlack</color>
     <color name="colorForMainListItemText">@android:color/tertiary_text_dark</color>
 
-    <color name="colorForImageIconFrontBackground">@color/colorPrimaryDark</color>
+    <color name="colorForImageIconFrontImageBackground">@color/colorWhite</color>
+    <color name="colorForImageIconFrontTextBackground">@color/colorPrimaryDark</color>
     <color name="colorForImageIconRearBackground">@color/colorDarkGrey</color>
     <color name="colorForImageIconText">@color/colorWhite</color>
 

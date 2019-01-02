@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Andrius Baruckis www.baruckis.com | mycryptocoins.baruckis.com
+ * Copyright 2018-2019 Andrius Baruckis www.baruckis.com | mycryptocoins.baruckis.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,7 +38,7 @@ class SettingsFragment : PreferenceFragmentCompat(), Injectable {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.pref_main, rootKey)
 
-        val preferenceFiatCurrency = findPreference(getString(R.string.pref_fiat_currency_key))
+        val preferenceFiatCurrency = findPreference(getString(R.string.pref_fiat_currency_key)) as Preference
 
         // Set the initial value for fiat currency preference summary.
         setListPreferenceSummary(preferenceFiatCurrency, cryptocurrencyRepository.getCurrentFiatCurrencyCode())

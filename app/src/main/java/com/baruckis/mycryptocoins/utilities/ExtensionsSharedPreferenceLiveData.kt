@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Andrius Baruckis www.baruckis.com | mycryptocoins.baruckis.com
+ * Copyright 2018-2019 Andrius Baruckis www.baruckis.com | mycryptocoins.baruckis.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@ abstract class SharedPreferenceLiveData<T>(val sharedPrefs: SharedPreferences,
                                            val key: String,
                                            val defValue: T) : LiveData<T>() {
 
-    private val preferenceChangeListener = SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
+    private val preferenceChangeListener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
         if (key == this.key) {
             value = getValueFromPreferences(key, defValue)
         }
@@ -59,6 +59,7 @@ class SharedPreferenceIntLiveData(sharedPrefs: SharedPreferences, key: String, d
 class SharedPreferenceStringLiveData(sharedPrefs: SharedPreferences, key: String, defValue: String) :
         SharedPreferenceLiveData<String>(sharedPrefs, key, defValue) {
     override fun getValueFromPreferences(key: String, defValue: String): String = sharedPrefs.getString(key, defValue)
+            ?: ""
 }
 
 class SharedPreferenceBooleanLiveData(sharedPrefs: SharedPreferences, key: String, defValue: Boolean) :
@@ -79,6 +80,7 @@ class SharedPreferenceLongLiveData(sharedPrefs: SharedPreferences, key: String, 
 class SharedPreferenceStringSetLiveData(sharedPrefs: SharedPreferences, key: String, defValue: Set<String>) :
         SharedPreferenceLiveData<Set<String>>(sharedPrefs, key, defValue) {
     override fun getValueFromPreferences(key: String, defValue: Set<String>): Set<String> = sharedPrefs.getStringSet(key, defValue)
+            ?: HashSet()
 }
 
 /**
