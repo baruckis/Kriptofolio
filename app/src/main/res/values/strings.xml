@@ -150,13 +150,14 @@
     <string name="activity_add_search_title">"Add crypto coin(-s)"</string>
     <string name="activity_add_search_subtitle">"All cryptocurrencies by ranking"</string>
 
-    <string name="string_last_updated_on_date_time">"Last updated (%1$s UTC)"</string>
+    <string name="string_info_last_updated_on_date_time">"Last updated (%1$s UTC)"</string>
+    <string name="string_info_results_of_search">"Results %1$s"</string>
 
     <string name="action_search">"Search"</string>
 
     <string name="search_hint">"Search for specific coin…"</string>
 
-    <string name="sample_text_last_updated_on_date_time">"Last updated (11/03/2018 12:55:08 UTC)"</string>
+    <string name="sample_text_info_last_updated_on_date_time">"Last updated (11/03/2018 12:55:08 UTC)"</string>
     <string name="sample_text_item_code" translatable="false">"BITSILVER"</string>
     
     <string name="dialog_cryptocurrency_amount_title">"How many %1$s coins do you have?"</string>

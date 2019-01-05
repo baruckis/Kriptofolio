@@ -141,6 +141,11 @@ class CryptocurrencyRepository @Inject constructor(
     }
 
 
+    fun getCryptocurrencyLiveDataListBySearch(searchText: String): LiveData<List<Cryptocurrency>> {
+        return cryptocurrencyDao.getCryptocurrencyLiveDataListBySearch(searchText)
+    }
+
+
     fun getSpecificCryptocurrencyLiveData(specificCryptoCode: String): LiveData<Cryptocurrency> {
         return cryptocurrencyDao.getSpecificCryptocurrencyLiveDataByCryptoCode(specificCryptoCode)
     }

@@ -50,13 +50,14 @@
     <string name="activity_add_search_title">"הוספת מטבע הצפנה (-s)"</string>
     <string name="activity_add_search_subtitle">"כל cryptocurrencies ידי דירוג"</string>
 
-    <string name="string_last_updated_on_date_time">"Last updated (%1$s UTC)"</string> <!-- TODO translate to HE -->
+    <string name="string_info_last_updated_on_date_time">"Last updated (%1$s UTC)"</string> <!-- TODO translate to HE -->
+    <string name="string_info_results_of_search">"Results %1$s"</string> <!-- TODO translate to HE -->
 
     <string name="action_search">"לחפש"</string>
 
     <string name="search_hint">"חפש מטבע ספציפי …"</string>
 
-    <string name="sample_text_last_updated_on_date_time">"Last updated (11/03/2018 12:55:08 UTC)"</string> <!-- TODO translate to HE -->
+    <string name="sample_text_info_last_updated_on_date_time">"Last updated (11/03/2018 12:55:08 UTC)"</string> <!-- TODO translate to HE -->
 
     <string name="dialog_cryptocurrency_amount_title">"How many %1$s coins do you have?"</string> <!-- TODO translate to HE -->
     <string name="dialog_cryptocurrency_amount_hint">"Enter amount"</string> <!-- TODO translate to HE -->

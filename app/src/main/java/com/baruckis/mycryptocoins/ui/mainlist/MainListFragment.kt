@@ -35,7 +35,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.baruckis.mycryptocoins.R
 import com.baruckis.mycryptocoins.databinding.FragmentMainListBinding
 import com.baruckis.mycryptocoins.dependencyinjection.Injectable
-import com.baruckis.mycryptocoins.utilities.DELAY_MILLISECONDS
+import com.baruckis.mycryptocoins.utilities.SERVER_CALL_DELAY_MILLISECONDS
 import com.baruckis.mycryptocoins.utilities.onActionButtonClick
 import com.baruckis.mycryptocoins.utilities.onDismissedAction
 import com.baruckis.mycryptocoins.utilities.showSnackbar
@@ -225,7 +225,7 @@ class MainListFragment : Fragment(), Injectable {
         viewModel.newSelectedFiatCurrencyCode = newFiatCurrencyCode
         if (snackbar?.isShown == true) snackbar?.dismiss()
         // Make a call to the server after some delay for better user experience.
-        Handler().postDelayed({ viewModel.retry(newFiatCurrencyCode) }, DELAY_MILLISECONDS)
+        Handler().postDelayed({ viewModel.retry(newFiatCurrencyCode) }, SERVER_CALL_DELAY_MILLISECONDS)
     }
 
 }

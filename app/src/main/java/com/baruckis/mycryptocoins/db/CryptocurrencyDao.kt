@@ -38,6 +38,14 @@ abstract class CryptocurrencyDao {
     @Query("SELECT * FROM cryptocurrencies ORDER BY rank ASC")
     abstract fun getAllCryptocurrencyLiveDataList(): LiveData<List<Cryptocurrency>>
 
+    // The LIKE operator does a pattern matching comparison. The operand to the right contains the
+    // pattern, the left hand operand contains the string to match against the pattern. A percent
+    // symbol ("%") in the pattern matches any sequence of zero or more characters in the string.
+    // An underscore ("_") in the pattern matches any single character in the string.
+    @Query("SELECT * FROM cryptocurrencies WHERE name LIKE :searchText OR symbol LIKE :searchText ORDER BY rank ASC")
+    abstract fun getCryptocurrencyLiveDataListBySearch(searchText: String): LiveData<List<Cryptocurrency>>
+
+
     // LIMIT clause is used to constrain the number of rows returned by the query.
     // We need just one as we search for exact specific cryptocurrency by code.
     @Query("SELECT * FROM cryptocurrencies WHERE symbol = :specificCryptoCode LIMIT 1")

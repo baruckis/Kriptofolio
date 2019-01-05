@@ -49,4 +49,8 @@ class AddSearchViewModel @Inject constructor(var cryptocurrencyRepository: Crypt
         liveData = cryptocurrencyRepository.getAllCryptocurrencyLiveDataList(cryptocurrencyRepository.getCurrentFiatCurrencyCode(), shouldFetch)
         mediatorLiveData.addSource(liveData) { mediatorLiveData.value = it }
     }
+
+    fun search(searchText: String): LiveData<List<Cryptocurrency>> {
+        return cryptocurrencyRepository.getCryptocurrencyLiveDataListBySearch(searchText)
+    }
 }

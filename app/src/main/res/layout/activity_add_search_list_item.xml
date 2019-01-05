@@ -26,7 +26,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:padding="@dimen/add_search_list_item_inner_margin">
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -44,8 +44,8 @@
         <eu.davidea.flipview.FlipView
             android:id="@+id/item_image_icon"
             style="@style/FlipView"
-            android:layout_marginEnd="@dimen/add_search_list_item_text_between_margin"
             android:layout_marginStart="@dimen/add_search_list_item_text_between_margin"
+            android:layout_marginEnd="@dimen/add_search_list_item_text_between_margin"
             android:clickable="false"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/item_name"
@@ -55,8 +55,9 @@
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/item_name"
             style="@style/AddSearchListItemPrimeText"
-            android:layout_marginEnd="@dimen/add_search_list_item_text_between_margin_2x"
             android:layout_marginStart="@dimen/add_search_list_item_text_between_margin"
+            android:layout_marginEnd="@dimen/add_search_list_item_text_between_margin_2x"
+            android:gravity="start|center_vertical"
             android:textAlignment="viewStart"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/item_symbol"
@@ -67,7 +68,9 @@
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/item_symbol"
             style="@style/AddSearchListItemText"
+            android:layout_width="wrap_content"
             android:layout_marginEnd="@dimen/add_search_list_item_text_between_margin"
+            android:gravity="end|center_vertical"
             android:textAlignment="viewEnd"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

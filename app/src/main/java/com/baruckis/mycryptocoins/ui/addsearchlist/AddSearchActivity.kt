@@ -23,6 +23,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -37,14 +38,13 @@ import com.baruckis.mycryptocoins.db.Cryptocurrency
 import com.baruckis.mycryptocoins.dependencyinjection.Injectable
 import com.baruckis.mycryptocoins.ui.addsearchlist.CryptocurrencyAmountDialog.Companion.DIALOG_CRYPTOCURRENCY_AMOUNT_TAG
 import com.baruckis.mycryptocoins.ui.common.RetryCallback
-import com.baruckis.mycryptocoins.utilities.DELAY_MILLISECONDS
-import com.baruckis.mycryptocoins.utilities.onActionButtonClick
-import com.baruckis.mycryptocoins.utilities.onDismissedAction
-import com.baruckis.mycryptocoins.utilities.showSnackbar
+import com.baruckis.mycryptocoins.utilities.*
 import com.baruckis.mycryptocoins.vo.Status
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.content_add_search.*
+import kotlinx.coroutines.*
 import javax.inject.Inject
+
 
 /**
  * UI for add crypto coins screen.
@@ -63,18 +63,30 @@ class AddSearchActivity : AppCompatActivity(), Injectable, CryptocurrencyAmountD
 
     private var snackbar: Snackbar? = null
 
+    private var searchMenuItem: MenuItem? = null
+    private var searchView: SearchView? = null
+    private var searchQuery: String? = null
+
+
     companion object {
         const val EXTRA_ADD_TASK_DESCRIPTION = "add_task"
+        private const val SEARCH_KEY = "search"
     }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // We recover our search query that we saved manually.
+        if (savedInstanceState != null) {
+            searchQuery = savedInstanceState.getString(SEARCH_KEY, null)
+        }
+
         // Manage activity with data binding.
         binding = DataBindingUtil.setContentView(this, R.layout.activity_add_search)
 
         setSupportActionBar(binding.toolbar2)
+        // Get a support ActionBar corresponding to this toolbar and enable the Up button.
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         // Setup ListView.
@@ -97,8 +109,25 @@ class AddSearchActivity : AppCompatActivity(), Injectable, CryptocurrencyAmountD
         subscribeUi()
     }
 
+
+    // SearchView used as an action view inside a collapsed menu item does not have its state saved
+    // or restored automatically like normal views. So we need to do it manually. This function will
+    // be called before the activity is destroyed and will save search query if any.
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        searchQuery = searchView?.query.toString()
+        outState.putString(SEARCH_KEY, searchQuery)
+    }
+
+
+    override fun onDestroy() {
+        textChangeDelayJob?.cancel()
+        super.onDestroy()
+    }
+
+
     private fun retry() {
-        Handler().postDelayed({ viewModel.retry(true) }, DELAY_MILLISECONDS)
+        Handler().postDelayed({ viewModel.retry(true) }, SERVER_CALL_DELAY_MILLISECONDS)
     }
 
 
@@ -180,20 +209,95 @@ class AddSearchActivity : AppCompatActivity(), Injectable, CryptocurrencyAmountD
         })
 
         viewModel.liveDataLastUpdated.observe(this, Observer<String> { data ->
-            last_updated_activity_add_search.text = StringBuilder(getString(R.string.string_last_updated_on_date_time, data)).toString()
+            info_activity_add_search.text = StringBuilder(getString(R.string.string_info_last_updated_on_date_time, data)).toString()
         })
 
     }
+
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
 
         menuInflater.inflate(R.menu.menu_search, menu)
 
+        // Associate searchable configuration with the SearchView.
         val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
-        val searchView = menu?.findItem(R.id.search)?.actionView as SearchView
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName))
-        searchView.maxWidth = Integer.MAX_VALUE // Expand to full width, to have close button set to the right side.
+
+        searchMenuItem = menu?.findItem(R.id.search)
+        searchMenuItem?.setOnActionExpandListener(searchExpandListener)
+
+        searchView = searchMenuItem?.actionView as SearchView
+        searchView?.setSearchableInfo(searchManager.getSearchableInfo(componentName))
+        searchView?.maxWidth = Integer.MAX_VALUE // Expand to full width, to have close button set to the right side.
+        searchView?.setOnQueryTextListener(searchListener)
+
+        if (!searchQuery.isNullOrEmpty()) {
+            searchMenuItem?.expandActionView()
+            searchView?.setQuery(searchQuery, true)
+        }
 
         return true
     }
+
+
+    private var textChangeDelayJob: Job? = null
+
+    // Coroutine will be launched in the main UI thread.
+    private val uiScope = CoroutineScope(Dispatchers.Main)
+
+    // This listener reacts to text change inside search area. We expect the search results to get
+    // filtered with every key stroke.
+    private val searchListener = object : SearchView.OnQueryTextListener {
+
+        override fun onQueryTextSubmit(query: String?): Boolean {
+            query?.let { search(it) }
+            return true
+        }
+
+        override fun onQueryTextChange(newText: String?): Boolean {
+
+            textChangeDelayJob?.cancel()
+
+            // To avoid too many requests and optimize search experience, we add a small delay to
+            // trigger a search when user finished typing.
+            textChangeDelayJob = uiScope.launch() {
+                newText?.let {
+                    delay(SEARCH_TYPING_DELAY_MILLISECONDS)
+                    search(it)
+                }
+            }
+
+            return true
+        }
+
+        private fun search(searchText: String) {
+            // The percent sign represents zero, one, or multiple numbers or characters.
+            // It finds any values that have searchText in any position.
+            viewModel.search("%$searchText%").observe(this@AddSearchActivity, Observer {
+                if (it == null) return@Observer
+                listAdapter.setData(it)
+                if (searchMenuItem?.isActionViewExpanded == true) {
+                    info_activity_add_search.text = StringBuilder(getString(R.string.string_info_results_of_search, it.size.toString())).toString()
+                }
+            })
+        }
+    }
+
+    // This listener lets you identify when search was launched and closed.
+    private val searchExpandListener = object : MenuItem.OnActionExpandListener {
+
+        override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
+            swipeRefreshLayout.isEnabled = false
+            info_activity_add_search.text = StringBuilder(getString(R.string.string_info_results_of_search, listAdapter.count.toString())).toString()
+            return true
+        }
+
+        override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
+            textChangeDelayJob?.cancel()
+            swipeRefreshLayout.isEnabled = true
+            info_activity_add_search.text = StringBuilder(getString(R.string.string_info_last_updated_on_date_time, viewModel.liveDataLastUpdated.value)).toString()
+            return true
+        }
+
+    }
+
 }

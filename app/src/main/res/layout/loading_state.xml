@@ -60,8 +60,10 @@
             android:id="@+id/error_msg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:paddingTop="@dimen/loading_state_margin"
             android:text="@string/unable_get_data"
+            android:textAlignment="center"
             app:visibleGone="@{resource.status == Status.ERROR}" />
     </LinearLayout>
 </layout>

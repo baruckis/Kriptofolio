@@ -50,13 +50,14 @@
     <string name="activity_add_search_title">"Pridėk kripto monetą(-as)"</string>
     <string name="activity_add_search_subtitle">"Visos kripto valiutos pagal reitingą"</string>
 
-    <string name="string_last_updated_on_date_time">"Paskutinį kartą atnaujinta (%1$s UTC)"</string>
+    <string name="string_info_last_updated_on_date_time">"Paskutinį kartą atnaujinta (%1$s UTC)"</string>
+    <string name="string_info_results_of_search">"Rezultatai %1$s"</string>
 
     <string name="action_search">"Ieškoti"</string>
 
     <string name="search_hint">"Ieškok konkrečios monetos…"</string>
 
-    <string name="sample_text_last_updated_on_date_time">"Paskutinį kartą atnaujinta (11/03/2018 12:55:08 UTC)"</string>
+    <string name="sample_text_info_last_updated_on_date_time">"Paskutinį kartą atnaujinta (11/03/2018 12:55:08 UTC)"</string>
 
     <string name="dialog_cryptocurrency_amount_title">"Kiek turi %1$s monetų?"</string>
     <string name="dialog_cryptocurrency_amount_hint">"Įvesk kiekį"</string>
