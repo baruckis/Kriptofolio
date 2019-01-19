@@ -23,6 +23,7 @@ const val DATABASE_NAME = "my-crypto-coins-db"
 const val CRYPTO_FORMAT_PATTERN = "#,##0.00000000"
 const val FIAT_FORMAT_PATTERN = "#,##0.00"
 const val PERCENT_FORMAT_PATTERN = "##0.00"
+const val ADD_TASK_REQUEST = 1
 const val SERVER_CALL_DELAY_MILLISECONDS: Long = 1000
 const val FLIPVIEW_CHARACTER_LIMIT = 3
 const val API_SERVICE_BASE_URL = "https://sandbox-api.coinmarketcap.com/"

@@ -27,14 +27,14 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/main_cardview_list_item_outer_top_bottom_margin"
-        android:layout_marginEnd="@dimen/main_cardview_list_item_outer_start_end_margin"
         android:layout_marginStart="@dimen/main_cardview_list_item_outer_start_end_margin"
         android:layout_marginTop="@dimen/main_cardview_list_item_outer_top_bottom_margin"
+        android:layout_marginEnd="@dimen/main_cardview_list_item_outer_start_end_margin"
+        android:layout_marginBottom="@dimen/main_cardview_list_item_outer_top_bottom_margin"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?android:attr/selectableItemBackground"
-        app:cardBackgroundColor="@color/colorForMainListItemBackground">
+        app:cardBackgroundColor="@color/main_list_item_color_state_selector">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -67,8 +67,8 @@
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/item_ranking"
                 style="@style/MainListItemText"
-                android:layout_marginEnd="@dimen/main_cardview_list_item_text_between_margin"
                 android:layout_marginStart="@dimen/main_cardview_list_item_text_between_margin"
+                android:layout_marginEnd="@dimen/main_cardview_list_item_text_between_margin"
                 android:textAlignment="center"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/item_image_icon"
@@ -79,8 +79,8 @@
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/item_name"
                 style="@style/MainListItemPrimeText"
-                android:layout_marginEnd="@dimen/main_cardview_list_item_text_between_margin"
                 android:layout_marginStart="@dimen/main_cardview_list_item_inner_margin"
+                android:layout_marginEnd="@dimen/main_cardview_list_item_text_between_margin"
                 android:text="@{cryptocurrency.name}"
                 android:textAlignment="viewStart"
                 app:layout_constraintBottom_toTopOf="@+id/item_amount_code"
@@ -93,8 +93,8 @@
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/item_amount_code"
                 style="@style/MainListItemText"
-                android:layout_marginEnd="@dimen/main_cardview_list_item_text_between_margin"
                 android:layout_marginStart="@dimen/main_cardview_list_item_inner_margin"
+                android:layout_marginEnd="@dimen/main_cardview_list_item_text_between_margin"
                 android:textAlignment="viewStart"
                 android:textColor="@color/colorForMainListItemPrimeText"
                 android:textDirection="locale"
@@ -107,8 +107,8 @@
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/item_price"
                 style="@style/MainListItemText"
-                android:layout_marginEnd="@dimen/main_cardview_list_item_text_between_margin"
                 android:layout_marginStart="@dimen/main_cardview_list_item_text_between_margin"
+                android:layout_marginEnd="@dimen/main_cardview_list_item_text_between_margin"
                 android:textAlignment="center"
                 app:layout_constraintBottom_toTopOf="@+id/item_amount_fiat"
                 app:layout_constraintEnd_toStartOf="@+id/guideline2_percent"
@@ -120,8 +120,8 @@
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/item_amount_fiat"
                 style="@style/MainListItemText"
-                android:layout_marginEnd="@dimen/main_cardview_list_item_text_between_margin"
                 android:layout_marginStart="@dimen/main_cardview_list_item_text_between_margin"
+                android:layout_marginEnd="@dimen/main_cardview_list_item_text_between_margin"
                 android:textAlignment="center"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/guideline2_percent"

@@ -78,3 +78,19 @@ fun Snackbar.onDismissedAction(callback: () -> Unit) {
         }
     })
 }
+
+/**
+ * Extension method for the Snackbar to add callback with [callback] action lambda.
+ */
+fun Snackbar.onDismissedAnyOfEvents(events: List<Int>,callback: () -> Unit) {
+    addCallback(object : Snackbar.Callback() {
+        override fun onDismissed(snackbar: Snackbar?, event: Int) {
+            events.forEach {
+                if (event == it) {
+                    callback()
+                    return@forEach
+                }
+            }
+        }
+    })
+}

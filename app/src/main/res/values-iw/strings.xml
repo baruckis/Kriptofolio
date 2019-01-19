@@ -26,6 +26,10 @@
     <string name="unable_get_data">"Unable to get data. Please press retry button to try again."</string> <!-- TODO translate to HE -->
     <string name="unknown_error">"Unknown error."</string> <!-- TODO translate to HE -->
 
+    <string name="undo">"Undo"</string> <!-- TODO translate to HE -->
+    <string name="deleted">"Deleted: %1$d"</string> <!-- TODO translate to HE -->
+
+
     <!-- Strings related to Main Activity -->
 
     <string name="string_total_value_holdings">"ערך אחזקות סה\"כ"</string>
@@ -43,6 +47,10 @@
     <string name="sample_text_column_coin_change_24h_1h_7d">"מחיר % ± 1 h / 7 ד\nh המחיר % ± 24\nסכום ± 24 $ h"</string>
 
     <string name="sample_text_total_value_on_date_time">"ערך אחזקות סה\"כ (2018/11/03 UTC 00:55:08)"</string>
+
+    <string name="action_mode_title">"Selected: %1$d"</string> <!-- TODO translate to HE -->
+    <string name="action_select_all">"Select all"</string> <!-- TODO translate to HE -->
+    <string name="action_delete">"Delete"</string> <!-- TODO translate to HE -->
 
 
     <!-- Strings related to Add Search Activity -->

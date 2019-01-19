@@ -25,6 +25,11 @@ import kotlinx.android.parcel.Parcelize
  * Entity object for Room database.
  */
 @Entity(tableName = "cryptocurrencies")
+// We will need to pass our custom data structure between different components in our app. For
+// that we are going to use Android recommended way - Parcelable interface. Instead of making
+// Parcelable class manually, we will use automatic Parcelable implementation generator. We just
+// need to declare the serialized properties in a primary constructor and add a @Parcelize
+// annotation, and writeToParcel()/createFromParcel() methods will be created automatically.
 @Parcelize
 data class Cryptocurrency(@PrimaryKey
                           val id: Int,

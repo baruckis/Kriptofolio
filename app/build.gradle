@@ -65,6 +65,11 @@ dependencies {
     implementation "androidx.preference:preference:$versions.preference"
     implementation "com.google.android.material:material:$versions.design"
 
+    // A RecyclerView addon library providing support for item selection. It support for creating,
+    // modifying, inspecting, and monitoring changes to items in a RecyclerView list. It enables
+    // users to select items in RecyclerView list using touch or mouse input.
+    implementation "androidx.recyclerview:recyclerview-selection:$versions.recyclerview"
+
     // Constraint layout
     implementation "androidx.constraintlayout:constraintlayout:$versions.constraint_layout"
 
@@ -76,7 +81,8 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-extensions:$versions.lifecycle"
     annotationProcessor "androidx.lifecycle:lifecycle-compiler:$versions.lifecycle"
 
-    // Room
+    // Room is a Database Object Mapping library that makes it easy to access database on Android
+    // applications.
     implementation "androidx.room:room-runtime:$versions.room"
     annotationProcessor "androidx.room:room-compiler:$versions.room"
     kapt "androidx.room:room-compiler:$versions.room"

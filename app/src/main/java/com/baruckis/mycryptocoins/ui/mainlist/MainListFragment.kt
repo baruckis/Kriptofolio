@@ -16,38 +16,46 @@
 
 package com.baruckis.mycryptocoins.ui.mainlist
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.Spinner
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.selection.SelectionTracker
+import androidx.recyclerview.selection.StorageStrategy
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.baruckis.mycryptocoins.R
 import com.baruckis.mycryptocoins.databinding.FragmentMainListBinding
+import com.baruckis.mycryptocoins.db.Cryptocurrency
 import com.baruckis.mycryptocoins.dependencyinjection.Injectable
-import com.baruckis.mycryptocoins.utilities.SERVER_CALL_DELAY_MILLISECONDS
-import com.baruckis.mycryptocoins.utilities.onActionButtonClick
-import com.baruckis.mycryptocoins.utilities.onDismissedAction
-import com.baruckis.mycryptocoins.utilities.showSnackbar
+import com.baruckis.mycryptocoins.ui.addsearchlist.AddSearchActivity
+import com.baruckis.mycryptocoins.ui.settings.SettingsActivity
+import com.baruckis.mycryptocoins.utilities.*
 import com.baruckis.mycryptocoins.vo.Status
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.activity_main.*
+import java.util.*
 import javax.inject.Inject
 
 
 /**
  * UI part for main my crypto coins screen. A placeholder fragment containing a simple view.
  */
-class MainListFragment : Fragment(), Injectable {
+class MainListFragment : Fragment(), Injectable, PrimaryActionModeController.PrimaryActionModeListener {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var emptyListView: View
@@ -63,7 +71,25 @@ class MainListFragment : Fragment(), Injectable {
 
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
 
-    private var snackbar: Snackbar? = null
+    private var snackbarUnableRefresh: Snackbar? = null
+    private var snackbarUndoDelete: Snackbar? = null
+
+    // Helper to create contextual action mode over toolbar.
+    private val primaryActionModeController = PrimaryActionModeController()
+
+    // For doing items multi select, long press select and also survive life cycle instance we are
+    // going to use selection library.
+    private lateinit var recyclerSelectionTracker: SelectionTracker<String>
+    private lateinit var recyclerSelectionTrackerItemKeyProvider: MainListItemKeyProvider
+
+    private var deletedItems: ArrayList<Cryptocurrency>? = null
+
+
+    companion object {
+        private const val SELECTION_TRACKER_ID = "selection_tracker"
+        private const val DELETED_ITEMS_KEY = "deleted_items"
+        private const val SELECTION_SEQUENCES_TO_DELETE_KEY = "selection_sequences_to_delete"
+    }
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -86,7 +112,7 @@ class MainListFragment : Fragment(), Injectable {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        setupList()
+        setupList(savedInstanceState)
 
         activity?.let {
             subscribeUi(it)
@@ -95,7 +121,7 @@ class MainListFragment : Fragment(), Injectable {
 
             // Every time activity is created, we set currently used fiat currency to be selected
             // one inside spinner component. We get data from shared preferences.
-            spinnerFiatCode.setSelection(getFiatCurrencyPosition(viewModel.getCurrentFiatCurrencyCode()))
+            spinnerFiatCode.setSelection(getFiatCurrencyPosition(viewModel.getCurrentFiatCurrencyCode()), false)
 
             spinnerFiatCode.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
 
@@ -114,10 +140,14 @@ class MainListFragment : Fragment(), Injectable {
                         return
                     }
 
-                    // We will retry the data from the server only when user
-                    // selected new currency to be active one.
+                    // Here we store new selected currency as additional variable. Later if call to
+                    // server is unsuccessful we will reuse it for retry functionality.
+                    viewModel.newSelectedFiatCurrencyCode = spinnerSelectedFiatCurrencyCode
+
                     swipeRefreshLayout.isRefreshing = true
                     spinnerFiatCode.isEnabled = false
+
+                    // We will try to get new data from the server with new selected fiat currency.
                     retry(spinnerSelectedFiatCurrencyCode)
                 }
             }
@@ -126,29 +156,170 @@ class MainListFragment : Fragment(), Injectable {
             // We observe the LiveData changes of fiat currency code from shared preferences.
             viewModel.liveDataCurrentFiatCurrencyCode.observe(this, Observer<String> { data ->
                 data?.let {
-                    if (viewModel.getSelectedFiatCurrencyCodeFromRep() == null) {
-                        // If there is no fiat currency code stored inside repository, we set it
-                        // to be same as in shared preferences and update the spinner.
-                        viewModel.setSelectedFiatCurrencyCodeFromRep(data)
-                        spinnerFiatCode.setSelection(getFiatCurrencyPosition(data))
-                    }
                     // If value in shared preferences change, e.g. user sets new fiat currency from
-                    // settings screen, then update the spinner.
-                    else if (viewModel.getSelectedFiatCurrencyCodeFromRep() != data) {
-                        spinnerFiatCode.setSelection(getFiatCurrencyPosition(data))
+                    // settings screen, then update the spinner, variables and try to get data from
+                    // the server.
+                    if (viewModel.getSelectedFiatCurrencyCodeFromRep() != data) {
+
+                        viewModel.newSelectedFiatCurrencyCode = null
+                        viewModel.setSelectedFiatCurrencyCodeFromRep(data)
+
+                        spinnerFiatCode.setSelection(getFiatCurrencyPosition(data), false)
+
+                        swipeRefreshLayout.isRefreshing = true
+                        spinnerFiatCode.isEnabled = false
+
+                        retry(null)
                     }
+
                 }
             })
 
-        }
 
+            it.fab.setOnClickListener { _ ->
+                snackbarUndoDelete?.let { snackbar ->
+                    clean()
+                    snackbar.dismiss()
+                }
+                val intent = Intent(it, AddSearchActivity::class.java)
+                startActivityForResult(intent, ADD_TASK_REQUEST)
+            }
+
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == ADD_TASK_REQUEST) {
+            if (resultCode == Activity.RESULT_OK) {
+                val cryptocurrency: Cryptocurrency? = data?.getParcelableExtra<Cryptocurrency>(AddSearchActivity.EXTRA_ADD_TASK_DESCRIPTION)
+                cryptocurrency?.let {
+                    viewModel.addCryptocurrency(cryptocurrency)
+                }
+            }
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        // Save selection state to survive the lifecycle changes.
+        recyclerSelectionTracker.onSaveInstanceState(outState)
+
+        // When fragment is destroyed we want to save our deleted items if any to be able to restore
+        // with undo snackbar later.
+        deletedItems?.let { outState.putParcelableArrayList(DELETED_ITEMS_KEY, deletedItems) }
+
+        // We also need to remember deleted selected items arrangement on screen, because later
+        // if user press undo button on snackbar, we will need restore deleted items with animation.
+        outState.putParcelable(SELECTION_SEQUENCES_TO_DELETE_KEY, recyclerAdapter.getSelectionSequencesToDelete())
+
+        super.onSaveInstanceState(outState)
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        // Restore selection state.
+        recyclerSelectionTracker.onRestoreInstanceState(savedInstanceState)
+
+        // Restore our deleted items if any.
+        deletedItems = savedInstanceState?.getParcelableArrayList(DELETED_ITEMS_KEY)
+
+        // If during deletion process undo snackbar was lost on configuration change
+        // (e.g. screen rotation) than recreate it again.
+        if (!deletedItems.isNullOrEmpty()) {
+            showSnackbarUndoDelete()
+        }
+    }
+
+    override fun onEnterActionMode() {
+        swipeRefreshLayout.isEnabled = false
+    }
+
+    override fun onLeaveActionMode() {
+        recyclerSelectionTracker.clearSelection()
+        recyclerAdapter.clearSelected()
+        swipeRefreshLayout.isEnabled = true
+    }
+
+    override fun onActionItemClick(item: MenuItem) {
+
+        when (item.itemId) {
+            R.id.action_select_all -> {
+                val list = ArrayList<String>()
+                recyclerAdapter.getData().forEach {
+                    list.add(it.id.toString())
+                }
+                recyclerSelectionTracker.setItemsSelected(list, true)
+            }
+            R.id.action_delete -> {
+                // We delete selected items with animation and store their ids.
+                deletedItems = recyclerAdapter.deleteSelectedItems() as ArrayList
+
+                val isAllDeleted = recyclerAdapter.getData().isEmpty()
+
+                // Show empty list UI if we deleted all items.
+                binding.emptyList = binding.listResource?.data != null && isAllDeleted
+
+                // We need not to forget to update data inside selection tracker after it was changed.
+                recyclerSelectionTrackerItemKeyProvider.updataData(recyclerAdapter.getData())
+                // Than we close action mode.
+                primaryActionModeController.finishActionMode()
+                if (!deletedItems.isNullOrEmpty()) {
+                    // Delete items from database.
+                    viewModel.deleteCryptocurrencyList(deletedItems!!.map { it.id }, isAllDeleted)
+
+                    // Finally we show snackbar which is the last chance for the user to undo deletion.
+                    showSnackbarUndoDelete()
+                }
+            }
+            R.id.action_settings -> {
+                startActivity(Intent(activity, SettingsActivity::class.java))
+            }
+        }
     }
 
 
-    private fun setupList() {
+    private fun setupList(savedInstanceState: Bundle?) {
+
         recyclerView.layoutManager = LinearLayoutManager(activity)
         recyclerAdapter = MainRecyclerViewAdapter()
+
+        // Here we restore deleted selected items and their arrangement on screen if any. As you
+        // see we pass data to recyclerview adapter immediately.
+        savedInstanceState?.let {
+            recyclerAdapter.setSelectionSequencesToDelete(savedInstanceState.getParcelable(SELECTION_SEQUENCES_TO_DELETE_KEY))
+        }
+
         recyclerView.adapter = recyclerAdapter
+
+        recyclerSelectionTrackerItemKeyProvider = MainListItemKeyProvider(recyclerAdapter.getData())
+
+
+        // SelectionTracker can be built only after setting the adapter on the recylerview.
+        // Here we create an instance of it.
+        recyclerSelectionTracker = SelectionTracker.Builder<String>(SELECTION_TRACKER_ID,
+                recyclerView, recyclerSelectionTrackerItemKeyProvider, MainListItemLookup(recyclerView),
+                StorageStrategy.createStringStorage()).build()
+
+
+        // We should invoke contextual action bar when we make a long click on recycler view item.
+        // SelectionTracker will help to implement this functionality by observing selection change.
+        recyclerSelectionTracker.addObserver(object : SelectionTracker.SelectionObserver<String>() {
+
+            override fun onSelectionChanged() {
+                super.onSelectionChanged()
+                if (recyclerSelectionTracker.hasSelection() && !primaryActionModeController.isInMode() && activity is AppCompatActivity) {
+                    primaryActionModeController.startActionMode(this@MainListFragment.activity as AppCompatActivity, this@MainListFragment,
+                            R.menu.menu_action_mode, getString(R.string.action_mode_title, recyclerSelectionTracker.selection.size()))
+
+                } else if (!recyclerSelectionTracker.hasSelection() && primaryActionModeController.isInMode()) {
+                    primaryActionModeController.finishActionMode()
+                } else {
+                    primaryActionModeController.setTitle(getString(R.string.action_mode_title, recyclerSelectionTracker.selection.size()))
+                }
+
+            }
+        })
+
+        recyclerAdapter.setSelectionTracker(recyclerSelectionTracker)
     }
 
     private fun subscribeUi(activity: FragmentActivity) {
@@ -173,18 +344,21 @@ class MainListFragment : Fragment(), Injectable {
 
             // We ignore any response where data is null.
             listResource.data?.let {
-                if (listResource.status != Status.LOADING) recyclerAdapter.setData(it)
+                if (listResource.status != Status.LOADING) {
+                    recyclerAdapter.setData(it)
+                    recyclerSelectionTrackerItemKeyProvider.updataData(it)
+                }
 
                 // First we check if there was an error from the server.
                 if (listResource.status == Status.ERROR) {
-                    snackbar = this.view!!.showSnackbar(R.string.unable_refresh) {
+                    snackbarUnableRefresh = this.view!!.showSnackbar(R.string.unable_refresh) {
                         onActionButtonClick {
                             swipeRefreshLayout.isRefreshing = true
                             spinnerFiatCode.isEnabled = false
                         }
                         onDismissedAction {
                             // When we retry to get data from the server with selected fiat currency.
-                            if (viewModel.newSelectedFiatCurrencyCode!= null)
+                            if (viewModel.newSelectedFiatCurrencyCode != null)
                                 spinnerFiatCode.setSelection(getFiatCurrencyPosition(viewModel.newSelectedFiatCurrencyCode))
                             else retry(null)
                         }
@@ -192,28 +366,14 @@ class MainListFragment : Fragment(), Injectable {
                     // If there was an error when trying to load data with new selected fiat currency,
                     // than restore previous one.
                     if (viewModel.newSelectedFiatCurrencyCode != null) {
-                        if (viewModel.newSelectedFiatCurrencyCode == viewModel.getCurrentFiatCurrencyCode())
-                            viewModel.setSelectedFiatCurrencyCodeFromRep(viewModel.newSelectedFiatCurrencyCode)
                         spinnerFiatCode.setSelection(getFiatCurrencyPosition(viewModel.getCurrentFiatCurrencyCode()))
                     }
-                }
-                // This another check is to filter successful response or empty data response
-                // from database when user selected new fiat currency.
-                else if ((listResource.status == Status.SUCCESS || listResource.data.isEmpty()) &&
-                        viewModel.newSelectedFiatCurrencyCode != null) {
-
-                    // Set new value in shared preferences and in the repository.
-                    viewModel.setNewCurrentFiatCurrencyCode(viewModel.newSelectedFiatCurrencyCode!!)
-                    viewModel.setSelectedFiatCurrencyCodeFromRep(viewModel.newSelectedFiatCurrencyCode)
-
-                    viewModel.newSelectedFiatCurrencyCode = null
                 }
             }
 
         })
 
     }
-
 
     // We find an array position of currently used fiat currency in the app.
     private fun getFiatCurrencyPosition(newFiatCurrencyCode: String?): Int {
@@ -222,10 +382,51 @@ class MainListFragment : Fragment(), Injectable {
 
     // Dismiss snackbar if needed and get new data from the server.
     private fun retry(newFiatCurrencyCode: String?) {
-        viewModel.newSelectedFiatCurrencyCode = newFiatCurrencyCode
-        if (snackbar?.isShown == true) snackbar?.dismiss()
+        if (snackbarUnableRefresh?.isShown == true) snackbarUnableRefresh?.dismiss()
         // Make a call to the server after some delay for better user experience.
         Handler().postDelayed({ viewModel.retry(newFiatCurrencyCode) }, SERVER_CALL_DELAY_MILLISECONDS)
+    }
+
+    private fun showSnackbarUndoDelete() {
+
+        // After successful deletion we provide ability for the user to undo deletion action
+        // by showing snackbar message for some time.
+        snackbarUndoDelete = this.view?.showSnackbar(getString(R.string.deleted, deletedItems!!.size), Snackbar.LENGTH_LONG) {
+            swipeRefreshLayout.isEnabled = false
+
+            onActionButtonClick(R.string.undo) {
+                deletedItems?.let { deletedItems ->
+                    // If user confirmed to undo deletion than restore items on UI visually.
+                    recyclerAdapter.restoreDeletedItems()
+                    // Again don't forget to update selection tracker to work it correctly.
+                    recyclerSelectionTrackerItemKeyProvider.updataData(recyclerAdapter.getData())
+                    // Than restore items inside database by adding them back.
+                    viewModel.restoreCryptocurrencyList(deletedItems)
+                    // Hide empty list ui message.
+                    binding.emptyList = deletedItems.isEmpty()
+                }
+
+                // Clean up.
+                deletedItems = null
+                recyclerAdapter.setSelectionSequencesToDelete(null)
+                swipeRefreshLayout.isEnabled = true
+            }
+            // When snackbar is dismissed it means that user did not wanted to undo deletion
+            // and we can confidently forget deleted items.
+            onDismissedAnyOfEvents(listOf(Snackbar.Callback.DISMISS_EVENT_TIMEOUT, Snackbar.Callback.DISMISS_EVENT_SWIPE)) {
+                clean()
+            }
+        }
+
+    }
+
+    // After restoration or deletion from database we should also clear variables
+    // that we save with instance.
+    private fun clean() {
+        deletedItems = null
+        recyclerAdapter.setSelectionSequencesToDelete(null)
+        swipeRefreshLayout.isEnabled = true
+        viewModel.mainListTimestamp = null
     }
 
 }

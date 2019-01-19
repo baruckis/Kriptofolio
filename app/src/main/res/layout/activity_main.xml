@@ -157,6 +157,7 @@
                     android:dropDownWidth="@dimen/main_collapsing_toolbar_layout_spinner_dropdown_width"
                     android:entries="@array/fiat_currency_code_array"
                     android:popupTheme="@style/AppTheme.PopupOverlay"
+                    android:saveEnabled="false"
                     android:spinnerMode="dropdown"
                     app:layout_constraintBaseline_toBaselineOf="@+id/textview_separator_code"
                     app:layout_constraintStart_toEndOf="@+id/textview_separator_code" />

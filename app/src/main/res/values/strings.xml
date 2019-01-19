@@ -29,6 +29,10 @@
     <string name="unable_get_data">"Unable to get data. Please press retry button to try again."</string>
     <string name="unknown_error">"Unknown error."</string>
 
+    <string name="undo">"Undo"</string>
+    <string name="deleted">"Deleted: %1$d"</string>
+
+
     <!-- Strings related to Main Activity -->
 
     <string name="string_total_value_holdings">"Total holdings value"</string>
@@ -143,6 +147,10 @@
         <item>"NT$"</item>
         <item>"R"</item>
     </string-array>
+
+    <string name="action_mode_title">"Selected: %1$d"</string>
+    <string name="action_select_all">"Select all"</string>
+    <string name="action_delete">"Delete"</string>
 
 
     <!-- Strings related to Add Search Activity -->

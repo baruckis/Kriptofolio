@@ -192,10 +192,14 @@ class AddSearchActivity : AppCompatActivity(), Injectable, CryptocurrencyAmountD
                 if (listResource.status != Status.LOADING) swipeRefreshLayout.isRefreshing = false
             } else {
                 binding.myListResource = listResource
+                searchMenuItem?.isEnabled = false
             }
 
             listResource.data?.let {
-                if (listResource.status != Status.LOADING) listAdapter.setData(it)
+                if (listResource.status != Status.LOADING) {
+                    listAdapter.setData(it)
+                    searchMenuItem?.isEnabled = true
+                }
             }
 
             if (listResource.status == Status.ERROR && listResource.data != null) {

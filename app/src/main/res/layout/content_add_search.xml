@@ -51,6 +51,7 @@
             android:text="@string/string_info_last_updated_on_date_time"
             android:textAlignment="center"
             android:textColor="@color/colorForAddSearchListLastUpdatedText"
+            app:layout_constraintTop_toTopOf="parent"
             app:visibleGone="@{listResource.data != null}"
             tools:text="@string/sample_text_info_last_updated_on_date_time" />
 

@@ -14,20 +14,15 @@
  * limitations under the License.
  */
 
-package com.baruckis.mycryptocoins.db
+package com.baruckis.mycryptocoins.ui.mainlist
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-import com.google.gson.annotations.SerializedName
-import java.util.*
+import androidx.recyclerview.selection.ItemDetailsLookup
+
 
 /**
- * Entity object for Room database.
- * It stores common data about each screen of the app.
+ * Simple interface for selection library to access information about RecyclerView area.
  */
-@Entity(tableName = "screen_status")
-data class ScreenStatus(@PrimaryKey
-                        val id: String,
-                        @SerializedName("timestamp")
-                        val timestamp: Date?
-)
+interface ViewHolderWithDetails {
+
+    fun getItemDetails(): ItemDetailsLookup.ItemDetails<String>
+}

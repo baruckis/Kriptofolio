@@ -27,6 +27,9 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
         android:padding="@dimen/add_search_list_item_inner_margin">
 
         <androidx.appcompat.widget.AppCompatTextView

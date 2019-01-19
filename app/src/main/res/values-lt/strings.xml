@@ -26,6 +26,10 @@
     <string name="unable_get_data">"Nepavyko gauti duomenų. Prašau paspausk kartojimo mygtuką bandyti dar kartą."</string>
     <string name="unknown_error">"Nežinoma klaida."</string>
 
+    <string name="undo">"Anuliuoti"</string>
+    <string name="deleted">"Ištrinta: %1$d"</string>
+
+
     <!-- Strings related to Main Activity -->
 
     <string name="string_total_value_holdings">"Bendra turima vertė"</string>
@@ -43,6 +47,10 @@
     <string name="sample_text_column_coin_change_24h_1h_7d">"± kaina % 1 val / 7 d\n± kaina % 24 val\n± kiekis $ 24 val"</string>
 
     <string name="sample_text_total_value_on_date_time">"Bendra turima vertė (11/03/2018 12:55:08 UTC)"</string>
+
+    <string name="action_mode_title">"Pasirinkta: %1$d"</string>
+    <string name="action_select_all">"Pasirinkti viską"</string>
+    <string name="action_delete">"Ištrinti"</string>
 
 
     <!-- Strings related to Add Search Activity -->

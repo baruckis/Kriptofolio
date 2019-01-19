@@ -28,7 +28,7 @@ import javax.inject.Inject
 class AddSearchViewModel @Inject constructor(var cryptocurrencyRepository: CryptocurrencyRepository) : ViewModel() {
 
     val mediatorLiveData = MediatorLiveData<Resource<List<Cryptocurrency>>>()
-    private var liveData: LiveData<Resource<List<Cryptocurrency>>> = cryptocurrencyRepository.getAllCryptocurrencyLiveDataList(cryptocurrencyRepository.getCurrentFiatCurrencyCode())
+    private var liveData: LiveData<Resource<List<Cryptocurrency>>> = cryptocurrencyRepository.getAllCryptocurrencyLiveDataResourceList(cryptocurrencyRepository.getCurrentFiatCurrencyCode())
 
     val liveDataLastUpdated: LiveData<String>
 
@@ -46,7 +46,7 @@ class AddSearchViewModel @Inject constructor(var cryptocurrencyRepository: Crypt
 
     fun retry(shouldFetch: Boolean) {
         mediatorLiveData.removeSource(liveData)
-        liveData = cryptocurrencyRepository.getAllCryptocurrencyLiveDataList(cryptocurrencyRepository.getCurrentFiatCurrencyCode(), shouldFetch)
+        liveData = cryptocurrencyRepository.getAllCryptocurrencyLiveDataResourceList(cryptocurrencyRepository.getCurrentFiatCurrencyCode(), shouldFetch)
         mediatorLiveData.addSource(liveData) { mediatorLiveData.value = it }
     }
 

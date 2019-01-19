@@ -16,14 +16,12 @@
 
 package com.baruckis.mycryptocoins.ui.mainlist
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.text.SpannableString
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MediatorLiveData
@@ -32,9 +30,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.baruckis.mycryptocoins.R
 import com.baruckis.mycryptocoins.db.Cryptocurrency
-import com.baruckis.mycryptocoins.ui.addsearchlist.AddSearchActivity
 import com.baruckis.mycryptocoins.ui.settings.SettingsActivity
-import com.baruckis.mycryptocoins.vo.Resource
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
@@ -46,8 +42,6 @@ import javax.inject.Inject
  * UI for main my crypto coins screen.
  */
 
-const val ADD_TASK_REQUEST = 1
-
 // To support injecting fragments which belongs to this activity we need to implement HasSupportFragmentInjector.
 // We would not need to implement it, if our activity did not contain any fragments or the fragments did not need to inject anything.
 class MainActivity : AppCompatActivity(), HasSupportFragmentInjector {
@@ -58,8 +52,6 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
     private lateinit var viewModel: MainViewModel
-
-    private lateinit var spinnerFiatCode: Spinner
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,13 +65,6 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector {
 
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
-
-        fab.setOnClickListener { _ ->
-            val intent = Intent(this@MainActivity, AddSearchActivity::class.java)
-            startActivityForResult(intent, ADD_TASK_REQUEST)
-        }
-
-        spinnerFiatCode = findViewById<Spinner>(R.id.spinner_fiat_code)
 
         subscribeUi()
     }
@@ -105,27 +90,18 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector {
 
     override fun supportFragmentInjector(): AndroidInjector<Fragment> = dispatchingAndroidInjector
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == ADD_TASK_REQUEST) {
-            if (resultCode == Activity.RESULT_OK) {
-                val cryptocurrency: Cryptocurrency? = data?.getParcelableExtra<Cryptocurrency>(AddSearchActivity.EXTRA_ADD_TASK_DESCRIPTION)
-                cryptocurrency?.let {
-                    viewModel.addCryptocurrency(cryptocurrency)
-                }
-            }
-        }
-    }
-
 
     // Update the all these separate text fields when the data changes by observing data on the ViewModel, exposed as a LiveData.
     private fun subscribeUi() {
 
         // We use MediatorLiveData to query and merge multiple data source type into single LiveData.
         val liveDataMerger = MediatorLiveData<MergedData>()
+
         liveDataMerger.addSource(viewModel.liveDataTotalHoldingsValueOnDateText) {
             liveDataMerger.value = MergedData.TotalHoldingsValueOnDateTextData(it)
         }
-        liveDataMerger.addSource(viewModel.mediatorLiveDataMyCryptocurrencyResourceList) {
+
+        liveDataMerger.addSource(viewModel.liveDataMyCryptocurrencyList) {
             liveDataMerger.value = MergedData.MyCryptocurrencyListData(it)
         }
 
@@ -136,12 +112,12 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector {
         liveDataMerger.observe(this, Observer<MergedData> { data ->
             when (data) {
                 is MergedData.TotalHoldingsValueOnDateTextData -> totalHoldingsValueOnDateText = data.text
-                is MergedData.MyCryptocurrencyListData -> myCryptocurrencyList = data.resource.data
+                is MergedData.MyCryptocurrencyListData -> myCryptocurrencyList = data.list
             }
 
             // We need to make sure that we don't update total holdings value with the date if
             // user owned crypto coins list is empty.
-            if (totalHoldingsValueOnDateText != null && !myCryptocurrencyList.isNullOrEmpty()) {
+            if (totalHoldingsValueOnDateText != null && myCryptocurrencyList != null) {
 
                 // Both data is ready, proceed to process them.
                 val txt = StringBuilder(getString(R.string.string_total_value_holdings))
@@ -149,6 +125,7 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector {
                 textview_total_value_on_date_time.text = txt
 
                 totalHoldingsValueOnDateText = null
+                myCryptocurrencyList = null
             }
 
         })
@@ -177,6 +154,6 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector {
     // We create a sealed classes to represent both data type that we want to merge.
     sealed class MergedData {
         data class TotalHoldingsValueOnDateTextData(val text: String) : MergedData()
-        data class MyCryptocurrencyListData(val resource: Resource<List<Cryptocurrency>>) : MergedData()
+        data class MyCryptocurrencyListData(val list: List<Cryptocurrency>) : MergedData()
     }
 }

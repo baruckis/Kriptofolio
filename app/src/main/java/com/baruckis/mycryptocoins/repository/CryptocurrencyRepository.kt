@@ -55,11 +55,11 @@ class CryptocurrencyRepository @Inject constructor(
 ) {
 
     // Just a simple helper variable to store selected fiat currency code during app lifecycle.
-    // It is needed for main screen currency spinner.
-    var selectedFiatCurrencyCode: String? = null
+    // It is needed for main screen currency spinner. We set it to be same as in shared preferences.
+    var selectedFiatCurrencyCode: String = getCurrentFiatCurrencyCode()
 
 
-    fun getMyCryptocurrencyLiveDataResourceList(fiatCurrencyCode: String, shouldFetch: Boolean = false, myCryptocurrenciesIds: String? = null): LiveData<Resource<List<Cryptocurrency>>> {
+    fun getMyCryptocurrencyLiveDataResourceList(fiatCurrencyCode: String, shouldFetch: Boolean = false, myCryptocurrenciesIds: String? = null, setNewCurrentFiatCurrencyCode: Boolean = false): LiveData<Resource<List<Cryptocurrency>>> {
         return object : NetworkBoundResource<List<Cryptocurrency>, CoinMarketCap<HashMap<String, CryptocurrencyLatest>>>(appExecutors) {
 
             override fun saveCallResult(item: CoinMarketCap<HashMap<String, CryptocurrencyLatest>>) {
@@ -72,6 +72,9 @@ class CryptocurrencyRepository @Inject constructor(
                         list.add(value)
                     }
                 }
+
+                // Before making a call, we can save our new selected fiat currecy code.
+                if (setNewCurrentFiatCurrencyCode) setNewCurrentFiatCurrencyCode(fiatCurrencyCode)
 
                 // Than we use common function to convert list response to the list compatible with
                 // our created upsert function in dao.
@@ -91,10 +94,20 @@ class CryptocurrencyRepository @Inject constructor(
             }
 
             override fun createCall(): LiveData<ApiResponse<CoinMarketCap<HashMap<String, CryptocurrencyLatest>>>> {
-                return if (!myCryptocurrenciesIds.isNullOrEmpty()) api.getCryptocurrenciesById(fiatCurrencyCode, myCryptocurrenciesIds) else AbsentLiveData.create()
+                // Make a server call for to get new data by ids provided.
+                return if (!myCryptocurrenciesIds.isNullOrEmpty()) api.getCryptocurrenciesById(fiatCurrencyCode, myCryptocurrenciesIds) else {
+                    // Special case when user cryptocurrencies list is empty.
+                    if (setNewCurrentFiatCurrencyCode) setNewCurrentFiatCurrencyCode(fiatCurrencyCode)
+                    AbsentLiveData.create()
+                }
             }
 
         }.asLiveData()
+    }
+
+
+    fun getMyCryptocurrencyLiveDataList(): LiveData<List<Cryptocurrency>> {
+        return cryptocurrencyDao.getMyCryptocurrencyLiveDataList()
     }
 
 
@@ -104,7 +117,7 @@ class CryptocurrencyRepository @Inject constructor(
 
 
     // The Resource wrapping of LiveData is useful to update the UI based upon the state.
-    fun getAllCryptocurrencyLiveDataList(fiatCurrencyCode: String, shouldFetch: Boolean = false): LiveData<Resource<List<Cryptocurrency>>> {
+    fun getAllCryptocurrencyLiveDataResourceList(fiatCurrencyCode: String, shouldFetch: Boolean = false): LiveData<Resource<List<Cryptocurrency>>> {
         return object : NetworkBoundResource<List<Cryptocurrency>, CoinMarketCap<List<CryptocurrencyLatest>>>(appExecutors) {
 
             // Here we save the data fetched from web-service.
@@ -113,7 +126,6 @@ class CryptocurrencyRepository @Inject constructor(
 
                 if (item.status != null) {
                     screenStatusDao.update(ScreenStatus(DB_ID_SCREEN_ADD_SEARCH_LIST, item.status.timestamp))
-                    screenStatusDao.update(ScreenStatus(DB_ID_SCREEN_MAIN_LIST, item.status.timestamp))
                 }
             }
 
@@ -151,14 +163,16 @@ class CryptocurrencyRepository @Inject constructor(
     }
 
 
-    fun updateCryptocurrencyFromList(cryptocurrency: Cryptocurrency) {
-        appExecutors.diskIO().execute {
-            cryptocurrencyDao.updateCryptocurrency(cryptocurrency)
-        }
+    fun updateCryptocurrency(cryptocurrency: Cryptocurrency): Int {
+        return cryptocurrencyDao.updateCryptocurrency(cryptocurrency)
     }
 
-    fun updateCryptocurrency(cryptocurrency: Cryptocurrency): Int? {
-        return cryptocurrencyDao.updateCryptocurrency(cryptocurrency)
+    fun updateCryptocurrencyList(cryptocurrencyList: List<Cryptocurrency>): Int {
+        return cryptocurrencyDao.updateCryptocurrencyList(cryptocurrencyList)
+    }
+
+    fun deleteCryptocurrencyList(ids: List<Int>) {
+        cryptocurrencyDao.deleteCryptocurrencyList(ids)
     }
 
 
@@ -166,12 +180,17 @@ class CryptocurrencyRepository @Inject constructor(
         return screenStatusDao.getSpecificScreenStatusLiveData(specificScreenStatusId)
     }
 
-    fun getSpecificScreenStatusData(specificScreenStatusId: String): ScreenStatus {
+    fun getSpecificScreenStatusData(specificScreenStatusId: String): ScreenStatus? {
         return screenStatusDao.getSpecificScreenStatusData(specificScreenStatusId)
     }
 
+    fun setMainListScreenStatusTimestamp(timestamp: Date?) {
+        screenStatusDao.update(ScreenStatus(DB_ID_SCREEN_MAIN_LIST, timestamp))
+    }
 
-    fun setNewCurrentFiatCurrencyCode(value: String) {
+
+    private fun setNewCurrentFiatCurrencyCode(value: String) {
+        selectedFiatCurrencyCode = value
         sharedPreferences.edit().putString(context.resources.getString(R.string.pref_fiat_currency_key), value).apply()
     }
 

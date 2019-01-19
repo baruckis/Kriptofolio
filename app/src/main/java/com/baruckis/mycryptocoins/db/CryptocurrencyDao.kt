@@ -19,13 +19,14 @@ package com.baruckis.mycryptocoins.db
 import androidx.lifecycle.LiveData
 import androidx.room.*
 
+
 /**
  * The Data Access Object for the [Cryptocurrency] class.
  */
 @Dao
 abstract class CryptocurrencyDao {
 
-    @Query("SELECT * FROM cryptocurrencies WHERE amount IS NOT NULL")
+    @Query("SELECT * FROM cryptocurrencies WHERE amount IS NOT NULL ORDER BY amountFiat DESC, rank ASC")
     abstract fun getMyCryptocurrencyLiveDataList(): LiveData<List<Cryptocurrency>>
 
     // The GROUP_CONCAT(X,Y) function returns a string which is the concatenation of all non-NULL
@@ -52,11 +53,20 @@ abstract class CryptocurrencyDao {
     abstract fun getSpecificCryptocurrencyLiveDataByCryptoCode(specificCryptoCode: String): LiveData<Cryptocurrency>
 
     @Query("SELECT * FROM cryptocurrencies WHERE id = :id LIMIT 1")
-    abstract fun getSpecificCryptocurrencyLiveDataById(id: Int): Cryptocurrency
+    abstract fun getSpecificCryptocurrencyById(id: Int): Cryptocurrency
+
+    @Query("SELECT * FROM cryptocurrencies WHERE id IN (:ids)")
+    abstract fun getSpecificCryptocurrencyListByIds(ids: List<Int>): List<Cryptocurrency>
+
 
     // Update specific item in the database.
     @Update(onConflict = OnConflictStrategy.REPLACE)
     abstract fun updateCryptocurrency(cryptocurrency: Cryptocurrency): Int
+
+
+    // Update specific items in the database.
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    abstract fun updateCryptocurrencyList(cryptocurrencyList: List<Cryptocurrency>): Int
 
 
     /**
@@ -90,7 +100,7 @@ abstract class CryptocurrencyDao {
             // Finally we update items one by one.
             for (updateItem in updateList) {
 
-                val currentItem = getSpecificCryptocurrencyLiveDataById(updateItem.id)
+                val currentItem = getSpecificCryptocurrencyById(updateItem.id)
 
                 currentItem.name = updateItem.name
                 currentItem.rank = updateItem.rank
@@ -107,6 +117,27 @@ abstract class CryptocurrencyDao {
                 }
 
                 updateCryptocurrency(currentItem)
+            }
+        }
+    }
+
+
+    // We delete items from database by resetting their amount. We can not delete item completely as
+    // it would be gone from all cryptocurrencies list displayed in add crypto coins screen because
+    // we use same database table.
+    @Transaction
+    open fun deleteCryptocurrencyList(ids: List<Int>) {
+
+        val deleteList = getSpecificCryptocurrencyListByIds(ids)
+
+        if (!deleteList.isEmpty()) {
+            for (deleteItem in deleteList) {
+
+                deleteItem.amount = null
+                deleteItem.amountFiat = null
+                deleteItem.amountFiatChange24h = null
+
+                updateCryptocurrency(deleteItem)
             }
         }
     }
