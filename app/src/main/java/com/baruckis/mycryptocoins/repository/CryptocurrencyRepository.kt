@@ -26,10 +26,7 @@ import com.baruckis.mycryptocoins.api.ApiResponse
 import com.baruckis.mycryptocoins.api.ApiService
 import com.baruckis.mycryptocoins.api.CoinMarketCap
 import com.baruckis.mycryptocoins.api.CryptocurrencyLatest
-import com.baruckis.mycryptocoins.db.Cryptocurrency
-import com.baruckis.mycryptocoins.db.CryptocurrencyDao
-import com.baruckis.mycryptocoins.db.ScreenStatus
-import com.baruckis.mycryptocoins.db.ScreenStatusDao
+import com.baruckis.mycryptocoins.db.*
 import com.baruckis.mycryptocoins.utilities.AbsentLiveData
 import com.baruckis.mycryptocoins.utilities.DB_ID_SCREEN_ADD_SEARCH_LIST
 import com.baruckis.mycryptocoins.utilities.DB_ID_SCREEN_MAIN_LIST
@@ -48,6 +45,7 @@ import kotlin.collections.ArrayList
 class CryptocurrencyRepository @Inject constructor(
         private val context: Context,
         private val appExecutors: AppExecutors,
+        private val myCryptocurrencyDao: MyCryptocurrencyDao,
         private val cryptocurrencyDao: CryptocurrencyDao,
         private val screenStatusDao: ScreenStatusDao,
         private val api: ApiService,
@@ -59,12 +57,12 @@ class CryptocurrencyRepository @Inject constructor(
     var selectedFiatCurrencyCode: String = getCurrentFiatCurrencyCode()
 
 
-    fun getMyCryptocurrencyLiveDataResourceList(fiatCurrencyCode: String, shouldFetch: Boolean = false, myCryptocurrenciesIds: String? = null, setNewCurrentFiatCurrencyCode: Boolean = false): LiveData<Resource<List<Cryptocurrency>>> {
-        return object : NetworkBoundResource<List<Cryptocurrency>, CoinMarketCap<HashMap<String, CryptocurrencyLatest>>>(appExecutors) {
+    fun getMyCryptocurrencyLiveDataResourceList(fiatCurrencyCode: String, shouldFetch: Boolean = false, myCryptocurrenciesIds: String? = null, setNewCurrentFiatCurrencyCode: Boolean = false): LiveData<Resource<List<MyCryptocurrency>>> {
+        return object : NetworkBoundResource<List<MyCryptocurrency>, CoinMarketCap<HashMap<String, CryptocurrencyLatest>>>(appExecutors) {
 
             override fun saveCallResult(item: CoinMarketCap<HashMap<String, CryptocurrencyLatest>>) {
 
-                val list: MutableList<CryptocurrencyLatest> = ArrayList<CryptocurrencyLatest>()
+                val list: MutableList<CryptocurrencyLatest> = ArrayList()
 
                 // We iterate over hashmap to make a list of CryptocurrencyLatest.
                 if (!item.data.isNullOrEmpty()) {
@@ -78,19 +76,19 @@ class CryptocurrencyRepository @Inject constructor(
 
                 // Than we use common function to convert list response to the list compatible with
                 // our created upsert function in dao.
-                cryptocurrencyDao.upsert(getCryptocurrencyListFromResponse(fiatCurrencyCode, list))
+                myCryptocurrencyDao.upsert(getMyCryptocurrencyListFromResponse(fiatCurrencyCode, list))
 
                 if (item.status != null) {
                     screenStatusDao.update(ScreenStatus(DB_ID_SCREEN_MAIN_LIST, item.status.timestamp))
                 }
             }
 
-            override fun shouldFetch(data: List<Cryptocurrency>?): Boolean {
+            override fun shouldFetch(data: List<MyCryptocurrency>?): Boolean {
                 return shouldFetch
             }
 
-            override fun loadFromDb(): LiveData<List<Cryptocurrency>> {
-                return cryptocurrencyDao.getMyCryptocurrencyLiveDataList()
+            override fun loadFromDb(): LiveData<List<MyCryptocurrency>> {
+                return myCryptocurrencyDao.getMyCryptocurrencyLiveDataList()
             }
 
             override fun createCall(): LiveData<ApiResponse<CoinMarketCap<HashMap<String, CryptocurrencyLatest>>>> {
@@ -106,13 +104,13 @@ class CryptocurrencyRepository @Inject constructor(
     }
 
 
-    fun getMyCryptocurrencyLiveDataList(): LiveData<List<Cryptocurrency>> {
-        return cryptocurrencyDao.getMyCryptocurrencyLiveDataList()
+    fun getMyCryptocurrencyLiveDataList(): LiveData<List<MyCryptocurrency>> {
+        return myCryptocurrencyDao.getMyCryptocurrencyLiveDataList()
     }
 
 
     fun getMyCryptocurrencyIds(): String? {
-        return cryptocurrencyDao.getMyCryptocurrencyIds()
+        return myCryptocurrencyDao.getMyCryptocurrencyIds()
     }
 
 
@@ -122,10 +120,16 @@ class CryptocurrencyRepository @Inject constructor(
 
             // Here we save the data fetched from web-service.
             override fun saveCallResult(item: CoinMarketCap<List<CryptocurrencyLatest>>) {
-                cryptocurrencyDao.upsert(getCryptocurrencyListFromResponse(fiatCurrencyCode, item.data))
+
+                val list = getCryptocurrencyListFromResponse(fiatCurrencyCode, item.data)
+
+                cryptocurrencyDao.reloadCryptocurrencyList(list)
+
+                val totalReloaded = myCryptocurrencyDao.reloadMyCryptocurrencyList(list)
 
                 if (item.status != null) {
                     screenStatusDao.update(ScreenStatus(DB_ID_SCREEN_ADD_SEARCH_LIST, item.status.timestamp))
+                    if (totalReloaded > 0) screenStatusDao.update(ScreenStatus(DB_ID_SCREEN_MAIN_LIST, item.status.timestamp))
                 }
             }
 
@@ -163,18 +167,17 @@ class CryptocurrencyRepository @Inject constructor(
     }
 
 
-    fun updateCryptocurrency(cryptocurrency: Cryptocurrency): Int {
-        return cryptocurrencyDao.updateCryptocurrency(cryptocurrency)
+    fun updateMyCryptocurrency(myCryptocurrency: MyCryptocurrency) {
+        myCryptocurrencyDao.upsert(listOf(myCryptocurrency), true)
     }
 
-    fun updateCryptocurrencyList(cryptocurrencyList: List<Cryptocurrency>): Int {
-        return cryptocurrencyDao.updateCryptocurrencyList(cryptocurrencyList)
+    fun insertMyCryptocurrencyList(myCryptocurrencyList: List<MyCryptocurrency>): List<Long> {
+        return myCryptocurrencyDao.insertCryptocurrencyList(myCryptocurrencyList)
     }
 
-    fun deleteCryptocurrencyList(ids: List<Int>) {
-        cryptocurrencyDao.deleteCryptocurrencyList(ids)
+    fun deleteMyCryptocurrencyList(myCryptocurrencyList: List<MyCryptocurrency>) {
+        myCryptocurrencyDao.deleteCryptocurrencyList(myCryptocurrencyList)
     }
-
 
     fun getSpecificScreenStatusLiveData(specificScreenStatusId: String): LiveData<ScreenStatus> {
         return screenStatusDao.getSpecificScreenStatusLiveData(specificScreenStatusId)
@@ -198,6 +201,7 @@ class CryptocurrencyRepository @Inject constructor(
         return sharedPreferences.getString(context.resources.getString(R.string.pref_fiat_currency_key), context.resources.getString(R.string.pref_default_fiat_currency_value))
                 ?: context.resources.getString(R.string.pref_default_fiat_currency_value)
     }
+
 
     fun getCurrentFiatCurrencyCodeLiveData(): LiveData<String> {
         return sharedPreferences.stringLiveData(context.resources.getString(R.string.pref_fiat_currency_key), context.resources.getString(R.string.pref_default_fiat_currency_value))
@@ -225,16 +229,32 @@ class CryptocurrencyRepository @Inject constructor(
     }
 
 
-    private fun getCryptocurrencyListFromResponse(fiatCurrencyCode: String, responseList: List<CryptocurrencyLatest>?): ArrayList<Cryptocurrency> {
+    private fun getMyCryptocurrencyListFromResponse(fiatCurrencyCode: String, responseList: List<CryptocurrencyLatest>?): ArrayList<MyCryptocurrency> {
 
-        val cryptocurrencyList: MutableList<Cryptocurrency> = ArrayList<Cryptocurrency>()
+        val myCryptocurrencyList: MutableList<MyCryptocurrency> = ArrayList()
 
         responseList?.forEach {
             val cryptocurrency = Cryptocurrency(it.id, it.name, it.cmcRank.toShort(),
-                    null, it.symbol, fiatCurrencyCode, it.quote.currency.price,
-                    null, it.quote.currency.percentChange1h,
-                    it.quote.currency.percentChange7d, it.quote.currency.percentChange24h,
-                    null)
+                    it.symbol, fiatCurrencyCode, it.quote.currency.price,
+                    it.quote.currency.percentChange1h,
+                    it.quote.currency.percentChange7d, it.quote.currency.percentChange24h)
+            val myCryptocurrency = MyCryptocurrency(it.id, cryptocurrency)
+            myCryptocurrencyList.add(myCryptocurrency)
+        }
+
+        return myCryptocurrencyList as ArrayList<MyCryptocurrency>
+    }
+
+
+    private fun getCryptocurrencyListFromResponse(fiatCurrencyCode: String, responseList: List<CryptocurrencyLatest>?): ArrayList<Cryptocurrency> {
+
+        val cryptocurrencyList: MutableList<Cryptocurrency> = ArrayList()
+
+        responseList?.forEach {
+            val cryptocurrency = Cryptocurrency(it.id, it.name, it.cmcRank.toShort(),
+                    it.symbol, fiatCurrencyCode, it.quote.currency.price,
+                    it.quote.currency.percentChange1h,
+                    it.quote.currency.percentChange7d, it.quote.currency.percentChange24h)
             cryptocurrencyList.add(cryptocurrency)
         }
 

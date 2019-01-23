@@ -75,6 +75,7 @@ fun Snackbar.onDismissedAction(callback: () -> Unit) {
             if (event == Snackbar.Callback.DISMISS_EVENT_ACTION) {
                 callback()
             }
+            removeCallback(this)
         }
     })
 }
@@ -91,6 +92,7 @@ fun Snackbar.onDismissedAnyOfEvents(events: List<Int>,callback: () -> Unit) {
                     return@forEach
                 }
             }
+            removeCallback(this)
         }
     })
 }

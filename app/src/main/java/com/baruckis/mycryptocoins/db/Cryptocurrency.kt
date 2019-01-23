@@ -24,7 +24,7 @@ import kotlinx.android.parcel.Parcelize
 /**
  * Entity object for Room database.
  */
-@Entity(tableName = "cryptocurrencies")
+@Entity(tableName = "all_cryptocurrencies")
 // We will need to pass our custom data structure between different components in our app. For
 // that we are going to use Android recommended way - Parcelable interface. Instead of making
 // Parcelable class manually, we will use automatic Parcelable implementation generator. We just
@@ -35,12 +35,9 @@ data class Cryptocurrency(@PrimaryKey
                           val id: Int,
                           var name: String,
                           var rank: Short,
-                          var amount: Double?,
                           var symbol: String,
                           var currencyFiat: String,
                           var priceFiat: Double,
-                          var amountFiat: Double?,
                           var pricePercentChange1h: Double,
                           var pricePercentChange7d: Double,
-                          var pricePercentChange24h: Double,
-                          var amountFiatChange24h: Double?) : Parcelable
+                          var pricePercentChange24h: Double) : Parcelable

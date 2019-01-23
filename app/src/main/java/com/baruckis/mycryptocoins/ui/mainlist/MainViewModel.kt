@@ -21,7 +21,9 @@ import android.text.SpannableString
 import androidx.lifecycle.*
 import com.baruckis.mycryptocoins.R
 import com.baruckis.mycryptocoins.db.Cryptocurrency
+import com.baruckis.mycryptocoins.db.MyCryptocurrency
 import com.baruckis.mycryptocoins.repository.CryptocurrencyRepository
+import com.baruckis.mycryptocoins.ui.common.BaseViewModel
 import com.baruckis.mycryptocoins.utilities.*
 import com.baruckis.mycryptocoins.vo.Resource
 import kotlinx.coroutines.*
@@ -35,7 +37,7 @@ import javax.inject.Inject
  */
 
 // ViewModel will require a CryptocurrencyRepository so we add @Inject code into ViewModel constructor.
-class MainViewModel @Inject constructor(val context: Context, val cryptocurrencyRepository: CryptocurrencyRepository) : ViewModel() {
+class MainViewModel @Inject constructor(val context: Context, val cryptocurrencyRepository: CryptocurrencyRepository) : BaseViewModel() {
 
     private var currentCryptoCurrencyCode: String
     private var currentCryptoCurrencySign: String
@@ -44,16 +46,16 @@ class MainViewModel @Inject constructor(val context: Context, val cryptocurrency
 
     val liveDataCurrentFiatCurrencySign: LiveData<String>
 
-    private val liveDataCurrentCryptocurrency: LiveData<Cryptocurrency>
+    private val liveDataCurrentMyCryptocurrency: LiveData<Cryptocurrency>
     private val liveDataTotalHoldingsValueFiat: LiveData<Double>
     private val liveDataTotalHoldingsValueCrypto: LiveData<Double>
     private val liveDataTotalHoldingsValueFiat24h: LiveData<Double>?
 
-    val mediatorLiveDataMyCryptocurrencyResourceList = MediatorLiveData<Resource<List<Cryptocurrency>>>()
-    private var liveDataMyCryptocurrencyResourceList: LiveData<Resource<List<Cryptocurrency>>>
-    val liveDataMyCryptocurrencyList: LiveData<List<Cryptocurrency>>
+    val mediatorLiveDataMyCryptocurrencyResourceList = MediatorLiveData<Resource<List<MyCryptocurrency>>>()
+    private var liveDataMyCryptocurrencyResourceList: LiveData<Resource<List<MyCryptocurrency>>>
+    private val liveDataMyCryptocurrencyList: LiveData<List<MyCryptocurrency>>
 
-    var liveDataTotalHoldingsValueOnDateText = MediatorLiveData<String>()
+    val liveDataTotalHoldingsValueOnDateText: LiveData<String>
     val liveDataTotalHoldingsValueFiat24hText: LiveData<SpannableString>
     val liveDataTotalHoldingsValueCryptoText: LiveData<String>
     val liveDataTotalHoldingsValueFiatText: LiveData<String>
@@ -66,6 +68,7 @@ class MainViewModel @Inject constructor(val context: Context, val cryptocurrency
     // This is temporary variable to remember timestamp of main screen when user undo delete action.
     // It is kept inside viewmodel not to be lost during configuration change.
     var mainListTimestamp: Date? = null
+
 
 
     init {
@@ -84,6 +87,7 @@ class MainViewModel @Inject constructor(val context: Context, val cryptocurrency
         // Set a resource value for a list of cryptocurrencies that user owns.
         liveDataMyCryptocurrencyResourceList = cryptocurrencyRepository.getMyCryptocurrencyLiveDataResourceList(cryptocurrencyRepository.getCurrentFiatCurrencyCode())
 
+
         // Declare additional variable to be able to reload data on demand.
         mediatorLiveDataMyCryptocurrencyResourceList.addSource(liveDataMyCryptocurrencyResourceList) {
             mediatorLiveDataMyCryptocurrencyResourceList.value = it
@@ -94,30 +98,33 @@ class MainViewModel @Inject constructor(val context: Context, val cryptocurrency
 
 
         // We prepare a text to show a date and time when data was updated from the server.
-        liveDataTotalHoldingsValueOnDateText.addSource(cryptocurrencyRepository.getSpecificScreenStatusLiveData(DB_ID_SCREEN_MAIN_LIST)) { data ->
-            liveDataTotalHoldingsValueOnDateText.value = formatDate(data?.timestamp, DATE_FORMAT_PATTERN)
-        }
+        liveDataTotalHoldingsValueOnDateText = Transformations
+                .switchMap(cryptocurrencyRepository.getSpecificScreenStatusLiveData(DB_ID_SCREEN_MAIN_LIST))
+                { screenStatus ->
+                    MutableLiveData<String>()
+                            .apply { value = formatDate(screenStatus?.timestamp, DATE_FORMAT_PATTERN) }
+                }
+
 
         // Helper function to count users cryptocurrency total amount and its change during last 24 hours.
-        fun getMyCryptocurrencyListSumByDouble(sumFunc: (Cryptocurrency) -> Double): Double {
+        fun getMyCryptocurrencyListSumByDouble(sumFunc: (MyCryptocurrency) -> Double): Double {
             val code = liveDataCurrentFiatCurrencyCode.value ?: getCurrentFiatCurrencyCode()
             var sum = 0.0
 
-            liveDataMyCryptocurrencyList.value?.forEach {
-                if (it.currencyFiat != code) {
+            liveDataMyCryptocurrencyList.value?.forEach { myCryptocurrency ->
+                if (myCryptocurrency.cryptoData.currencyFiat != code) {
                     sum = Double.NaN
                     return@forEach
                 }
-                sum += sumFunc(it)
+                sum += sumFunc(myCryptocurrency)
             }
             return sum
         }
 
 
         // Helper live data to check if fiat currency code change was unsuccessful.
-        val liveDataUnsuccessfulFiatCurrencyCodeChange: LiveData<Boolean> = zip(liveDataCurrentFiatCurrencyCode, liveDataMyCryptocurrencyResourceList){
-            currentFiatCurrencyCode, myCryptocurrencyResourceList ->
-            !myCryptocurrencyResourceList.data.isNullOrEmpty() && myCryptocurrencyResourceList.data.first().currencyFiat != currentFiatCurrencyCode
+        val liveDataUnsuccessfulFiatCurrencyCodeChange: LiveData<Boolean> = zip(liveDataCurrentFiatCurrencyCode, liveDataMyCryptocurrencyResourceList) { currentFiatCurrencyCode, myCryptocurrencyResourceList ->
+            !myCryptocurrencyResourceList.data.isNullOrEmpty() && myCryptocurrencyResourceList.data.first().cryptoData.currencyFiat != currentFiatCurrencyCode
         }
 
         // Here we count total holdings value during last 24 hours when users cryptocurrency list
@@ -148,7 +155,7 @@ class MainViewModel @Inject constructor(val context: Context, val cryptocurrency
 
 
         // Declare additional variable to store data of our default cryptocurrency (Bitcoin) for further operations.
-        liveDataCurrentCryptocurrency = cryptocurrencyRepository.getSpecificCryptocurrencyLiveData(currentCryptoCurrencyCode)
+        liveDataCurrentMyCryptocurrency = cryptocurrencyRepository.getSpecificCryptocurrencyLiveData(currentCryptoCurrencyCode)
 
 
         // Declare additional variable to calculate all amount value of fiat currency that user has.
@@ -169,7 +176,6 @@ class MainViewModel @Inject constructor(val context: Context, val cryptocurrency
         }
 
 
-
         // Here we use helper function combining two LiveData sources to one to format text of our
         // total holdings amount. At last we can show user owned all cryptocurrencies portfolio
         // value in selected fiat currency as formatted text.
@@ -184,7 +190,7 @@ class MainViewModel @Inject constructor(val context: Context, val cryptocurrency
 
         // Here we use helper function combining two LiveData sources to show counted all
         // cryptocurrencies portfolio amount in default crypto (Bitcoin).
-        liveDataTotalHoldingsValueCrypto = zip(liveDataTotalHoldingsValueFiat, liveDataCurrentCryptocurrency)
+        liveDataTotalHoldingsValueCrypto = zip(liveDataTotalHoldingsValueFiat, liveDataCurrentMyCryptocurrency)
         { totalHoldingsValueFiat, currentCryptocurrency ->
             totalHoldingsValueFiat / currentCryptocurrency.priceFiat
         }
@@ -229,13 +235,6 @@ class MainViewModel @Inject constructor(val context: Context, val cryptocurrency
     }
 
 
-    // In Kotlin, all coroutines run inside a CoroutineScope.
-    // A scope controls the lifetime of coroutines through its job.
-    private val viewModelJob = Job()
-    // Since uiScope has a default dispatcher of Dispatchers.Main, this coroutine will be launched
-    // in the main thread.
-    private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
-
     /**
      * On retry we need to run sequential code. First we need to get owned crypto coins ids from
      * local database, wait for response and only after it use these ids to make a call with
@@ -248,8 +247,13 @@ class MainViewModel @Inject constructor(val context: Context, val cryptocurrency
         }
     }
 
+    // Refresh the data from local database.
+    fun refreshMyCryptocurrencyResourceList() {
+        refreshMyCryptocurrencyResourceList(cryptocurrencyRepository.getMyCryptocurrencyLiveDataResourceList(cryptocurrencyRepository.getCurrentFiatCurrencyCode()))
+    }
+
     // To implement a manual refresh without modifying your existing LiveData logic.
-    private fun refreshMyCryptocurrencyResourceList(liveData: LiveData<Resource<List<Cryptocurrency>>>) {
+    private fun refreshMyCryptocurrencyResourceList(liveData: LiveData<Resource<List<MyCryptocurrency>>>) {
         mediatorLiveDataMyCryptocurrencyResourceList.removeSource(liveDataMyCryptocurrencyResourceList)
         liveDataMyCryptocurrencyResourceList = liveData
         mediatorLiveDataMyCryptocurrencyResourceList.addSource(liveDataMyCryptocurrencyResourceList) { mediatorLiveDataMyCryptocurrencyResourceList.value = it }
@@ -257,7 +261,8 @@ class MainViewModel @Inject constructor(val context: Context, val cryptocurrency
 
     private suspend fun updateMyCryptocurrencyList(newFiatCurrencyCode: String? = null) {
 
-        val fiatCurrencyCode: String = newFiatCurrencyCode ?: cryptocurrencyRepository.getCurrentFiatCurrencyCode()
+        val fiatCurrencyCode: String = newFiatCurrencyCode
+                ?: cryptocurrencyRepository.getCurrentFiatCurrencyCode()
 
         // The function withContext is a suspend function. The withContext immediately shifts
         // execution of the block into different thread inside the block, and back when it
@@ -270,22 +275,12 @@ class MainViewModel @Inject constructor(val context: Context, val cryptocurrency
         // and main looper is available, coroutine resumes on main thread, and
         // [getMyCryptocurrencyLiveDataResourceList] is called.
         // We wait for background operations to complete, without blocking the original thread.
-        refreshMyCryptocurrencyResourceList(cryptocurrencyRepository.getMyCryptocurrencyLiveDataResourceList(fiatCurrencyCode, true, myCryptocurrencyIds, newFiatCurrencyCode!=null))
+        refreshMyCryptocurrencyResourceList(cryptocurrencyRepository.getMyCryptocurrencyLiveDataResourceList(fiatCurrencyCode, true, myCryptocurrencyIds, newFiatCurrencyCode != null))
     }
 
-    // onCleared is called when the ViewModel is no longer used and will be destroyed.
-    // This typically happens when the user navigates away from the Activity or Fragment that was
-    // using the ViewModel.
-    override fun onCleared() {
-        super.onCleared()
-        // When you cancel the job of a scope, it cancels all coroutines started in that scope.
-        // It's important to cancel any coroutines that are no longer required to avoid unnecessary
-        // work and memory leaks.
-        viewModelJob.cancel()
-    }
 
-    // This function will add user selected cryptocurrency using coroutines.
-    fun addCryptocurrency(cryptocurrency: Cryptocurrency) {
+    // This function will add user selected myCryptocurrency using coroutines.
+    fun addCryptocurrency(myCryptocurrency: MyCryptocurrency) {
         // Launch a coroutine in uiScope.
         uiScope.launch {
             // As we make a multiple calls to database, we need to do them on different thread.
@@ -293,15 +288,15 @@ class MainViewModel @Inject constructor(val context: Context, val cryptocurrency
             // for a long period of time.
             val refreshNeeded = withContext(Dispatchers.IO) {
 
-                // Add selected cryptocurrency by updating it.
-                cryptocurrencyRepository.updateCryptocurrency(cryptocurrency)
+                // Add selected myCryptocurrency by updating it.
+                cryptocurrencyRepository.updateMyCryptocurrency(myCryptocurrency)
 
-                // When we add selected cryptocurrency to users owned cryptocurrencies list, we need
+                // When we add selected myCryptocurrency to users owned cryptocurrencies list, we need
                 // to check if it is up to date and if it is presented in correct fiat currency. If
                 // any of these conditions are not met than we request a data update from the server.
 
                 // Check if it is presented in correct fiat currency.
-                if (cryptocurrency.currencyFiat != getCurrentFiatCurrencyCode()) {
+                if (myCryptocurrency.cryptoData.currencyFiat != getCurrentFiatCurrencyCode()) {
                     // Reset main list screen timestamp.
                     cryptocurrencyRepository.setMainListScreenStatusTimestamp(null)
                     return@withContext true
@@ -317,7 +312,7 @@ class MainViewModel @Inject constructor(val context: Context, val cryptocurrency
                     return@withContext false
                 } else
                 // If main list screen has newer data than data taken from add search screen
-                // for adding selected cryptocurrency.
+                // for adding selected myCryptocurrency.
                     if (timestampAddSearchList < timestampMainList) {
                         // Reset main list screen timestamp.
                         cryptocurrencyRepository.setMainListScreenStatusTimestamp(null)
@@ -330,20 +325,20 @@ class MainViewModel @Inject constructor(val context: Context, val cryptocurrency
                 updateMyCryptocurrencyList()
             } else {
                 // Get the data from local database.
-                refreshMyCryptocurrencyResourceList(cryptocurrencyRepository.getMyCryptocurrencyLiveDataResourceList(cryptocurrencyRepository.getCurrentFiatCurrencyCode()))
+                refreshMyCryptocurrencyResourceList()
             }
         }
     }
 
 
     // This function will delete user selected cryptocurrencies using coroutines.
-    fun deleteCryptocurrencyList(ids: List<Int>, isAll: Boolean) {
+    fun deleteCryptocurrencyList(myCryptocurrencyList: List<MyCryptocurrency>, isAll: Boolean) {
         // Launch a coroutine in uiScope.
         uiScope.launch {
             withContext(Dispatchers.IO) {
                 // Again potentially not to lock the UI we do not access database on the main thread,
                 // but instead do that on different one.
-                cryptocurrencyRepository.deleteCryptocurrencyList(ids)
+                cryptocurrencyRepository.deleteMyCryptocurrencyList(myCryptocurrencyList)
 
                 // If all items were deleted than reset main list screen timestamp.
                 if (isAll) {
@@ -354,13 +349,14 @@ class MainViewModel @Inject constructor(val context: Context, val cryptocurrency
         }
     }
 
-    fun restoreCryptocurrencyList(cryptocurrencyList: List<Cryptocurrency>) {
+
+    fun restoreCryptocurrencyList(myCryptocurrencyList: List<MyCryptocurrency>) {
         // Launch a coroutine in uiScope.
         uiScope.launch {
             withContext(Dispatchers.IO) {
                 // Again potentially not to lock the UI we do not access database on the main thread,
                 // but instead do that on different one.
-                cryptocurrencyRepository.updateCryptocurrencyList(cryptocurrencyList)
+                cryptocurrencyRepository.insertMyCryptocurrencyList(myCryptocurrencyList)
 
                 // Restore main list screen timestamp.
                 if (mainListTimestamp != null) {

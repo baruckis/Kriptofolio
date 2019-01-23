@@ -14,18 +14,16 @@
  * limitations under the License.
  */
 
-package com.baruckis.mycryptocoins.vo
+package com.baruckis.mycryptocoins.utilities
 
 /**
- * Status of a resource that is provided to the UI.
- *
- *
- * These are usually created by the Repository classes where they return
- * `LiveData<Resource<T>>` to pass back the latest data to the UI with its fetch status.
+ * Static methods used to calculate financial values.
  */
-enum class Status {
-    SUCCESS_DB,
-    SUCCESS_NETWORK,
-    ERROR,
-    LOADING
-}
+
+// Get total amount value in fiat currency based on its price.
+fun getAmountFiatCounted(amount: Double?, priceFiat: Double): Double? =
+        amount?.let { it -> it * priceFiat }
+
+// Get total amount value change during last 24 hours in fiat currency.
+fun getAmountFiatChange24hCounted(amountFiat: Double?, pricePercentChange24h: Double): Double? =
+        amountFiat?.let { it -> it * (pricePercentChange24h / 100) }

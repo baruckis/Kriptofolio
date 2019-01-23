@@ -36,4 +36,5 @@ interface ScreenStatusDao {
 
     @Query("SELECT * FROM screen_status WHERE id = :specificScreenStatusId LIMIT 1")
     fun getSpecificScreenStatusData(specificScreenStatusId: String): ScreenStatus?
+
 }

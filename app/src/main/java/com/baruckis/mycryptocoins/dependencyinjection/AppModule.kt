@@ -26,6 +26,7 @@ import com.baruckis.mycryptocoins.api.ApiService
 import com.baruckis.mycryptocoins.api.AuthenticationInterceptor
 import com.baruckis.mycryptocoins.db.AppDatabase
 import com.baruckis.mycryptocoins.db.CryptocurrencyDao
+import com.baruckis.mycryptocoins.db.MyCryptocurrencyDao
 import com.baruckis.mycryptocoins.db.ScreenStatusDao
 import com.baruckis.mycryptocoins.utilities.API_SERVICE_BASE_URL
 import com.baruckis.mycryptocoins.utilities.DATABASE_NAME
@@ -58,6 +59,10 @@ class AppModule() {
         // We add the interceptor to OkHttpClient.
         // It will add authentication headers to every call we make.
         builder.interceptors().add(AuthenticationInterceptor())
+
+        // Configure this client not to retry when a connectivity problem is encountered.
+        builder.retryOnConnectionFailure(false)
+
         // Log requests and responses.
         // Add logging as the last interceptor, because this will also log the information which
         // you added or manipulated with previous interceptors to your request.
@@ -88,6 +93,12 @@ class AppModule() {
                 // At current moment we don't want to provide migrations and specifically want database to be cleared when upgrade the version.
                 .fallbackToDestructiveMigration()
                 .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideMyCryptocurrencyDao(db: AppDatabase): MyCryptocurrencyDao {
+        return db.myCryptocurrencyDao()
     }
 
     @Provides

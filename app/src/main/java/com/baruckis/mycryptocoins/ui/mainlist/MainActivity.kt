@@ -24,12 +24,10 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.baruckis.mycryptocoins.R
-import com.baruckis.mycryptocoins.db.Cryptocurrency
 import com.baruckis.mycryptocoins.ui.settings.SettingsActivity
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
@@ -94,40 +92,11 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector {
     // Update the all these separate text fields when the data changes by observing data on the ViewModel, exposed as a LiveData.
     private fun subscribeUi() {
 
-        // We use MediatorLiveData to query and merge multiple data source type into single LiveData.
-        val liveDataMerger = MediatorLiveData<MergedData>()
-
-        liveDataMerger.addSource(viewModel.liveDataTotalHoldingsValueOnDateText) {
-            liveDataMerger.value = MergedData.TotalHoldingsValueOnDateTextData(it)
-        }
-
-        liveDataMerger.addSource(viewModel.liveDataMyCryptocurrencyList) {
-            liveDataMerger.value = MergedData.MyCryptocurrencyListData(it)
-        }
-
-        var totalHoldingsValueOnDateText: String? = null
-        var myCryptocurrencyList: List<Cryptocurrency>? = null
-
-        // We observe the LiveData and make sure both data sets are received before processing.
-        liveDataMerger.observe(this, Observer<MergedData> { data ->
-            when (data) {
-                is MergedData.TotalHoldingsValueOnDateTextData -> totalHoldingsValueOnDateText = data.text
-                is MergedData.MyCryptocurrencyListData -> myCryptocurrencyList = data.list
-            }
-
-            // We need to make sure that we don't update total holdings value with the date if
-            // user owned crypto coins list is empty.
-            if (totalHoldingsValueOnDateText != null && myCryptocurrencyList != null) {
-
-                // Both data is ready, proceed to process them.
-                val txt = StringBuilder(getString(R.string.string_total_value_holdings))
-                if (totalHoldingsValueOnDateText.toString().isNotEmpty()) txt.append(getString(R.string.string_total_value_on_date_time, totalHoldingsValueOnDateText))
-                textview_total_value_on_date_time.text = txt
-
-                totalHoldingsValueOnDateText = null
-                myCryptocurrencyList = null
-            }
-
+        viewModel.liveDataTotalHoldingsValueOnDateText.observe(this, Observer<String> { data ->
+            val txt = StringBuilder(getString(R.string.string_total_value_holdings))
+            if (data.toString().isNotEmpty())
+                txt.append(getString(R.string.string_total_value_on_date_time, data))
+            textview_total_value_on_date_time.text = txt
         })
 
         viewModel.liveDataTotalHoldingsValueFiat24hText.observe(this, Observer<SpannableString> { data ->
@@ -149,11 +118,5 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector {
             text_column_coin_change_24h_1h_7d.text = StringBuilder(getString(R.string.string_column_coin_change_24h_1h_7d, data))
         })
 
-    }
-
-    // We create a sealed classes to represent both data type that we want to merge.
-    sealed class MergedData {
-        data class TotalHoldingsValueOnDateTextData(val text: String) : MergedData()
-        data class MyCryptocurrencyListData(val list: List<Cryptocurrency>) : MergedData()
     }
 }

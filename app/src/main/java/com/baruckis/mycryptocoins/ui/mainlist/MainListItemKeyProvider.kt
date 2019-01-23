@@ -17,7 +17,7 @@
 package com.baruckis.mycryptocoins.ui.mainlist
 
 import androidx.recyclerview.selection.ItemKeyProvider
-import com.baruckis.mycryptocoins.db.Cryptocurrency
+import com.baruckis.mycryptocoins.db.MyCryptocurrency
 
 
 /**
@@ -26,28 +26,28 @@ import com.baruckis.mycryptocoins.db.Cryptocurrency
  * IDs. It will allow for a quick mapping between the IDs and the items that will handle the
  * selection by the selection library.
  */
-class MainListItemKeyProvider(private var cryptocurrencyList: List<Cryptocurrency>,
+class MainListItemKeyProvider(private var myCryptocurrencyList: List<MyCryptocurrency>,
                               scope: Int = ItemKeyProvider.SCOPE_CACHED) : ItemKeyProvider<String>(scope) {
 
     private lateinit var keyToPosition: MutableMap<String, Int>
 
     init {
-        updataData(cryptocurrencyList)
+        updataData(myCryptocurrencyList)
     }
 
-    fun updataData(newCryptocurrencyList: List<Cryptocurrency>) {
-        cryptocurrencyList = newCryptocurrencyList
-        keyToPosition = HashMap(cryptocurrencyList.size)
+    fun updataData(newCryptocurrencyList: List<MyCryptocurrency>) {
+        myCryptocurrencyList = newCryptocurrencyList
+        keyToPosition = HashMap(myCryptocurrencyList.size)
 
-        for ((i, cryptocurrency) in cryptocurrencyList.withIndex()) {
-            keyToPosition[cryptocurrency.id.toString()] = i
+        for ((i, cryptocurrency) in myCryptocurrencyList.withIndex()) {
+            keyToPosition[cryptocurrency.myId.toString()] = i
         }
     }
 
 
     override fun getKey(position: Int): String? {
         // As unique identifier lets make id which is also unique for each cryptocurrency.
-        return cryptocurrencyList[position].id.toString()
+        return myCryptocurrencyList[position].myId.toString()
     }
 
     override fun getPosition(key: String): Int {

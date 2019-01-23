@@ -26,7 +26,7 @@ import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.widget.RecyclerView
 import com.baruckis.mycryptocoins.R
 import com.baruckis.mycryptocoins.databinding.FragmentMainListItemBinding
-import com.baruckis.mycryptocoins.db.Cryptocurrency
+import com.baruckis.mycryptocoins.db.MyCryptocurrency
 import com.baruckis.mycryptocoins.dependencyinjection.GlideApp
 import com.baruckis.mycryptocoins.utilities.*
 import com.baruckis.mycryptocoins.utilities.glide.WhiteBackground
@@ -40,13 +40,13 @@ import kotlin.collections.HashMap
 
 class MainRecyclerViewAdapter : RecyclerView.Adapter<MainRecyclerViewAdapter.BindingViewHolder>() {
 
-    private var dataList: List<Cryptocurrency> = ArrayList<Cryptocurrency>()
+    private var dataList: List<MyCryptocurrency> = ArrayList()
 
     private lateinit var selectionTracker: SelectionTracker<String>
-    private var selectedData: HashMap<Int, Cryptocurrency> = HashMap()
+    private var selectedData: HashMap<Int, MyCryptocurrency> = HashMap()
 
 
-    private var selectionSequencesToDelete = ArrayList<HashMap<Int, Cryptocurrency>>()
+    private var selectionSequencesToDelete = ArrayList<HashMap<Int, MyCryptocurrency>>()
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BindingViewHolder {
@@ -55,8 +55,8 @@ class MainRecyclerViewAdapter : RecyclerView.Adapter<MainRecyclerViewAdapter.Bin
 
         // We should select an item when we make a click on image icon and flip it.
         binding.itemImageIcon.setOnClickListener() { _ ->
-            binding.cryptocurrency?.let {
-                selectionTracker.select(it.id.toString())
+            binding.myCryptocurrency?.let {
+                selectionTracker.select(it.myId.toString())
             }
         }
 
@@ -69,10 +69,10 @@ class MainRecyclerViewAdapter : RecyclerView.Adapter<MainRecyclerViewAdapter.Bin
 
         // Here we manage selection state.
         if (this::selectionTracker.isInitialized) {
-            if (selectionTracker.isSelected(cryptocurrency.id.toString())) {
+            if (selectionTracker.isSelected(cryptocurrency.myId.toString())) {
                 selectedData[position] = cryptocurrency
                 isSelected = true
-            }
+            } else selectedData.remove(position)
         }
 
         holder.bind(cryptocurrency, isSelected)
@@ -81,12 +81,12 @@ class MainRecyclerViewAdapter : RecyclerView.Adapter<MainRecyclerViewAdapter.Bin
     override fun getItemCount(): Int = dataList.size
 
 
-    fun setData(newDataList: List<Cryptocurrency>) {
+    fun setData(newDataList: List<MyCryptocurrency>) {
         dataList = newDataList
         notifyDataSetChanged()
     }
 
-    fun getData(): List<Cryptocurrency> {
+    fun getData(): List<MyCryptocurrency> {
         return dataList
     }
 
@@ -94,7 +94,7 @@ class MainRecyclerViewAdapter : RecyclerView.Adapter<MainRecyclerViewAdapter.Bin
     // parcelable. Not sure if there is a better way, that we would not need to create this extra
     // helper class.
     @Parcelize
-    class SelectionSequencesToDelete(val maplist: ArrayList<HashMap<Int, Cryptocurrency>>) : Parcelable
+    class SelectionSequencesToDelete(val maplist: ArrayList<HashMap<Int, MyCryptocurrency>>) : Parcelable
 
     fun setSelectionSequencesToDelete(newSelectionSequences: SelectionSequencesToDelete?) {
         selectionSequencesToDelete = newSelectionSequences?.maplist ?: ArrayList()
@@ -112,14 +112,14 @@ class MainRecyclerViewAdapter : RecyclerView.Adapter<MainRecyclerViewAdapter.Bin
 
     // Delete functionality becomes rather complicated as we want to animate items that we remove.
     // To do that we need to provide one item position or multiple items range.
-    fun deleteSelectedItems(): List<Cryptocurrency> {
+    fun deleteSelectedItems(): List<MyCryptocurrency> {
 
         val iterator = selectedData.iterator()
 
-        selectionSequencesToDelete = ArrayList<HashMap<Int, Cryptocurrency>>()
-        var selectionSingleSequence: HashMap<Int, Cryptocurrency> = HashMap()
+        selectionSequencesToDelete = ArrayList()
+        var selectionSingleSequence: HashMap<Int, MyCryptocurrency> = HashMap()
 
-        var current: MutableMap.MutableEntry<Int, Cryptocurrency>? = null
+        var current: MutableMap.MutableEntry<Int, MyCryptocurrency>? = null
 
         // To animate items that we need to delete, first we need to arrange them to the separate
         // sequences.
@@ -190,20 +190,20 @@ class MainRecyclerViewAdapter : RecyclerView.Adapter<MainRecyclerViewAdapter.Bin
 
     inner class BindingViewHolder(var binding: FragmentMainListItemBinding) : RecyclerView.ViewHolder(binding.root), ViewHolderWithDetails {
 
-        fun bind(cryptocurrency: Cryptocurrency, isSelected: Boolean) {
-            binding.cryptocurrency = cryptocurrency
+        fun bind(myCryptocurrency: MyCryptocurrency, isSelected: Boolean) {
+            binding.myCryptocurrency = myCryptocurrency
 
             // Will allow to indicate to the user that the item has been selected.
             binding.root.isSelected = isSelected
 
-            binding.itemRanking.text = String.format("${cryptocurrency.rank}")
+            binding.itemRanking.text = String.format("${myCryptocurrency.cryptoData.rank}")
 
-            binding.itemImageIcon.setFrontText(getTextFirstChars(cryptocurrency.symbol, FLIPVIEW_CHARACTER_LIMIT))
+            binding.itemImageIcon.setFrontText(getTextFirstChars(myCryptocurrency.cryptoData.symbol, FLIPVIEW_CHARACTER_LIMIT))
 
             // We make an Uri of image that we need to load. Every image unique name is its id.
             val imageUri = Uri.parse(CRYPTOCURRENCY_IMAGE_URL).buildUpon()
                     .appendPath(CRYPTOCURRENCY_IMAGE_SIZE_PX)
-                    .appendPath(cryptocurrency.id.toString() + CRYPTOCURRENCY_IMAGE_FILE)
+                    .appendPath(myCryptocurrency.myId.toString() + CRYPTOCURRENCY_IMAGE_FILE)
                     .build()
 
             // Glide generated API from AppGlideModule.
@@ -222,20 +222,20 @@ class MainRecyclerViewAdapter : RecyclerView.Adapter<MainRecyclerViewAdapter.Bin
             binding.itemImageIcon.flip(isSelected)
 
 
-            binding.itemAmountCode.text = String.format("${roundValue(cryptocurrency.amount, ValueType.Crypto)} ${cryptocurrency.symbol}")
-            binding.itemPrice.text = String.format("${roundValue(cryptocurrency.priceFiat, ValueType.Fiat)} ${cryptocurrency.currencyFiat}")
-            binding.itemAmountFiat.text = String.format("${roundValue(cryptocurrency.amountFiat, ValueType.Fiat)} ${cryptocurrency.currencyFiat}")
-            binding.itemPricePercentChange1h7d.text = SpannableStringBuilder(getSpannableValueStyled(binding.root.context, cryptocurrency.pricePercentChange1h, SpannableValueColorStyle.Foreground, ValueType.Percent, "", "%"))
-                    .append(binding.root.context.getString(R.string.string_column_coin_separator_change)).append(getSpannableValueStyled(binding.root.context, cryptocurrency.pricePercentChange7d, SpannableValueColorStyle.Foreground, ValueType.Fiat, "", "%"))
-            binding.itemPricePercentChange24h.text = getSpannableValueStyled(binding.root.context, cryptocurrency.pricePercentChange24h, SpannableValueColorStyle.Foreground, ValueType.Percent, "", "%")
-            binding.itemAmountFiatChange24h.text = getSpannableValueStyled(binding.root.context, cryptocurrency.amountFiatChange24h, SpannableValueColorStyle.Foreground, ValueType.Percent, "", " ${cryptocurrency.currencyFiat}")
+            binding.itemAmountCode.text = String.format("${roundValue(myCryptocurrency.amount, ValueType.Crypto)} ${myCryptocurrency.cryptoData.symbol}")
+            binding.itemPrice.text = String.format("${roundValue(myCryptocurrency.cryptoData.priceFiat, ValueType.Fiat)} ${myCryptocurrency.cryptoData.currencyFiat}")
+            binding.itemAmountFiat.text = String.format("${roundValue(myCryptocurrency.amountFiat, ValueType.Fiat)} ${myCryptocurrency.cryptoData.currencyFiat}")
+            binding.itemPricePercentChange1h7d.text = SpannableStringBuilder(getSpannableValueStyled(binding.root.context, myCryptocurrency.cryptoData.pricePercentChange1h, SpannableValueColorStyle.Foreground, ValueType.Percent, "", "%"))
+                    .append(binding.root.context.getString(R.string.string_column_coin_separator_change)).append(getSpannableValueStyled(binding.root.context, myCryptocurrency.cryptoData.pricePercentChange7d, SpannableValueColorStyle.Foreground, ValueType.Fiat, "", "%"))
+            binding.itemPricePercentChange24h.text = getSpannableValueStyled(binding.root.context, myCryptocurrency.cryptoData.pricePercentChange24h, SpannableValueColorStyle.Foreground, ValueType.Percent, "", "%")
+            binding.itemAmountFiatChange24h.text = getSpannableValueStyled(binding.root.context, myCryptocurrency.amountFiatChange24h, SpannableValueColorStyle.Foreground, ValueType.Percent, "", " ${myCryptocurrency.cryptoData.currencyFiat}")
 
             binding.executePendingBindings()
         }
 
         // Implementation for selection library to access information about specific area.
         override fun getItemDetails(): ItemDetailsLookup.ItemDetails<String> {
-            return MainListItemDetails(dataList[adapterPosition].id.toString(), adapterPosition)
+            return MainListItemDetails(dataList[adapterPosition].myId.toString(), adapterPosition)
         }
 
     }

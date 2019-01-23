@@ -35,6 +35,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.baruckis.mycryptocoins.R
 import com.baruckis.mycryptocoins.databinding.ActivityAddSearchBinding
 import com.baruckis.mycryptocoins.db.Cryptocurrency
+import com.baruckis.mycryptocoins.db.MyCryptocurrency
 import com.baruckis.mycryptocoins.dependencyinjection.Injectable
 import com.baruckis.mycryptocoins.ui.addsearchlist.CryptocurrencyAmountDialog.Companion.DIALOG_CRYPTOCURRENCY_AMOUNT_TAG
 import com.baruckis.mycryptocoins.ui.common.RetryCallback
@@ -95,6 +96,7 @@ class AddSearchActivity : AppCompatActivity(), Injectable, CryptocurrencyAmountD
 
         swipeRefreshLayout = swiperefresh_activity_add_search
         swipeRefreshLayout.setOnRefreshListener {
+            searchMenuItem?.isEnabled = false
             if (snackbar?.isShown == true) {
                 snackbar?.dismiss()
             } else retry()
@@ -139,10 +141,12 @@ class AddSearchActivity : AppCompatActivity(), Injectable, CryptocurrencyAmountD
 
         val amount = cryptocurrencyAmountDialog.getAmount()
 
-        viewModel.selectedCryptocurrency?.let {
-            it.amount = amount
-            it.amountFiat = amount * it.priceFiat
-            it.amountFiatChange24h = it.amountFiat!! * (it.pricePercentChange24h / (100))
+        viewModel.selectedCryptocurrency?.let { myCryptocurrency ->
+            myCryptocurrency.amount = amount
+            myCryptocurrency.amountFiat =
+                    getAmountFiatCounted(amount, myCryptocurrency.cryptoData.priceFiat)
+            myCryptocurrency.amountFiatChange24h =
+                    getAmountFiatChange24hCounted(myCryptocurrency.amountFiat, myCryptocurrency.cryptoData.pricePercentChange24h)
         }
 
         val result = Intent()
@@ -174,7 +178,7 @@ class AddSearchActivity : AppCompatActivity(), Injectable, CryptocurrencyAmountD
                         cancelButton = getString(R.string.dialog_cryptocurrency_amount_cancel_button),
                         error = getString(R.string.dialog_cryptocurrency_amount_error))
 
-        viewModel.selectedCryptocurrency = cryptocurrency
+        viewModel.selectedCryptocurrency = MyCryptocurrency(cryptocurrency.id, cryptocurrency)
 
         // Display the alert dialog.
         cryptocurrencyAmountDialog.show(supportFragmentManager, DIALOG_CRYPTOCURRENCY_AMOUNT_TAG)
@@ -189,25 +193,29 @@ class AddSearchActivity : AppCompatActivity(), Injectable, CryptocurrencyAmountD
         viewModel.mediatorLiveData.observe(this, Observer { listResource ->
 
             if (swipeRefreshLayout.isRefreshing) {
-                if (listResource.status != Status.LOADING) swipeRefreshLayout.isRefreshing = false
-            } else {
-                binding.myListResource = listResource
-                searchMenuItem?.isEnabled = false
-            }
-
-            listResource.data?.let {
                 if (listResource.status != Status.LOADING) {
-                    listAdapter.setData(it)
+                    swipeRefreshLayout.isRefreshing = false
                     searchMenuItem?.isEnabled = true
                 }
+            } else binding.myListResource = listResource
+
+            listResource.data?.let {
+                if (listResource.status != Status.LOADING) listAdapter.setData(it)
             }
 
             if (listResource.status == Status.ERROR && listResource.data != null) {
 
                 snackbar = findViewById<CoordinatorLayout>(R.id.coordinator_add_search).showSnackbar(R.string.unable_refresh) {
-                    onActionButtonClick { swipeRefreshLayout.isRefreshing = true }
+                    onActionButtonClick {
+                        swipeRefreshLayout.isRefreshing = true
+                        searchMenuItem?.isEnabled = false
+                    }
                     onDismissedAction { retry() }
                 }
+            } else if (listResource.status == Status.SUCCESS_NETWORK) {
+                // Set a custom value result which will invoke refresh for my cryptocurrency
+                // resource list.
+                setResult(Activity.RESULT_FIRST_USER)
             }
 
         })

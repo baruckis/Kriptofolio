@@ -18,6 +18,7 @@ package com.baruckis.mycryptocoins.ui.addsearchlist
 
 import androidx.lifecycle.*
 import com.baruckis.mycryptocoins.db.Cryptocurrency
+import com.baruckis.mycryptocoins.db.MyCryptocurrency
 import com.baruckis.mycryptocoins.repository.CryptocurrencyRepository
 import com.baruckis.mycryptocoins.utilities.DATE_FORMAT_PATTERN
 import com.baruckis.mycryptocoins.utilities.DB_ID_SCREEN_ADD_SEARCH_LIST
@@ -34,14 +35,17 @@ class AddSearchViewModel @Inject constructor(var cryptocurrencyRepository: Crypt
 
     // Helper variable to store temporary cryptocurrency which user clicked on to add. It is stored
     // in view model to avoid loosing value during configuration change, e.g. device rotation.
-    var selectedCryptocurrency: Cryptocurrency? = null
+    var selectedCryptocurrency: MyCryptocurrency? = null
 
 
     init {
         // A mediator to observe the changes. Room will automatically notify all active observers when the data changes.
         mediatorLiveData.addSource(liveData) { mediatorLiveData.value = it }
 
-        liveDataLastUpdated = Transformations.switchMap(cryptocurrencyRepository.getSpecificScreenStatusLiveData(DB_ID_SCREEN_ADD_SEARCH_LIST)) { screenStatus -> MutableLiveData<String>().apply { value = formatDate(screenStatus?.timestamp, DATE_FORMAT_PATTERN) } }
+        liveDataLastUpdated = Transformations.switchMap(cryptocurrencyRepository.getSpecificScreenStatusLiveData(DB_ID_SCREEN_ADD_SEARCH_LIST))
+        { screenStatus ->
+            MutableLiveData<String>().apply { value = formatDate(screenStatus?.timestamp, DATE_FORMAT_PATTERN) }
+        }
     }
 
     fun retry(shouldFetch: Boolean) {
@@ -53,4 +57,5 @@ class AddSearchViewModel @Inject constructor(var cryptocurrencyRepository: Crypt
     fun search(searchText: String): LiveData<List<Cryptocurrency>> {
         return cryptocurrencyRepository.getCryptocurrencyLiveDataListBySearch(searchText)
     }
+
 }

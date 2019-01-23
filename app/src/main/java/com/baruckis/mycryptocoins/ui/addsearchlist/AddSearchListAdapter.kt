@@ -36,7 +36,7 @@ import kotlinx.android.synthetic.main.flipview_front_custom.view.*
 
 class AddSearchListAdapter(val context: Context, private val cryptocurrencyClickCallback: ((Cryptocurrency) -> Unit)?) : BaseAdapter() {
 
-    private var dataList: List<Cryptocurrency> = ArrayList<Cryptocurrency>()
+    private var dataList: List<Cryptocurrency> = ArrayList()
     private val inflater: LayoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
     fun setData(newDataList: List<Cryptocurrency>) {
@@ -51,7 +51,7 @@ class AddSearchListAdapter(val context: Context, private val cryptocurrencyClick
         if (view == null) {
 
             view = inflater.inflate(R.layout.activity_add_search_list_item, parent, false)
-            itemBinding = DataBindingUtil.bind<ActivityAddSearchListItemBinding>(view)!!
+            itemBinding = DataBindingUtil.bind(view)!!
 
             itemBinding.root.setOnClickListener {
                 itemBinding.cryptocurrency?.let {

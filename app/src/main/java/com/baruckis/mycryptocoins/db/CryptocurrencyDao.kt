@@ -19,55 +19,20 @@ package com.baruckis.mycryptocoins.db
 import androidx.lifecycle.LiveData
 import androidx.room.*
 
-
 /**
  * The Data Access Object for the [Cryptocurrency] class.
  */
 @Dao
 abstract class CryptocurrencyDao {
 
-    @Query("SELECT * FROM cryptocurrencies WHERE amount IS NOT NULL ORDER BY amountFiat DESC, rank ASC")
-    abstract fun getMyCryptocurrencyLiveDataList(): LiveData<List<Cryptocurrency>>
-
-    // The GROUP_CONCAT(X,Y) function returns a string which is the concatenation of all non-NULL
-    // values of X. If parameter Y is present then it is used as the separator between instances
-    // of X. A comma (",") is used as the separator if Y is omitted. The order of the concatenated
-    // elements is arbitrary.
-    @Query("SELECT GROUP_CONCAT(id) FROM cryptocurrencies WHERE amount IS NOT NULL")
-    abstract fun getMyCryptocurrencyIds(): String
-
-    @Query("SELECT * FROM cryptocurrencies ORDER BY rank ASC")
+    @Query("SELECT * FROM all_cryptocurrencies ORDER BY rank ASC")
     abstract fun getAllCryptocurrencyLiveDataList(): LiveData<List<Cryptocurrency>>
 
-    // The LIKE operator does a pattern matching comparison. The operand to the right contains the
-    // pattern, the left hand operand contains the string to match against the pattern. A percent
-    // symbol ("%") in the pattern matches any sequence of zero or more characters in the string.
-    // An underscore ("_") in the pattern matches any single character in the string.
-    @Query("SELECT * FROM cryptocurrencies WHERE name LIKE :searchText OR symbol LIKE :searchText ORDER BY rank ASC")
-    abstract fun getCryptocurrencyLiveDataListBySearch(searchText: String): LiveData<List<Cryptocurrency>>
-
-
-    // LIMIT clause is used to constrain the number of rows returned by the query.
-    // We need just one as we search for exact specific cryptocurrency by code.
-    @Query("SELECT * FROM cryptocurrencies WHERE symbol = :specificCryptoCode LIMIT 1")
-    abstract fun getSpecificCryptocurrencyLiveDataByCryptoCode(specificCryptoCode: String): LiveData<Cryptocurrency>
-
-    @Query("SELECT * FROM cryptocurrencies WHERE id = :id LIMIT 1")
-    abstract fun getSpecificCryptocurrencyById(id: Int): Cryptocurrency
-
-    @Query("SELECT * FROM cryptocurrencies WHERE id IN (:ids)")
-    abstract fun getSpecificCryptocurrencyListByIds(ids: List<Int>): List<Cryptocurrency>
-
-
-    // Update specific item in the database.
-    @Update(onConflict = OnConflictStrategy.REPLACE)
-    abstract fun updateCryptocurrency(cryptocurrency: Cryptocurrency): Int
-
-
-    // Update specific items in the database.
-    @Update(onConflict = OnConflictStrategy.REPLACE)
-    abstract fun updateCryptocurrencyList(cryptocurrencyList: List<Cryptocurrency>): Int
-
+    /**
+     * Delete all of objects from the database.
+     */
+    @Query("DELETE FROM all_cryptocurrencies")
+    abstract fun deleteAll()
 
     /**
      * Insert an array of objects in the database.
@@ -75,71 +40,28 @@ abstract class CryptocurrencyDao {
      * @param itemList the objects list to be inserted.
      * @return The SQLite row ids.
      */
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract fun insertCryptocurrencyList(itemList: List<Cryptocurrency>): List<Long>
 
 
-    // Update database table or insert if rows do not exist.
     @Transaction
-    open fun upsert(itemList: List<Cryptocurrency>) {
-        // First try to insert all items. Here you get the id for each item as return value from
-        // insert operation with IGNORE as a OnConflictStrategy if it was successful.
-        val insertResult = insertCryptocurrencyList(itemList)
-        val updateList = ArrayList<Cryptocurrency>()
-
-        for (i in insertResult.indices) {
-            // If it equals to -1 then it means row wasn't inserted and needs to be updated.
-            if (insertResult[i] == -1L) {
-                // So we add such item to separate update list.
-                updateList.add(itemList[i])
-            }
-        }
-
-        // Than we check if we there is anything to update.
-        if (!updateList.isEmpty()) {
-            // Finally we update items one by one.
-            for (updateItem in updateList) {
-
-                val currentItem = getSpecificCryptocurrencyById(updateItem.id)
-
-                currentItem.name = updateItem.name
-                currentItem.rank = updateItem.rank
-                currentItem.symbol = updateItem.symbol
-                currentItem.currencyFiat = updateItem.currencyFiat
-                currentItem.priceFiat = updateItem.priceFiat
-                currentItem.pricePercentChange1h = updateItem.pricePercentChange1h
-                currentItem.pricePercentChange7d = updateItem.pricePercentChange7d
-                currentItem.pricePercentChange24h = updateItem.pricePercentChange24h
-
-                if (currentItem.amount != null) {
-                    currentItem.amountFiat = currentItem.amount!! * updateItem.priceFiat
-                    currentItem.amountFiatChange24h = currentItem.amountFiat!! * (updateItem.pricePercentChange24h / (100))
-                }
-
-                updateCryptocurrency(currentItem)
-            }
-        }
+    open fun reloadCryptocurrencyList(itemList: List<Cryptocurrency>) {
+        deleteAll()
+        insertCryptocurrencyList(itemList)
     }
 
 
-    // We delete items from database by resetting their amount. We can not delete item completely as
-    // it would be gone from all cryptocurrencies list displayed in add crypto coins screen because
-    // we use same database table.
-    @Transaction
-    open fun deleteCryptocurrencyList(ids: List<Int>) {
+    // The LIKE operator does a pattern matching comparison. The operand to the right contains the
+    // pattern, the left hand operand contains the string to match against the pattern. A percent
+    // symbol ("%") in the pattern matches any sequence of zero or more characters in the string.
+    // An underscore ("_") in the pattern matches any single character in the string.
+    @Query("SELECT * FROM all_cryptocurrencies WHERE name LIKE :searchText OR symbol LIKE :searchText ORDER BY rank ASC")
+    abstract fun getCryptocurrencyLiveDataListBySearch(searchText: String): LiveData<List<Cryptocurrency>>
 
-        val deleteList = getSpecificCryptocurrencyListByIds(ids)
 
-        if (!deleteList.isEmpty()) {
-            for (deleteItem in deleteList) {
-
-                deleteItem.amount = null
-                deleteItem.amountFiat = null
-                deleteItem.amountFiatChange24h = null
-
-                updateCryptocurrency(deleteItem)
-            }
-        }
-    }
+    // LIMIT clause is used to constrain the number of rows returned by the query.
+    // We need just one as we search for exact specific cryptocurrency by code.
+    @Query("SELECT * FROM all_cryptocurrencies WHERE symbol = :specificCryptoCode LIMIT 1")
+    abstract fun getSpecificCryptocurrencyLiveDataByCryptoCode(specificCryptoCode: String): LiveData<Cryptocurrency>
 
 }

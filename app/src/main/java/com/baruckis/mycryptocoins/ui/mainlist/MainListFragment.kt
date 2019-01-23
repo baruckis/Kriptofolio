@@ -40,7 +40,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.baruckis.mycryptocoins.R
 import com.baruckis.mycryptocoins.databinding.FragmentMainListBinding
-import com.baruckis.mycryptocoins.db.Cryptocurrency
+import com.baruckis.mycryptocoins.db.MyCryptocurrency
 import com.baruckis.mycryptocoins.dependencyinjection.Injectable
 import com.baruckis.mycryptocoins.ui.addsearchlist.AddSearchActivity
 import com.baruckis.mycryptocoins.ui.settings.SettingsActivity
@@ -82,7 +82,7 @@ class MainListFragment : Fragment(), Injectable, PrimaryActionModeController.Pri
     private lateinit var recyclerSelectionTracker: SelectionTracker<String>
     private lateinit var recyclerSelectionTrackerItemKeyProvider: MainListItemKeyProvider
 
-    private var deletedItems: ArrayList<Cryptocurrency>? = null
+    private var deletedItems: ArrayList<MyCryptocurrency>? = null
 
 
     companion object {
@@ -115,6 +115,7 @@ class MainListFragment : Fragment(), Injectable, PrimaryActionModeController.Pri
         setupList(savedInstanceState)
 
         activity?.let {
+
             subscribeUi(it)
 
             spinnerFiatCode = it.findViewById(R.id.spinner_fiat_code)
@@ -156,12 +157,12 @@ class MainListFragment : Fragment(), Injectable, PrimaryActionModeController.Pri
             // We observe the LiveData changes of fiat currency code from shared preferences.
             viewModel.liveDataCurrentFiatCurrencyCode.observe(this, Observer<String> { data ->
                 data?.let {
+                    viewModel.newSelectedFiatCurrencyCode = null
                     // If value in shared preferences change, e.g. user sets new fiat currency from
                     // settings screen, then update the spinner, variables and try to get data from
                     // the server.
                     if (viewModel.getSelectedFiatCurrencyCodeFromRep() != data) {
 
-                        viewModel.newSelectedFiatCurrencyCode = null
                         viewModel.setSelectedFiatCurrencyCodeFromRep(data)
 
                         spinnerFiatCode.setSelection(getFiatCurrencyPosition(data), false)
@@ -189,12 +190,18 @@ class MainListFragment : Fragment(), Injectable, PrimaryActionModeController.Pri
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        // If new owned cryptocurrency was added.
         if (requestCode == ADD_TASK_REQUEST) {
             if (resultCode == Activity.RESULT_OK) {
-                val cryptocurrency: Cryptocurrency? = data?.getParcelableExtra<Cryptocurrency>(AddSearchActivity.EXTRA_ADD_TASK_DESCRIPTION)
+                val cryptocurrency: MyCryptocurrency? = data?.getParcelableExtra(AddSearchActivity.EXTRA_ADD_TASK_DESCRIPTION)
                 cryptocurrency?.let {
                     viewModel.addCryptocurrency(cryptocurrency)
                 }
+            }
+            // If all cryptocurrency list data were updated from the network.
+            else if (resultCode == Activity.RESULT_FIRST_USER) {
+                snackbarUnableRefresh?.dismiss()
+                viewModel.refreshMyCryptocurrencyResourceList()
             }
         }
     }
@@ -245,7 +252,7 @@ class MainListFragment : Fragment(), Injectable, PrimaryActionModeController.Pri
             R.id.action_select_all -> {
                 val list = ArrayList<String>()
                 recyclerAdapter.getData().forEach {
-                    list.add(it.id.toString())
+                    list.add(it.myId.toString())
                 }
                 recyclerSelectionTracker.setItemsSelected(list, true)
             }
@@ -263,8 +270,9 @@ class MainListFragment : Fragment(), Injectable, PrimaryActionModeController.Pri
                 // Than we close action mode.
                 primaryActionModeController.finishActionMode()
                 if (!deletedItems.isNullOrEmpty()) {
+
                     // Delete items from database.
-                    viewModel.deleteCryptocurrencyList(deletedItems!!.map { it.id }, isAllDeleted)
+                    viewModel.deleteCryptocurrencyList(deletedItems!!, isAllDeleted)
 
                     // Finally we show snackbar which is the last chance for the user to undo deletion.
                     showSnackbarUndoDelete()
@@ -309,7 +317,6 @@ class MainListFragment : Fragment(), Injectable, PrimaryActionModeController.Pri
                 if (recyclerSelectionTracker.hasSelection() && !primaryActionModeController.isInMode() && activity is AppCompatActivity) {
                     primaryActionModeController.startActionMode(this@MainListFragment.activity as AppCompatActivity, this@MainListFragment,
                             R.menu.menu_action_mode, getString(R.string.action_mode_title, recyclerSelectionTracker.selection.size()))
-
                 } else if (!recyclerSelectionTracker.hasSelection() && primaryActionModeController.isInMode()) {
                     primaryActionModeController.finishActionMode()
                 } else {
@@ -358,9 +365,9 @@ class MainListFragment : Fragment(), Injectable, PrimaryActionModeController.Pri
                         }
                         onDismissedAction {
                             // When we retry to get data from the server with selected fiat currency.
-                            if (viewModel.newSelectedFiatCurrencyCode != null)
+                            if (viewModel.newSelectedFiatCurrencyCode != null) {
                                 spinnerFiatCode.setSelection(getFiatCurrencyPosition(viewModel.newSelectedFiatCurrencyCode))
-                            else retry(null)
+                            } else retry(null)
                         }
                     }
                     // If there was an error when trying to load data with new selected fiat currency,
@@ -372,7 +379,6 @@ class MainListFragment : Fragment(), Injectable, PrimaryActionModeController.Pri
             }
 
         })
-
     }
 
     // We find an array position of currently used fiat currency in the app.
@@ -382,7 +388,7 @@ class MainListFragment : Fragment(), Injectable, PrimaryActionModeController.Pri
 
     // Dismiss snackbar if needed and get new data from the server.
     private fun retry(newFiatCurrencyCode: String?) {
-        if (snackbarUnableRefresh?.isShown == true) snackbarUnableRefresh?.dismiss()
+        snackbarUnableRefresh?.dismiss()
         // Make a call to the server after some delay for better user experience.
         Handler().postDelayed({ viewModel.retry(newFiatCurrencyCode) }, SERVER_CALL_DELAY_MILLISECONDS)
     }

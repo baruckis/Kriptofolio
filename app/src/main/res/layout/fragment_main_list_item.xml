@@ -20,8 +20,8 @@
     <data>
 
         <variable
-            name="cryptocurrency"
-            type="com.baruckis.mycryptocoins.db.Cryptocurrency" />
+            name="myCryptocurrency"
+            type="com.baruckis.mycryptocoins.db.MyCryptocurrency" />
     </data>
 
     <androidx.cardview.widget.CardView
@@ -81,7 +81,7 @@
                 style="@style/MainListItemPrimeText"
                 android:layout_marginStart="@dimen/main_cardview_list_item_inner_margin"
                 android:layout_marginEnd="@dimen/main_cardview_list_item_text_between_margin"
-                android:text="@{cryptocurrency.name}"
+                android:text="@{myCryptocurrency.cryptoData.name}"
                 android:textAlignment="viewStart"
                 app:layout_constraintBottom_toTopOf="@+id/item_amount_code"
                 app:layout_constraintEnd_toStartOf="@+id/guideline1_percent"
