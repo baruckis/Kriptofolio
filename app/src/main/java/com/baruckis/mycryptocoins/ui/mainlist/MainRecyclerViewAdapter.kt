@@ -34,8 +34,6 @@ import com.bumptech.glide.load.MultiTransformation
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.flipview_front_custom.view.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 
 class MainRecyclerViewAdapter : RecyclerView.Adapter<MainRecyclerViewAdapter.BindingViewHolder>() {
@@ -44,7 +42,6 @@ class MainRecyclerViewAdapter : RecyclerView.Adapter<MainRecyclerViewAdapter.Bin
 
     private lateinit var selectionTracker: SelectionTracker<String>
     private var selectedData: HashMap<Int, MyCryptocurrency> = HashMap()
-
 
     private var selectionSequencesToDelete = ArrayList<HashMap<Int, MyCryptocurrency>>()
 
@@ -67,6 +64,7 @@ class MainRecyclerViewAdapter : RecyclerView.Adapter<MainRecyclerViewAdapter.Bin
         val cryptocurrency = dataList[position]
         var isSelected = false
 
+
         // Here we manage selection state.
         if (this::selectionTracker.isInitialized) {
             if (selectionTracker.isSelected(cryptocurrency.myId.toString())) {
@@ -75,7 +73,7 @@ class MainRecyclerViewAdapter : RecyclerView.Adapter<MainRecyclerViewAdapter.Bin
             } else selectedData.remove(position)
         }
 
-        holder.bind(cryptocurrency, isSelected)
+        holder.bind(cryptocurrency, isSelected, holder.itemView.isInLayout)
     }
 
     override fun getItemCount(): Int = dataList.size
@@ -190,7 +188,8 @@ class MainRecyclerViewAdapter : RecyclerView.Adapter<MainRecyclerViewAdapter.Bin
 
     inner class BindingViewHolder(var binding: FragmentMainListItemBinding) : RecyclerView.ViewHolder(binding.root), ViewHolderWithDetails {
 
-        fun bind(myCryptocurrency: MyCryptocurrency, isSelected: Boolean) {
+        fun bind(myCryptocurrency: MyCryptocurrency, isSelected: Boolean, flipViewAnimate: Boolean) {
+
             binding.myCryptocurrency = myCryptocurrency
 
             // Will allow to indicate to the user that the item has been selected.
@@ -219,8 +218,8 @@ class MainRecyclerViewAdapter : RecyclerView.Adapter<MainRecyclerViewAdapter.Bin
                     // The target ImageView your image is supposed to get displayed in.
                     .into(binding.itemImageIcon.imageview_front)
 
-            binding.itemImageIcon.flip(isSelected)
 
+            if (flipViewAnimate) binding.itemImageIcon.flip(isSelected) else binding.itemImageIcon.flipSilently(isSelected)
 
             binding.itemAmountCode.text = String.format("${roundValue(myCryptocurrency.amount, ValueType.Crypto)} ${myCryptocurrency.cryptoData.symbol}")
             binding.itemPrice.text = String.format("${roundValue(myCryptocurrency.cryptoData.priceFiat, ValueType.Fiat)} ${myCryptocurrency.cryptoData.currencyFiat}")

@@ -14,20 +14,30 @@
  * limitations under the License.
  */
 
-package com.baruckis.mycryptocoins.db
+package com.baruckis.mycryptocoins.utilities
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-import com.google.gson.annotations.SerializedName
-import java.util.*
+import android.util.Log
+import com.baruckis.mycryptocoins.BuildConfig
+
 
 /**
- * Entity object for Room database.
- * It stores common data about each screen of the app.
+ * Debug console logger for verbose message.
+ *
+ * @param message
  */
-@Entity(tableName = "screen_status")
-data class ScreenStatus(@PrimaryKey
-                        val id: String,
-                        @SerializedName("timestamp")
-                        val timestamp: Date?
-)
+fun logConsoleVerbose(message: String) {
+    if (BuildConfig.DEBUG) {
+        Log.v(LOG_TAG, message)
+    }
+}
+
+/**
+ * Debug console logger for warning message.
+ *
+ * @param message
+ */
+fun logConsoleWarn(message: String) {
+    if (BuildConfig.DEBUG) {
+        Log.w(LOG_TAG, message)
+    }
+}

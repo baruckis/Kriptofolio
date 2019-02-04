@@ -28,7 +28,7 @@ import com.baruckis.mycryptocoins.utilities.getAmountFiatCounted
 @Dao
 abstract class MyCryptocurrencyDao {
 
-    @Query("SELECT * FROM my_cryptocurrencies WHERE amount IS NOT NULL ORDER BY amountFiat DESC, rank ASC")
+    @Query("SELECT * FROM my_cryptocurrencies WHERE amount IS NOT NULL ORDER BY amount_fiat DESC, rank ASC")
     abstract fun getMyCryptocurrencyLiveDataList(): LiveData<List<MyCryptocurrency>>
 
     // The GROUP_CONCAT(X,Y) function returns a string which is the concatenation of all non-NULL
@@ -98,6 +98,7 @@ abstract class MyCryptocurrencyDao {
                 currentItem.cryptoData.pricePercentChange1h = updateItem.cryptoData.pricePercentChange1h
                 currentItem.cryptoData.pricePercentChange7d = updateItem.cryptoData.pricePercentChange7d
                 currentItem.cryptoData.pricePercentChange24h = updateItem.cryptoData.pricePercentChange24h
+                currentItem.cryptoData.lastFetchedDate = updateItem.cryptoData.lastFetchedDate
 
                 if (updateAmount) {
                     currentItem.amount = updateItem.amount
@@ -131,7 +132,7 @@ abstract class MyCryptocurrencyDao {
      * @param cryptocurrencyList the objects list to be used for update matches.
      */
     @Transaction
-    open fun reloadMyCryptocurrencyList(cryptocurrencyList: List<Cryptocurrency>): Int {
+    open fun reloadMyCryptocurrencyList(cryptocurrencyList: List<Cryptocurrency>) {
 
         val myCryptocurrencyList = getMyCryptocurrencyList()
 
@@ -147,7 +148,6 @@ abstract class MyCryptocurrencyDao {
         }
 
         if (!myCryptocurrencyList.isEmpty()) updateCryptocurrencyList(myCryptocurrencyList)
-        return myCryptocurrencyList.size
     }
 
 }

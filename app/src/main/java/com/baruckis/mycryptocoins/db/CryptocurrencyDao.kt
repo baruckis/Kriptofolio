@@ -25,6 +25,7 @@ import androidx.room.*
 @Dao
 abstract class CryptocurrencyDao {
 
+
     @Query("SELECT * FROM all_cryptocurrencies ORDER BY rank ASC")
     abstract fun getAllCryptocurrencyLiveDataList(): LiveData<List<Cryptocurrency>>
 

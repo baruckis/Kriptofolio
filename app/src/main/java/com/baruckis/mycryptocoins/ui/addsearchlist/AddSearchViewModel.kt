@@ -16,42 +16,55 @@
 
 package com.baruckis.mycryptocoins.ui.addsearchlist
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import com.baruckis.mycryptocoins.db.Cryptocurrency
 import com.baruckis.mycryptocoins.db.MyCryptocurrency
 import com.baruckis.mycryptocoins.repository.CryptocurrencyRepository
-import com.baruckis.mycryptocoins.utilities.DATE_FORMAT_PATTERN
-import com.baruckis.mycryptocoins.utilities.DB_ID_SCREEN_ADD_SEARCH_LIST
-import com.baruckis.mycryptocoins.utilities.formatDate
+import com.baruckis.mycryptocoins.ui.common.BaseViewModel
+import com.baruckis.mycryptocoins.utilities.SERVER_CALL_DELAY_MILLISECONDS
 import com.baruckis.mycryptocoins.vo.Resource
 import javax.inject.Inject
 
-class AddSearchViewModel @Inject constructor(var cryptocurrencyRepository: CryptocurrencyRepository) : ViewModel() {
+class AddSearchViewModel @Inject constructor(var cryptocurrencyRepository: CryptocurrencyRepository) : BaseViewModel() {
 
-    val mediatorLiveData = MediatorLiveData<Resource<List<Cryptocurrency>>>()
-    private var liveData: LiveData<Resource<List<Cryptocurrency>>> = cryptocurrencyRepository.getAllCryptocurrencyLiveDataResourceList(cryptocurrencyRepository.getCurrentFiatCurrencyCode())
-
-    val liveDataLastUpdated: LiveData<String>
+    val mediatorLiveDataCryptocurrencyResourceList = MediatorLiveData<Resource<List<Cryptocurrency>>>()
+    private var liveDataCryptocurrencyResourceList: LiveData<Resource<List<Cryptocurrency>>> =
+            cryptocurrencyRepository.getAllCryptocurrencyLiveDataResourceList(cryptocurrencyRepository.getCurrentFiatCurrencyCode())
 
     // Helper variable to store temporary cryptocurrency which user clicked on to add. It is stored
     // in view model to avoid loosing value during configuration change, e.g. device rotation.
     var selectedCryptocurrency: MyCryptocurrency? = null
 
+    // Helper variable to store state of swipe refresh layout.
+    var isSwipeRefreshing: Boolean = false
+
+    var lastUpdatedOnDate: String = ""
+
+    var isSearchMenuItemEnabled: Boolean = true
+
 
     init {
         // A mediator to observe the changes. Room will automatically notify all active observers when the data changes.
-        mediatorLiveData.addSource(liveData) { mediatorLiveData.value = it }
-
-        liveDataLastUpdated = Transformations.switchMap(cryptocurrencyRepository.getSpecificScreenStatusLiveData(DB_ID_SCREEN_ADD_SEARCH_LIST))
-        { screenStatus ->
-            MutableLiveData<String>().apply { value = formatDate(screenStatus?.timestamp, DATE_FORMAT_PATTERN) }
+        mediatorLiveDataCryptocurrencyResourceList.addSource(liveDataCryptocurrencyResourceList) {
+            mediatorLiveDataCryptocurrencyResourceList.value = it
         }
     }
 
-    fun retry(shouldFetch: Boolean) {
-        mediatorLiveData.removeSource(liveData)
-        liveData = cryptocurrencyRepository.getAllCryptocurrencyLiveDataResourceList(cryptocurrencyRepository.getCurrentFiatCurrencyCode(), shouldFetch)
-        mediatorLiveData.addSource(liveData) { mediatorLiveData.value = it }
+
+    fun retry() {
+        // Make a call to the server after some delay for better user experience.
+        refreshCryptocurrencyResourceList(SERVER_CALL_DELAY_MILLISECONDS)
+    }
+
+    private fun refreshCryptocurrencyResourceList(callDelay: Long = 0) {
+        mediatorLiveDataCryptocurrencyResourceList.removeSource(liveDataCryptocurrencyResourceList)
+        liveDataCryptocurrencyResourceList = cryptocurrencyRepository.getAllCryptocurrencyLiveDataResourceList(
+                cryptocurrencyRepository.getCurrentFiatCurrencyCode(),
+                true, callDelay)
+        mediatorLiveDataCryptocurrencyResourceList.addSource(liveDataCryptocurrencyResourceList) {
+            mediatorLiveDataCryptocurrencyResourceList.value = it
+        }
     }
 
     fun search(searchText: String): LiveData<List<Cryptocurrency>> {

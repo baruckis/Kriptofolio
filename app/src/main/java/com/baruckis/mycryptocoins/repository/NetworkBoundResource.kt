@@ -16,6 +16,7 @@
 
 package com.baruckis.mycryptocoins.repository
 
+import android.os.Handler
 import androidx.annotation.MainThread
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
@@ -75,39 +76,50 @@ abstract class NetworkBoundResource<ResultType, RequestType>
         result.addSource(dbSource) { newData ->
             setValue(Resource.loading(newData))
         }
-        result.addSource(apiResponse) { response ->
-            result.removeSource(apiResponse)
-            result.removeSource(dbSource)
-            when (response) {
-                is ApiSuccessResponse -> {
-                    appExecutors.diskIO().execute {
-                        saveCallResult(processResponse(response))
-                        appExecutors.mainThread().execute {
-                            // We specially request a new live data,
-                            // otherwise we will get immediately last cached value,
-                            // which may not be updated with latest results received from network.
-                            result.addSource(loadFromDb()) { newData ->
-                                setValue(Resource.successNetwork(newData))
+
+        // Create inner function as we want to delay it.
+        fun fetch() {
+            result.addSource(apiResponse) { response ->
+                result.removeSource(apiResponse)
+                result.removeSource(dbSource)
+                when (response) {
+                    is ApiSuccessResponse -> {
+                        appExecutors.diskIO().execute {
+                            saveCallResult(processResponse(response))
+                            appExecutors.mainThread().execute {
+                                // We specially request a new live data,
+                                // otherwise we will get immediately last cached value,
+                                // which may not be updated with latest results received from network.
+                                result.addSource(loadFromDb()) { newData ->
+                                    setValue(Resource.successNetwork(newData))
+                                }
                             }
                         }
                     }
-                }
-                is ApiEmptyResponse -> {
-                    appExecutors.mainThread().execute {
-                        // reload from disk whatever we had
-                        result.addSource(loadFromDb()) { newData ->
-                            setValue(Resource.successDb(newData))
+                    is ApiEmptyResponse -> {
+                        appExecutors.mainThread().execute {
+                            // reload from disk whatever we had
+                            result.addSource(loadFromDb()) { newData ->
+                                setValue(Resource.successDb(newData))
+                            }
                         }
                     }
-                }
-                is ApiErrorResponse -> {
-                    onFetchFailed()
-                    result.addSource(dbSource) { newData ->
-                        setValue(Resource.error(response.errorMessage, newData))
+                    is ApiErrorResponse -> {
+                        onFetchFailed()
+                        result.addSource(dbSource) { newData ->
+                            setValue(Resource.error(response.errorMessage, newData))
+                        }
                     }
                 }
             }
         }
+
+        // Add delay before call if needed.
+        val delay = fetchDelayMillis()
+        if (delay > 0) {
+            Handler().postDelayed({ fetch() }, delay)
+        } else fetch()
+
     }
 
     // Called when the fetch fails. The child class may want to reset components
@@ -129,6 +141,9 @@ abstract class NetworkBoundResource<ResultType, RequestType>
     // potentially updated data from the network.
     @MainThread
     protected abstract fun shouldFetch(data: ResultType?): Boolean
+
+    // Make a call to the server after some delay for better user experience.
+    protected open fun fetchDelayMillis(): Long = 0
 
     // Called to get the cached data from the database.
     @MainThread

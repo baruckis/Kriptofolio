@@ -21,7 +21,6 @@ import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
@@ -95,16 +94,21 @@ class AddSearchActivity : AppCompatActivity(), Injectable, CryptocurrencyAmountD
         listview_activity_add_search.adapter = listAdapter
 
         swipeRefreshLayout = swiperefresh_activity_add_search
+
+        // We call this when we swipe and refresh.
         swipeRefreshLayout.setOnRefreshListener {
-            searchMenuItem?.isEnabled = false
-            if (snackbar?.isShown == true) {
-                snackbar?.dismiss()
-            } else retry()
+            // Dismiss snackbar if needed
+            snackbar?.dismiss()
+
+            enableSearchMenuItem(false)
+
+            viewModel.isSwipeRefreshing = true
+            viewModel.retry()
         }
 
         binding.myRetryCallback = object : RetryCallback {
             override fun retry() {
-                viewModel.retry(false)
+                this@AddSearchActivity.retry()
             }
         }
 
@@ -128,8 +132,15 @@ class AddSearchActivity : AppCompatActivity(), Injectable, CryptocurrencyAmountD
     }
 
 
+    // Get new data from the server.
     private fun retry() {
-        Handler().postDelayed({ viewModel.retry(true) }, SERVER_CALL_DELAY_MILLISECONDS)
+        // Dismiss snackbar if needed
+        snackbar?.dismiss()
+
+        enableSearchMenuItem(false)
+
+        // Make a call to the server.
+        viewModel.retry()
     }
 
 
@@ -190,40 +201,59 @@ class AddSearchActivity : AppCompatActivity(), Injectable, CryptocurrencyAmountD
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(AddSearchViewModel::class.java)
 
         // Update the list when the data changes by observing data on the ViewModel, exposed as a LiveData.
-        viewModel.mediatorLiveData.observe(this, Observer { listResource ->
+        viewModel.mediatorLiveDataCryptocurrencyResourceList.observe(this, Observer { listResource ->
 
-            if (swipeRefreshLayout.isRefreshing) {
-                if (listResource.status != Status.LOADING) {
-                    swipeRefreshLayout.isRefreshing = false
-                    searchMenuItem?.isEnabled = true
-                }
-            } else binding.myListResource = listResource
+            if (listResource.status != Status.LOADING || listAdapter.isEmpty) {
+                binding.myListResource = listResource
+                enableSearchMenuItem(false)
+            }
+
+            // Restore swipe refresh layout state from our view model using helper variable.
+            // This is important when we rotate screen.
+            if (viewModel.isSwipeRefreshing && !swipeRefreshLayout.isRefreshing) {
+                showSwipeRefreshing(true)
+                enableSearchMenuItem(false)
+            }
 
             listResource.data?.let {
-                if (listResource.status != Status.LOADING) listAdapter.setData(it)
-            }
+                listAdapter.setData(it)
 
-            if (listResource.status == Status.ERROR && listResource.data != null) {
+                viewModel.lastUpdatedOnDate = if (!it.isEmpty()) formatDate(it.first().lastFetchedDate, DATE_FORMAT_PATTERN) else ""
+                info_activity_add_search.text = StringBuilder(getString(R.string.string_info_last_updated_on_date_time, viewModel.lastUpdatedOnDate)).toString()
 
-                snackbar = findViewById<CoordinatorLayout>(R.id.coordinator_add_search).showSnackbar(R.string.unable_refresh) {
-                    onActionButtonClick {
-                        swipeRefreshLayout.isRefreshing = true
-                        searchMenuItem?.isEnabled = false
+
+                // First we check if there was an error from the server.
+                if (listResource.status == Status.ERROR) {
+                    showSwipeRefreshing(false)
+                    enableSearchMenuItem(true)
+
+                    snackbar = findViewById<CoordinatorLayout>(R.id.coordinator_add_search).showSnackbar(R.string.unable_refresh) {
+                        onActionButtonClick {
+                            showSwipeRefreshing(true)
+                            enableSearchMenuItem(false)
+                        }
+                        onDismissedAction { retry() }
                     }
-                    onDismissedAction { retry() }
+
+                } else if (listResource.status == Status.SUCCESS_DB || listResource.status == Status.SUCCESS_NETWORK) {
+                    showSwipeRefreshing(false)
+                    enableSearchMenuItem(true)
                 }
-            } else if (listResource.status == Status.SUCCESS_NETWORK) {
-                // Set a custom value result which will invoke refresh for my cryptocurrency
-                // resource list.
-                setResult(Activity.RESULT_FIRST_USER)
             }
 
         })
 
-        viewModel.liveDataLastUpdated.observe(this, Observer<String> { data ->
-            info_activity_add_search.text = StringBuilder(getString(R.string.string_info_last_updated_on_date_time, data)).toString()
-        })
+    }
 
+
+    private fun showSwipeRefreshing(isRefreshing: Boolean) {
+        viewModel.isSwipeRefreshing = isRefreshing
+        swipeRefreshLayout.isRefreshing = isRefreshing
+    }
+
+    private fun enableSearchMenuItem(isEnabled: Boolean) {
+        searchMenuItem?.isEnabled = isEnabled
+        viewModel.isSearchMenuItemEnabled = isEnabled
     }
 
 
@@ -236,6 +266,7 @@ class AddSearchActivity : AppCompatActivity(), Injectable, CryptocurrencyAmountD
 
         searchMenuItem = menu?.findItem(R.id.search)
         searchMenuItem?.setOnActionExpandListener(searchExpandListener)
+        searchMenuItem?.isEnabled = viewModel.isSearchMenuItemEnabled
 
         searchView = searchMenuItem?.actionView as SearchView
         searchView?.setSearchableInfo(searchManager.getSearchableInfo(componentName))
@@ -306,7 +337,7 @@ class AddSearchActivity : AppCompatActivity(), Injectable, CryptocurrencyAmountD
         override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
             textChangeDelayJob?.cancel()
             swipeRefreshLayout.isEnabled = true
-            info_activity_add_search.text = StringBuilder(getString(R.string.string_info_last_updated_on_date_time, viewModel.liveDataLastUpdated.value)).toString()
+            info_activity_add_search.text = StringBuilder(getString(R.string.string_info_last_updated_on_date_time, viewModel.lastUpdatedOnDate)).toString()
             return true
         }
 

@@ -18,8 +18,6 @@ package com.baruckis.mycryptocoins.ui.settings
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
@@ -34,23 +32,7 @@ import javax.inject.Inject
 class SettingsFragment : PreferenceFragmentCompat(), Injectable {
 
     @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
-
-    private lateinit var viewModel: SettingsViewModel
-
-    @Inject
     lateinit var cryptocurrencyRepository: CryptocurrencyRepository
-
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-        activity?.let {
-
-            // Obtain ViewModel from ViewModelProviders, using parent activity as LifecycleOwner.
-            viewModel = ViewModelProviders.of(it, viewModelFactory).get(SettingsViewModel::class.java)
-        }
-    }
 
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -65,12 +47,6 @@ class SettingsFragment : PreferenceFragmentCompat(), Injectable {
         preferenceFiatCurrency.setOnPreferenceChangeListener { preference, newValue ->
 
             val newCode: String = newValue.toString()
-
-            // If new fiat currency is selected than clear main list screen timestamp as data needs
-            // to be reloaded from the network.
-            if (cryptocurrencyRepository.getCurrentFiatCurrencyCode() != newCode) {
-                viewModel.setMainListScreenStatusTimestamp(null)
-            }
 
             setListPreferenceSummary(preference, newCode)
             true

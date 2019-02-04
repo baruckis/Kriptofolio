@@ -22,6 +22,7 @@
         <variable
             name="myCryptocurrency"
             type="com.baruckis.mycryptocoins.db.MyCryptocurrency" />
+
     </data>
 
     <androidx.cardview.widget.CardView
@@ -60,6 +61,7 @@
                 style="@style/FlipView"
                 android:clickable="true"
                 android:focusable="true"
+                android:animateFirstView="false"
                 app:layout_constraintBottom_toTopOf="@+id/item_ranking"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

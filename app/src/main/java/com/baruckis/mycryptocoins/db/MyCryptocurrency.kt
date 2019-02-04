@@ -17,10 +17,7 @@
 package com.baruckis.mycryptocoins.db
 
 import android.os.Parcelable
-import androidx.room.Embedded
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-import androidx.room.RoomWarnings
+import androidx.room.*
 import kotlinx.android.parcel.Parcelize
 
 /**
@@ -32,11 +29,16 @@ import kotlinx.android.parcel.Parcelize
 @SuppressWarnings(RoomWarnings.PRIMARY_KEY_FROM_EMBEDDED_IS_DROPPED)
 data class MyCryptocurrency(
         @PrimaryKey
+        @ColumnInfo(name = "my_id")
         val myId: Int,
         // Because one data class cannot inherit from another data class, we will use composition
         // instead.
-        // If sub fields of an embedded field has PrimaryKey annotation, they will not be considered as primary keys in the owner entity.
+        // If sub fields of an embedded field has PrimaryKey annotation, they will not be considered
+        // as primary keys in the owner entity.
         @Embedded var cryptoData: Cryptocurrency,
+        @ColumnInfo(name = "amount")
         var amount: Double? = null,
+        @ColumnInfo(name = "amount_fiat")
         var amountFiat: Double? = null,
+        @ColumnInfo(name = "amount_fiat_change_24h")
         var amountFiatChange24h: Double? = null) : Parcelable
