@@ -29,6 +29,9 @@
     <string name="undo">"Anuliuoti"</string>
     <string name="deleted">"Ištrinta: %1$d"</string>
 
+    <string name="time_format_am">"priešpiet"</string>
+    <string name="time_format_pm">"popiet"</string>
+
 
     <!-- Strings related to Main Activity -->
 
@@ -127,7 +130,12 @@
 
     <string name="pref_date_format_title">"Datos formatas"</string>
 
+    <string name="pref_default_date_format_entry">"yyyy-MM-dd"</string>
+    <string name="pref_default_date_format_value">"yyyy-MM-dd"</string>
+
     <string name="pref_24h_switch_title">"Naudoti 24 valandų formatą"</string>
+
+    <string name="pref_24h_switch_12h_summary">"01:00 popiet"</string>
 
 
     <string name="pref_support_category_title">"Parama"</string>

@@ -95,6 +95,12 @@ class AddSearchActivity : AppCompatActivity(), Injectable, CryptocurrencyAmountD
 
         swipeRefreshLayout = swiperefresh_activity_add_search
 
+        // Make swipe refresh layout circle colorful.
+        swipeRefreshLayout.setColorSchemeResources(
+                R.color.colorForSwipeRefreshProgress1,
+                R.color.colorForSwipeRefreshProgress2,
+                R.color.colorForSwipeRefreshProgress3)
+
         // We call this when we swipe and refresh.
         swipeRefreshLayout.setOnRefreshListener {
             // Dismiss snackbar if needed
@@ -218,7 +224,9 @@ class AddSearchActivity : AppCompatActivity(), Injectable, CryptocurrencyAmountD
             listResource.data?.let {
                 listAdapter.setData(it)
 
-                viewModel.lastUpdatedOnDate = if (!it.isEmpty()) formatDate(it.first().lastFetchedDate, DATE_FORMAT_PATTERN) else ""
+                viewModel.lastUpdatedOnDate = if (!it.isEmpty())
+                    formatDate(it.first().lastFetchedDate,
+                            viewModel.getCurrentDateFormat(), viewModel.getCurrentTimeFormat(), this) else ""
                 info_activity_add_search.text = StringBuilder(getString(R.string.string_info_last_updated_on_date_time, viewModel.lastUpdatedOnDate)).toString()
 
 

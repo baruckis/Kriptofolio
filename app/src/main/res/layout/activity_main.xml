@@ -24,6 +24,7 @@
     tools:context=".ui.mainlist.MainActivity">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar_layout"
         android:layout_width="match_parent"
         android:layout_height="@dimen/main_app_bar_layout_height"
         android:theme="@style/AppTheme.AppBarOverlay">
@@ -34,7 +35,7 @@
             android:layout_height="match_parent"
             android:background="@color/colorForMainCollapsingBar"
             app:contentScrim="@color/colorForMainCollapsingBarScrim"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
             app:titleEnabled="false">
 
             <androidx.constraintlayout.widget.ConstraintLayout

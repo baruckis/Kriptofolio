@@ -28,8 +28,7 @@ import com.baruckis.mycryptocoins.db.Cryptocurrency
 import com.baruckis.mycryptocoins.db.CryptocurrencyDao
 import com.baruckis.mycryptocoins.db.MyCryptocurrency
 import com.baruckis.mycryptocoins.db.MyCryptocurrencyDao
-import com.baruckis.mycryptocoins.utilities.AbsentLiveData
-import com.baruckis.mycryptocoins.utilities.stringLiveData
+import com.baruckis.mycryptocoins.utilities.*
 import com.baruckis.mycryptocoins.vo.Resource
 import java.util.*
 import javax.inject.Inject
@@ -175,6 +174,32 @@ class CryptocurrencyRepository @Inject constructor(
     fun deleteMyCryptocurrencyList(myCryptocurrencyList: List<MyCryptocurrency>) {
         myCryptocurrencyDao.deleteCryptocurrencyList(myCryptocurrencyList)
     }
+
+
+    fun getCurrentDateFormat(): String {
+        return sharedPreferences.getString(context.resources.getString(R.string.pref_date_format_key), context.resources.getString(R.string.pref_default_date_format_value))
+                ?: context.resources.getString(R.string.pref_default_date_format_value)
+    }
+
+    fun getCurrentDateFormatLiveData(): LiveData<String> {
+        return sharedPreferences.stringLiveData(context.resources.getString(R.string.pref_date_format_key), context.resources.getString(R.string.pref_default_date_format_value))
+    }
+
+
+    fun getCurrentTimeFormat(): TimeFormat {
+        return if (sharedPreferences.getBoolean(context.resources.getString(R.string.pref_24h_switch_key), true))
+            TimeFormat.Hours24() else TimeFormat.Hours12()
+    }
+
+    fun getCurrentTimeFormatLiveData(): LiveData<TimeFormat> {
+        return Transformations.switchMap(sharedPreferences.
+                booleanLiveData(context.resources.getString(R.string.pref_24h_switch_key), true)) {
+            MutableLiveData<TimeFormat>().apply {
+                value = if (it) TimeFormat.Hours24() else TimeFormat.Hours12()
+            }
+        }
+    }
+
 
 
     fun setNewCurrentFiatCurrencyCode(value: String) {

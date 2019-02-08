@@ -31,6 +31,9 @@
 
     <string name="undo">"Undo"</string>
     <string name="deleted">"Deleted: %1$d"</string>
+    
+    <string name="time_format_am">"AM"</string>
+    <string name="time_format_pm">"PM"</string>
 
 
     <!-- Strings related to Main Activity -->
@@ -279,21 +282,29 @@
 
     <string name="pref_date_format_title">"Date format"</string>
 
-    <string name="pref_default_date_format_entry" translatable="false">"12/31/2017"</string>
-    <string name="pref_default_date_format_value" translatable="false">"dd/mm/yyyy"</string>
+    <string name="pref_date_format_key" translatable="false">"preference date format"</string>
+
+    <string name="pref_default_date_format_entry">"dd/MM/yyyy"</string>
+    <string name="pref_default_date_format_value">"dd/MM/yyyy"</string>
 
     <string-array name="pref_date_format_list_entries" translatable="false">
-        <item>"12/31/2017"</item>
-        <item>"2017/12/31"</item>
+        <item>"dd/MM/yyyy"</item>
+        <item>"MM/dd/yyyy"</item>
+        <item>"yyyy-MM-dd"</item>
     </string-array>
 
     <string-array name="pref_date_format_list_values" translatable="false">
-        <item>"dd/mm/yyyy"</item>
-        <item>"yyyy/mm/dd"</item>
+        <item>"dd/MM/yyyy"</item> <!-- English (Europe, UK), Hebrew -->
+        <item>"MM/dd/yyyy"</item> <!-- English (USA) -->
+        <item>"yyyy-MM-dd"</item> <!-- Lithuanian -->
     </string-array>
 
     <string name="pref_24h_switch_title">"Use 24-hour format"</string>
-    <string name="pref_24h_switch_summary" translatable="false">"00:00"</string>
+
+    <string name="pref_24h_switch_key" translatable="false">"preference 24h switch"</string>
+
+    <string name="pref_24h_switch_24h_summary" translatable="false">"13:00"</string>
+    <string name="pref_24h_switch_12h_summary">"01:00 PM"</string>
 
 
     <string name="pref_support_category_title">"Support"</string>

@@ -99,9 +99,38 @@ fun getTextFirstChars(text: String?, charLimit: Int): String {
 }
 
 
-fun formatDate(timeStamp: Date?, dateFormatPattern: String): String {
-    return if (timeStamp == null) "" else {
-        val sdf = SimpleDateFormat(dateFormatPattern, Locale.getDefault())
-        sdf.format(timeStamp)
+sealed class TimeFormat(val pattern: String) {
+    class Hours12 : TimeFormat(TIME_12h_FORMAT_PATTERN)
+    class Hours24 : TimeFormat(TIME_24h_FORMAT_PATTERN)
+}
+
+fun formatDate(timeStamp: Date?, dateFormatPattern: String?, timeFormatPattern: TimeFormat? = null,
+               context: Context? = null): String {
+    return if (timeStamp == null || dateFormatPattern == null) "" else {
+
+        var pattern = dateFormatPattern
+        var addOn = ""
+
+        when (timeFormatPattern) {
+            is TimeFormat.Hours12 -> {
+                if (context != null) {
+                    val calendar: Calendar = Calendar.getInstance()
+                    calendar.time = timeStamp
+                    when (calendar.get(Calendar.AM_PM)) {
+                        Calendar.AM -> addOn = context.resources.getString(R.string.time_format_am)
+                        Calendar.PM -> addOn = context.resources.getString(R.string.time_format_pm)
+                    }
+                }
+            }
+        }
+
+        pattern += if (timeFormatPattern != null) " " + timeFormatPattern.pattern else ""
+
+        val sdf = SimpleDateFormat(pattern, Locale.getDefault())
+
+        var value = sdf.format(timeStamp)
+        if (addOn.isNotEmpty()) value += " $addOn"
+
+        return value
     }
 }

@@ -48,6 +48,8 @@ class MainViewModel @Inject constructor(val context: Context, val cryptocurrency
     private var currentCryptoCurrencyCode: String
     private var currentCryptoCurrencySign: String
 
+    var liveDataCurrentDateFormat: LiveData<String>
+
     var liveDataCurrentFiatCurrencyCode: LiveData<String>
     val liveDataCurrentFiatCurrencySign: LiveData<String>
 
@@ -81,6 +83,8 @@ class MainViewModel @Inject constructor(val context: Context, val cryptocurrency
         currentCryptoCurrencySign = context.getString(R.string.default_crypto_sign)
 
 
+        liveDataCurrentDateFormat = cryptocurrencyRepository.getCurrentDateFormatLiveData()
+
         // Set a code value for our selected fiat currency which is stored in shared preferences.
         liveDataCurrentFiatCurrencyCode = cryptocurrencyRepository.getCurrentFiatCurrencyCodeLiveData()
 
@@ -113,15 +117,30 @@ class MainViewModel @Inject constructor(val context: Context, val cryptocurrency
             return lastFetchedDate
         }
 
-        // We prepare a text to show a date and time when data was updated from the server.
-        liveDataTotalHoldingsValueOnDateText = Transformations
-                .switchMap(liveDataMyCryptocurrencyList)
-                {
-                    MutableLiveData<String>().apply {
-                        value =
-                                formatDate(getMyCryptocurrencyListLastFetchedDate(), DATE_FORMAT_PATTERN)
-                    }
-                }
+
+        liveDataTotalHoldingsValueOnDateText = MediatorLiveData<String>().apply {
+
+            // We prepare a text to show a date and time when data was updated from the server.
+            addSource(liveDataMyCryptocurrencyList) {
+                value = formatDate(getMyCryptocurrencyListLastFetchedDate(),
+                        liveDataCurrentDateFormat.value,
+                        cryptocurrencyRepository.getCurrentTimeFormat(), context)
+            }
+
+            // Or when date format is changed in settings.
+            addSource(liveDataCurrentDateFormat) {
+                value = formatDate(getMyCryptocurrencyListLastFetchedDate(),
+                        liveDataCurrentDateFormat.value,
+                        cryptocurrencyRepository.getCurrentTimeFormat(), context)
+            }
+
+            // Or when time format is changed in settings.
+            addSource(cryptocurrencyRepository.getCurrentTimeFormatLiveData()) { timeFormat ->
+                value = formatDate(getMyCryptocurrencyListLastFetchedDate(),
+                        liveDataCurrentDateFormat.value,
+                        timeFormat, context)
+            }
+        }
 
 
         // Helper function to count users cryptocurrency total amount and its change during last 24 hours.

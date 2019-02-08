@@ -29,6 +29,9 @@
     <string name="undo">"Undo"</string> <!-- TODO translate to HE -->
     <string name="deleted">"Deleted: %1$d"</string> <!-- TODO translate to HE -->
 
+    <string name="time_format_am">"AM"</string> <!-- TODO translate to HE -->
+    <string name="time_format_pm">"PM"</string> <!-- TODO translate to HE -->
+
 
     <!-- Strings related to Main Activity -->
 
@@ -127,7 +130,12 @@
 
     <string name="pref_date_format_title">"פורמט תאריך"</string>
 
+    <string name="pref_default_date_format_entry">"dd/MM/yyyy"</string>
+    <string name="pref_default_date_format_value">"dd/MM/yyyy"</string>
+
     <string name="pref_24h_switch_title">"השתמש בתבנית 24 שעות ביממה"</string>
+
+    <string name="pref_24h_switch_12h_summary">"01:00 PM"</string> <!-- TODO translate to HE -->
 
 
     <string name="pref_support_category_title">"תמיכה"</string>

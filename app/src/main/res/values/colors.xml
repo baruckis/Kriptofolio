@@ -47,6 +47,10 @@
     <color name="colorForAddSearchListItemPrimeText">@color/colorBlack</color>
     <color name="colorForAddSearchListItemText">@android:color/tertiary_text_dark</color>
 
+    <color name="colorForSwipeRefreshProgress1">@color/colorNavy</color>
+    <color name="colorForSwipeRefreshProgress2">@color/colorPrimary</color>
+    <color name="colorForSwipeRefreshProgress3">@color/colorAccent</color>
+
     <color name="colorTintForFab">@color/colorWhite</color>
     <color name="colorTintForSearchToolbar">@color/colorWhite</color>
     <color name="colorForPreferenceIcon">@color/colorPrimaryDark</color>

@@ -42,7 +42,7 @@
             android:entries="@array/pref_date_format_list_entries"
             android:entryValues="@array/pref_date_format_list_values"
             android:icon="@drawable/ic_date_range"
-            android:key="date_format_list"
+            android:key="@string/pref_date_format_key"
             android:summary="@string/pref_default_date_format_entry"
             android:title="@string/pref_date_format_title"
             tools:summary="@string/pref_default_date_format_entry" />
@@ -50,8 +50,9 @@
         <SwitchPreference
             android:defaultValue="true"
             android:icon="@drawable/ic_calendar_clock"
-            android:key="24h_switch"
-            android:summary="@string/pref_24h_switch_summary"
+            android:key="@string/pref_24h_switch_key"
+            android:summaryOff="@string/pref_24h_switch_12h_summary"
+            android:summaryOn="@string/pref_24h_switch_24h_summary"
             android:title="@string/pref_24h_switch_title" />
 
     </PreferenceCategory>

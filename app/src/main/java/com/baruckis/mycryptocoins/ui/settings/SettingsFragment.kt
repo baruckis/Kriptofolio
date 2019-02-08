@@ -24,7 +24,10 @@ import androidx.preference.PreferenceFragmentCompat
 import com.baruckis.mycryptocoins.R
 import com.baruckis.mycryptocoins.dependencyinjection.Injectable
 import com.baruckis.mycryptocoins.repository.CryptocurrencyRepository
+import com.baruckis.mycryptocoins.utilities.formatDate
+import java.util.*
 import javax.inject.Inject
+
 
 /**
  * A simple [Fragment] subclass.
@@ -51,6 +54,21 @@ class SettingsFragment : PreferenceFragmentCompat(), Injectable {
             setListPreferenceSummary(preference, newCode)
             true
         }
+
+
+        val preferenceDateFormat = findPreference(getString(R.string.pref_date_format_key)) as Preference
+
+        // Set the initial value for date format preference summary.
+        setPreferenceDateFormatSummary(preferenceDateFormat, cryptocurrencyRepository.getCurrentDateFormat())
+
+        // Change the date format preference summary when preference value changed.
+        preferenceDateFormat.setOnPreferenceChangeListener { preference, newValue ->
+
+            val newFormat: String = newValue.toString()
+
+            setPreferenceDateFormatSummary(preference, newFormat)
+            true
+        }
     }
 
     private fun setListPreferenceSummary(preference: Preference, value: String) {
@@ -59,6 +77,12 @@ class SettingsFragment : PreferenceFragmentCompat(), Injectable {
             val entry = preference.entries[index]
             preference.summary = entry
         }
+    }
+
+    private fun setPreferenceDateFormatSummary(preference: Preference, value: String) {
+        setListPreferenceSummary(preference, value)
+        val todayDate = Calendar.getInstance().time
+        preference.summary = preference.summary.toString() + " (" + formatDate(todayDate, value) + ")"
     }
 
 }

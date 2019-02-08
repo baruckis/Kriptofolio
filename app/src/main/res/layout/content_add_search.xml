@@ -40,17 +40,18 @@
         tools:context=".ui.addsearchlist.AddSearchActivity"
         tools:showIn="@layout/activity_add_search">
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/info_activity_add_search"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            style="@style/AutoSizeText"
             android:background="@color/colorForAddSearchListLastUpdatedBackground"
             android:ellipsize="start"
+            android:gravity="center"
             android:padding="@dimen/add_search_list_item_last_updated_padding"
-            android:singleLine="true"
             android:text="@string/string_info_last_updated_on_date_time"
             android:textAlignment="center"
             android:textColor="@color/colorForAddSearchListLastUpdatedText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:visibleGone="@{listResource.data != null}"
             tools:text="@string/sample_text_info_last_updated_on_date_time" />

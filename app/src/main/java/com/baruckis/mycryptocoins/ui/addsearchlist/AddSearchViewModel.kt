@@ -23,6 +23,7 @@ import com.baruckis.mycryptocoins.db.MyCryptocurrency
 import com.baruckis.mycryptocoins.repository.CryptocurrencyRepository
 import com.baruckis.mycryptocoins.ui.common.BaseViewModel
 import com.baruckis.mycryptocoins.utilities.SERVER_CALL_DELAY_MILLISECONDS
+import com.baruckis.mycryptocoins.utilities.TimeFormat
 import com.baruckis.mycryptocoins.vo.Resource
 import javax.inject.Inject
 
@@ -69,6 +70,15 @@ class AddSearchViewModel @Inject constructor(var cryptocurrencyRepository: Crypt
 
     fun search(searchText: String): LiveData<List<Cryptocurrency>> {
         return cryptocurrencyRepository.getCryptocurrencyLiveDataListBySearch(searchText)
+    }
+
+
+    fun getCurrentDateFormat(): String {
+        return cryptocurrencyRepository.getCurrentDateFormat()
+    }
+
+    fun getCurrentTimeFormat(): TimeFormat {
+        return cryptocurrencyRepository.getCurrentTimeFormat()
     }
 
 }

@@ -46,6 +46,7 @@ import com.baruckis.mycryptocoins.ui.common.CustomItemAnimator
 import com.baruckis.mycryptocoins.ui.settings.SettingsActivity
 import com.baruckis.mycryptocoins.utilities.*
 import com.baruckis.mycryptocoins.vo.Status
+import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
@@ -104,6 +105,12 @@ class MainListFragment : Fragment(), Injectable, PrimaryActionModeController.Pri
         emptyListView = v.findViewById(R.id.layout_fragment_main_list_empty)
         swipeRefreshLayout = v.findViewById(R.id.swiperefresh_fragment_main_list)
 
+        // Make swipe refresh layout circle colorful.
+        swipeRefreshLayout.setColorSchemeResources(
+                R.color.colorForSwipeRefreshProgress1,
+                R.color.colorForSwipeRefreshProgress2,
+                R.color.colorForSwipeRefreshProgress3)
+
         // We call this when we swipe and refresh.
         swipeRefreshLayout.setOnRefreshListener {
             snackbarUnableRefresh?.dismiss()
@@ -117,9 +124,9 @@ class MainListFragment : Fragment(), Injectable, PrimaryActionModeController.Pri
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        setupList(savedInstanceState)
-
         activity?.let {
+
+            setupList(it, savedInstanceState)
 
             subscribeUi(it)
 
@@ -210,6 +217,7 @@ class MainListFragment : Fragment(), Injectable, PrimaryActionModeController.Pri
 
         }
     }
+
 
     // This activity expects result from another activity.
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -309,7 +317,7 @@ class MainListFragment : Fragment(), Injectable, PrimaryActionModeController.Pri
     }
 
 
-    private fun setupList(savedInstanceState: Bundle?) {
+    private fun setupList(activity: FragmentActivity, savedInstanceState: Bundle?) {
 
         recyclerView.layoutManager = LinearLayoutManager(activity)
         recyclerAdapter = MainRecyclerViewAdapter()
@@ -377,6 +385,23 @@ class MainListFragment : Fragment(), Injectable, PrimaryActionModeController.Pri
         customAnimator.supportsChangeAnimations = false
 
         recyclerView.itemAnimator = customAnimator
+
+
+        val appBarLayout = activity.findViewById<AppBarLayout>(R.id.app_bar_layout)
+
+        // Enable SwipeRefreshLayout only when AppBarLayout expanded completely.
+        appBarLayout.addOnOffsetChangedListener(
+                AppBarLayout.OnOffsetChangedListener { _, verticalOffset ->
+                    // Is expanded.
+                    if (verticalOffset == 0 && !swipeRefreshLayout.isEnabled) {
+                        swipeRefreshLayout.isEnabled = true
+                    }
+                    // Is collapsed.
+                    else if (verticalOffset < 0 && swipeRefreshLayout.isEnabled && !swipeRefreshLayout.isRefreshing) {
+                        swipeRefreshLayout.isEnabled = false
+                    }
+                })
+
     }
 
 
@@ -386,7 +411,6 @@ class MainListFragment : Fragment(), Injectable, PrimaryActionModeController.Pri
         viewModel = ViewModelProviders.of(activity, viewModelFactory).get(MainViewModel::class.java)
 
         binding.viewmodel = viewModel
-
 
         // Update the list when the data changes by observing data on the ViewModel, exposed as a LiveData.
         viewModel.mediatorLiveDataMyCryptocurrencyResourceList.observe(this, Observer { listResource ->

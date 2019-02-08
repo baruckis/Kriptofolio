@@ -36,6 +36,8 @@ import java.util.*
 data class Cryptocurrency(@PrimaryKey
                           @ColumnInfo(name = "id")
                           val id: Int,
+        // It’s recommended to add @ColumnInfo annotation for all persisted
+        // fields, in order to avoid problems when refactoring, especially when a field is renamed.
                           @ColumnInfo(name = "name")
                           var name: String,
                           @ColumnInfo(name = "rank")
