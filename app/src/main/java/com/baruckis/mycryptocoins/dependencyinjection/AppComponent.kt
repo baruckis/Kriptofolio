@@ -34,7 +34,8 @@ import javax.inject.Singleton
             // If you want to use injection in fragment then you should use AndroidSupportInjectionModule.class else use AndroidInjectionModule.
             AndroidSupportInjectionModule::class,
             AppModule::class,
-            ActivityBuildersModule::class
+            ActivityBuildersModule::class,
+            LocalizationModule::class
         ]
 )
 interface AppComponent {

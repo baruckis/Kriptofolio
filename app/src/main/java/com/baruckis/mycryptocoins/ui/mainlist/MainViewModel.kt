@@ -28,6 +28,7 @@ import com.baruckis.mycryptocoins.db.MyCryptocurrency
 import com.baruckis.mycryptocoins.repository.CryptocurrencyRepository
 import com.baruckis.mycryptocoins.ui.common.BaseViewModel
 import com.baruckis.mycryptocoins.utilities.*
+import com.baruckis.mycryptocoins.utilities.localization.StringsLocalization
 import com.baruckis.mycryptocoins.vo.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -43,7 +44,9 @@ import javax.inject.Inject
  */
 
 // ViewModel will require a CryptocurrencyRepository so we add @Inject code into ViewModel constructor.
-class MainViewModel @Inject constructor(val context: Context, val cryptocurrencyRepository: CryptocurrencyRepository) : BaseViewModel() {
+class MainViewModel @Inject constructor(private val context: Context,
+                                        private val cryptocurrencyRepository: CryptocurrencyRepository,
+                                        private val stringsLocalization: StringsLocalization) : BaseViewModel() {
 
     private var currentCryptoCurrencyCode: String
     private var currentCryptoCurrencySign: String
@@ -62,7 +65,7 @@ class MainViewModel @Inject constructor(val context: Context, val cryptocurrency
     private var liveDataMyCryptocurrencyResourceList: LiveData<Resource<List<MyCryptocurrency>>>
     private val liveDataMyCryptocurrencyList: LiveData<List<MyCryptocurrency>>
 
-    val liveDataTotalHoldingsValueOnDateText: LiveData<String>
+    var liveDataTotalHoldingsValueOnDateText: LiveData<String>
     val liveDataTotalHoldingsValueFiat24hText: LiveData<SpannableString>
     val liveDataTotalHoldingsValueCryptoText: LiveData<String>
     val liveDataTotalHoldingsValueFiatText: LiveData<String>
@@ -104,41 +107,33 @@ class MainViewModel @Inject constructor(val context: Context, val cryptocurrency
         liveDataMyCryptocurrencyList = cryptocurrencyRepository.getMyCryptocurrencyLiveDataList()
 
 
-        // Helper function to find last fetched date of user's cryptocurrency list.
-        fun getMyCryptocurrencyListLastFetchedDate(): Date? {
-            val lastFetchedDate: Date? =
-                    liveDataMyCryptocurrencyList.value?.elementAtOrNull(0)?.cryptoData?.lastFetchedDate
-                            ?: return null
-
-            liveDataMyCryptocurrencyList.value?.forEach { myCryptocurrency ->
-                if (myCryptocurrency.cryptoData.lastFetchedDate != lastFetchedDate) return null
-            }
-
-            return lastFetchedDate
-        }
-
-
         liveDataTotalHoldingsValueOnDateText = MediatorLiveData<String>().apply {
 
             // We prepare a text to show a date and time when data was updated from the server.
             addSource(liveDataMyCryptocurrencyList) {
                 value = formatDate(getMyCryptocurrencyListLastFetchedDate(),
                         liveDataCurrentDateFormat.value,
-                        cryptocurrencyRepository.getCurrentTimeFormat(), context)
+                        cryptocurrencyRepository.getCurrentTimeFormat(),
+                        stringsLocalization.getString(R.string.time_format_am),
+                        stringsLocalization.getString(R.string.time_format_pm))
             }
 
             // Or when date format is changed in settings.
             addSource(liveDataCurrentDateFormat) {
                 value = formatDate(getMyCryptocurrencyListLastFetchedDate(),
                         liveDataCurrentDateFormat.value,
-                        cryptocurrencyRepository.getCurrentTimeFormat(), context)
+                        cryptocurrencyRepository.getCurrentTimeFormat(),
+                        stringsLocalization.getString(R.string.time_format_am),
+                        stringsLocalization.getString(R.string.time_format_pm))
             }
 
             // Or when time format is changed in settings.
             addSource(cryptocurrencyRepository.getCurrentTimeFormatLiveData()) { timeFormat ->
                 value = formatDate(getMyCryptocurrencyListLastFetchedDate(),
                         liveDataCurrentDateFormat.value,
-                        timeFormat, context)
+                        timeFormat,
+                        stringsLocalization.getString(R.string.time_format_am),
+                        stringsLocalization.getString(R.string.time_format_pm))
             }
         }
 
@@ -250,6 +245,20 @@ class MainViewModel @Inject constructor(val context: Context, val cryptocurrency
             }
         }
 
+    }
+
+
+    // Helper function to find last fetched date of user's cryptocurrency list.
+    private fun getMyCryptocurrencyListLastFetchedDate(): Date? {
+        val lastFetchedDate: Date? =
+                liveDataMyCryptocurrencyList.value?.elementAtOrNull(0)?.cryptoData?.lastFetchedDate
+                        ?: return null
+
+        liveDataMyCryptocurrencyList.value?.forEach { myCryptocurrency ->
+            if (myCryptocurrency.cryptoData.lastFetchedDate != lastFetchedDate) return null
+        }
+
+        return lastFetchedDate
     }
 
 

@@ -29,6 +29,7 @@ import com.baruckis.mycryptocoins.db.CryptocurrencyDao
 import com.baruckis.mycryptocoins.db.MyCryptocurrency
 import com.baruckis.mycryptocoins.db.MyCryptocurrencyDao
 import com.baruckis.mycryptocoins.utilities.*
+import com.baruckis.mycryptocoins.utilities.localization.StringsLocalization
 import com.baruckis.mycryptocoins.vo.Resource
 import java.util.*
 import javax.inject.Inject
@@ -47,7 +48,8 @@ class CryptocurrencyRepository @Inject constructor(
         private val myCryptocurrencyDao: MyCryptocurrencyDao,
         private val cryptocurrencyDao: CryptocurrencyDao,
         private val api: ApiService,
-        private val sharedPreferences: SharedPreferences
+        private val sharedPreferences: SharedPreferences,
+        private val stringsLocalization: StringsLocalization
 ) {
 
     // Just a simple helper variable to store selected fiat currency code during app lifecycle.
@@ -177,12 +179,14 @@ class CryptocurrencyRepository @Inject constructor(
 
 
     fun getCurrentDateFormat(): String {
-        return sharedPreferences.getString(context.resources.getString(R.string.pref_date_format_key), context.resources.getString(R.string.pref_default_date_format_value))
-                ?: context.resources.getString(R.string.pref_default_date_format_value)
+        return sharedPreferences.getString(context.resources.getString(R.string.pref_date_format_key),
+                stringsLocalization.getString(R.string.pref_default_date_format_value))
+                ?: stringsLocalization.getString(R.string.pref_default_date_format_value)
     }
 
     fun getCurrentDateFormatLiveData(): LiveData<String> {
-        return sharedPreferences.stringLiveData(context.resources.getString(R.string.pref_date_format_key), context.resources.getString(R.string.pref_default_date_format_value))
+        return sharedPreferences.stringLiveData(context.resources.getString(R.string.pref_date_format_key),
+                stringsLocalization.getString(R.string.pref_default_date_format_value))
     }
 
 
@@ -201,20 +205,28 @@ class CryptocurrencyRepository @Inject constructor(
     }
 
 
+    fun getCurrentLanguage(): String {
+        return sharedPreferences.getString(context.resources.getString(R.string.pref_language_key),
+                stringsLocalization.getString(R.string.pref_default_language_value))
+                ?: stringsLocalization.getString(R.string.pref_default_language_value)
+    }
+
 
     fun setNewCurrentFiatCurrencyCode(value: String) {
         selectedFiatCurrencyCode = value
-        sharedPreferences.edit().putString(context.resources.getString(R.string.pref_fiat_currency_key), value).apply()
+        sharedPreferences.edit().putString(context.resources.getString(R.string.pref_fiat_currency_key),
+                value).apply()
     }
 
     fun getCurrentFiatCurrencyCode(): String {
-        return sharedPreferences.getString(context.resources.getString(R.string.pref_fiat_currency_key), context.resources.getString(R.string.pref_default_fiat_currency_value))
-                ?: context.resources.getString(R.string.pref_default_fiat_currency_value)
+        return sharedPreferences.getString(context.resources.getString(R.string.pref_fiat_currency_key),
+                stringsLocalization.getString(R.string.pref_default_fiat_currency_value))
+                ?: stringsLocalization.getString(R.string.pref_default_fiat_currency_value)
     }
 
-
     fun getCurrentFiatCurrencyCodeLiveData(): LiveData<String> {
-        return sharedPreferences.stringLiveData(context.resources.getString(R.string.pref_fiat_currency_key), context.resources.getString(R.string.pref_default_fiat_currency_value))
+        return sharedPreferences.stringLiveData(context.resources.getString(R.string.pref_fiat_currency_key),
+                stringsLocalization.getString(R.string.pref_default_fiat_currency_value))
     }
 
 
@@ -234,12 +246,15 @@ class CryptocurrencyRepository @Inject constructor(
 
     fun getCurrentFiatCurrencySignLiveData(): LiveData<String> {
         return Transformations.switchMap(getCurrentFiatCurrencyCodeLiveData()) { data ->
-            MutableLiveData<String>().takeIf { data != null }?.apply { value = getCurrentFiatCurrencySign(data) }
+            MutableLiveData<String>().takeIf { data != null }?.apply {
+                value = getCurrentFiatCurrencySign(data) }
         }
     }
 
 
-    private fun getMyCryptocurrencyListFromResponse(fiatCurrencyCode: String, responseList: List<CryptocurrencyLatest>?, timestamp: Date?): ArrayList<MyCryptocurrency> {
+    private fun getMyCryptocurrencyListFromResponse(fiatCurrencyCode: String,
+                                                    responseList: List<CryptocurrencyLatest>?,
+                                                    timestamp: Date?): ArrayList<MyCryptocurrency> {
 
         val myCryptocurrencyList: MutableList<MyCryptocurrency> = ArrayList()
 
@@ -256,7 +271,9 @@ class CryptocurrencyRepository @Inject constructor(
     }
 
 
-    private fun getCryptocurrencyListFromResponse(fiatCurrencyCode: String, responseList: List<CryptocurrencyLatest>?, timestamp: Date?): ArrayList<Cryptocurrency> {
+    private fun getCryptocurrencyListFromResponse(fiatCurrencyCode: String,
+                                                  responseList: List<CryptocurrencyLatest>?,
+                                                  timestamp: Date?): ArrayList<Cryptocurrency> {
 
         val cryptocurrencyList: MutableList<Cryptocurrency> = ArrayList()
 

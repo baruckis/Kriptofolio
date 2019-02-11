@@ -105,7 +105,7 @@ sealed class TimeFormat(val pattern: String) {
 }
 
 fun formatDate(timeStamp: Date?, dateFormatPattern: String?, timeFormatPattern: TimeFormat? = null,
-               context: Context? = null): String {
+               textAM: String? = null, textPM: String? = null): String {
     return if (timeStamp == null || dateFormatPattern == null) "" else {
 
         var pattern = dateFormatPattern
@@ -113,13 +113,11 @@ fun formatDate(timeStamp: Date?, dateFormatPattern: String?, timeFormatPattern: 
 
         when (timeFormatPattern) {
             is TimeFormat.Hours12 -> {
-                if (context != null) {
-                    val calendar: Calendar = Calendar.getInstance()
-                    calendar.time = timeStamp
-                    when (calendar.get(Calendar.AM_PM)) {
-                        Calendar.AM -> addOn = context.resources.getString(R.string.time_format_am)
-                        Calendar.PM -> addOn = context.resources.getString(R.string.time_format_pm)
-                    }
+                val calendar: Calendar = Calendar.getInstance()
+                calendar.time = timeStamp
+                when (calendar.get(Calendar.AM_PM)) {
+                    Calendar.AM -> addOn = textAM ?: ""
+                    Calendar.PM -> addOn = textPM ?: ""
                 }
             }
         }

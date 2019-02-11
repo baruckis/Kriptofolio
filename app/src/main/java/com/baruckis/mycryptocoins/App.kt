@@ -18,7 +18,11 @@ package com.baruckis.mycryptocoins
 
 import android.app.Activity
 import android.app.Application
+import android.content.Context
+import android.content.res.Configuration
 import com.baruckis.mycryptocoins.dependencyinjection.AppInjector
+import com.baruckis.mycryptocoins.utilities.localization.LocalizationManager
+import com.baruckis.mycryptocoins.utilities.logConsoleVerbose
 import com.facebook.stetho.Stetho
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
@@ -30,6 +34,7 @@ class App : Application(), HasActivityInjector {
 
     @Inject // It implements Dagger machinery of finding appropriate injector factory for a type.
     lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Activity>
+
 
     override fun onCreate() {
         super.onCreate()
@@ -43,5 +48,20 @@ class App : Application(), HasActivityInjector {
 
     // This is required by HasActivityInjector interface to setup Dagger for Activity.
     override fun activityInjector(): AndroidInjector<Activity> = dispatchingAndroidInjector
+
+
+    // Android resets the locale for the top level resources back to the device default on every
+    // application restart and configuration change. So make sure you perform a new update there.
+
+    override fun attachBaseContext(base: Context) {
+        super.attachBaseContext(LocalizationManager.setLocale(base))
+        logConsoleVerbose("attachBaseContext " + this@App.toString())
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        LocalizationManager.setLocale(this)
+        logConsoleVerbose("onConfigurationChanged")
+    }
 
 }

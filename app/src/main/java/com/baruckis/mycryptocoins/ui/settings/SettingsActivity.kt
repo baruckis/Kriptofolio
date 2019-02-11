@@ -19,6 +19,7 @@ package com.baruckis.mycryptocoins.ui.settings
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.baruckis.mycryptocoins.ui.common.BaseActivity
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
@@ -27,7 +28,7 @@ import javax.inject.Inject
 /**
  * A [AppCompatActivity] that presents a set of application settings.
  */
-class SettingsActivity : AppCompatActivity(), HasSupportFragmentInjector {
+class SettingsActivity : BaseActivity(), HasSupportFragmentInjector {
 
     @Inject
     lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Fragment>

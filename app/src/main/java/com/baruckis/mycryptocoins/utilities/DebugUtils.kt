@@ -41,3 +41,14 @@ fun logConsoleWarn(message: String) {
         Log.w(LOG_TAG, message)
     }
 }
+
+/**
+ * Debug console logger for error message.
+ *
+ * @param message
+ */
+fun logConsoleError(message: String) {
+    if (BuildConfig.DEBUG) {
+        Log.e(LOG_TAG, message)
+    }
+}

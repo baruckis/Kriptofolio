@@ -109,5 +109,4 @@ class AppModule() {
     @Provides
     @Singleton
     fun provideSharedPreferences(app: App): SharedPreferences = PreferenceManager.getDefaultSharedPreferences(app)
-
 }

@@ -37,8 +37,10 @@ import com.baruckis.mycryptocoins.db.Cryptocurrency
 import com.baruckis.mycryptocoins.db.MyCryptocurrency
 import com.baruckis.mycryptocoins.dependencyinjection.Injectable
 import com.baruckis.mycryptocoins.ui.addsearchlist.CryptocurrencyAmountDialog.Companion.DIALOG_CRYPTOCURRENCY_AMOUNT_TAG
+import com.baruckis.mycryptocoins.ui.common.BaseActivity
 import com.baruckis.mycryptocoins.ui.common.RetryCallback
 import com.baruckis.mycryptocoins.utilities.*
+import com.baruckis.mycryptocoins.utilities.localization.StringsLocalization
 import com.baruckis.mycryptocoins.vo.Status
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.content_add_search.*
@@ -49,7 +51,7 @@ import javax.inject.Inject
 /**
  * UI for add crypto coins screen.
  */
-class AddSearchActivity : AppCompatActivity(), Injectable, CryptocurrencyAmountDialog.CryptocurrencyAmountDialogListener {
+class AddSearchActivity : BaseActivity(), Injectable, CryptocurrencyAmountDialog.CryptocurrencyAmountDialogListener {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -66,6 +68,9 @@ class AddSearchActivity : AppCompatActivity(), Injectable, CryptocurrencyAmountD
     private var searchMenuItem: MenuItem? = null
     private var searchView: SearchView? = null
     private var searchQuery: String? = null
+
+    @Inject
+    lateinit var stringsLocalization: StringsLocalization
 
 
     companion object {
@@ -226,7 +231,10 @@ class AddSearchActivity : AppCompatActivity(), Injectable, CryptocurrencyAmountD
 
                 viewModel.lastUpdatedOnDate = if (!it.isEmpty())
                     formatDate(it.first().lastFetchedDate,
-                            viewModel.getCurrentDateFormat(), viewModel.getCurrentTimeFormat(), this) else ""
+                            viewModel.getCurrentDateFormat(), viewModel.getCurrentTimeFormat(),
+                            stringsLocalization.getString(R.string.time_format_am),
+                            stringsLocalization.getString(R.string.time_format_pm))
+                            else ""
                 info_activity_add_search.text = StringBuilder(getString(R.string.string_info_last_updated_on_date_time, viewModel.lastUpdatedOnDate)).toString()
 
 

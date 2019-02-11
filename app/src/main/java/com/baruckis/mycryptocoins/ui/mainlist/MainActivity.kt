@@ -22,12 +22,12 @@ import android.preference.PreferenceManager
 import android.text.SpannableString
 import android.view.Menu
 import android.view.MenuItem
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.baruckis.mycryptocoins.R
+import com.baruckis.mycryptocoins.ui.common.BaseActivity
 import com.baruckis.mycryptocoins.ui.settings.SettingsActivity
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
@@ -42,7 +42,7 @@ import javax.inject.Inject
 
 // To support injecting fragments which belongs to this activity we need to implement HasSupportFragmentInjector.
 // We would not need to implement it, if our activity did not contain any fragments or the fragments did not need to inject anything.
-class MainActivity : AppCompatActivity(), HasSupportFragmentInjector {
+class MainActivity : BaseActivity(), HasSupportFragmentInjector {
 
     @Inject
     lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Fragment>
@@ -66,6 +66,7 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector {
 
         subscribeUi()
     }
+
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu. This adds items to the onActionButtonClick bar if it is present.

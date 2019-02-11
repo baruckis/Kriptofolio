@@ -16,6 +16,7 @@
 
 package com.baruckis.mycryptocoins.ui.settings
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.preference.ListPreference
@@ -24,7 +25,9 @@ import androidx.preference.PreferenceFragmentCompat
 import com.baruckis.mycryptocoins.R
 import com.baruckis.mycryptocoins.dependencyinjection.Injectable
 import com.baruckis.mycryptocoins.repository.CryptocurrencyRepository
+import com.baruckis.mycryptocoins.ui.mainlist.MainActivity
 import com.baruckis.mycryptocoins.utilities.formatDate
+import com.baruckis.mycryptocoins.utilities.localization.StringsLocalization
 import java.util.*
 import javax.inject.Inject
 
@@ -36,6 +39,9 @@ class SettingsFragment : PreferenceFragmentCompat(), Injectable {
 
     @Inject
     lateinit var cryptocurrencyRepository: CryptocurrencyRepository
+
+    @Inject
+    lateinit var stringsLocalization: StringsLocalization
 
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -67,6 +73,36 @@ class SettingsFragment : PreferenceFragmentCompat(), Injectable {
             val newFormat: String = newValue.toString()
 
             setPreferenceDateFormatSummary(preference, newFormat)
+            true
+        }
+
+
+        val preferenceLanguage = findPreference(getString(R.string.pref_language_key)) as Preference
+
+        // Set the initial value for fiat currency preference summary.
+        setListPreferenceSummary(preferenceLanguage, cryptocurrencyRepository.getCurrentLanguage())
+
+        preferenceLanguage.setOnPreferenceChangeListener { preference, newValue ->
+
+            val newLanguage: String = newValue.toString()
+
+            if (newLanguage == cryptocurrencyRepository.getCurrentLanguage())
+            // False means not to update the state of the preference with the new value.
+                return@setOnPreferenceChangeListener false
+
+            setListPreferenceSummary(preference, newLanguage)
+
+            context?.let {
+
+                stringsLocalization.setLanguage(newLanguage)
+
+                // The current activity and the other activities in the back stack is using the
+                // previous locale to show content. We have somehow to refresh them. The simplest
+                // way is to clear the existing task and start a new one.
+                val i = Intent(activity, MainActivity::class.java)
+                startActivity(i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK))
+            }
+
             true
         }
     }
