@@ -69,6 +69,7 @@
 
         <Preference
             android:icon="@drawable/ic_attach_money"
+            android:key="@string/pref_donate_view_key"
             android:summary="@string/pref_donate_view_summary"
             android:title="@string/pref_donate_view_title" />
 

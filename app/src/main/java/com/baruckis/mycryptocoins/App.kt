@@ -24,6 +24,7 @@ import com.baruckis.mycryptocoins.dependencyinjection.AppInjector
 import com.baruckis.mycryptocoins.utilities.localization.LocalizationManager
 import com.baruckis.mycryptocoins.utilities.logConsoleVerbose
 import com.facebook.stetho.Stetho
+import com.google.android.gms.ads.MobileAds
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
@@ -43,6 +44,9 @@ class App : Application(), HasActivityInjector {
         AppInjector.init(this)
 
         Stetho.initializeWithDefaults(this)
+
+        // Initialize MobileAds SDK. This needs to be done only once, ideally at app launch.
+        MobileAds.initialize(this, getString(R.string.admob_app_id))
     }
 
 

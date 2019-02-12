@@ -1,5 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<!--
+﻿<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright 2018-2019 Andrius Baruckis www.baruckis.com | mycryptocoins.baruckis.com
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -146,6 +145,11 @@
 
     <string name="pref_donate_view_title">"תרום את תצוגת"</string>
     <string name="pref_donate_view_summary">"רק לצפות מודעות וידאו קצרות"</string>
+
+    <string name="video_ad_loading">"Loading video ad…"</string> <!-- TODO translate to HE -->
+    <string name="video_ad_thank_you">"Thank you! Author just got paid for your view. :)"</string> <!-- TODO translate to HE -->
+    <string name="video_ad_failed_load">"Failed to load video ad. Please check your internet connection and try again."</string> <!-- TODO translate to HE -->
+
 
     <string name="pref_donate_crypto_title">"תרום עם הצפנה"</string>
     <string name="pref_donate_crypto_summary">"שלח Bitcoin שלך או Etherium"</string>

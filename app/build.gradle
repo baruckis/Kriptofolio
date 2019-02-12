@@ -140,4 +140,7 @@ dependencies {
     // Facebook's Stetho project enables you to use Chrome debugging tools to troubleshoot
     // network traffic, database files, and view layouts.
     implementation "com.facebook.stetho:stetho:$versions.stetho"
+
+    // Google Mobile Ads SDK.
+    implementation "com.google.android.gms:play-services-ads:$versions.ads"
 }

@@ -140,6 +140,10 @@
 
         </androidx.cardview.widget.CardView>
 
+
+        <!-- emptyList is a boxed field but needs to be un-boxed to execute app:visibleGone.
+             This may cause NPE so Data Binding will safely unbox it. That is why we wrap emptyList
+             with safeUnbox() to prevent the warning. -->
         <LinearLayout
             android:id="@+id/layout_fragment_main_list_empty"
             android:layout_width="match_parent"
@@ -155,7 +159,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/cardview_labels"
-            app:visibleGone="@{emptyList}">
+            app:visibleGone="@{safeUnbox(emptyList)}">
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/text_primary_empty"

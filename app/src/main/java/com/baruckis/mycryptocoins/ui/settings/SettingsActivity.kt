@@ -33,7 +33,6 @@ class SettingsActivity : BaseActivity(), HasSupportFragmentInjector {
     @Inject
     lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Fragment>
 
-
     override fun supportFragmentInjector(): AndroidInjector<Fragment> = dispatchingAndroidInjector
 
 
@@ -47,6 +46,7 @@ class SettingsActivity : BaseActivity(), HasSupportFragmentInjector {
                 .replace(android.R.id.content, SettingsFragment())
                 .commit()
     }
+
 
     /**
      * Set up the [android.app.ActionBar], if the API is available.
