@@ -328,8 +328,26 @@
     <string name="video_ad_failed_load">"Failed to load video ad. Please check your internet connection and try again."</string>
 
 
+    <string name="pref_donate_crypto_key" translatable="false">"preference donate crypto"</string>
+
     <string name="pref_donate_crypto_title">"Donate with crypto"</string>
     <string name="pref_donate_crypto_summary">"Send your Bitcoin or Etherium"</string>
+
+    <string name="dialog_donate_crypto_title">"Donate with crypto"</string>
+    <string name="dialog_donate_crypto_message_first">"Send any amount of Bitcoin or Ethereum to the author. Click to copy particular cryptocurrency address."</string>
+    <string name="dialog_donate_crypto_cancel_button">"Cancel"</string>
+
+    <string name="dialog_donate_crypto_bitcoin_address_title">"Copy Bitcoin Address"</string>
+    <string name="dialog_donate_crypto_bitcoin_address">"3Db5NAnFTfNSqc9P851SUcGoosfdm4ZJXW"</string>
+
+    <string name="dialog_donate_crypto_ethereum_address_title">"Copy Ethereum Address"</string>
+    <string name="dialog_donate_crypto_ethereum_address">"0x3b402CaF8921d79467B6A319A014413081C28c3E"</string>
+
+    <string name="dialog_donate_crypto_message_second">"Your any donation would help not only to inspire the author to continue development but also to cover API data service subscription costs if the need arise."</string>
+    <string name="dialog_donate_crypto_message_third">"Thank you! 😇"</string>
+
+    <string name="dialog_donate_crypto_bitcoin_address_copy_confirmation">"Bitcoin address copied!"</string>
+    <string name="dialog_donate_crypto_ethereum_address_copy_confirmation">"Ethereum address copied!"</string>
 
 
     <string name="pref_support_about_title">"About"</string>

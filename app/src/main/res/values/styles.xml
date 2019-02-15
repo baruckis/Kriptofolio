@@ -115,4 +115,19 @@
         <item name="enableInitialAnimation">false</item>
     </style>
 
+    <style name="Dialog"/>
+
+    <style name="Dialog.DonateCrypto"/>
+
+    <style name="Dialog.DonateCrypto.ClickableItemImageIcon">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerVertical">true</item>
+    </style>
+
+    <style name="Dialog.DonateCrypto.ClickableItemTextView" parent="AutoSizeText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:textAlignment">center</item>
+    </style>
+
 </resources>

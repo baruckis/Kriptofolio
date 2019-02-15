@@ -75,6 +75,7 @@
 
         <Preference
             android:icon="@drawable/ic_currency_btc"
+            android:key="@string/pref_donate_crypto_key"
             android:summary="@string/pref_donate_crypto_summary"
             android:title="@string/pref_donate_crypto_title" />
 

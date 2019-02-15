@@ -154,6 +154,22 @@
     <string name="pref_donate_crypto_title">"Paaukok kripto"</string>
     <string name="pref_donate_crypto_summary">"Pervesk savo Bitcoin arba Etherium"</string>
 
+    <string name="dialog_donate_crypto_title">"Paaukok kripto"</string>
+    <string name="dialog_donate_crypto_message_first">"Pervesk bet kokią sumą Bitcoin arba Ethereum autoriui. Paspausk, kad nukopijuoti konkrečios kripto valiutos adresą."</string>
+    <string name="dialog_donate_crypto_cancel_button">"Atšaukti"</string>
+
+    <string name="dialog_donate_crypto_bitcoin_address_title">"Kopijuoti Bitcoin adresą"</string>
+    <string name="dialog_donate_crypto_bitcoin_address">"3Db5NAnFTfNSqc9P851SUcGoosfdm4ZJXW"</string>
+
+    <string name="dialog_donate_crypto_ethereum_address_title">"Kopijuoti Ethereum adresą"</string>
+    <string name="dialog_donate_crypto_ethereum_address">"0x3b402CaF8921d79467B6A319A014413081C28c3E"</string>
+
+    <string name="dialog_donate_crypto_message_second">"Jūsų bet kokia auka padėtų ne tik įkvėpti autorių toliau tęsti darbą bet taip pat padengti API duomenų perdavimo paslaugos prenumeratos išlaidas, jeigu tam iškiltų būtinybė."</string>
+    <string name="dialog_donate_crypto_message_third">"Ačiū! 😇"</string>
+
+    <string name="dialog_donate_crypto_bitcoin_address_copy_confirmation">"Bitcoin adresas nukopijuotas!"</string>
+    <string name="dialog_donate_crypto_ethereum_address_copy_confirmation">"Ethereum adresas nukopijuotas!"</string>
+
 
     <string name="pref_support_about_title">"Apie"</string>
 

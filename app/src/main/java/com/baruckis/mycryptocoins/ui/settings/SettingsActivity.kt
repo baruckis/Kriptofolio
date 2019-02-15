@@ -41,10 +41,16 @@ class SettingsActivity : BaseActivity(), HasSupportFragmentInjector {
 
         setupActionBar()
 
-        supportFragmentManager
-                .beginTransaction()
-                .replace(android.R.id.content, SettingsFragment())
-                .commit()
+        // Check to determine whether the PreferenceFragment has already been created. When you
+        // change the screen orientation (or any other action that destroys and re-creates the
+        // Activity), your PreferenceFragment will get created twice, which is what causes it to
+        // lose its state.
+        if (savedInstanceState == null) {
+            supportFragmentManager
+                    .beginTransaction()
+                    .replace(android.R.id.content, SettingsFragment())
+                    .commit()
+        }
     }
 
 

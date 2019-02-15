@@ -154,6 +154,22 @@
     <string name="pref_donate_crypto_title">"תרום עם הצפנה"</string>
     <string name="pref_donate_crypto_summary">"שלח Bitcoin שלך או Etherium"</string>
 
+    <string name="dialog_donate_crypto_title">"תרום עם הצפנה"</string>
+    <string name="dialog_donate_crypto_message_first">"Send any amount of Bitcoin or Ethereum to the author. Click to copy particular cryptocurrency address."</string> <!-- TODO translate to HE -->
+    <string name="dialog_donate_crypto_cancel_button">"Cancel"</string> <!-- TODO translate to HE -->
+
+    <string name="dialog_donate_crypto_bitcoin_address_title">"Copy Bitcoin Address"</string> <!-- TODO translate to HE -->
+    <string name="dialog_donate_crypto_bitcoin_address">"3Db5NAnFTfNSqc9P851SUcGoosfdm4ZJXW"</string> <!-- TODO translate to HE -->
+
+    <string name="dialog_donate_crypto_ethereum_address_title">"Copy Ethereum Address"</string> <!-- TODO translate to HE -->
+    <string name="dialog_donate_crypto_ethereum_address">"0x3b402CaF8921d79467B6A319A014413081C28c3E"</string> <!-- TODO translate to HE -->
+
+    <string name="dialog_donate_crypto_message_second">"Your any donation would help not only to inspire the author to continue development but also to cover API data service subscription costs if the need arise."</string> <!-- TODO translate to HE -->
+    <string name="dialog_donate_crypto_message_third">"Thank you! 😇"</string> <!-- TODO translate to HE -->
+
+    <string name="dialog_donate_crypto_bitcoin_address_copy_confirmation">"Bitcoin address copied!"</string> <!-- TODO translate to HE -->
+    <string name="dialog_donate_crypto_ethereum_address_copy_confirmation">"Ethereum address copied!"</string> <!-- TODO translate to HE -->
+
 
     <string name="pref_support_about_title">"על אודות"</string>
 

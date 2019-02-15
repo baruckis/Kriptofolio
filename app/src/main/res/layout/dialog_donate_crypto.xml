@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright 2018-2019 Andrius Baruckis www.baruckis.com | mycryptocoins.baruckis.com
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="@dimen/dialog_donate_crypto_margin">
+
+    <View
+        android:id="@+id/divider_top"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignTop="@+id/scrollview"
+        android:background="?android:attr/listDivider" />
+
+    <View
+        android:id="@+id/divider_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignBottom="@+id/scrollview"
+        android:background="?android:attr/listDivider" />
+
+    <ScrollView
+        android:id="@+id/scrollview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="?dialogPreferredPadding"
+            android:paddingTop="@dimen/dialog_donate_crypto_margin"
+            android:paddingRight="?dialogPreferredPadding"
+            android:paddingBottom="@dimen/dialog_donate_crypto_margin">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/message_first"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/dialog_donate_crypto_margin"
+                android:text="@string/dialog_donate_crypto_message_first"
+                android:textAppearance="@android:style/TextAppearance.Theme.Dialog" />
+
+            <RelativeLayout
+                android:id="@+id/item_bitcoin_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="@dimen/dialog_donate_crypto_margin">
+
+                <ImageView
+                    android:id="@+id/item_image_icon_bitcoin"
+                    style="@style/Dialog.DonateCrypto.ClickableItemImageIcon"
+                    android:layout_alignParentStart="true"
+                    android:contentDescription="@null"
+                    android:paddingStart="0dp"
+                    android:paddingEnd="@dimen/dialog_donate_crypto_margin"
+                    android:src="@drawable/ic_bitcoin" />
+
+                <ImageView
+                    android:id="@+id/item_image_content_copy_bitcoin"
+                    style="@style/Dialog.DonateCrypto.ClickableItemImageIcon"
+                    android:layout_alignParentEnd="true"
+                    android:contentDescription="@null"
+                    android:paddingStart="@dimen/dialog_donate_crypto_margin"
+                    android:paddingEnd="0dp"
+                    android:src="@drawable/ic_content_copy" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_toStartOf="@id/item_image_content_copy_bitcoin"
+                    android:layout_toEndOf="@id/item_image_icon_bitcoin"
+                    android:orientation="vertical">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/item_title_bitcoin"
+                        style="@style/Dialog.DonateCrypto.ClickableItemTextView"
+                        android:text="@string/dialog_donate_crypto_bitcoin_address_title"
+                        android:textStyle="bold" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/item_subtitle_bitcoin"
+                        style="@style/Dialog.DonateCrypto.ClickableItemTextView"
+                        android:text="@string/dialog_donate_crypto_bitcoin_address" />
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/item_ethereum_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="@dimen/dialog_donate_crypto_margin">
+
+                <ImageView
+                    android:id="@+id/item_image_icon_ethereum"
+                    style="@style/Dialog.DonateCrypto.ClickableItemImageIcon"
+                    android:layout_alignParentStart="true"
+                    android:contentDescription="@null"
+                    android:paddingStart="0dp"
+                    android:paddingEnd="@dimen/dialog_donate_crypto_margin"
+                    android:src="@drawable/ic_ethereum" />
+
+                <ImageView
+                    android:id="@+id/item_image_content_copy_ethereum"
+                    style="@style/Dialog.DonateCrypto.ClickableItemImageIcon"
+                    android:layout_alignParentEnd="true"
+                    android:contentDescription="@null"
+                    android:paddingStart="@dimen/dialog_donate_crypto_margin"
+                    android:paddingEnd="0dp"
+                    android:src="@drawable/ic_content_copy" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_toStartOf="@id/item_image_content_copy_ethereum"
+                    android:layout_toEndOf="@id/item_image_icon_ethereum"
+                    android:orientation="vertical">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/item_title_ethereum"
+                        style="@style/Dialog.DonateCrypto.ClickableItemTextView"
+                        android:text="@string/dialog_donate_crypto_ethereum_address_title"
+                        android:textStyle="bold" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/item_subtitle_ethereum"
+                        style="@style/Dialog.DonateCrypto.ClickableItemTextView"
+                        android:text="@string/dialog_donate_crypto_ethereum_address" />
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/message_second"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/dialog_donate_crypto_margin"
+                android:paddingBottom="@dimen/dialog_donate_crypto_margin"
+                android:text="@string/dialog_donate_crypto_message_second"
+                android:textAppearance="@android:style/TextAppearance.Theme.Dialog" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/message_third"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/dialog_donate_crypto_margin"
+                android:text="@string/dialog_donate_crypto_message_third"
+                android:textAlignment="center"
+                android:textAppearance="@android:style/TextAppearance.Theme.Dialog"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</RelativeLayout>

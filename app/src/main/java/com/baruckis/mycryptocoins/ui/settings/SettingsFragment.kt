@@ -29,6 +29,7 @@ import com.baruckis.mycryptocoins.R
 import com.baruckis.mycryptocoins.dependencyinjection.Injectable
 import com.baruckis.mycryptocoins.repository.CryptocurrencyRepository
 import com.baruckis.mycryptocoins.ui.mainlist.MainActivity
+import com.baruckis.mycryptocoins.ui.settings.DonateCryptoDialog.Companion.DIALOG_DONATE_CRYPTO_TAG
 import com.baruckis.mycryptocoins.utilities.ADMOB_TEST_AD_UNIT_ID
 import com.baruckis.mycryptocoins.utilities.formatDate
 import com.baruckis.mycryptocoins.utilities.localization.StringsLocalization
@@ -155,6 +156,25 @@ class SettingsFragment : PreferenceFragmentCompat(), Injectable, RewardedVideoAd
                 viewModel.videoAdIsRequested = true
                 Toast.makeText(activity, getString(R.string.video_ad_loading), Toast.LENGTH_SHORT).show()
                 loadRewardedVideoAd()
+            }
+
+            true
+        }
+
+
+        val preferenceDonateCrypto = findPreference(getString(R.string.pref_donate_crypto_key)) as Preference
+
+        preferenceDonateCrypto.setOnPreferenceClickListener {
+
+            activity?.let {
+                // Create an instance of the dialog fragment and show it.
+                val donateCryptoDialog =
+                        DonateCryptoDialog.newInstance(
+                                title = getString(R.string.dialog_donate_crypto_title),
+                                cancelButton = getString(R.string.dialog_donate_crypto_cancel_button) )
+
+                // Display the alert dialog.
+                donateCryptoDialog.show(it.supportFragmentManager, DIALOG_DONATE_CRYPTO_TAG)
             }
 
             true
