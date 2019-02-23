@@ -47,6 +47,7 @@
 
     <dimen name="dialog_donate_crypto_margin">8dp</dimen>
 
+    <dimen name="libraries_licenses_cardview_list_item_margin">8dp</dimen>
 
     <dimen name="loading_state_margin">8dp</dimen>
 

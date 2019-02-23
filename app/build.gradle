@@ -19,6 +19,9 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions' // To implement view binding
 apply plugin: 'kotlin-kapt' // For annotation processing
 
+// Helps fetch & display the open source libraries used within your project.
+apply plugin: 'com.google.android.gms.oss-licenses-plugin'
+
 // Version values at Project level versions.gradle.
 
 android {
@@ -37,8 +40,17 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    // The Data Binding Library is a support library that allows you to bind UI components in your
+    // layouts to data sources in your app using a declarative format rather than programmatically.
     dataBinding {
         enabled = true
+    }
+
+    // Configure only for each module that uses Java 8 language features
+    // (either in its source code or through dependencies).
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 
@@ -49,92 +61,123 @@ androidExtensions {
 }
 
 dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
 
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    /* Kotlin */
 
+    // The standard library for Kotlin/JVM and its additional part for JDK 8.
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$versions.kotlin"
 
-    // Kotlin
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$versions.kotlin"
+    // Coroutines support libraries for Kotlin.
 
+    // Dependencies for coroutines.
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$versions.coroutines"
+
+    // Dependency is for the special UI context that can be passed to coroutine builders that use
+    // the main thread dispatcher to dispatch events on the main thread.
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$versions.coroutines"
 
     /* Android */
 
-    // Support libraries
-    implementation "androidx.appcompat:appcompat:$versions.app_compat"
-    implementation "androidx.cardview:cardview:$versions.cardview"
-    implementation "androidx.preference:preference:$versions.preference"
-    implementation "com.google.android.material:material:$versions.design"
-
-    // A RecyclerView addon library providing support for item selection. It support for creating,
-    // modifying, inspecting, and monitoring changes to items in a RecyclerView list. It enables
-    // users to select items in RecyclerView list using touch or mouse input.
-    implementation "androidx.recyclerview:recyclerview-selection:$versions.recyclerview"
-
-    // Constraint layout
-    implementation "androidx.constraintlayout:constraintlayout:$versions.constraint_layout"
-
-    // Android KTX
+    // Android KTX is a set of Kotlin extensions. The purpose of Android KTX is to make Android
+    // development with Kotlin more concise, pleasant, and idiomatic by leveraging Kotlin language
+    // features such as extension functions/properties, lambdas, named parameters, and parameter
+    // default values.
     implementation "androidx.core:core-ktx:$versions.ktx"
 
-    // Architecture components
-    // LiveData + ViewModel
+    /* AndroidX - Support Libraries */
+
+    // This library adds support for the Action Bar user interface design pattern.
+    // It includes support for material design user interface implementations.
+    implementation "androidx.appcompat:appcompat:$versions.app_compat"
+
+    // This library adds support for the CardView widget, which lets you show information inside
+    // cards that have a consistent look on any app.
+    implementation "androidx.cardview:cardview:$versions.cardview"
+
+    // This library allows you to build interactive settings screens, without needing to handle
+    // interacting with device storage or managing the user interface.
+    implementation "androidx.preference:preference:$versions.preference"
+
+    // RecyclerView - a flexible view for providing a limited window into a large data set.
+    implementation "androidx.recyclerview:recyclerview:$versions.recyclerview"
+
+    // A RecyclerView addon library providing support for item selection. The library provides
+    // support for both touch and mouse driven selection. Developers retain control over the
+    // visual representation, and the policies controlling selection behavior (like which items
+    // are eligible for selection, and how many items can be selected.)
+    implementation "androidx.recyclerview:recyclerview-selection:$versions.recyclerview"
+
+    /* Constraint Layout Library */
+
+    // A ConstraintLayout is a ViewGroup which allows you to position and size widgets in a
+    // flexible way.
+    implementation "androidx.constraintlayout:constraintlayout:$versions.constraint_layout"
+
+    /* Material Components */
+
+    // Material Components for Android is a static library that you can add to your Android app
+    // in order to use APIs that provide implementations of the Material Design specification.
+    implementation "com.google.android.material:material:$versions.design"
+
+    /* Architecture Components */
+
+    // Lifecycle-aware components perform actions in response to a change in the lifecycle status
+    // of another component, such as activities and fragments. These components help you produce
+    // better-organized, and often lighter-weight code, that is easier to maintain.
+
+    // ViewModel and LiveData.
+    // The ViewModel class is designed to store and manage UI-related data in a lifecycle conscious
+    // way. LiveData is an observable data holder class.
     implementation "androidx.lifecycle:lifecycle-extensions:$versions.lifecycle"
-    annotationProcessor "androidx.lifecycle:lifecycle-compiler:$versions.lifecycle"
+    kapt "androidx.lifecycle:lifecycle-compiler:$versions.lifecycle"
+    // For Kotlin we use kapt instead of annotationProcessor.
 
     // Room is a Database Object Mapping library that makes it easy to access database on Android
     // applications.
     implementation "androidx.room:room-runtime:$versions.room"
-    annotationProcessor "androidx.room:room-compiler:$versions.room"
     kapt "androidx.room:room-compiler:$versions.room"
+    // For Kotlin we use kapt instead of annotationProcessor.
 
-    // Room testing
-    androidTestImplementation "androidx.room:room-testing:$versions.room"
-
-    // Android Testing Support Library's runner and rules.
-    androidTestImplementation "androidx.test:runner:$versions.runner"
-
-    // Espresso UI testing
-    androidTestImplementation "androidx.test.espresso:espresso-core:$versions.espresso"
-
+    // Navigation component simplifies implementing navigation, while also helping you visualize
+    // your app's navigation flow.
+    implementation "android.arch.navigation:navigation-fragment-ktx:$versions.navigation"
+    implementation "android.arch.navigation:navigation-ui-ktx:$versions.navigation"
 
     /* Other */
 
-    // Dagger for dependency injection.
+    // Dagger for dependency injection. It is a fully static, compile-time dependency injection
+    // framework for both Java and Android.
     implementation "com.google.dagger:dagger:$versions.dagger"
     implementation "com.google.dagger:dagger-android:$versions.dagger"
     implementation "com.google.dagger:dagger-android-support:$versions.dagger"
     kapt "com.google.dagger:dagger-compiler:$versions.dagger"
     kapt "com.google.dagger:dagger-android-processor:$versions.dagger"
 
-    // Dependencies for local unit tests.
-    testImplementation "junit:junit:$versions.junit"
-
-    // Dependencies for coroutines.
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$versions.coroutines"
-    // Dependency is for the special UI context that can be passed to coroutine builders that use
-    // the main thread dispatcher to dispatch events on the main thread.
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$versions.coroutines"
-
-    // 3rd party:
     // HTTP client - Retrofit with OkHttp.
-    implementation ("com.squareup.retrofit2:retrofit:$versions.retrofit") {
+    implementation("com.squareup.retrofit2:retrofit:$versions.retrofit") {
         // Exclude Retrofit’s OkHttp peer-dependency module and define your own module import.
         exclude module: 'okhttp'
     }
-    implementation "com.squareup.okhttp3:okhttp:$versions.okhttp"
 
-    // Glide
-    implementation "com.github.bumptech.glide:glide:$versions.glide"
-    kapt "com.github.bumptech.glide:compiler:$versions.glide"
-    // Glide's OkHttp3 integration.
-    implementation "com.github.bumptech.glide:okhttp3-integration:$versions.glide"+"@aar"
+    // An HTTP & HTTP/2 client for Android and Java applications.
+    implementation "com.squareup.okhttp3:okhttp:$versions.okhttp"
 
     // For providing logs that can be useful for debugging.
     implementation "com.squareup.okhttp3:logging-interceptor:$versions.okhttp"
+
     // JSON converter Gson for JSON to Java object mapping.
     implementation "com.squareup.retrofit2:converter-gson:$versions.retrofit"
 
-    // UI
+    // Glide - an image loading and caching library for Android focused on smooth scrolling.
+    implementation "com.github.bumptech.glide:glide:$versions.glide"
+    kapt "com.github.bumptech.glide:compiler:$versions.glide"
+
+    // Glide's OkHttp integration library to use OkHttp 3.x to fetch data over http/https in Glide.
+    implementation "com.github.bumptech.glide:okhttp3-integration:$versions.glide" + "@aar"
+
+    // UI. FlipView is a ViewGroup (FrameLayout) that is designed to display 2 views/layouts by
+    // flipping the front one in favor of the back one, and vice versa.
     implementation "eu.davidea:flipview:$versions.flip_view"
 
     // Facebook's Stetho project enables you to use Chrome debugging tools to troubleshoot
@@ -142,5 +185,27 @@ dependencies {
     implementation "com.facebook.stetho:stetho:$versions.stetho"
 
     // Google Mobile Ads SDK.
+    // A SDK that enables you to monetize your mobile apps with ads on the Android platform.
     implementation "com.google.android.gms:play-services-ads:$versions.ads"
+
+    // Helps apps to display open source software licenses and notices. When the application builds,
+    // the Gradle plugin will process the licenses and add them to the app resources.
+    implementation 'com.google.android.gms:play-services-oss-licenses:16.0.1'
+
+    /* Testing */
+
+    // The AndroidX Test Library provides an extensive framework for testing Android apps.
+
+    // Android testing library's runner.
+    androidTestImplementation "androidx.test:runner:$versions.runner"
+
+    // Espresso UI testing. Use Espresso to write concise, beautiful, and reliable Android UI tests.
+    androidTestImplementation "androidx.test.espresso:espresso-core:$versions.espresso"
+
+    // Room testing with test helpers.
+    androidTestImplementation "androidx.room:room-testing:$versions.room"
+
+    // Dependencies for local unit tests. JUnit is a unit testing framework for Java.
+    testImplementation "junit:junit:$versions.junit"
+
 }

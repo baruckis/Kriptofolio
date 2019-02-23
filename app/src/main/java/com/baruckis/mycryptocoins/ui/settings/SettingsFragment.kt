@@ -19,15 +19,16 @@ package com.baruckis.mycryptocoins.ui.settings
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.Navigation
 import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.baruckis.mycryptocoins.R
 import com.baruckis.mycryptocoins.dependencyinjection.Injectable
-import com.baruckis.mycryptocoins.repository.CryptocurrencyRepository
 import com.baruckis.mycryptocoins.ui.mainlist.MainActivity
 import com.baruckis.mycryptocoins.ui.settings.DonateCryptoDialog.Companion.DIALOG_DONATE_CRYPTO_TAG
 import com.baruckis.mycryptocoins.utilities.ADMOB_TEST_AD_UNIT_ID
@@ -52,9 +53,6 @@ class SettingsFragment : PreferenceFragmentCompat(), Injectable, RewardedVideoAd
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
     @Inject
-    lateinit var cryptocurrencyRepository: CryptocurrencyRepository
-
-    @Inject
     lateinit var stringsLocalization: StringsLocalization
 
 
@@ -67,117 +65,148 @@ class SettingsFragment : PreferenceFragmentCompat(), Injectable, RewardedVideoAd
         super.onActivityCreated(savedInstanceState)
 
         activity?.let { activity ->
-            // Obtain ViewModel from ViewModelProviders, using parent activity as LifecycleOwner.
-            viewModel = ViewModelProviders.of(activity, viewModelFactory).get(SettingsViewModel::class.java)
+            activity.title = getString(R.string.title_activity_settings)
+            if (activity is AppCompatActivity) activity.supportActionBar?.subtitle = ""
         }
-
-        // Use an activity context to get the rewarded video instance.
-        rewardedVideoAd = MobileAds.getRewardedVideoAdInstance(activity)
-        rewardedVideoAd.rewardedVideoAdListener = this
-
-        // It is highly recommended that you call load ad as early as possible to allow videos
-        // to be preloaded.
-        loadRewardedVideoAd()
     }
-
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.pref_main, rootKey)
 
-        val preferenceFiatCurrency = findPreference(getString(R.string.pref_fiat_currency_key)) as Preference
+        activity?.let { activity ->
 
-        // Set the initial value for fiat currency preference summary.
-        setListPreferenceSummary(preferenceFiatCurrency, cryptocurrencyRepository.getCurrentFiatCurrencyCode())
-
-        // Change the fiat currency preference summary when preference value changed.
-        preferenceFiatCurrency.setOnPreferenceChangeListener { preference, newValue ->
-
-            val newCode: String = newValue.toString()
-
-            setListPreferenceSummary(preference, newCode)
-            true
-        }
+            // Obtain ViewModel from ViewModelProviders, using parent activity as LifecycleOwner.
+            viewModel = ViewModelProviders.of(activity, viewModelFactory).get(SettingsViewModel::class.java)
 
 
-        val preferenceDateFormat = findPreference(getString(R.string.pref_date_format_key)) as Preference
+            // Use an activity context to get the rewarded video instance.
+            rewardedVideoAd = MobileAds.getRewardedVideoAdInstance(activity)
+            rewardedVideoAd.rewardedVideoAdListener = this
 
-        // Set the initial value for date format preference summary.
-        setPreferenceDateFormatSummary(preferenceDateFormat, cryptocurrencyRepository.getCurrentDateFormat())
-
-        // Change the date format preference summary when preference value changed.
-        preferenceDateFormat.setOnPreferenceChangeListener { preference, newValue ->
-
-            val newFormat: String = newValue.toString()
-
-            setPreferenceDateFormatSummary(preference, newFormat)
-            true
-        }
+            // It is highly recommended that you call load ad as early as possible to allow videos
+            // to be preloaded.
+            loadRewardedVideoAd()
 
 
-        val preferenceLanguage = findPreference(getString(R.string.pref_language_key)) as Preference
+            val preferenceFiatCurrency = findPreference(getString(R.string.pref_fiat_currency_key)) as Preference
 
-        // Set the initial value for fiat currency preference summary.
-        setListPreferenceSummary(preferenceLanguage, cryptocurrencyRepository.getCurrentLanguage())
+            // Set the initial value for fiat currency preference summary.
+            setListPreferenceSummary(preferenceFiatCurrency, viewModel.currentFiatCurrencyCode)
 
-        preferenceLanguage.setOnPreferenceChangeListener { preference, newValue ->
+            // Change the fiat currency preference summary when preference value changed.
+            preferenceFiatCurrency.setOnPreferenceChangeListener { preference, newValue ->
 
-            val newLanguage: String = newValue.toString()
+                val newCode: String = newValue.toString()
 
-            if (newLanguage == cryptocurrencyRepository.getCurrentLanguage())
-            // False means not to update the state of the preference with the new value.
-                return@setOnPreferenceChangeListener false
-
-            setListPreferenceSummary(preference, newLanguage)
-
-            context?.let {
-
-                stringsLocalization.setLanguage(newLanguage)
-
-                // The current activity and the other activities in the back stack is using the
-                // previous locale to show content. We have somehow to refresh them. The simplest
-                // way is to clear the existing task and start a new one.
-                val i = Intent(activity, MainActivity::class.java)
-                startActivity(i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK))
+                setListPreferenceSummary(preference, newCode)
+                true
             }
 
-            true
-        }
 
+            val preferenceDateFormat = findPreference(getString(R.string.pref_date_format_key)) as Preference
 
-        val preferenceDonateView = findPreference(getString(R.string.pref_donate_view_key)) as Preference
+            // Set the initial value for date format preference summary.
+            setPreferenceDateFormatSummary(preferenceDateFormat, viewModel.currentDateFormat)
 
-        preferenceDonateView.setOnPreferenceClickListener {
+            // Change the date format preference summary when preference value changed.
+            preferenceDateFormat.setOnPreferenceChangeListener { preference, newValue ->
 
-            logConsoleVerbose("Video ad is requested.")
+                val newFormat: String = newValue.toString()
 
-            if (rewardedVideoAd.isLoaded) {
-                rewardedVideoAd.show()
-            } else {
-                viewModel.videoAdIsRequested = true
-                Toast.makeText(activity, getString(R.string.video_ad_loading), Toast.LENGTH_SHORT).show()
-                loadRewardedVideoAd()
+                setPreferenceDateFormatSummary(preference, newFormat)
+                true
             }
 
-            true
-        }
+
+            val preferenceLanguage = findPreference(getString(R.string.pref_language_key)) as Preference
+
+            // Set the initial value for fiat currency preference summary.
+            setListPreferenceSummary(preferenceLanguage, viewModel.currentLanguage)
+
+            preferenceLanguage.setOnPreferenceChangeListener { preference, newValue ->
+
+                val newLanguage: String = newValue.toString()
+
+                if (newLanguage == viewModel.currentLanguage)
+                // False means not to update the state of the preference with the new value.
+                    return@setOnPreferenceChangeListener false
+
+                setListPreferenceSummary(preference, newLanguage)
+
+                context?.let {
+
+                    stringsLocalization.setLanguage(newLanguage)
+
+                    // The current activity and the other activities in the back stack is using the
+                    // previous locale to show content. We have somehow to refresh them. The simplest
+                    // way is to clear the existing task and start a new one.
+                    val i = Intent(activity, MainActivity::class.java)
+                    startActivity(i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK))
+                }
+
+                true
+            }
 
 
-        val preferenceDonateCrypto = findPreference(getString(R.string.pref_donate_crypto_key)) as Preference
+            val preferenceDonateView = findPreference(getString(R.string.pref_donate_view_key)) as Preference
 
-        preferenceDonateCrypto.setOnPreferenceClickListener {
+            preferenceDonateView.setOnPreferenceClickListener {
 
-            activity?.let {
+                logConsoleVerbose("Video ad is requested.")
+
+                if (rewardedVideoAd.isLoaded) {
+                    rewardedVideoAd.show()
+                } else {
+                    viewModel.videoAdIsRequested = true
+                    Toast.makeText(activity, getString(R.string.video_ad_loading), Toast.LENGTH_SHORT).show()
+                    loadRewardedVideoAd()
+                }
+
+                true
+            }
+
+
+            val preferenceDonateCrypto = findPreference(getString(R.string.pref_donate_crypto_key)) as Preference
+
+            preferenceDonateCrypto.setOnPreferenceClickListener {
+
                 // Create an instance of the dialog fragment and show it.
                 val donateCryptoDialog =
                         DonateCryptoDialog.newInstance(
                                 title = getString(R.string.dialog_donate_crypto_title),
-                                cancelButton = getString(R.string.dialog_donate_crypto_cancel_button) )
+                                positiveButton = getString(R.string.dialog_donate_crypto_positive_button))
 
                 // Display the alert dialog.
-                donateCryptoDialog.show(it.supportFragmentManager, DIALOG_DONATE_CRYPTO_TAG)
+                donateCryptoDialog.show(activity.supportFragmentManager, DIALOG_DONATE_CRYPTO_TAG)
+
+                true
             }
 
-            true
+
+            val preferenceThirdPartySoftware = findPreference(getString(R.string.pref_third_party_software_key)) as Preference
+
+            preferenceThirdPartySoftware.setOnPreferenceClickListener {
+
+                Navigation.findNavController(activity, R.id.nav_host_fragment)
+                        .navigate(R.id.action_settings_dest_to_libraries_licenses_dest)
+
+                true
+            }
+
+
+            val preferenceLicense = findPreference(getString(R.string.pref_license_key)) as Preference
+
+            preferenceLicense.setOnPreferenceClickListener {
+
+                Navigation.findNavController(activity, R.id.nav_host_fragment)
+                        .navigate(R.id.action_settings_dest_to_license_dest,
+                                LicenseFragment.createArguments(
+                                        stringsLocalization.getString(R.string.app_name),
+                                        viewModel.appLicenseData))
+
+                true
+            }
+
         }
 
     }

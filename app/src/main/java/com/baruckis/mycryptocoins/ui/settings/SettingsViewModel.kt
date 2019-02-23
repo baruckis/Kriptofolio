@@ -17,9 +17,22 @@
 package com.baruckis.mycryptocoins.ui.settings
 
 import androidx.lifecycle.ViewModel
+import com.baruckis.mycryptocoins.repository.CryptocurrencyRepository
+import com.baruckis.mycryptocoins.repository.LicensesRepository
 import javax.inject.Inject
 
-class SettingsViewModel @Inject constructor() : ViewModel() {
+
+class SettingsViewModel @Inject constructor(
+        cryptocurrencyRepository: CryptocurrencyRepository,
+        licensesRepository: LicensesRepository) : ViewModel() {
 
     var videoAdIsRequested: Boolean = false
+
+    val currentLanguage = cryptocurrencyRepository.getCurrentLanguage()
+
+    val currentFiatCurrencyCode = cryptocurrencyRepository.getCurrentFiatCurrencyCode()
+
+    val currentDateFormat = cryptocurrencyRepository.getCurrentDateFormat()
+
+    val appLicenseData: String = licensesRepository.getAppLicense()
 }

@@ -35,9 +35,12 @@
 
     <string name="undo">"Undo"</string>
     <string name="deleted">"Deleted: %1$d"</string>
-    
+
     <string name="time_format_am">"AM"</string>
     <string name="time_format_pm">"PM"</string>
+
+    <string name="no_application_handle">"No application can handle this request."</string>
+    <string name="install_web_browser">"Please install a web browser."</string>
 
 
     <!-- Strings related to Main Activity -->
@@ -174,15 +177,15 @@
 
     <string name="sample_text_info_last_updated_on_date_time">"Last updated (11/03/2018 12:55:08 UTC)"</string>
     <string name="sample_text_item_code" translatable="false">"BITSILVER"</string>
-    
+
     <string name="dialog_cryptocurrency_amount_title">"How many %1$s coins do you have?"</string>
     <string name="dialog_cryptocurrency_amount_hint">"Enter amount"</string>
     <string name="dialog_cryptocurrency_amount_confirm_button">"OK"</string>
     <string name="dialog_cryptocurrency_amount_cancel_button">"Cancel"</string>
     <string name="dialog_cryptocurrency_amount_error">"Valid number is required!"</string>
-    
 
-    <!-- Strings related to Settings -->
+
+    <!-- Strings related to Settings Activity -->
 
     <string name="title_activity_settings">"Settings"</string>
 
@@ -335,13 +338,13 @@
 
     <string name="dialog_donate_crypto_title">"Donate with crypto"</string>
     <string name="dialog_donate_crypto_message_first">"Send any amount of Bitcoin or Ethereum to the author. Click to copy particular cryptocurrency address."</string>
-    <string name="dialog_donate_crypto_cancel_button">"Cancel"</string>
+    <string name="dialog_donate_crypto_positive_button">"Got it"</string>
 
     <string name="dialog_donate_crypto_bitcoin_address_title">"Copy Bitcoin Address"</string>
-    <string name="dialog_donate_crypto_bitcoin_address">"3Db5NAnFTfNSqc9P851SUcGoosfdm4ZJXW"</string>
+    <string name="dialog_donate_crypto_bitcoin_address" translatable="false">"3Db5NAnFTfNSqc9P851SUcGoosfdm4ZJXW"</string>
 
     <string name="dialog_donate_crypto_ethereum_address_title">"Copy Ethereum Address"</string>
-    <string name="dialog_donate_crypto_ethereum_address">"0x3b402CaF8921d79467B6A319A014413081C28c3E"</string>
+    <string name="dialog_donate_crypto_ethereum_address" translatable="false">"0x3b402CaF8921d79467B6A319A014413081C28c3E"</string>
 
     <string name="dialog_donate_crypto_message_second">"Your any donation would help not only to inspire the author to continue development but also to cover API data service subscription costs if the need arise."</string>
     <string name="dialog_donate_crypto_message_third">"Thank you! 😇"</string>
@@ -361,12 +364,188 @@
     <string name="pref_source_title">"View source on"</string>
     <string name="pref_source_summary" translatable="false">"GitHub"</string>
 
-    <string name="pref_open_source_title">"Used open source licenses"</string>
+    <string name="pref_third_party_software_title">"Third-party software"</string>
+    <string name="pref_third_party_software_summary">"Free &#38; open source licenses"</string>
+    <string name="pref_third_party_software_key" translatable="false">"third party software"</string>
 
     <string name="pref_license_title">"License"</string>
     <string name="pref_license_summary">"Copyright"</string>
+    <string name="pref_license_key" translatable="false">"license"</string>
 
     <string name="pref_app_title" translatable="false">@string/app_name</string>
     <string name="pref_app_summary" translatable="false">@string/app_version</string>
+
+
+    <!-- Strings related to Libraries Licenses List Fragment -->
+
+    <string name="fragment_libraries_licenses_list_title">"Third-party software"</string>
+    <string name="fragment_libraries_licenses_list_subtitle">"Main libraries"</string>
+
+    <string name="action_more">"More"</string>
+
+    <string name="button_read_license">"Read license"</string>
+    <string name="button_project_link">"Project link"</string>
+
+    <string name="library_title_kotlin" translatable="false">"Kotlin Standard"</string>
+    <string name="library_developer_kotlin" translatable="false">"JetBrains"</string>
+    <string name="library_link_kotlin" translatable="false">"https://github.com/JetBrains/kotlin/tree/master/libraries/stdlib"</string>
+    <string name="library_license_name_kotlin" translatable="false">@string/library_license_name_apache_v2</string>
+
+    <string name="library_title_coroutines" translatable="false">"Kotlinx Coroutines Core"</string>
+    <string name="library_developer_coroutines" translatable="false">"JetBrains"</string>
+    <string name="library_link_coroutines" translatable="false">"https://github.com/Kotlin/kotlinx.coroutines/tree/master/core"</string>
+    <string name="library_license_name_coroutines" translatable="false">@string/library_license_name_apache_v2</string>
+
+    <string name="library_title_coroutines_android" translatable="false">"Kotlinx Coroutines Android"</string>
+    <string name="library_developer_coroutines_android" translatable="false">"JetBrains"</string>
+    <string name="library_link_coroutines_android" translatable="false">"https://github.com/Kotlin/kotlinx.coroutines/tree/master/ui/kotlinx-coroutines-android"</string>
+    <string name="library_license_name_coroutines_android" translatable="false">@string/library_license_name_apache_v2</string>
+
+    <string name="library_title_ktx" translatable="false">"Android KTX"</string>
+    <string name="library_developer_ktx" translatable="false">"Android Open Source Project"</string>
+    <string name="library_link_ktx" translatable="false">"https://android.github.io/android-ktx/core-ktx"</string>
+    <string name="library_license_name_ktx" translatable="false">@string/library_license_name_apache_v2</string>
+
+    <string name="library_title_android_appcompat" translatable="false">"Android AppCompat"</string>
+    <string name="library_developer_android_appcompat" translatable="false">"Android Open Source Project"</string>
+    <string name="library_link_android_appcompat" translatable="false">"https://developer.android.com/topic/libraries/support-library/packages#v7-appcompat"</string>
+    <string name="library_license_name_android_appcompat" translatable="false">@string/library_license_name_apache_v2</string>
+
+    <string name="library_title_android_cardview" translatable="false">"Android CardView"</string>
+    <string name="library_developer_android_cardview" translatable="false">"Android Open Source Project"</string>
+    <string name="library_link_android_cardview" translatable="false">"https://developer.android.com/topic/libraries/support-library/packages#v7-cardview"</string>
+    <string name="library_license_name_android_cardview" translatable="false">@string/library_license_name_apache_v2</string>
+
+    <string name="library_title_android_preference" translatable="false">"Android Preference"</string>
+    <string name="library_developer_android_preference" translatable="false">"Android Open Source Project"</string>
+    <string name="library_link_android_preference" translatable="false">"https://developer.android.com/guide/topics/ui/settings"</string>
+    <string name="library_license_name_android_preference" translatable="false">@string/library_license_name_apache_v2</string>
+
+    <string name="library_title_android_recyclerview" translatable="false">"Android RecyclerView"</string>
+    <string name="library_developer_android_recyclerview" translatable="false">"Android Open Source Project"</string>
+    <string name="library_link_android_recyclerview" translatable="false">"https://developer.android.com/guide/topics/ui/layout/recyclerview"</string>
+    <string name="library_license_name_android_recyclerview" translatable="false">@string/library_license_name_apache_v2</string>
+
+    <string name="library_title_android_recyclerview_selection" translatable="false">"Android RecyclerView Selection"</string>
+    <string name="library_developer_android_recyclerview_selection" translatable="false">"Android Open Source Project"</string>
+    <string name="library_link_android_recyclerview_selection" translatable="false">"https://developer.android.com/reference/androidx/recyclerview/selection/package-summary"</string>
+    <string name="library_license_name_android_recyclerview_selection" translatable="false">@string/library_license_name_apache_v2</string>
+
+    <string name="library_title_android_constraint_layout" translatable="false">"Android Constraint Layout"</string>
+    <string name="library_developer_android_constraint_layout" translatable="false">"Android Open Source Project"</string>
+    <string name="library_link_android_constraint_layout" translatable="false">"https://developer.android.com/reference/android/support/constraint/ConstraintLayout"</string>
+    <string name="library_license_name_android_constraint_layout" translatable="false">@string/library_license_name_apache_v2</string>
+
+    <string name="library_title_android_material_components" translatable="false">"Android Material Components"</string>
+    <string name="library_developer_android_material_components" translatable="false">"Android Open Source Project"</string>
+    <string name="library_link_android_material_components" translatable="false">"https://github.com/material-components/material-components-android"</string>
+    <string name="library_license_name_android_material_components" translatable="false">@string/library_license_name_apache_v2</string>
+
+    <string name="library_title_android_data_binding" translatable="false">"Android Data Binding"</string>
+    <string name="library_developer_android_data_binding" translatable="false">"Android Open Source Project"</string>
+    <string name="library_link_android_data_binding" translatable="false">"https://developer.android.com/topic/libraries/data-binding"</string>
+    <string name="library_license_name_android_data_binding" translatable="false">@string/library_license_name_apache_v2</string>
+
+    <string name="library_title_android_lifecycle_aware" translatable="false">"Android Lifecycle-Aware Components"</string>
+    <string name="library_developer_android_lifecycle_aware" translatable="false">"Android Open Source Project"</string>
+    <string name="library_link_android_lifecycle_aware" translatable="false">"https://developer.android.com/topic/libraries/architecture/lifecycle"</string>
+    <string name="library_license_name_android_lifecycle_aware" translatable="false">@string/library_license_name_apache_v2</string>
+
+    <string name="library_title_android_room" translatable="false">"Android Room Persistence"</string>
+    <string name="library_developer_android_room" translatable="false">"Android Open Source Project"</string>
+    <string name="library_link_android_room" translatable="false">"https://developer.android.com/topic/libraries/architecture/room"</string>
+    <string name="library_license_name_android_room" translatable="false">@string/library_license_name_apache_v2</string>
+
+    <string name="library_title_android_navigation" translatable="false">"Android Navigation"</string>
+    <string name="library_developer_android_navigation" translatable="false">"Android Open Source Project"</string>
+    <string name="library_link_android_navigation" translatable="false">"https://developer.android.com/topic/libraries/architecture/navigation.html"</string>
+    <string name="library_license_name_android_navigation" translatable="false">@string/library_license_name_apache_v2</string>
+
+    <string name="library_title_dagger" translatable="false">"Dagger"</string>
+    <string name="library_developer_dagger" translatable="false">"Square / Google"</string>
+    <string name="library_link_dagger" translatable="false">"https://google.github.io/dagger"</string>
+    <string name="library_license_name_dagger" translatable="false">@string/library_license_name_apache_v2</string>
+
+    <string name="library_title_retrofit" translatable="false">"Retrofit"</string>
+    <string name="library_developer_retrofit" translatable="false">"Square"</string>
+    <string name="library_link_retrofit" translatable="false">"https://square.github.io/retrofit"</string>
+    <string name="library_license_name_retrofit" translatable="false">@string/library_license_name_apache_v2</string>
+
+    <string name="library_title_okhttp" translatable="false">"OkHttp"</string>
+    <string name="library_developer_okhttp" translatable="false">"Square"</string>
+    <string name="library_link_okhttp" translatable="false">"https://square.github.io/okhttp"</string>
+    <string name="library_license_name_okhttp" translatable="false">@string/library_license_name_apache_v2</string>
+
+    <string name="library_title_okhttp_logging_interceptor" translatable="false">"OkHttp Logging Interceptor"</string>
+    <string name="library_developer_okhttp_logging_interceptor" translatable="false">"Square"</string>
+    <string name="library_link_okhttp_logging_interceptor" translatable="false">"https://github.com/square/okhttp/tree/master/okhttp-logging-interceptor"</string>
+    <string name="library_license_name_okhttp_logging_interceptor" translatable="false">@string/library_license_name_apache_v2</string>
+
+    <string name="library_title_gson" translatable="false">"Gson"</string>
+    <string name="library_developer_gson" translatable="false">"Google"</string>
+    <string name="library_link_gson" translatable="false">"https://github.com/google/gson"</string>
+    <string name="library_license_name_gson" translatable="false">@string/library_license_name_apache_v2</string>
+
+    <string name="library_title_glide" translatable="false">"Glide"</string>
+    <string name="library_developer_glide" translatable="false">"Google"</string>
+    <string name="library_link_glide" translatable="false">"https://bumptech.github.io/glide"</string>
+    <string name="library_license_name_glide">"BSD, part MIT and Apache 2.0"</string>
+
+    <string name="library_title_glide_okhttp" translatable="false">"Glide OkHttp Integration"</string>
+    <string name="library_developer_glide_okhttp" translatable="false">"Google"</string>
+    <string name="library_link_glide_okhttp" translatable="false">"http://bumptech.github.io/glide/int/okhttp3.html"</string>
+    <string name="library_license_name_glide_okhttp">@string/library_license_name_glide</string>
+
+    <string name="library_title_flipview" translatable="false">"FlipView"</string>
+    <string name="library_developer_flipview" translatable="false">"Davide Steduto"</string>
+    <string name="library_link_flipview" translatable="false">"https://github.com/davideas/FlipView"</string>
+    <string name="library_license_name_flipview" translatable="false">@string/library_license_name_apache_v2</string>
+
+    <string name="library_title_stetho" translatable="false">"Stetho"</string>
+    <string name="library_developer_stetho" translatable="false">"Facebook"</string>
+    <string name="library_link_stetho" translatable="false">"http://facebook.github.io/stetho"</string>
+    <string name="library_license_name_stetho" translatable="false">@string/library_license_name_bsd</string>
+
+    <string name="library_title_google_ads" translatable="false">"Google Mobile Ads SDK"</string>
+    <string name="library_developer_google_ads" translatable="false">"Google"</string>
+    <string name="library_link_google_ads" translatable="false">"https://developer.android.com/distribute/play-services"</string>
+    <string name="library_license_name_google_ads" translatable="false">@string/library_license_name_android_sdk</string>
+
+    <string name="library_title_oss_licenses" translatable="false">"OSS Licenses Gradle Plugin"</string>
+    <string name="library_developer_oss_licenses" translatable="false">"Google"</string>
+    <string name="library_link_oss_licenses" translatable="false">"https://github.com/google/play-services-plugins"</string>
+    <string name="library_license_name_oss_licenses" translatable="false">@string/library_license_name_android_sdk</string>
+
+    <string name="library_title_android_test" translatable="false">"Android Test"</string>
+    <string name="library_developer_android_test" translatable="false">"Android Open Source Project"</string>
+    <string name="library_link_android_test" translatable="false">"https://android.github.io/android-test"</string>
+    <string name="library_license_name_android_test" translatable="false">@string/library_license_name_apache_v2</string>
+
+    <string name="library_title_android_test_espresso" translatable="false">"Android Test Espresso"</string>
+    <string name="library_developer_android_test_espresso" translatable="false">"Android Open Source Project"</string>
+    <string name="library_link_android_test_espresso" translatable="false">"https://developer.android.com/training/testing/espresso"</string>
+    <string name="library_license_name_android_test_espresso" translatable="false">@string/library_license_name_apache_v2</string>
+
+    <string name="library_title_junit" translatable="false">"JUnit"</string>
+    <string name="library_developer_junit">"Erich Gamma, Kent Beck &#38; JUnit team"</string>
+    <string name="library_link_junit" translatable="false">"https://junit.org"</string>
+    <string name="library_license_name_junit" translatable="false">@string/library_license_name_epl_v1</string>
+
+
+    <string name="library_license_name_apache_v2" translatable="false">"Apache 2.0"</string>
+    <string name="library_license_name_bsd" translatable="false">"BSD"</string>
+    <string name="library_license_name_android_sdk" translatable="false">"Android Software Development Kit License Agreement"</string>
+    <string name="library_license_name_epl_v1" translatable="false">"Eclipse Public License 1.0"</string>
+
+
+    <!-- Strings related to License Fragment -->
+
+    <string name="fragment_license_title">"License"</string>
+
+
+    <!-- Strings related to Oss Licenses Menu Activity -->
+
+    <string name="activity_oss_licenses_menu_title">"All libraries licenses"</string>
+
 
 </resources>

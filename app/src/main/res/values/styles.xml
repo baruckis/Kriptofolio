@@ -115,9 +115,9 @@
         <item name="enableInitialAnimation">false</item>
     </style>
 
-    <style name="Dialog"/>
+    <style name="Dialog" />
 
-    <style name="Dialog.DonateCrypto"/>
+    <style name="Dialog.DonateCrypto" />
 
     <style name="Dialog.DonateCrypto.ClickableItemImageIcon">
         <item name="android:layout_width">wrap_content</item>
@@ -128,6 +128,49 @@
     <style name="Dialog.DonateCrypto.ClickableItemTextView" parent="AutoSizeText">
         <item name="android:layout_width">match_parent</item>
         <item name="android:textAlignment">center</item>
+    </style>
+
+    <style name="CardStyle" parent="Widget.MaterialComponents.CardView">
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:layout_marginBottom">8dp</item>
+        <item name="android:layout_marginEnd">8dp</item>
+        <item name="android:layout_marginStart">8dp</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+    </style>
+
+    <style name="CardStyle.LibrariesLicenses" parent="CardStyle">
+        <item name="android:clickable">false</item>
+        <item name="android:focusable">false</item>
+    </style>
+
+    <style name="CardStyle.LibrariesLicensesTitle" parent="TextAppearance.AppCompat.Large">
+        <item name="android:layout_marginEnd">8dp</item>
+        <item name="android:layout_marginStart">8dp</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:layout_marginBottom">8dp</item>
+    </style>
+
+    <style name="CardStyle.LibrariesLicensesDeveloper" parent="TextAppearance.AppCompat.Small">
+        <item name="android:textAlignment">viewEnd</item>
+        <item name="android:layout_marginEnd">8dp</item>
+        <item name="android:layout_marginStart">8dp</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:layout_marginBottom">8dp</item>
+    </style>
+
+    <style name="CardStyle.LibrariesLicensesLicense" parent="TextAppearance.AppCompat.Medium">
+        <item name="android:layout_marginEnd">8dp</item>
+        <item name="android:layout_marginStart">8dp</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:layout_marginBottom">8dp</item>
+    </style>
+
+    <style name="CardStyle.BorderlessButton" parent="Widget.AppCompat.Button.Borderless.Colored">
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:layout_marginBottom">8dp</item>
+        <item name="android:layout_marginStart">8dp</item>
+        <item name="android:layout_marginEnd">0dp</item>
     </style>
 
 </resources>

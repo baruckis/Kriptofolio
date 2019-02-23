@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright 2018-2019 Andrius Baruckis www.baruckis.com | mycryptocoins.baruckis.com
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="libraryLicenseInfo"
+            type="com.baruckis.mycryptocoins.db.LibraryLicenseInfo" />
+
+    </data>
+
+    <androidx.cardview.widget.CardView
+        style="@style/CardStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/libraries_licenses_cardview_list_item_margin">
+
+            <TextView
+                android:id="@+id/title"
+                style="@style/CardStyle.LibrariesLicensesTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="@{libraryLicenseInfo.library}"
+                app:layout_constraintBottom_toTopOf="@+id/divider"
+                app:layout_constraintEnd_toStartOf="@+id/developer"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Material Design" />
+
+            <TextView
+                android:id="@+id/developer"
+                style="@style/CardStyle.LibrariesLicensesDeveloper"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxWidth="100dp"
+                android:minWidth="60dp"
+                android:text="@{libraryLicenseInfo.developer}"
+                app:layout_constraintBottom_toTopOf="@+id/divider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Android" />
+
+            <View
+                android:id="@+id/divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="@dimen/libraries_licenses_cardview_list_item_margin"
+                android:layout_marginTop="@dimen/libraries_licenses_cardview_list_item_margin"
+                android:layout_marginEnd="@dimen/libraries_licenses_cardview_list_item_margin"
+                android:layout_marginBottom="@dimen/libraries_licenses_cardview_list_item_margin"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/title" />
+
+            <TextView
+                android:id="@+id/license"
+                style="@style/CardStyle.LibrariesLicensesLicense"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{libraryLicenseInfo.licenseName}"
+                android:textAlignment="viewEnd"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/divider"
+                tools:text="@string/library_license_name_apache_v2" />
+
+            <Button
+                android:id="@+id/button_read_license"
+                style="@style/CardStyle.BorderlessButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/button_read_license"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/license" />
+
+            <Button
+                android:id="@+id/button_project_link"
+                style="@style/CardStyle.BorderlessButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/libraries_licenses_cardview_list_item_margin"
+                android:text="@string/button_project_link"
+                app:layout_constraintEnd_toStartOf="@id/button_read_license"
+                app:layout_constraintTop_toBottomOf="@id/license" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</layout>

@@ -19,6 +19,8 @@ package com.baruckis.mycryptocoins.ui.settings
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation
+import com.baruckis.mycryptocoins.R
 import com.baruckis.mycryptocoins.ui.common.BaseActivity
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
@@ -39,26 +41,13 @@ class SettingsActivity : BaseActivity(), HasSupportFragmentInjector {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setupActionBar()
-
-        // Check to determine whether the PreferenceFragment has already been created. When you
-        // change the screen orientation (or any other action that destroys and re-creates the
-        // Activity), your PreferenceFragment will get created twice, which is what causes it to
-        // lose its state.
-        if (savedInstanceState == null) {
-            supportFragmentManager
-                    .beginTransaction()
-                    .replace(android.R.id.content, SettingsFragment())
-                    .commit()
-        }
-    }
-
-
-    /**
-     * Set up the [android.app.ActionBar], if the API is available.
-     */
-    private fun setupActionBar() {
+        // Get a support ActionBar corresponding to this toolbar and enable the Up button.
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        setContentView(R.layout.activity_settings)
     }
 
+    override fun onSupportNavigateUp() =
+            Navigation.findNavController(this, R.id.nav_host_fragment).navigateUp() ||
+                    super.onSupportNavigateUp()
 }

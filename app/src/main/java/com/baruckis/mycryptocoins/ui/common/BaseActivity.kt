@@ -82,5 +82,4 @@ abstract class BaseActivity : AppCompatActivity() {
             throw RuntimeException(e)
         }
     }
-
 }

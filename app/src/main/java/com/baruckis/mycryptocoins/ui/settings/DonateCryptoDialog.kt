@@ -39,13 +39,13 @@ class DonateCryptoDialog : DialogFragment() {
         const val DIALOG_DONATE_CRYPTO_TAG = "donate_crypto_dialog"
 
         private const val EXTRA_TITLE = "title"
-        private const val EXTRA_CANCEL_BUTTON = "cancel_button"
+        private const val EXTRA_POSITIVE_BUTTON = "positive_button"
 
-        fun newInstance(title: String, cancelButton: String): DonateCryptoDialog {
+        fun newInstance(title: String, positiveButton: String): DonateCryptoDialog {
             val dialog = DonateCryptoDialog()
             val args = Bundle().apply {
                 putString(EXTRA_TITLE, title)
-                putString(EXTRA_CANCEL_BUTTON, cancelButton)
+                putString(EXTRA_POSITIVE_BUTTON, positiveButton)
             }
             dialog.arguments = args
             return dialog
@@ -57,7 +57,7 @@ class DonateCryptoDialog : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
         val title = arguments?.getString(DonateCryptoDialog.EXTRA_TITLE)
-        val cancelButton = arguments?.getString(DonateCryptoDialog.EXTRA_CANCEL_BUTTON)
+        val positiveButton = arguments?.getString(DonateCryptoDialog.EXTRA_POSITIVE_BUTTON)
 
         val dialog = activity?.let { activity ->
             val builder = AlertDialog.Builder(activity)
@@ -93,8 +93,8 @@ class DonateCryptoDialog : DialogFragment() {
 
             builder.setCancelable(true)
 
-            // Set the alert dialog negative/cancel button.
-            builder.setNegativeButton(cancelButton) { _, _ ->
+            // Set the alert dialog positive button.
+            builder.setPositiveButton(positiveButton) { _, _ ->
                 // Do nothing.
             }
 

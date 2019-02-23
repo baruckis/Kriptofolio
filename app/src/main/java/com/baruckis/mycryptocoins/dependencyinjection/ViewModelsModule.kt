@@ -20,6 +20,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.baruckis.mycryptocoins.ui.addsearchlist.AddSearchViewModel
 import com.baruckis.mycryptocoins.ui.mainlist.MainViewModel
+import com.baruckis.mycryptocoins.ui.settings.thirdpartysoft.LibrariesLicensesViewModel
 import com.baruckis.mycryptocoins.ui.settings.SettingsViewModel
 import dagger.Binds
 import dagger.Module
@@ -46,6 +47,11 @@ abstract class ViewModelsModule {
     @IntoMap
     @ViewModelKey(SettingsViewModel::class)
     abstract fun bindSettingsViewModel(settingsViewModel: SettingsViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(LibrariesLicensesViewModel::class)
+    abstract fun bindLibrariesLicensesViewModel(librariesLicensesViewModel: LibrariesLicensesViewModel): ViewModel
 
 
     @Binds

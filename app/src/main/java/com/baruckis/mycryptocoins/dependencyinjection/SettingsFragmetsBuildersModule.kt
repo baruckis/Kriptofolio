@@ -16,24 +16,20 @@
 
 package com.baruckis.mycryptocoins.dependencyinjection
 
-import com.baruckis.mycryptocoins.ui.addsearchlist.AddSearchActivity
-import com.baruckis.mycryptocoins.ui.mainlist.MainActivity
-import com.baruckis.mycryptocoins.ui.settings.SettingsActivity
+import com.baruckis.mycryptocoins.ui.settings.thirdpartysoft.LibrariesLicensesListFragment
+import com.baruckis.mycryptocoins.ui.settings.SettingsFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
 /**
- * All activities intended to use Dagger @Inject should be listed here.
+ * All fragments related to SettingsActivity intended to use Dagger @Inject should be listed here.
  */
 @Module
-abstract class ActivityBuildersModule {
+abstract class SettingsFragmetsBuildersModule {
 
-    @ContributesAndroidInjector(modules = [MainListFragmetBuildersModule::class]) // Where to apply the injection.
-    abstract fun contributeMainActivity(): MainActivity
+    @ContributesAndroidInjector() // Attaches fragment to Dagger graph.
+    abstract fun contributeSettingsFragment(): SettingsFragment
 
-    @ContributesAndroidInjector
-    abstract fun contributeAddSearchActivity(): AddSearchActivity
-
-    @ContributesAndroidInjector(modules = [SettingsFragmetsBuildersModule::class]) // Where to apply the injection.
-    abstract fun contributeSettingsActivity(): SettingsActivity
+    @ContributesAndroidInjector() // Attaches fragment to Dagger graph.
+    abstract fun contributeLibrariesLicensesListFragment(): LibrariesLicensesListFragment
 }

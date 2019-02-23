@@ -100,10 +100,13 @@
 
         <Preference
             android:icon="@drawable/ic_file_multiple"
-            android:title="@string/pref_open_source_title" />
+            android:key="@string/pref_third_party_software_key"
+            android:summary="@string/pref_third_party_software_summary"
+            android:title="@string/pref_third_party_software_title" />
 
         <Preference
             android:icon="@drawable/ic_copyright"
+            android:key="@string/pref_license_key"
             android:summary="@string/pref_license_summary"
             android:title="@string/pref_license_title" />
 

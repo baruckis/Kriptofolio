@@ -14,18 +14,20 @@
  * limitations under the License.
  */
 
-package com.baruckis.mycryptocoins.dependencyinjection
+package com.baruckis.mycryptocoins.ui.settings.thirdpartysoft
 
-import com.baruckis.mycryptocoins.ui.settings.SettingsFragment
-import dagger.Module
-import dagger.android.ContributesAndroidInjector
+import androidx.lifecycle.ViewModel
+import com.baruckis.mycryptocoins.db.LibraryLicenseInfo
+import com.baruckis.mycryptocoins.repository.LicensesRepository
+import javax.inject.Inject
 
-/**
- * All fragments related to SettingsActivity intended to use Dagger @Inject should be listed here.
- */
-@Module
-abstract class SettingsFragmetBuildersModule {
 
-    @ContributesAndroidInjector() // Attaches fragment to Dagger graph.
-    abstract fun contributeSettingsFragment(): SettingsFragment
+class LibrariesLicensesViewModel @Inject constructor(
+        licensesRepository: LicensesRepository) : ViewModel() {
+
+    var librariesLicensesData: List<LibraryLicenseInfo> = licensesRepository.getLibrariesLicensesList()
+
+    val ossLicensesTitle: String = licensesRepository.getOssLicensesTitle()
+
+    val noBrowserFoundMessage: String = licensesRepository.getNoBrowserFoundMessage()
 }

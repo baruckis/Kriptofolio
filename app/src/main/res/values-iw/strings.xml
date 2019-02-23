@@ -31,6 +31,9 @@
     <string name="time_format_am">"AM"</string> <!-- TODO translate to HE -->
     <string name="time_format_pm">"PM"</string> <!-- TODO translate to HE -->
 
+    <string name="no_application_handle">"No application can handle this request."</string> <!-- TODO translate to HE -->
+    <string name="install_web_browser">"Please install a web browser."</string> <!-- TODO translate to HE -->
+
 
     <!-- Strings related to Main Activity -->
 
@@ -76,7 +79,7 @@
     <string name="dialog_cryptocurrency_amount_error">"Valid number is required!"</string> <!-- TODO translate to HE -->
 
 
-    <!-- Strings related to Settings -->
+    <!-- Strings related to Settings Activity -->
 
     <string name="title_activity_settings">"הגדרות"</string>
 
@@ -156,13 +159,10 @@
 
     <string name="dialog_donate_crypto_title">"תרום עם הצפנה"</string>
     <string name="dialog_donate_crypto_message_first">"Send any amount of Bitcoin or Ethereum to the author. Click to copy particular cryptocurrency address."</string> <!-- TODO translate to HE -->
-    <string name="dialog_donate_crypto_cancel_button">"Cancel"</string> <!-- TODO translate to HE -->
+    <string name="dialog_donate_crypto_positive_button">"Got it"</string> <!-- TODO translate to HE -->
 
     <string name="dialog_donate_crypto_bitcoin_address_title">"Copy Bitcoin Address"</string> <!-- TODO translate to HE -->
-    <string name="dialog_donate_crypto_bitcoin_address">"3Db5NAnFTfNSqc9P851SUcGoosfdm4ZJXW"</string> <!-- TODO translate to HE -->
-
     <string name="dialog_donate_crypto_ethereum_address_title">"Copy Ethereum Address"</string> <!-- TODO translate to HE -->
-    <string name="dialog_donate_crypto_ethereum_address">"0x3b402CaF8921d79467B6A319A014413081C28c3E"</string> <!-- TODO translate to HE -->
 
     <string name="dialog_donate_crypto_message_second">"Your any donation would help not only to inspire the author to continue development but also to cover API data service subscription costs if the need arise."</string> <!-- TODO translate to HE -->
     <string name="dialog_donate_crypto_message_third">"Thank you! 😇"</string> <!-- TODO translate to HE -->
@@ -180,9 +180,37 @@
 
     <string name="pref_source_title">"הצג מקור על"</string>
 
-    <string name="pref_open_source_title">"רישיונות בשימוש בקוד פתוח"</string>
+    <string name="pref_third_party_software_title">"Third-party software"</string> <!-- TODO translate to HE -->
+    <string name="pref_third_party_software_summary">"Free &#38; open source licenses"</string> <!-- TODO translate to HE -->
 
     <string name="pref_license_title">"רישיון"</string>
     <string name="pref_license_summary">"זכויות יוצרים"</string>
+
+
+    <!-- Strings related to Libraries Licenses Fragment -->
+
+    <string name="fragment_libraries_licenses_list_title">"Third-party software"</string> <!-- TODO translate to HE -->
+    <string name="fragment_libraries_licenses_list_subtitle">"Main libraries"</string> <!-- TODO translate to HE -->
+
+    <string name="action_more">"More"</string> <!-- TODO translate to HE -->
+
+    <string name="button_read_license">"Read license"</string> <!-- TODO translate to HE -->
+    <string name="button_project_link">"Project link"</string> <!-- TODO translate to HE -->
+
+    <string name="library_license_name_glide">"BSD, part MIT and Apache 2.0"</string> <!-- TODO translate to HE -->
+
+    <string name="library_license_name_glide_okhttp">@string/library_license_name_glide</string>
+
+    <string name="library_developer_junit">"Erich Gamma, Kent Beck &#38; JUnit team"</string> <!-- TODO translate to HE -->
+
+
+    <!-- Strings related to License Fragment -->
+
+    <string name="fragment_license_title">"License"</string> <!-- TODO translate to HE -->
+
+
+    <!-- Strings related to Oss Licenses Menu Activity -->
+
+    <string name="activity_oss_licenses_menu_title">"All libraries licenses"</string> <!-- TODO translate to HE -->
 
 </resources>
