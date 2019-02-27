@@ -47,6 +47,9 @@ class SettingsActivity : BaseActivity(), HasSupportFragmentInjector {
         setContentView(R.layout.activity_settings)
     }
 
+    // We want to finish the activity when we are at the start destination of Navigation component.
+    // Navigation library would hide the back arrow whenever it is at the start destination, so
+    // we do not use recommended "setupActionBarWithNavController" and control everything manually.
     override fun onSupportNavigateUp() =
             Navigation.findNavController(this, R.id.nav_host_fragment).navigateUp() ||
                     super.onSupportNavigateUp()

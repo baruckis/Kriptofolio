@@ -317,8 +317,14 @@
     <string name="pref_support_category_title">"Support"</string>
 
     <string name="pref_rate_app_title">"Rate app in Google Play"</string>
+    <string name="pref_rate_app_key" translatable="false">"rate app"</string>
+
 
     <string name="pref_share_app_title">"Share with your friends"</string>
+    <string name="pref_share_app_key" translatable="false">"share app"</string>
+
+    <string name="share_app_message">"I suggest this free cryptocurrencies portfolio Android app for you: "</string>
+    <string name="share_app_chooser">"Share with: "</string>
 
 
     <string name="pref_donate_view_key" translatable="false">"preference donate view"</string>
@@ -353,16 +359,27 @@
     <string name="dialog_donate_crypto_ethereum_address_copy_confirmation">"Ethereum address copied!"</string>
 
 
+    <string name="pref_buy_me_coffee_key" translatable="false">"buy me coffee"</string>
+    <string name="pref_buy_me_coffee_title">"Buy me a coffee"</string>
+    <string name="pref_buy_me_coffee_url" translatable="false">"https://www.buymeacoffee.com/baruckis"</string>
+
+
     <string name="pref_support_about_title">"About"</string>
 
     <string name="pref_website_title">"Website"</string>
-    <string name="pref_website_summary">"mycryptocoins.baruckis.com"</string>
+    <string name="pref_website_summary" translatable="false">"mycryptocoins.baruckis.com"</string>
+    <string name="pref_website_key" translatable="false">"website"</string>
+    <string name="pref_website_url" translatable="false">"http://mycryptocoins.baruckis.com"</string>
 
     <string name="pref_author_title">"Author Andrius Baruckis"</string>
     <string name="pref_author_summary" translatable="false">"www.baruckis.com"</string>
+    <string name="pref_author_key" translatable="false">"author"</string>
+    <string name="pref_author_url" translatable="false">"https://www.baruckis.com"</string>
 
     <string name="pref_source_title">"View source on"</string>
     <string name="pref_source_summary" translatable="false">"GitHub"</string>
+    <string name="pref_source_key" translatable="false">"source"</string>
+    <string name="pref_source_url" translatable="false">"https://github.com/baruckis/MyCryptoCoinsApp-Android"</string>
 
     <string name="pref_third_party_software_title">"Third-party software"</string>
     <string name="pref_third_party_software_summary">"Free &#38; open source licenses"</string>

@@ -144,7 +144,12 @@
 
     <string name="pref_rate_app_title">"Įvertink programą Google Play"</string>
 
+
     <string name="pref_share_app_title">"Pasidalink su draugais"</string>
+
+    <string name="share_app_message">"Siūlau tau šią nemokamą kriptovaliutų portfelio Android programėlę: "</string>
+    <string name="share_app_chooser">"Pasidalink su: "</string>
+
 
     <string name="pref_donate_view_title">"Dovanok savo peržiūrą"</string>
     <string name="pref_donate_view_summary">"Tiesiog peržiūrėk trumpą video reklamą"</string>
@@ -171,10 +176,12 @@
     <string name="dialog_donate_crypto_ethereum_address_copy_confirmation">"Ethereum adresas nukopijuotas!"</string>
 
 
+    <string name="pref_buy_me_coffee_title">"Nupirkite man kavos"</string>
+
+
     <string name="pref_support_about_title">"Apie"</string>
 
     <string name="pref_website_title">"Interneto svetainė"</string>
-    <string name="pref_website_summary">"mycryptocoins.baruckis.com/lt"</string>
 
     <string name="pref_author_title">"Autorius Andrius Baruckis"</string>
 

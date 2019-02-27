@@ -19,15 +19,16 @@ package com.baruckis.mycryptocoins.ui.settings.thirdpartysoft
 import androidx.lifecycle.ViewModel
 import com.baruckis.mycryptocoins.db.LibraryLicenseInfo
 import com.baruckis.mycryptocoins.repository.LicensesRepository
+import com.baruckis.mycryptocoins.utilities.localization.StringsLocalization
 import javax.inject.Inject
 
 
 class LibrariesLicensesViewModel @Inject constructor(
         licensesRepository: LicensesRepository) : ViewModel() {
 
-    var librariesLicensesData: List<LibraryLicenseInfo> = licensesRepository.getLibrariesLicensesList()
-
-    val ossLicensesTitle: String = licensesRepository.getOssLicensesTitle()
+    val librariesLicensesData: List<LibraryLicenseInfo> = licensesRepository.getLibrariesLicensesList()
 
     val noBrowserFoundMessage: String = licensesRepository.getNoBrowserFoundMessage()
+
+    val stringsLocalization: StringsLocalization = licensesRepository.getStringsLocalization()
 }

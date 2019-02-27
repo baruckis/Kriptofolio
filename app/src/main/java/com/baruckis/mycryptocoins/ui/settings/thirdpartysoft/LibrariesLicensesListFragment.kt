@@ -58,11 +58,11 @@ class LibrariesLicensesListFragment : Fragment(), Injectable {
 
         activity?.let { activity ->
 
-            activity.title = getString(R.string.fragment_libraries_licenses_list_title)
-            if (activity is AppCompatActivity) activity.supportActionBar?.subtitle = getString(R.string.fragment_libraries_licenses_list_subtitle)
-
             // Obtain ViewModel from ViewModelProviders, using parent activity as LifecycleOwner.
             viewModel = ViewModelProviders.of(activity, viewModelFactory).get(LibrariesLicensesViewModel::class.java)
+
+            activity.title = viewModel.stringsLocalization.getString(R.string.fragment_libraries_licenses_list_title)
+            if (activity is AppCompatActivity) activity.supportActionBar?.subtitle = viewModel.stringsLocalization.getString(R.string.fragment_libraries_licenses_list_subtitle)
 
             recyclerView = recyclerview_fragment_libraries_licenses_list
 
@@ -97,8 +97,8 @@ class LibrariesLicensesListFragment : Fragment(), Injectable {
     // part of Google Play services or not. Tapping the library name will display additional
     // licenseName information for that library.
     private fun showMoreLicenses(): Boolean {
-        OssLicensesMenuActivity.setActivityTitle(viewModel.ossLicensesTitle)
         startActivity(Intent(context, OssLicensesMenuActivity::class.java))
+        OssLicensesMenuActivity.setActivityTitle(viewModel.stringsLocalization.getString(R.string.activity_oss_licenses_menu_title))
         return true
     }
 

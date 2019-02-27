@@ -19,12 +19,14 @@ package com.baruckis.mycryptocoins.ui.settings
 import androidx.lifecycle.ViewModel
 import com.baruckis.mycryptocoins.repository.CryptocurrencyRepository
 import com.baruckis.mycryptocoins.repository.LicensesRepository
+import com.baruckis.mycryptocoins.utilities.localization.StringsLocalization
 import javax.inject.Inject
 
 
 class SettingsViewModel @Inject constructor(
         cryptocurrencyRepository: CryptocurrencyRepository,
-        licensesRepository: LicensesRepository) : ViewModel() {
+        licensesRepository: LicensesRepository,
+        val stringsLocalization: StringsLocalization) : ViewModel() {
 
     var videoAdIsRequested: Boolean = false
 
@@ -35,4 +37,6 @@ class SettingsViewModel @Inject constructor(
     val currentDateFormat = cryptocurrencyRepository.getCurrentDateFormat()
 
     val appLicenseData: String = licensesRepository.getAppLicense()
+
+    val noBrowserFoundMessage: String = licensesRepository.getNoBrowserFoundMessage()
 }

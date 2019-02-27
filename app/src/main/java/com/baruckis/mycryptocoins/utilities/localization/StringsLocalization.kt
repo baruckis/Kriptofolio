@@ -45,8 +45,7 @@ class StringsLocalization @Inject constructor(
     // It will get the language from Localization and use it to retrieve the proper resources from
     // the map. If the map does not contain anything at that language key for some reason, we will
     // use fallback resources as a last resort before failing to provide a string.
-    fun getString(@StringRes stringId: Int): String = resMap.
-            getOrElse(localization.currentLanguage, this::getFallbackResources).getString(stringId)
+    fun getString(@StringRes stringId: Int): String = resMap.getOrElse(localization.currentLanguage, this::getFallbackResources).getString(stringId)
 
 
     private fun getFallbackResources(): Resources {

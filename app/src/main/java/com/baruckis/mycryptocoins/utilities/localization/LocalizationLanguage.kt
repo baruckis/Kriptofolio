@@ -42,7 +42,9 @@ class LocalizationLanguage(
             val cachedValue = currentLanguageCache
             // If we don’t have it yet, we read from SharedPreferences.
             return if (cachedValue == null) {
-                val storedValue = sharedPreferences.getString(context.getString(R.string.pref_language_key), "")
+                val storedValue = sharedPreferences.getString(
+                        context.getString(R.string.pref_language_key),
+                        context.getString(R.string.pref_default_language_value))
                 // Then we try to get our enum from that value.
                 val storedLanguage = try {
                     Language.fromLocale(Locale(storedValue))

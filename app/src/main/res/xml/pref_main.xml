@@ -61,10 +61,12 @@
 
         <Preference
             android:icon="@drawable/ic_star"
+            android:key="@string/pref_rate_app_key"
             android:title="@string/pref_rate_app_title" />
 
         <Preference
             android:icon="@drawable/ic_share"
+            android:key="@string/pref_share_app_key"
             android:title="@string/pref_share_app_title" />
 
         <Preference
@@ -79,22 +81,30 @@
             android:summary="@string/pref_donate_crypto_summary"
             android:title="@string/pref_donate_crypto_title" />
 
+        <Preference
+            android:icon="@drawable/ic_coffee"
+            android:key="@string/pref_buy_me_coffee_key"
+            android:title="@string/pref_buy_me_coffee_title" />
+
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/pref_support_about_title">
 
         <Preference
             android:icon="@drawable/ic_web"
+            android:key="@string/pref_website_key"
             android:summary="@string/pref_website_summary"
             android:title="@string/pref_website_title" />
 
         <Preference
             android:icon="@drawable/ic_human_greeting"
+            android:key="@string/pref_author_key"
             android:summary="@string/pref_author_summary"
             android:title="@string/pref_author_title" />
 
         <Preference
             android:icon="@drawable/ic_github_circle"
+            android:key="@string/pref_source_key"
             android:summary="@string/pref_source_summary"
             android:title="@string/pref_source_title" />
 
@@ -111,6 +121,7 @@
             android:title="@string/pref_license_title" />
 
         <Preference
+            android:selectable="false"
             android:icon="@drawable/ic_info_outline"
             android:summary="@string/pref_app_summary"
             android:title="@string/pref_app_title" />

@@ -16,7 +16,10 @@
 
 package com.baruckis.mycryptocoins.ui.settings
 
+import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -31,10 +34,7 @@ import com.baruckis.mycryptocoins.R
 import com.baruckis.mycryptocoins.dependencyinjection.Injectable
 import com.baruckis.mycryptocoins.ui.mainlist.MainActivity
 import com.baruckis.mycryptocoins.ui.settings.DonateCryptoDialog.Companion.DIALOG_DONATE_CRYPTO_TAG
-import com.baruckis.mycryptocoins.utilities.ADMOB_TEST_AD_UNIT_ID
-import com.baruckis.mycryptocoins.utilities.formatDate
-import com.baruckis.mycryptocoins.utilities.localization.StringsLocalization
-import com.baruckis.mycryptocoins.utilities.logConsoleVerbose
+import com.baruckis.mycryptocoins.utilities.*
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.reward.RewardItem
@@ -52,10 +52,6 @@ class SettingsFragment : PreferenceFragmentCompat(), Injectable, RewardedVideoAd
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    @Inject
-    lateinit var stringsLocalization: StringsLocalization
-
-
     private lateinit var viewModel: SettingsViewModel
 
     private lateinit var rewardedVideoAd: RewardedVideoAd
@@ -65,7 +61,7 @@ class SettingsFragment : PreferenceFragmentCompat(), Injectable, RewardedVideoAd
         super.onActivityCreated(savedInstanceState)
 
         activity?.let { activity ->
-            activity.title = getString(R.string.title_activity_settings)
+            activity.title = viewModel.stringsLocalization.getString(R.string.title_activity_settings)
             if (activity is AppCompatActivity) activity.supportActionBar?.subtitle = ""
         }
     }
@@ -86,6 +82,37 @@ class SettingsFragment : PreferenceFragmentCompat(), Injectable, RewardedVideoAd
             // It is highly recommended that you call load ad as early as possible to allow videos
             // to be preloaded.
             loadRewardedVideoAd()
+
+
+            val preferenceLanguage = findPreference(getString(R.string.pref_language_key)) as Preference
+
+            // Set the initial value for fiat currency preference summary.
+            setListPreferenceSummary(preferenceLanguage, viewModel.currentLanguage)
+
+            preferenceLanguage.setOnPreferenceChangeListener { preference, newValue ->
+
+                val newLanguage: String = newValue.toString()
+
+                if (newLanguage == viewModel.currentLanguage)
+                // False means not to update the state of the preference with the new value.
+                    return@setOnPreferenceChangeListener false
+
+                setListPreferenceSummary(preference, newLanguage)
+
+                context?.let {
+
+                    viewModel.stringsLocalization.setLanguage(newLanguage)
+
+                    // The current activity and the other activities in the back stack is using the
+                    // previous locale to show content. We have somehow to refresh them. The simplest
+                    // way is to clear the existing task and start a new one.
+                    val i = Intent(activity, MainActivity::class.java)
+                    startActivity(i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK
+                            or Intent.FLAG_ACTIVITY_NEW_TASK))
+                }
+
+                true
+            }
 
 
             val preferenceFiatCurrency = findPreference(getString(R.string.pref_fiat_currency_key)) as Preference
@@ -118,31 +145,21 @@ class SettingsFragment : PreferenceFragmentCompat(), Injectable, RewardedVideoAd
             }
 
 
-            val preferenceLanguage = findPreference(getString(R.string.pref_language_key)) as Preference
+            val preferenceRateApp = findPreference(getString(R.string.pref_rate_app_key)) as Preference
 
-            // Set the initial value for fiat currency preference summary.
-            setListPreferenceSummary(preferenceLanguage, viewModel.currentLanguage)
+            preferenceRateApp.setOnPreferenceClickListener {
 
-            preferenceLanguage.setOnPreferenceChangeListener { preference, newValue ->
+                openAppInPlayStore()
 
-                val newLanguage: String = newValue.toString()
+                true
+            }
 
-                if (newLanguage == viewModel.currentLanguage)
-                // False means not to update the state of the preference with the new value.
-                    return@setOnPreferenceChangeListener false
 
-                setListPreferenceSummary(preference, newLanguage)
+            val preferenceShareApp = findPreference(getString(R.string.pref_share_app_key)) as Preference
 
-                context?.let {
+            preferenceShareApp.setOnPreferenceClickListener {
 
-                    stringsLocalization.setLanguage(newLanguage)
-
-                    // The current activity and the other activities in the back stack is using the
-                    // previous locale to show content. We have somehow to refresh them. The simplest
-                    // way is to clear the existing task and start a new one.
-                    val i = Intent(activity, MainActivity::class.java)
-                    startActivity(i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK))
-                }
+                shareApp()
 
                 true
             }
@@ -158,7 +175,8 @@ class SettingsFragment : PreferenceFragmentCompat(), Injectable, RewardedVideoAd
                     rewardedVideoAd.show()
                 } else {
                     viewModel.videoAdIsRequested = true
-                    Toast.makeText(activity, getString(R.string.video_ad_loading), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(activity, viewModel.stringsLocalization
+                            .getString(R.string.video_ad_loading), Toast.LENGTH_SHORT).show()
                     loadRewardedVideoAd()
                 }
 
@@ -173,11 +191,53 @@ class SettingsFragment : PreferenceFragmentCompat(), Injectable, RewardedVideoAd
                 // Create an instance of the dialog fragment and show it.
                 val donateCryptoDialog =
                         DonateCryptoDialog.newInstance(
-                                title = getString(R.string.dialog_donate_crypto_title),
-                                positiveButton = getString(R.string.dialog_donate_crypto_positive_button))
+                                title = viewModel.stringsLocalization
+                                        .getString(R.string.dialog_donate_crypto_title),
+                                positiveButton = viewModel.stringsLocalization
+                                        .getString(R.string.dialog_donate_crypto_positive_button))
 
                 // Display the alert dialog.
                 donateCryptoDialog.show(activity.supportFragmentManager, DIALOG_DONATE_CRYPTO_TAG)
+
+                true
+            }
+
+
+            val preferenceBuyMeCoffee = findPreference(getString(R.string.pref_buy_me_coffee_key)) as Preference
+
+            preferenceBuyMeCoffee.setOnPreferenceClickListener {
+
+                browseUrl(getString(R.string.pref_buy_me_coffee_url))
+
+                true
+            }
+
+
+            val preferenceWebsite = findPreference(getString(R.string.pref_website_key)) as Preference
+
+            preferenceWebsite.setOnPreferenceClickListener {
+
+                browseUrl(getString(R.string.pref_website_url))
+
+                true
+            }
+
+
+            val preferenceAuthor = findPreference(getString(R.string.pref_author_key)) as Preference
+
+            preferenceAuthor.setOnPreferenceClickListener {
+
+                browseUrl(getString(R.string.pref_author_url))
+
+                true
+            }
+
+
+            val preferenceSource = findPreference(getString(R.string.pref_source_key)) as Preference
+
+            preferenceSource.setOnPreferenceClickListener {
+
+                browseUrl(getString(R.string.pref_source_url))
 
                 true
             }
@@ -201,7 +261,7 @@ class SettingsFragment : PreferenceFragmentCompat(), Injectable, RewardedVideoAd
                 Navigation.findNavController(activity, R.id.nav_host_fragment)
                         .navigate(R.id.action_settings_dest_to_license_dest,
                                 LicenseFragment.createArguments(
-                                        stringsLocalization.getString(R.string.app_name),
+                                        viewModel.stringsLocalization.getString(R.string.app_name),
                                         viewModel.appLicenseData))
 
                 true
@@ -264,7 +324,8 @@ class SettingsFragment : PreferenceFragmentCompat(), Injectable, RewardedVideoAd
 
         logConsoleVerbose("onRewarded! Points: ${reward?.type} Amount: ${reward?.amount}")
 
-        Toast.makeText(activity, getString(R.string.video_ad_thank_you), Toast.LENGTH_LONG).show()
+        Toast.makeText(activity, viewModel.stringsLocalization
+                .getString(R.string.video_ad_thank_you), Toast.LENGTH_LONG).show()
     }
 
     override fun onRewardedVideoStarted() {
@@ -278,7 +339,8 @@ class SettingsFragment : PreferenceFragmentCompat(), Injectable, RewardedVideoAd
 
         if (viewModel.videoAdIsRequested) {
             viewModel.videoAdIsRequested = false
-            Toast.makeText(activity, getString(R.string.video_ad_failed_load), Toast.LENGTH_LONG).show()
+            Toast.makeText(activity, viewModel.stringsLocalization
+                    .getString(R.string.video_ad_failed_load), Toast.LENGTH_LONG).show()
         }
     }
 
@@ -301,8 +363,58 @@ class SettingsFragment : PreferenceFragmentCompat(), Injectable, RewardedVideoAd
         // The easiest way to load test ads is to use dedicated test ad unit ID for Android
         // rewarded video. It's been specially configured to return test ads for every request,
         // and you're free to use it in your own apps while coding, testing, and debugging.
-        rewardedVideoAd.loadAd(ADMOB_TEST_AD_UNIT_ID,
+        rewardedVideoAd.loadAd(ADMOB_AD_UNIT_ID,
                 AdRequest.Builder().build())
+    }
+
+    private fun browseUrl(uriString: String) {
+        try {
+            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(uriString))
+            startActivity(browserIntent)
+        } catch (e: ActivityNotFoundException) {
+            Toast.makeText(activity, viewModel.noBrowserFoundMessage, Toast.LENGTH_LONG).show()
+        }
+    }
+
+    // Link in Google Play store app on the phone.
+    private fun openAppInPlayStore() {
+        val uri = Uri.parse("market://" + GOOGLE_PLAY_STORE_APP_DETAILS_PATH +
+                context?.packageName)
+        val goToMarketIntent = Intent(Intent.ACTION_VIEW, uri)
+
+        var flags = Intent.FLAG_ACTIVITY_NO_HISTORY or
+                Intent.FLAG_ACTIVITY_MULTIPLE_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+        flags = if (Build.VERSION.SDK_INT >= 21) {
+            flags or Intent.FLAG_ACTIVITY_NEW_DOCUMENT
+        } else {
+            flags or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+
+        goToMarketIntent.addFlags(flags)
+
+        try {
+            startActivity(goToMarketIntent, null)
+        } catch (e: ActivityNotFoundException) {
+            val intent = Intent(Intent.ACTION_VIEW,
+                    Uri.parse(GOOGLE_PLAY_STORE_APPS_URL +
+                            GOOGLE_PLAY_STORE_APP_DETAILS_PATH + context?.packageName))
+
+            startActivity(intent, null)
+        }
+    }
+
+    // Share entire app with share intent.
+    private fun shareApp() {
+        val intent = Intent()
+        intent.type = "text/plain"
+        intent.action = Intent.ACTION_SEND
+        intent.putExtra(Intent.EXTRA_SUBJECT, viewModel.stringsLocalization.getString(R.string.app_name))
+        intent.putExtra(Intent.EXTRA_TEXT,
+                viewModel.stringsLocalization.getString(R.string.share_app_message) +
+                        GOOGLE_PLAY_STORE_APPS_URL + GOOGLE_PLAY_STORE_APP_DETAILS_PATH +
+                        context?.packageName)
+        startActivity(Intent.createChooser(intent,
+                viewModel.stringsLocalization.getString(R.string.share_app_chooser)))
     }
 
 }

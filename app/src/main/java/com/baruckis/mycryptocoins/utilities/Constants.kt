@@ -37,4 +37,6 @@ const val CRYPTOCURRENCY_IMAGE_URL = "https://s2.coinmarketcap.com/static/img/co
 const val CRYPTOCURRENCY_IMAGE_SIZE_PX = "128x128"
 const val CRYPTOCURRENCY_IMAGE_FILE = ".png"
 const val SEARCH_TYPING_DELAY_MILLISECONDS: Long = 500
-const val ADMOB_TEST_AD_UNIT_ID = "ca-app-pub-3940256099942544/5224354917" // TODO: Use your Ad Unit ID provided by Google AdMob. This is dedicated test Ad Unit ID for Android rewarded video.
+const val ADMOB_AD_UNIT_ID = "ca-app-pub-3940256099942544/5224354917" // TODO: Use your Ad Unit ID provided by Google AdMob. This is dedicated test Ad Unit ID for Android rewarded video.
+const val GOOGLE_PLAY_STORE_APPS_URL = "https://play.google.com/store/apps/"
+const val GOOGLE_PLAY_STORE_APP_DETAILS_PATH = "details?id="
