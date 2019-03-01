@@ -379,7 +379,7 @@ class SettingsFragment : PreferenceFragmentCompat(), Injectable, RewardedVideoAd
     // Link in Google Play store app on the phone.
     private fun openAppInPlayStore() {
         val uri = Uri.parse("market://" + GOOGLE_PLAY_STORE_APP_DETAILS_PATH +
-                context?.packageName)
+                getPackageName())
         val goToMarketIntent = Intent(Intent.ACTION_VIEW, uri)
 
         var flags = Intent.FLAG_ACTIVITY_NO_HISTORY or
@@ -397,7 +397,7 @@ class SettingsFragment : PreferenceFragmentCompat(), Injectable, RewardedVideoAd
         } catch (e: ActivityNotFoundException) {
             val intent = Intent(Intent.ACTION_VIEW,
                     Uri.parse(GOOGLE_PLAY_STORE_APPS_URL +
-                            GOOGLE_PLAY_STORE_APP_DETAILS_PATH + context?.packageName))
+                            GOOGLE_PLAY_STORE_APP_DETAILS_PATH + getPackageName()))
 
             startActivity(intent, null)
         }
@@ -412,9 +412,15 @@ class SettingsFragment : PreferenceFragmentCompat(), Injectable, RewardedVideoAd
         intent.putExtra(Intent.EXTRA_TEXT,
                 viewModel.stringsLocalization.getString(R.string.share_app_message) +
                         GOOGLE_PLAY_STORE_APPS_URL + GOOGLE_PLAY_STORE_APP_DETAILS_PATH +
-                        context?.packageName)
+                        getPackageName())
         startActivity(Intent.createChooser(intent,
                 viewModel.stringsLocalization.getString(R.string.share_app_chooser)))
+    }
+
+    private fun getPackageName(): String? {
+        // Get a string resource item generated at build time by Gradle.
+        val suffix = getString(R.string.app_id_suffix)
+        return context?.packageName?.removeSuffix(suffix)
     }
 
 }

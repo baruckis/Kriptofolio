@@ -20,10 +20,12 @@
 
     <string name="app_name">"My Crypto Coins"</string>
 
-    <string name="app_version" translatable="false">"v1.0.0"</string>
+    <!--  major . minor . patch -->
+    <string name="app_version_full" translatable="false">"v1.0.0"</string>
+    <string name="app_version_demo" translatable="false">"v1.0.0 DEMO"</string>
 
-    <!-- TODO: Use your App ID provided by Google AdMob. This one is just for testing. -->
-    <string name="admob_app_id" translatable="false">"ca-app-pub-3940256099942544~3347511713"</string>
+    <string name="app_subtitle_full" translatable="false">""</string>
+    <string name="app_subtitle_demo" translatable="false">"DEMO"</string>
 
 
     <string name="action_settings">"Settings"</string>

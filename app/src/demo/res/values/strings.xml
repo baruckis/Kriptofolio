@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright 2018-2019 Andrius Baruckis www.baruckis.com | mycryptocoins.baruckis.com
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<!-- Strings used throughout the app for DEMO build. -->
+
+<resources>
+
+    <string name="app_version" translatable="false">@string/app_version_demo</string>
+    <string name="app_subtitle" translatable="false">@string/app_subtitle_demo</string>
+
+    <!-- App ID provided by Google AdMob is just for testing. -->
+    <string name="admob_app_id" translatable="false">"ca-app-pub-3940256099942544~3347511713"</string>
+
+</resources>

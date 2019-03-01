@@ -45,12 +45,22 @@ android {
     dataBinding {
         enabled = true
     }
-
     // Configure only for each module that uses Java 8 language features
     // (either in its source code or through dependencies).
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+    flavorDimensions "version"
+    productFlavors {
+        demo {
+            applicationIdSuffix ".demo"
+            // This new string resource item will be generated at build time.
+            resValue "string", "app_id_suffix", ".demo"
+        }
+        full {
+            resValue "string", "app_id_suffix", ""
+        }
     }
 }
 
@@ -207,5 +217,4 @@ dependencies {
 
     // Dependencies for local unit tests. JUnit is a unit testing framework for Java.
     testImplementation "junit:junit:$versions.junit"
-
 }

@@ -64,6 +64,8 @@ class MainActivity : BaseActivity(), HasSupportFragmentInjector {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
+        supportActionBar?.subtitle = getString(R.string.app_subtitle)
+
         subscribeUi()
     }
 
