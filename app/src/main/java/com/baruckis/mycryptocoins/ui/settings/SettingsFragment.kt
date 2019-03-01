@@ -30,6 +30,7 @@ import androidx.navigation.Navigation
 import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import com.baruckis.mycryptocoins.BuildConfig
 import com.baruckis.mycryptocoins.R
 import com.baruckis.mycryptocoins.dependencyinjection.Injectable
 import com.baruckis.mycryptocoins.ui.mainlist.MainActivity
@@ -186,6 +187,10 @@ class SettingsFragment : PreferenceFragmentCompat(), Injectable, RewardedVideoAd
 
             val preferenceDonateCrypto = findPreference(getString(R.string.pref_donate_crypto_key)) as Preference
 
+            // Removed donation methods just for FULL release as Google forbids other payments
+            // besides Google Play. This is requirement to meet Google Play policy.
+            preferenceDonateCrypto.isVisible = BuildConfig.IS_DEMO
+
             preferenceDonateCrypto.setOnPreferenceClickListener {
 
                 // Create an instance of the dialog fragment and show it.
@@ -204,6 +209,8 @@ class SettingsFragment : PreferenceFragmentCompat(), Injectable, RewardedVideoAd
 
 
             val preferenceBuyMeCoffee = findPreference(getString(R.string.pref_buy_me_coffee_key)) as Preference
+
+            preferenceBuyMeCoffee.isVisible = BuildConfig.IS_DEMO
 
             preferenceBuyMeCoffee.setOnPreferenceClickListener {
 

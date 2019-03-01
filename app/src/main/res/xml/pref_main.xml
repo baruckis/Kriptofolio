@@ -121,8 +121,8 @@
             android:title="@string/pref_license_title" />
 
         <Preference
-            android:selectable="false"
             android:icon="@drawable/ic_info_outline"
+            android:selectable="false"
             android:summary="@string/pref_app_summary"
             android:title="@string/pref_app_title" />
 
