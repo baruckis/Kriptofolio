@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?><!--
-  ~ Copyright 2018-2019 Andrius Baruckis www.baruckis.com | mycryptocoins.baruckis.com
+  ~ Copyright 2018-2019 Andrius Baruckis www.baruckis.com | kriptofolio.app
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -20,9 +20,9 @@
 
     <data>
 
-        <import type="com.baruckis.mycryptocoins.vo.Status" />
+        <import type="com.baruckis.kriptofolio.vo.Status" />
 
-        <import type="com.baruckis.mycryptocoins.vo.Resource" />
+        <import type="com.baruckis.kriptofolio.vo.Resource" />
 
         <variable
             name="myListResource"
@@ -30,7 +30,7 @@
 
         <variable
             name="myRetryCallback"
-            type="com.baruckis.mycryptocoins.ui.common.RetryCallback" />
+            type="com.baruckis.kriptofolio.ui.common.RetryCallback" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout

@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2018-2019 Andrius Baruckis www.baruckis.com | mycryptocoins.baruckis.com
+  ~ Copyright 2018-2019 Andrius Baruckis www.baruckis.com | kriptofolio.app
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fragment"
-    android:name="com.baruckis.mycryptocoins.ui.mainlist.MainListFragment"
+    android:name="com.baruckis.kriptofolio.ui.mainlist.MainListFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"

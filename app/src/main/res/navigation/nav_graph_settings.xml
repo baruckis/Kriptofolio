@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?><!--
-  ~ Copyright 2018-2019 Andrius Baruckis www.baruckis.com | mycryptocoins.baruckis.com
+  ~ Copyright 2018-2019 Andrius Baruckis www.baruckis.com | kriptofolio.app
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@
     app:startDestination="@id/settings_dest">
     <fragment
         android:id="@+id/settings_dest"
-        android:name="com.baruckis.mycryptocoins.ui.settings.SettingsFragment">
+        android:name="com.baruckis.kriptofolio.ui.settings.SettingsFragment">
         <action
             android:id="@+id/action_settings_dest_to_libraries_licenses_dest"
             app:destination="@id/libraries_licenses_dest"
@@ -39,7 +39,7 @@
     </fragment>
     <fragment
         android:id="@+id/libraries_licenses_dest"
-        android:name="com.baruckis.mycryptocoins.ui.settings.thirdpartysoft.LibrariesLicensesListFragment"
+        android:name="com.baruckis.kriptofolio.ui.settings.thirdpartysoft.LibrariesLicensesListFragment"
         tools:layout="@layout/fragment_libraries_licenses_list">
         <action
             android:id="@+id/action_libraries_licenses_dest_to_license_dest"
@@ -51,6 +51,6 @@
     </fragment>
     <fragment
         android:id="@+id/license_dest"
-        android:name="com.baruckis.mycryptocoins.ui.settings.LicenseFragment"
+        android:name="com.baruckis.kriptofolio.ui.settings.LicenseFragment"
         tools:layout="@layout/fragment_license" />
 </navigation>

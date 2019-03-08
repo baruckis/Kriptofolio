@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2019 Andrius Baruckis www.baruckis.com | mycryptocoins.baruckis.com
+ * Copyright 2018-2019 Andrius Baruckis www.baruckis.com | kriptofolio.app
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,10 +27,10 @@ apply plugin: 'com.google.android.gms.oss-licenses-plugin'
 android {
     compileSdkVersion versions.compile_sdk
     defaultConfig {
-        applicationId "com.baruckis.mycryptocoins"
+        applicationId "com.baruckis.kriptofolio"
         minSdkVersion versions.min_sdk
         targetSdkVersion versions.target_sdk
-        versionCode 2
+        versionCode 1
         versionName "@string/app_version"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -202,7 +202,7 @@ dependencies {
 
     // Helps apps to display open source software licenses and notices. When the application builds,
     // the Gradle plugin will process the licenses and add them to the app resources.
-    implementation 'com.google.android.gms:play-services-oss-licenses:16.0.1'
+    implementation "com.google.android.gms:play-services-oss-licenses:$versions.licenses"
 
     /* Testing */
 

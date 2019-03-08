@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2018-2019 Andrius Baruckis www.baruckis.com | mycryptocoins.baruckis.com
+  ~ Copyright 2018-2019 Andrius Baruckis www.baruckis.com | kriptofolio.app
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@
 
 <resources>
 
-    <string name="app_name">"My Crypto Coins"</string>
+    <string name="app_name" translatable="false">"Kriptofolio"</string>
 
     <!--  major . minor . patch -->
     <string name="app_version_full" translatable="false">"v1.0.0"</string>
@@ -369,9 +369,9 @@
     <string name="pref_support_about_title">"About"</string>
 
     <string name="pref_website_title">"Website"</string>
-    <string name="pref_website_summary" translatable="false">"mycryptocoins.baruckis.com"</string>
+    <string name="pref_website_summary" translatable="false">"kriptofolio.app"</string>
     <string name="pref_website_key" translatable="false">"website"</string>
-    <string name="pref_website_url" translatable="false">"http://mycryptocoins.baruckis.com"</string>
+    <string name="pref_website_url" translatable="false">"https://kriptofolio.app"</string>
 
     <string name="pref_author_title">"Author Andrius Baruckis"</string>
     <string name="pref_author_summary" translatable="false">"www.baruckis.com"</string>
@@ -381,7 +381,7 @@
     <string name="pref_source_title">"View source on"</string>
     <string name="pref_source_summary" translatable="false">"GitHub"</string>
     <string name="pref_source_key" translatable="false">"source"</string>
-    <string name="pref_source_url" translatable="false">"https://github.com/baruckis/MyCryptoCoinsApp-Android"</string>
+    <string name="pref_source_url" translatable="false">"https://github.com/baruckis/Kriptofolio"</string>
 
     <string name="pref_third_party_software_title">"Third-party software"</string>
     <string name="pref_third_party_software_summary">"Free &#38; open source licenses"</string>

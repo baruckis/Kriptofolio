@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?><!--
-  ~ Copyright 2018-2019 Andrius Baruckis www.baruckis.com | mycryptocoins.baruckis.com
+  ~ Copyright 2018-2019 Andrius Baruckis www.baruckis.com | kriptofolio.app
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -151,17 +151,17 @@
                     app:layout_constraintBaseline_toBaselineOf="@+id/textview_separator_code"
                     app:layout_constraintEnd_toStartOf="@+id/textview_separator_code" />
 
-                <Spinner
+                <androidx.appcompat.widget.AppCompatSpinner
                     android:id="@+id/spinner_fiat_code"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:dropDownWidth="@dimen/main_collapsing_toolbar_layout_spinner_dropdown_width"
                     android:entries="@array/fiat_currency_code_array"
-                    android:popupTheme="@style/AppTheme.PopupOverlay"
                     android:saveEnabled="false"
                     android:spinnerMode="dropdown"
                     app:layout_constraintBaseline_toBaselineOf="@+id/textview_separator_code"
-                    app:layout_constraintStart_toEndOf="@+id/textview_separator_code" />
+                    app:layout_constraintStart_toEndOf="@+id/textview_separator_code"
+                    app:popupTheme="@style/AppTheme.PopupOverlay" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
