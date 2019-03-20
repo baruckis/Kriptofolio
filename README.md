@@ -12,6 +12,10 @@ I am creating modern Android sample app using best tools and practices available
 Blog posts series: https://www.baruckis.com/android/kriptofolio-app-series
 
 
+## Get the App
+<a href="https://play.google.com/store/apps/details?id=com.baruckis.kriptofolio&amp;pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1" target="_blank" rel="noopener noreferrer"><img class="aligncenter" src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" alt="Get it on Google Play" width="388" height="150"></a>
+
+
 ## License
 
     Copyright 2018-2019 Andrius Baruckis www.baruckis.com | kriptofolio.app
