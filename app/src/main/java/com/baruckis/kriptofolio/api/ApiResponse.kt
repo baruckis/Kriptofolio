@@ -42,17 +42,34 @@ sealed class ApiResponse<CoinMarketCapType> {
                 }
             } else {
 
-                // Convert error response to JSON object.
-                val gson = Gson()
-                val type = object : TypeToken<CoinMarketCap<CoinMarketCapType>>() {}.type
-                val errorResponse: CoinMarketCap<CoinMarketCapType> = gson.fromJson(response.errorBody()!!.charStream(), type)
+                var errorMsg: String? = null
 
-                val msg = errorResponse.status?.errorMessage ?: errorResponse.message
-                val errorMsg = if (msg.isNullOrEmpty()) {
-                    response.message()
-                } else {
-                    msg
+                if (response.errorBody()?.contentType()?.subtype().equals("json")) {
+
+                    errorMsg = try {
+
+                        // Convert error response to JSON object.
+                        val gson = Gson()
+                        val type = object : TypeToken<CoinMarketCap<CoinMarketCapType>>() {}.type
+                        val errorResponse: CoinMarketCap<CoinMarketCapType> = gson.fromJson(response.errorBody()!!.charStream(), type)
+
+                        errorResponse.status?.errorMessage ?: errorResponse.message
+
+                    } catch (e: Exception) {
+                        ""
+                    }
+
                 }
+
+                if (errorMsg.isNullOrEmpty()) {
+                    val msg = response.errorBody()?.string()
+                    errorMsg = if (msg.isNullOrEmpty()) {
+                        response.message()
+                    } else {
+                        msg
+                    }
+                }
+
                 ApiErrorResponse(errorMsg ?: "Unknown error.")
             }
         }

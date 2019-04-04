@@ -85,193 +85,244 @@ class SettingsFragment : PreferenceFragmentCompat(), Injectable, RewardedVideoAd
             loadRewardedVideoAd()
 
 
-            val preferenceLanguage = findPreference(getString(R.string.pref_language_key)) as Preference
+            val preferenceLanguage = findPreference<Preference>(getString(R.string.pref_language_key))
 
-            // Set the initial value for fiat currency preference summary.
-            setListPreferenceSummary(preferenceLanguage, viewModel.currentLanguage)
+            preferenceLanguage?.let {
 
-            preferenceLanguage.setOnPreferenceChangeListener { preference, newValue ->
+                // Set the initial value for fiat currency preference summary.
+                setListPreferenceSummary(preferenceLanguage, viewModel.currentLanguage)
 
-                val newLanguage: String = newValue.toString()
+                preferenceLanguage.setOnPreferenceChangeListener { preference, newValue ->
 
-                if (newLanguage == viewModel.currentLanguage)
-                // False means not to update the state of the preference with the new value.
-                    return@setOnPreferenceChangeListener false
+                    val newLanguage: String = newValue.toString()
 
-                setListPreferenceSummary(preference, newLanguage)
+                    if (newLanguage == viewModel.currentLanguage)
+                    // False means not to update the state of the preference with the new value.
+                        return@setOnPreferenceChangeListener false
 
-                context?.let {
+                    setListPreferenceSummary(preference, newLanguage)
 
-                    viewModel.stringsLocalization.setLanguage(newLanguage)
+                    context?.let {
 
-                    // The current activity and the other activities in the back stack is using the
-                    // previous locale to show content. We have somehow to refresh them. The simplest
-                    // way is to clear the existing task and start a new one.
-                    val i = Intent(activity, MainActivity::class.java)
-                    startActivity(i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK
-                            or Intent.FLAG_ACTIVITY_NEW_TASK))
+                        viewModel.stringsLocalization.setLanguage(newLanguage)
+
+                        // The current activity and the other activities in the back stack is using the
+                        // previous locale to show content. We have somehow to refresh them. The simplest
+                        // way is to clear the existing task and start a new one.
+                        val i = Intent(activity, MainActivity::class.java)
+                        startActivity(i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                or Intent.FLAG_ACTIVITY_NEW_TASK))
+                    }
+
+                    true
+                }
+            }
+
+
+            val preferenceFiatCurrency = findPreference<Preference>(getString(R.string.pref_fiat_currency_key))
+
+            preferenceFiatCurrency?.let {
+
+                // Set the initial value for fiat currency preference summary.
+                setListPreferenceSummary(preferenceFiatCurrency, viewModel.currentFiatCurrencyCode)
+
+                // Change the fiat currency preference summary when preference value changed.
+                preferenceFiatCurrency.setOnPreferenceChangeListener { preference, newValue ->
+
+                    val newCode: String = newValue.toString()
+
+                    setListPreferenceSummary(preference, newCode)
+                    true
                 }
 
-                true
             }
 
 
-            val preferenceFiatCurrency = findPreference(getString(R.string.pref_fiat_currency_key)) as Preference
+            val preferenceDateFormat = findPreference<Preference>(getString(R.string.pref_date_format_key))
 
-            // Set the initial value for fiat currency preference summary.
-            setListPreferenceSummary(preferenceFiatCurrency, viewModel.currentFiatCurrencyCode)
+            preferenceDateFormat?.let {
 
-            // Change the fiat currency preference summary when preference value changed.
-            preferenceFiatCurrency.setOnPreferenceChangeListener { preference, newValue ->
+                // Set the initial value for date format preference summary.
+                setPreferenceDateFormatSummary(preferenceDateFormat, viewModel.currentDateFormat)
 
-                val newCode: String = newValue.toString()
+                // Change the date format preference summary when preference value changed.
+                preferenceDateFormat.setOnPreferenceChangeListener { preference, newValue ->
 
-                setListPreferenceSummary(preference, newCode)
-                true
-            }
+                    val newFormat: String = newValue.toString()
 
-
-            val preferenceDateFormat = findPreference(getString(R.string.pref_date_format_key)) as Preference
-
-            // Set the initial value for date format preference summary.
-            setPreferenceDateFormatSummary(preferenceDateFormat, viewModel.currentDateFormat)
-
-            // Change the date format preference summary when preference value changed.
-            preferenceDateFormat.setOnPreferenceChangeListener { preference, newValue ->
-
-                val newFormat: String = newValue.toString()
-
-                setPreferenceDateFormatSummary(preference, newFormat)
-                true
-            }
-
-
-            val preferenceRateApp = findPreference(getString(R.string.pref_rate_app_key)) as Preference
-
-            preferenceRateApp.setOnPreferenceClickListener {
-
-                openAppInPlayStore()
-
-                true
-            }
-
-
-            val preferenceShareApp = findPreference(getString(R.string.pref_share_app_key)) as Preference
-
-            preferenceShareApp.setOnPreferenceClickListener {
-
-                shareApp()
-
-                true
-            }
-
-
-            val preferenceDonateView = findPreference(getString(R.string.pref_donate_view_key)) as Preference
-
-            preferenceDonateView.setOnPreferenceClickListener {
-
-                logConsoleVerbose("Video ad is requested.")
-
-                if (rewardedVideoAd.isLoaded) {
-                    rewardedVideoAd.show()
-                } else {
-                    viewModel.videoAdIsRequested = true
-                    Toast.makeText(activity, viewModel.stringsLocalization
-                            .getString(R.string.video_ad_loading), Toast.LENGTH_SHORT).show()
-                    loadRewardedVideoAd()
+                    setPreferenceDateFormatSummary(preference, newFormat)
+                    true
                 }
 
-                true
             }
 
 
-            val preferenceDonateCrypto = findPreference(getString(R.string.pref_donate_crypto_key)) as Preference
+            val preferenceRateApp = findPreference<Preference>(getString(R.string.pref_rate_app_key))
 
-            // Removed donation methods just for FULL release as Google forbids other payments
-            // besides Google Play. This is requirement to meet Google Play policy.
-            preferenceDonateCrypto.isVisible = BuildConfig.IS_DEMO
+            preferenceRateApp?.let {
 
-            preferenceDonateCrypto.setOnPreferenceClickListener {
+                preferenceRateApp.setOnPreferenceClickListener {
 
-                // Create an instance of the dialog fragment and show it.
-                val donateCryptoDialog =
-                        DonateCryptoDialog.newInstance(
-                                title = viewModel.stringsLocalization
-                                        .getString(R.string.dialog_donate_crypto_title),
-                                positiveButton = viewModel.stringsLocalization
-                                        .getString(R.string.dialog_donate_crypto_positive_button))
+                    openAppInPlayStore()
 
-                // Display the alert dialog.
-                donateCryptoDialog.show(activity.supportFragmentManager, DIALOG_DONATE_CRYPTO_TAG)
+                    true
+                }
 
-                true
             }
 
 
-            val preferenceBuyMeCoffee = findPreference(getString(R.string.pref_buy_me_coffee_key)) as Preference
+            val preferenceShareApp = findPreference<Preference>(getString(R.string.pref_share_app_key))
 
-            preferenceBuyMeCoffee.isVisible = BuildConfig.IS_DEMO
+            preferenceShareApp?.let {
 
-            preferenceBuyMeCoffee.setOnPreferenceClickListener {
+                preferenceShareApp.setOnPreferenceClickListener {
 
-                browseUrl(getString(R.string.pref_buy_me_coffee_url))
+                    shareApp()
 
-                true
+                    true
+                }
+
             }
 
 
-            val preferenceWebsite = findPreference(getString(R.string.pref_website_key)) as Preference
+            val preferenceDonateView = findPreference<Preference>(getString(R.string.pref_donate_view_key))
 
-            preferenceWebsite.setOnPreferenceClickListener {
+            preferenceDonateView?.let {
 
-                browseUrl(getString(R.string.pref_website_url))
+                preferenceDonateView.setOnPreferenceClickListener {
 
-                true
+                    logConsoleVerbose("Video ad is requested.")
+
+                    if (rewardedVideoAd.isLoaded) {
+                        rewardedVideoAd.show()
+                    } else {
+                        viewModel.videoAdIsRequested = true
+                        Toast.makeText(activity, viewModel.stringsLocalization
+                                .getString(R.string.video_ad_loading), Toast.LENGTH_SHORT).show()
+                        loadRewardedVideoAd()
+                    }
+
+                    true
+                }
+
             }
 
 
-            val preferenceAuthor = findPreference(getString(R.string.pref_author_key)) as Preference
+            val preferenceDonateCrypto = findPreference<Preference>(getString(R.string.pref_donate_crypto_key))
 
-            preferenceAuthor.setOnPreferenceClickListener {
+            preferenceDonateCrypto?.let {
 
-                browseUrl(getString(R.string.pref_author_url))
+                // Removed donation methods just for FULL release as Google forbids other payments
+                // besides Google Play. This is requirement to meet Google Play policy.
+                preferenceDonateCrypto.isVisible = BuildConfig.IS_DEMO
 
-                true
+                preferenceDonateCrypto.setOnPreferenceClickListener {
+
+                    // Create an instance of the dialog fragment and show it.
+                    val donateCryptoDialog =
+                            DonateCryptoDialog.newInstance(
+                                    title = viewModel.stringsLocalization
+                                            .getString(R.string.dialog_donate_crypto_title),
+                                    positiveButton = viewModel.stringsLocalization
+                                            .getString(R.string.dialog_donate_crypto_positive_button))
+
+                    // Display the alert dialog.
+                    donateCryptoDialog.show(activity.supportFragmentManager, DIALOG_DONATE_CRYPTO_TAG)
+
+                    true
+                }
+
             }
 
 
-            val preferenceSource = findPreference(getString(R.string.pref_source_key)) as Preference
+            val preferenceBuyMeCoffee = findPreference<Preference>(getString(R.string.pref_buy_me_coffee_key))
 
-            preferenceSource.setOnPreferenceClickListener {
+            preferenceBuyMeCoffee?.let {
 
-                browseUrl(getString(R.string.pref_source_url))
+                preferenceBuyMeCoffee.isVisible = BuildConfig.IS_DEMO
 
-                true
+                preferenceBuyMeCoffee.setOnPreferenceClickListener {
+
+                    browseUrl(getString(R.string.pref_buy_me_coffee_url))
+
+                    true
+                }
+
             }
 
 
-            val preferenceThirdPartySoftware = findPreference(getString(R.string.pref_third_party_software_key)) as Preference
+            val preferenceWebsite = findPreference<Preference>(getString(R.string.pref_website_key))
 
-            preferenceThirdPartySoftware.setOnPreferenceClickListener {
+            preferenceWebsite?.let {
 
-                Navigation.findNavController(activity, R.id.nav_host_fragment)
-                        .navigate(R.id.action_settings_dest_to_libraries_licenses_dest)
+                preferenceWebsite.setOnPreferenceClickListener {
 
-                true
+                    browseUrl(getString(R.string.pref_website_url))
+
+                    true
+                }
+
             }
 
 
-            val preferenceLicense = findPreference(getString(R.string.pref_license_key)) as Preference
+            val preferenceAuthor = findPreference<Preference>(getString(R.string.pref_author_key))
 
-            preferenceLicense.setOnPreferenceClickListener {
+            preferenceAuthor?.let {
 
-                Navigation.findNavController(activity, R.id.nav_host_fragment)
-                        .navigate(R.id.action_settings_dest_to_license_dest,
-                                LicenseFragment.createArguments(
-                                        viewModel.stringsLocalization.getString(R.string.app_name),
-                                        viewModel.appLicenseData))
+                preferenceAuthor.setOnPreferenceClickListener {
 
-                true
+                    browseUrl(getString(R.string.pref_author_url))
+
+                    true
+                }
+
+            }
+
+
+            val preferenceSource = findPreference<Preference>(getString(R.string.pref_source_key))
+
+            preferenceSource?.let {
+
+                preferenceSource.setOnPreferenceClickListener {
+
+                    browseUrl(getString(R.string.pref_source_url))
+
+                    true
+                }
+
+            }
+
+
+            val preferenceThirdPartySoftware = findPreference<Preference>(getString(R.string.pref_third_party_software_key))
+
+            preferenceThirdPartySoftware?.let {
+
+                preferenceThirdPartySoftware.setOnPreferenceClickListener {
+
+                    Navigation.findNavController(activity, R.id.nav_host_fragment)
+                            .navigate(R.id.action_settings_dest_to_libraries_licenses_dest)
+
+                    true
+                }
+
+            }
+
+
+            val preferenceLicense = findPreference<Preference>(getString(R.string.pref_license_key))
+
+            preferenceLicense?.let {
+
+                preferenceLicense.setOnPreferenceClickListener {
+
+                    Navigation.findNavController(activity, R.id.nav_host_fragment)
+                            .navigate(R.id.action_settings_dest_to_license_dest,
+                                    LicenseFragment.createArguments(
+                                            viewModel.stringsLocalization.getString(R.string.app_name),
+                                            viewModel.appLicenseData))
+
+                    true
+                }
+
             }
 
         }

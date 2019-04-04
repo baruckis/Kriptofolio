@@ -21,8 +21,8 @@
     <string name="app_name" translatable="false">"Kriptofolio"</string>
 
     <!--  major . minor . patch -->
-    <string name="app_version_full" translatable="false">"v1.0.0"</string>
-    <string name="app_version_demo" translatable="false">"v1.0.0 DEMO"</string>
+    <string name="app_version_full" translatable="false">"v1.0.1"</string>
+    <string name="app_version_demo" translatable="false">"v1.0.1 DEMO"</string>
 
     <string name="app_subtitle_full" translatable="false">""</string>
     <string name="app_subtitle_demo" translatable="false">"DEMO"</string>

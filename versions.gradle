@@ -22,8 +22,9 @@ versions.min_sdk = 21
 versions.target_sdk = 28
 
 // App dependencies
-versions.ads = "17.1.3"
-versions.app_compat = "1.0.2"
+versions.ads = "17.2.0"
+versions.app_compat = "1.1.0-alpha04"
+versions.arch_core = "2.0.1"
 versions.cardview = "1.0.0"
 versions.constraint_layout = "2.0.0-alpha3"
 versions.coroutines = "1.0.1"
@@ -38,12 +39,14 @@ versions.kotlin = "1.3.21"
 versions.ktx = "1.0.1"
 versions.licenses = "16.0.2"
 versions.lifecycle = "2.0.0"
-versions.navigation = "1.0.0-rc02"
+versions.mockito = "1.10.19"
+versions.navigation = "1.0.0"
 versions.okhttp = "3.13.1"
-versions.preference = "1.1.0-alpha03"
+versions.preference = "1.1.0-alpha04"
 versions.recyclerview = "1.0.0"
 versions.retrofit = "2.5.0"
 versions.room = "2.0.0"
+versions.rules = "1.1.0-alpha4"
 versions.runner = "1.1.0-alpha4"
 versions.stetho = "1.5.0"
 
