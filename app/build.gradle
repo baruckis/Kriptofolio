@@ -118,7 +118,7 @@ dependencies {
     // support for both touch and mouse driven selection. Developers retain control over the
     // visual representation, and the policies controlling selection behavior (like which items
     // are eligible for selection, and how many items can be selected.)
-    implementation "androidx.recyclerview:recyclerview-selection:$versions.recyclerview"
+    implementation "androidx.recyclerview:recyclerview-selection:$versions.recyclerview_selection"
 
     /* Constraint Layout Library */
 
@@ -202,7 +202,7 @@ dependencies {
 
     // Helps apps to display open source software licenses and notices. When the application builds,
     // the Gradle plugin will process the licenses and add them to the app resources.
-    implementation "com.google.android.gms:play-services-oss-licenses:$versions.licenses"
+    implementation "com.google.android.gms:play-services-oss-licenses:$versions.oss_licenses"
 
     /* Testing */
 

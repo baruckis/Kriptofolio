@@ -44,7 +44,7 @@ sealed class ApiResponse<CoinMarketCapType> {
 
                 var errorMsg: String? = null
 
-                if (response.errorBody()?.contentType()?.subtype().equals("json")) {
+                if (response.errorBody()?.contentType()?.subtype.equals("json")) {
 
                     errorMsg = try {
 
