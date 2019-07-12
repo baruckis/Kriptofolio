@@ -43,6 +43,7 @@
 
     <string name="no_application_handle">"No application can handle this request."</string>
     <string name="install_web_browser">"Please install a web browser."</string>
+    <string name="install_email">"Please install an email client and contact %s."</string>
 
 
     <!-- Strings related to Main Activity -->
@@ -364,6 +365,13 @@
     <string name="pref_buy_me_coffee_key" translatable="false">"buy me coffee"</string>
     <string name="pref_buy_me_coffee_title">"Buy me a coffee"</string>
     <string name="pref_buy_me_coffee_url" translatable="false">"https://www.buymeacoffee.com/baruckis"</string>
+
+
+    <string name="pref_contact_title">"Contact"</string>
+    <string name="pref_contact_summary">"Have any feedback? Email your questions, suggestions, bug reports"</string>
+    <string name="pref_contact_key" translatable="false">"contact"</string>
+
+    <string name="feedback_email_subject" translatable="false">"Feedback %s for Android"</string>
 
 
     <string name="pref_support_about_title">"About"</string>

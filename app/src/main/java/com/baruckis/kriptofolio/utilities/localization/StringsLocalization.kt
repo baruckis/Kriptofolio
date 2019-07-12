@@ -47,6 +47,10 @@ class StringsLocalization @Inject constructor(
     // use fallback resources as a last resort before failing to provide a string.
     fun getString(@StringRes stringId: Int): String = resMap.getOrElse(localization.currentLanguage, this::getFallbackResources).getString(stringId)
 
+    // Variable number of arguments (vararg) can be passed in the named form by using the spread operator *.
+    fun getString(@StringRes stringId: Int, vararg formatArgs: Any): String =
+            resMap.getOrElse(localization.currentLanguage, this::getFallbackResources).getString(stringId, *formatArgs)
+
 
     private fun getFallbackResources(): Resources {
         val defaultLanguage =

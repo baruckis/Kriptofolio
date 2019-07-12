@@ -86,6 +86,12 @@
             android:key="@string/pref_buy_me_coffee_key"
             android:title="@string/pref_buy_me_coffee_title" />
 
+        <Preference
+            android:icon="@drawable/ic_email_outline"
+            android:key="@string/pref_contact_key"
+            android:summary="@string/pref_contact_summary"
+            android:title="@string/pref_contact_title" />
+
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/pref_support_about_title">

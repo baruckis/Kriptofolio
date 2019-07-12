@@ -251,6 +251,24 @@ class SettingsFragment : PreferenceFragmentCompat(), Injectable, RewardedVideoAd
             }
 
 
+            val preferenceContact = findPreference<Preference>(getString(R.string.pref_contact_key))
+
+            preferenceContact?.let {
+
+                preferenceContact.setOnPreferenceClickListener {
+
+                    val subject = viewModel.stringsLocalization.getString(R.string.app_name) +
+                            " " + viewModel.stringsLocalization.getString(R.string.app_version)
+
+                    sendEmailFeedback(FEEDBACK_EMAIL,
+                            viewModel.stringsLocalization.getString(R.string.feedback_email_subject, subject))
+
+                    true
+                }
+
+            }
+
+
             val preferenceWebsite = findPreference<Preference>(getString(R.string.pref_website_key))
 
             preferenceWebsite?.let {
@@ -479,6 +497,31 @@ class SettingsFragment : PreferenceFragmentCompat(), Injectable, RewardedVideoAd
         // Get a string resource item generated at build time by Gradle.
         val suffix = getString(R.string.app_id_suffix)
         return context?.packageName?.removeSuffix(suffix)
+    }
+
+
+    private fun sendEmailFeedback(toEmail: String, subject: String) {
+
+        val uriBuilder = StringBuilder("mailto:" + Uri.encode(toEmail))
+        uriBuilder.append("?subject=" + Uri.encode(subject))
+        val uriString = uriBuilder.toString()
+
+        val intent = Intent(Intent.ACTION_SENDTO, Uri.parse(uriString))
+
+        try {
+            startActivity(intent)
+        } catch (e: Exception) {
+            logConsoleError(e.localizedMessage)
+
+            // If there is no email client application, than show error message for the user.
+            if (e is ActivityNotFoundException) {
+                Toast.makeText(
+                        activity,
+                        viewModel.stringsLocalization.getString(R.string.no_application_handle)
+                                + " " + viewModel.stringsLocalization.getString(R.string.install_email, toEmail),
+                        Toast.LENGTH_LONG).show()
+            }
+        }
     }
 
 }

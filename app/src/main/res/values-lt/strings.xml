@@ -31,6 +31,7 @@
 
     <string name="no_application_handle">"Jokia programa negali įgyvendinti šio prašymo."</string>
     <string name="install_web_browser">"Prašau įdiek interneto naršyklę."</string>
+    <string name="install_email">"Prašau įdiek el. pašto klientą ir susisiek %s."</string>
 
 
     <!-- Strings related to Main Activity -->
@@ -175,6 +176,10 @@
 
 
     <string name="pref_buy_me_coffee_title">"Nupirkite man kavos"</string>
+
+
+    <string name="pref_contact_title">"Susisiekite"</string>
+    <string name="pref_contact_summary">"Turite kokių nors atsiliepimų? Siųskite el. paštu savo klausimus, pasiūlymus, pastebėtas klaidas"</string>
 
 
     <string name="pref_support_about_title">"Apie"</string>

@@ -40,3 +40,4 @@ const val SEARCH_TYPING_DELAY_MILLISECONDS: Long = 500
 
 const val GOOGLE_PLAY_STORE_APPS_URL = "https://play.google.com/store/apps/"
 const val GOOGLE_PLAY_STORE_APP_DETAILS_PATH = "details?id="
+const val FEEDBACK_EMAIL = "hello@kriptofolio.app"

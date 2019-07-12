@@ -31,6 +31,7 @@
 
     <string name="no_application_handle">"אין אפליקציה שיכולה לענות על בקשה זו."</string>
     <string name="install_web_browser">"נא להתקין דפדפן."</string>
+    <string name="install_email">"Please install an email client and contact %s."</string> <!-- TODO translate to Hebrew -->
 
 
     <!-- Strings related to Main Activity -->
@@ -175,6 +176,10 @@
 
 
     <string name="pref_buy_me_coffee_title">"קנה לי קפה"</string>
+
+
+    <string name="pref_contact_title">"Contact"</string> <!-- TODO translate to Hebrew -->
+    <string name="pref_contact_summary">"Have any feedback? Email your questions, suggestions, bug reports"</string> <!-- TODO translate to Hebrew -->
 
 
     <string name="pref_support_about_title">"על אודות"</string>
