@@ -115,6 +115,11 @@
             android:title="@string/pref_source_title" />
 
         <Preference
+            android:icon="@drawable/ic_file_lock"
+            android:key="@string/pref_privacy_policy_key"
+            android:title="@string/pref_privacy_policy_title" />
+
+        <Preference
             android:icon="@drawable/ic_file_multiple"
             android:key="@string/pref_third_party_software_key"
             android:summary="@string/pref_third_party_software_summary"

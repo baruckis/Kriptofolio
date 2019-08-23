@@ -391,6 +391,10 @@
     <string name="pref_source_key" translatable="false">"source"</string>
     <string name="pref_source_url" translatable="false">"https://github.com/baruckis/Kriptofolio"</string>
 
+    <string name="pref_privacy_policy_title">"Privacy policy"</string>
+    <string name="pref_privacy_policy_key" translatable="false">"privacy policy"</string>
+    <string name="pref_privacy_policy_url" translatable="false">"https://kriptofolio.app/privacy-policy-app"</string>
+
     <string name="pref_third_party_software_title">"Third-party software"</string>
     <string name="pref_third_party_software_summary">"Free &#38; open source licenses"</string>
     <string name="pref_third_party_software_key" translatable="false">"third party software"</string>

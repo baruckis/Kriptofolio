@@ -190,6 +190,8 @@
 
     <string name="pref_source_title">"Pamatyk kodą"</string>
 
+    <string name="pref_privacy_policy_title">"Privatumo politika"</string>
+
     <string name="pref_third_party_software_title">"Trečiųjų šalių programinė įranga"</string>
     <string name="pref_third_party_software_summary">"Nemokamo &#38; atvirojo kodo licencijos"</string>
 

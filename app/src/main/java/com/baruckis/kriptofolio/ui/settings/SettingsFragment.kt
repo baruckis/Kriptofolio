@@ -17,12 +17,15 @@
 package com.baruckis.kriptofolio.ui.settings
 
 import android.content.ActivityNotFoundException
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.browser.customtabs.CustomTabsIntent
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
@@ -44,6 +47,8 @@ import com.google.android.gms.ads.reward.RewardedVideoAdListener
 import java.util.*
 import javax.inject.Inject
 
+const val SERVICE_ACTION = "android.support.customtabs.action.CustomTabsService"
+const val CHROME_PACKAGE = "com.android.chrome"
 
 /**
  * A simple [Fragment] subclass.
@@ -311,6 +316,20 @@ class SettingsFragment : PreferenceFragmentCompat(), Injectable, RewardedVideoAd
             }
 
 
+            val preferencePrivacyPolicy = findPreference<Preference>(getString(R.string.pref_privacy_policy_key))
+
+            preferencePrivacyPolicy?.let {
+
+                preferencePrivacyPolicy.setOnPreferenceClickListener {
+
+                    browseUrlWithChromeCustomTab(getString(R.string.pref_privacy_policy_url))
+
+                    true
+                }
+
+            }
+
+
             val preferenceThirdPartySoftware = findPreference<Preference>(getString(R.string.pref_third_party_software_key))
 
             preferenceThirdPartySoftware?.let {
@@ -450,6 +469,32 @@ class SettingsFragment : PreferenceFragmentCompat(), Injectable, RewardedVideoAd
         } catch (e: ActivityNotFoundException) {
             Toast.makeText(activity, viewModel.noBrowserFoundMessage, Toast.LENGTH_LONG).show()
         }
+    }
+
+    private fun browseUrlWithChromeCustomTab(uriString: String) {
+        activity?.let { context ->
+            /*
+            * Chrome Custom Tabs give apps more control over their web experience, and make
+            * transitions between native and web content more seamless without having to
+            * resort to a WebView. Chrome Custom Tabs allow an app to customize how Chrome
+            * looks and feels.
+            * */
+            if (context.isChromeCustomTabsSupported()) {
+                CustomTabsIntent.Builder().apply {
+                    setToolbarColor(ContextCompat.getColor(context, R.color.colorPrimary))
+                    setSecondaryToolbarColor(ContextCompat.getColor(context, R.color.colorPrimaryDark))
+                }.build().launchUrl(context, Uri.parse(uriString))
+            } else {
+                browseUrl(uriString)
+            }
+        }
+    }
+
+    private fun Context.isChromeCustomTabsSupported(): Boolean {
+        val serviceIntent = Intent(SERVICE_ACTION)
+        serviceIntent.setPackage(CHROME_PACKAGE)
+        val resolveInfos = packageManager.queryIntentServices(serviceIntent, 0)
+        return !(resolveInfos == null || resolveInfos.isEmpty())
     }
 
     // Link in Google Play store app on the phone.

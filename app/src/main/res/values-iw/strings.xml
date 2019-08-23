@@ -190,6 +190,8 @@
 
     <string name="pref_source_title">"הצג מקור על"</string>
 
+    <string name="pref_privacy_policy_title">"Privacy policy"</string> <!-- TODO translate to Hebrew -->
+
     <string name="pref_third_party_software_title">"תוכנה צד שלישי"</string>
     <string name="pref_third_party_software_summary"> קוד פתוח חופשי"&amp;"רישיונות </string>
 
