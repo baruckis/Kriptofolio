@@ -31,7 +31,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.selection.StorageStrategy
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -407,8 +406,8 @@ class MainListFragment : Fragment(), Injectable, PrimaryActionModeController.Pri
 
     private fun subscribeUi(activity: FragmentActivity) {
 
-        // Obtain ViewModel from ViewModelProviders, using parent activity as LifecycleOwner.
-        viewModel = ViewModelProviders.of(activity, viewModelFactory).get(MainViewModel::class.java)
+        // Obtain ViewModel from ViewModelProvider, using parent activity as LifecycleOwner.
+        viewModel = ViewModelProvider(activity, viewModelFactory)[MainViewModel::class.java]
 
         binding.viewmodel = viewModel
 

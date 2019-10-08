@@ -28,7 +28,6 @@ import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
 import androidx.preference.ListPreference
 import androidx.preference.Preference
@@ -77,8 +76,8 @@ class SettingsFragment : PreferenceFragmentCompat(), Injectable, RewardedVideoAd
 
         activity?.let { activity ->
 
-            // Obtain ViewModel from ViewModelProviders, using parent activity as LifecycleOwner.
-            viewModel = ViewModelProviders.of(activity, viewModelFactory).get(SettingsViewModel::class.java)
+            // Obtain ViewModel from ViewModelProvider, using parent activity as LifecycleOwner.
+            viewModel = ViewModelProvider(activity, viewModelFactory)[SettingsViewModel::class.java]
 
 
             // Use an activity context to get the rewarded video instance.
@@ -494,7 +493,7 @@ class SettingsFragment : PreferenceFragmentCompat(), Injectable, RewardedVideoAd
         val serviceIntent = Intent(SERVICE_ACTION)
         serviceIntent.setPackage(CHROME_PACKAGE)
         val resolveInfos = packageManager.queryIntentServices(serviceIntent, 0)
-        return !(resolveInfos == null || resolveInfos.isEmpty())
+        return resolveInfos.isNotEmpty()
     }
 
     // Link in Google Play store app on the phone.
@@ -556,7 +555,7 @@ class SettingsFragment : PreferenceFragmentCompat(), Injectable, RewardedVideoAd
         try {
             startActivity(intent)
         } catch (e: Exception) {
-            logConsoleError(e.localizedMessage)
+            logConsoleError(e.localizedMessage ?: "Exception error")
 
             // If there is no email client application, than show error message for the user.
             if (e is ActivityNotFoundException) {

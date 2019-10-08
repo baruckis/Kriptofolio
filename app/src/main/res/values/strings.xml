@@ -14,15 +14,34 @@
   ~ limitations under the License.
   -->
 
-<!DOCTYPE resources [<!ENTITY usd "USD"><!ENTITY aud "AUD"><!ENTITY brl "BRL"><!ENTITY cad "CAD"><!ENTITY chf "CHF"><!ENTITY clp "CLP"><!ENTITY cny "CNY"><!ENTITY czk "CZK"><!ENTITY dkk "DKK"><!ENTITY eur "EUR"><!ENTITY gbp "GBP"><!ENTITY hkd "HKD"><!ENTITY huf "HUF"><!ENTITY idr "IDR"><!ENTITY ils "ILS"><!ENTITY inr "INR"><!ENTITY jpy "JPY"><!ENTITY krw "KRW"><!ENTITY mxn "MXN"><!ENTITY myr "MYR"><!ENTITY nok "NOK"><!ENTITY nzd "NZD"><!ENTITY php "PHP"><!ENTITY pkr "PKR"><!ENTITY pln "PLN"><!ENTITY rub "RUB"><!ENTITY sek "SEK"><!ENTITY sgd "SGD"><!ENTITY thb "THB"><!ENTITY try "TRY"><!ENTITY twd "TWD"><!ENTITY zar "ZAR">]>
+<!DOCTYPE resources [<!ENTITY usd "USD"><!ENTITY all "ALL"><!ENTITY dzd "DZD"><!ENTITY ars "ARS">
+    <!ENTITY amd "AMD"><!ENTITY aud "AUD"><!ENTITY azn "AZN"><!ENTITY bhd "BHD"><!ENTITY bdt "BDT">
+    <!ENTITY byn "BYN"><!ENTITY bmd "BMD"><!ENTITY bob "BOB"><!ENTITY bam "BAM"><!ENTITY brl "BRL">
+    <!ENTITY bgn "BGN"><!ENTITY khr "KHR"><!ENTITY cad "CAD"><!ENTITY cad "CAD"><!ENTITY clp "CLP">
+    <!ENTITY cny "CNY"><!ENTITY cop "COP"><!ENTITY crc "CRC"><!ENTITY hrk "HRK"><!ENTITY cup "CUP">
+    <!ENTITY czk "CZK"><!ENTITY dkk "DKK"><!ENTITY dop "DOP"><!ENTITY egp "EGP"><!ENTITY eur "EUR">
+    <!ENTITY gel "GEL"><!ENTITY ghs "GHS"><!ENTITY gtq "GTQ"><!ENTITY hnl "HNL"><!ENTITY hkd "HKD">
+    <!ENTITY huf "HUF"><!ENTITY isk "ISK"><!ENTITY inr "INR"><!ENTITY idr "IDR"><!ENTITY irr "IRR">
+    <!ENTITY iqd "IQD"><!ENTITY ils "ILS"><!ENTITY jmd "JMD"><!ENTITY jpy "JPY"><!ENTITY jod "JOD">
+    <!ENTITY kzt "KZT"><!ENTITY kes "KES"><!ENTITY kwd "KWD"><!ENTITY kgs "KGS"><!ENTITY lbp "LBP">
+    <!ENTITY mkd "MKD"><!ENTITY myr "MYR"><!ENTITY mur "MUR"><!ENTITY mxn "MXN"><!ENTITY mdl "MDL">
+    <!ENTITY mnt "MNT"><!ENTITY mad "MAD"><!ENTITY mmk "MMK"><!ENTITY nad "NAD"><!ENTITY npr "NPR">
+    <!ENTITY twd "TWD"><!ENTITY nzd "NZD"><!ENTITY nio "NIO"><!ENTITY ngn "NGN"><!ENTITY nok "NOK">
+    <!ENTITY omr "OMR"><!ENTITY pkr "PKR"><!ENTITY pab "PAB"><!ENTITY pen "PEN"><!ENTITY php "PHP">
+    <!ENTITY pln "PLN"><!ENTITY gbp "GBP"><!ENTITY qar "QAR"><!ENTITY ron "RON"><!ENTITY rub "RUB">
+    <!ENTITY sar "SAR"><!ENTITY rsd "RSD"><!ENTITY sgd "SGD"><!ENTITY zar "ZAR"><!ENTITY krw "KRW">
+    <!ENTITY ssp "SSP"><!ENTITY ves "VES"><!ENTITY lkr "LKR"><!ENTITY sek "SEK"><!ENTITY chf "CHF">
+    <!ENTITY thb "THB"><!ENTITY ttd "TTD"><!ENTITY tnd "TND"><!ENTITY try "TRY"><!ENTITY ugx "UGX">
+    <!ENTITY uah "UAH"><!ENTITY aed "AED"><!ENTITY uyu "UYU"><!ENTITY uzs "UZS"><!ENTITY vnd "VND">
+    ]>
 
 <resources>
 
     <string name="app_name" translatable="false">"Kriptofolio"</string>
 
     <!--  major . minor . patch -->
-    <string name="app_version_full" translatable="false">"v1.0.1"</string>
-    <string name="app_version_demo" translatable="false">"v1.0.1 DEMO"</string>
+    <string name="app_version_full" translatable="false">"v1.1.0"</string>
+    <string name="app_version_demo" translatable="false">"v1.1.0 DEMO"</string>
 
     <string name="app_subtitle_full" translatable="false">""</string>
     <string name="app_subtitle_demo" translatable="false">"DEMO"</string>
@@ -93,73 +112,196 @@
 
     <string-array name="fiat_currency_code_array" translatable="false">
         <item>"&usd;"</item>
+        <item>"&all;"</item>
+        <item>"&dzd;"</item>
+        <item>"&ars;"</item>
+        <item>"&amd;"</item>
         <item>"&aud;"</item>
+        <item>"&azn;"</item>
+        <item>"&bhd;"</item>
+        <item>"&bdt;"</item>
+        <item>"&byn;"</item>
+        <item>"&bmd;"</item>
+        <item>"&bob;"</item>
+        <item>"&bam;"</item>
         <item>"&brl;"</item>
+        <item>"&bgn;"</item>
+        <item>"&khr;"</item>
         <item>"&cad;"</item>
-        <item>"&chf;"</item>
         <item>"&clp;"</item>
         <item>"&cny;"</item>
+        <item>"&cop;"</item>
+        <item>"&crc;"</item>
+        <item>"&hrk;"</item>
+        <item>"&cup;"</item>
         <item>"&czk;"</item>
         <item>"&dkk;"</item>
+        <item>"&dop;"</item>
+        <item>"&egp;"</item>
         <item>"&eur;"</item>
-        <item>"&gbp;"</item>
+        <item>"&gel;"</item>
+        <item>"&ghs;"</item>
+        <item>"&gtq;"</item>
+        <item>"&hnl;"</item>
         <item>"&hkd;"</item>
         <item>"&huf;"</item>
-        <item>"&idr;"</item>
-        <item>"&ils;"</item>
+        <item>"&isk;"</item>
         <item>"&inr;"</item>
+        <item>"&idr;"</item>
+        <item>"&irr;"</item>
+        <item>"&iqd;"</item>
+        <item>"&ils;"</item>
+        <item>"&jmd;"</item>
         <item>"&jpy;"</item>
-        <item>"&krw;"</item>
-        <item>"&mxn;"</item>
+        <item>"&jod;"</item>
+        <item>"&kzt;"</item>
+        <item>"&kes;"</item>
+        <item>"&kwd;"</item>
+        <item>"&kgs;"</item>
+        <item>"&lbp;"</item>
+        <item>"&mkd;"</item>
         <item>"&myr;"</item>
-        <item>"&nok;"</item>
-        <item>"&nzd;"</item>
-        <item>"&php;"</item>
-        <item>"&pkr;"</item>
-        <item>"&pln;"</item>
-        <item>"&rub;"</item>
-        <item>"&sek;"</item>
-        <item>"&sgd;"</item>
-        <item>"&thb;"</item>
-        <item>"&try;"</item>
+        <item>"&mur;"</item>
+        <item>"&mxn;"</item>
+        <item>"&mdl;"</item>
+        <item>"&mnt;"</item>
+        <item>"&mad;"</item>
+        <item>"&mmk;"</item>
+        <item>"&nad;"</item>
+        <item>"&npr;"</item>
         <item>"&twd;"</item>
+        <item>"&nzd;"</item>
+        <item>"&nio;"</item>
+        <item>"&ngn;"</item>
+        <item>"&nok;"</item>
+        <item>"&omr;"</item>
+        <item>"&pkr;"</item>
+        <item>"&pab;"</item>
+        <item>"&pen;"</item>
+        <item>"&php;"</item>
+        <item>"&pln;"</item>
+        <item>"&gbp;"</item>
+        <item>"&qar;"</item>
+        <item>"&ron;"</item>
+        <item>"&rub;"</item>
+        <item>"&sar;"</item>
+        <item>"&rsd;"</item>
+        <item>"&sgd;"</item>
         <item>"&zar;"</item>
+        <item>"&krw;"</item>
+        <item>"&ssp;"</item>
+        <item>"&ves;"</item>
+        <item>"&lkr;"</item>
+        <item>"&sek;"</item>
+        <item>"&chf;"</item>
+        <item>"&thb;"</item>
+        <item>"&ttd;"</item>
+        <item>"&tnd;"</item>
+        <item>"&try;"</item>
+        <item>"&ugx;"</item>
+        <item>"&uah;"</item>
+        <item>"&aed;"</item>
+        <item>"&uyu;"</item>
+        <item>"&uzs;"</item>
+        <item>"&vnd;"</item>
     </string-array>
 
     <string-array name="fiat_currency_sign_array" translatable="false">
         <item>"$"</item>
-        <item>"A$"</item>
+        <item>"L"</item>
+        <item>"د.ج"</item>
+        <item>"$"</item>
+        <item>"֏"</item>
+        <item>"$"</item>
+        <item>"₼"</item>
+        <item>".د.ب"</item>
+        <item>"৳"</item>
+        <item>"Br"</item>
+        <item>"$"</item>
+        <item>"Bs."</item>
+        <item>"KM"</item>
         <item>"R$"</item>
-        <item>"C$"</item>
-        <item>"Fr."</item>
+        <item>"лв"</item>
+        <item>"៛"</item>
+        <item>"$"</item>
         <item>"$"</item>
         <item>"¥"</item>
+        <item>"$"</item>
+        <item>"₡"</item>
+        <item>"kn"</item>
+        <item>"$"</item>
         <item>"Kč"</item>
-        <item>"Kr."</item>
-        <item>"€"</item>
+        <item>"kr"</item>
+        <item>"$"</item>
         <item>"£"</item>
-        <item>"HK$"</item>
+        <item>"€"</item>
+        <item>"₾""</item>
+        <item>"₾₵"</item>
+        <item>"₾Q"</item>
+        <item>"L"</item>
+        <item>"$"</item>
         <item>"Ft"</item>
-        <item>"Rp"</item>
-        <item>"₪"</item>
+        <item>"kr"</item>
         <item>"₹"</item>
-        <item>"JP¥"</item>
-        <item>"₩"</item>
-        <item>"Mex$"</item>
+        <item>"Rp"</item>
+        <item>"﷼"</item>
+        <item>"ع.د"</item>
+        <item>"₪"</item>
+        <item>"$"</item>
+        <item>"¥"</item>
+        <item>"د.ا"</item>
+        <item>"₸"</item>
+        <item>"Sh"</item>
+        <item>"د.ك"</item>
+        <item>"с"</item>
+        <item>"ل.ل"</item>
+        <item>"ден"</item>
         <item>"RM"</item>
-        <item>"kr"</item>
-        <item>"NZ$"</item>
-        <item>"₱"</item>
         <item>"₨"</item>
-        <item>"zł"</item>
-        <item>"₽"</item>
+        <item>"$"</item>
+        <item>"L"</item>
+        <item>"₮"</item>
+        <item>"د.م."</item>
+        <item>"Ks"</item>
+        <item>"$"</item>
+        <item>"₨"</item>
+        <item>"$"</item>
+        <item>"$"</item>
+        <item>"C$"</item>
+        <item>"₦"</item>
         <item>"kr"</item>
-        <item>"S$"</item>
+        <item>"ر.ع."</item>
+        <item>"₨"</item>
+        <item>"B/."</item>
+        <item>"S/."</item>
+        <item>"₱"</item>
+        <item>"zł"</item>
+        <item>"£"</item>
+        <item>"ر.ق"</item>
+        <item>"lei"</item>
+        <item>"₽"</item>
+        <item>"ر.س"</item>
+        <item>"дин."</item>
+        <item>"$"</item>
+        <item>"Rs"</item>
+        <item>"₩"</item>
+        <item>"£"</item>
+        <item>"Bs."</item>
+        <item>"Rs"</item>
+        <item>"kr"</item>
+        <item>"Fr"</item>
         <item>"฿"</item>
+        <item>"$"</item>
+        <item>"د.ت"</item>
         <item>"₺"</item>
-        <item>"NT$"</item>
-        <item>"R"</item>
+        <item>"Sh"</item>
+        <item>"₴"</item>
+        <item>"د.إ"</item>
+        <item>"$"</item>
+        <item>"so'm"</item>
+        <item>"₫"</item>
     </string-array>
+
 
     <string name="action_mode_title">"Selected: %1$d"</string>
     <string name="action_select_all">"Select all"</string>
@@ -217,77 +359,199 @@
 
     <string name="pref_fiat_currency_key" translatable="false">"preference fiat currency"</string>
 
-    <string name="pref_default_fiat_currency_entry">"&usd; - US Dollar"</string>
+    <string name="pref_default_fiat_currency_entry">"&usd; - United States Dollar ($)"</string>
     <string name="pref_default_fiat_currency_value">"&usd;"</string>
 
     <string-array name="pref_fiat_currency_list_entries">
-        <item>"&usd; - US Dollar"</item>
-        <item>"&aud; - Australian Dollar"</item>
-        <item>"&brl; - Brazilian Real"</item>
-        <item>"&cad; - Canadian Dollar"</item>
-        <item>"&chf; - Swiss Franc"</item>
-        <item>"&clp; - Chilean Peso"</item>
-        <item>"&cny; - Chinese Yuan Renminbi"</item>
-        <item>"&czk; - Czech Koruna"</item>
-        <item>"&dkk; - Danish Krone"</item>
-        <item>"&eur; - Euro"</item>
-        <item>"&gbp; - British Pound"</item>
-        <item>"&hkd; - Hong Kong Dollar"</item>
-        <item>"&huf; - Hungarian Forint"</item>
-        <item>"&idr; - Indonesian Rupiah"</item>
-        <item>"&ils; - Israeli Shekel"</item>
-        <item>"&inr; - Indian Rupee"</item>
-        <item>"&jpy; - Japanese Yen"</item>
-        <item>"&krw; - South Korean Won"</item>
-        <item>"&mxn; - Mexican Peso"</item>
-        <item>"&myr; - Malaysian Ringgit"</item>
-        <item>"&nok; - Norwegian Krone"</item>
-        <item>"&nzd; - New Zealand Dollar"</item>
-        <item>"&php; - Philippine Piso"</item>
-        <item>"&pkr; - Pakistani Rupee"</item>
-        <item>"&pln; - Polish Zloty"</item>
-        <item>"&rub; - Russian Ruble"</item>
-        <item>"&sek; - Swedish Krona"</item>
-        <item>"&sgd; - Singapore Dollar"</item>
-        <item>"&thb; - Thai Baht"</item>
-        <item>"&try; - Turkish Lira"</item>
-        <item>"&twd; - Taiwan New Dollar"</item>
-        <item>"&zar; - South African Rand"</item>
+        <item>"&usd; - United States Dollar ($)"</item>
+        <item>"&all; - Albanian Lek (L)"</item>
+        <item>"&dzd; - Algerian Dinar (د.ج)"</item>
+        <item>"&ars; - Argentine Peso ($)"</item>
+        <item>"&amd; - Armenian Dram (֏)"</item>
+        <item>"&aud; - Australian Dollar ($)"</item>
+        <item>"&azn; - Azerbaijani Manat (₼)"</item>
+        <item>"&bhd; - Bahraini Dinar (.د.ب)"</item>
+        <item>"&bdt; - Bangladeshi Taka (৳)"</item>
+        <item>"&byn; - Belarusian Ruble (Br)"</item>
+        <item>"&bmd; - Bermudan Dollar ($)"</item>
+        <item>"&bob; - Bolivian Boliviano (Bs.)"</item>
+        <item>"&bam; - Bosnia-Herzegovina Convertible Mark (KM)"</item>
+        <item>"&brl; - Brazilian Real (R$)"</item>
+        <item>"&bgn; - Bulgarian Lev (лв)"</item>
+        <item>"&khr; - Cambodian Riel (៛)"</item>
+        <item>"&cad; - Canadian Dollar ($)"</item>
+        <item>"&clp; - Chilean Peso ($)"</item>
+        <item>"&cny; - Chinese Yuan (¥)"</item>
+        <item>"&cop; - Colombian Peso ($)"</item>
+        <item>"&crc; - Costa Rican Colón (₡)"</item>
+        <item>"&hrk; - Croatian Kuna (kn)"</item>
+        <item>"&cup; - Cuban Peso ($)"</item>
+        <item>"&czk; - Czech Koruna (Kč)"</item>
+        <item>"&dkk; - Danish Krone (kr)"</item>
+        <item>"&dop; - Dominican Peso ($)"</item>
+        <item>"&egp; - Egyptian Pound (£)"</item>
+        <item>"&eur; - Euro (€)"</item>
+        <item>"&gel; - Georgian Lari (₾))"</item>
+        <item>"&ghs; - Ghanaian Cedi (₵)"</item>
+        <item>"&gtq; - Guatemalan Quetzal (Q)"</item>
+        <item>"&hnl; - Honduran Lempira (L)"</item>
+        <item>"&hkd; - Hong Kong Dollar ($)"</item>
+        <item>"&huf; - Hungarian Forint (Ft)"</item>
+        <item>"&isk; - Icelandic Króna (kr)"</item>
+        <item>"&inr; - Indian Rupee (₹)"</item>
+        <item>"&idr; - Indonesian Rupiah (Rp)"</item>
+        <item>"&irr; - Iranian Rial (﷼)"</item>
+        <item>"&iqd; - Iraqi Dinar (ع.د)"</item>
+        <item>"&ils; - Israeli New Shekel (₪)"</item>
+        <item>"&jmd; - Jamaican Dollar ($)"</item>
+        <item>"&jpy; - Japanese Yen (¥)"</item>
+        <item>"&jod; - Jordanian Dinar (د.ا)"</item>
+        <item>"&kzt; - Kazakhstani Tenge (₸)"</item>
+        <item>"&kes; - Kenyan Shilling (Sh)"</item>
+        <item>"&kwd; - Kuwaiti Dinar (د.ك)"</item>
+        <item>"&kgs; - Kyrgystani Som (с)"</item>
+        <item>"&lbp; - Lebanese Pound (ل.ل)"</item>
+        <item>"&mkd; - Macedonian Denar (ден)"</item>
+        <item>"&myr; - Malaysian Ringgit (RM)"</item>
+        <item>"&mur; - Mauritian Rupee (₨)"</item>
+        <item>"&mxn; - Mexican Peso ($)"</item>
+        <item>"&mdl; - Moldovan Leu (L)"</item>
+        <item>"&mnt; - Mongolian Tugrik (₮)"</item>
+        <item>"&mad; - Moroccan Dirham (د.م.)"</item>
+        <item>"&mmk; - Myanma Kyat (Ks)"</item>
+        <item>"&nad; - Namibian Dollar ($)"</item>
+        <item>"&npr; - Nepalese Rupee (₨)"</item>
+        <item>"&twd; - New Taiwan Dollar ($)"</item>
+        <item>"&nzd; - New Zealand Dollar ($)"</item>
+        <item>"&nio; - Nicaraguan Córdoba (C$)"</item>
+        <item>"&ngn; - Nigerian Naira (₦)"</item>
+        <item>"&nok; - Norwegian Krone (kr)"</item>
+        <item>"&omr; - Omani Rial (ر.ع.)"</item>
+        <item>"&pkr; - Pakistani Rupee (₨)"</item>
+        <item>"&pab; - Panamanian Balboa (B/.)"</item>
+        <item>"&pen; - Peruvian Sol (S/.)"</item>
+        <item>"&php; - Philippine Peso (₱)"</item>
+        <item>"&pln; - Polish Złoty (zł)"</item>
+        <item>"&gbp; - Pound Sterling (£)"</item>
+        <item>"&qar; - Qatari Rial (ر.ق)"</item>
+        <item>"&ron; - Romanian Leu (lei)"</item>
+        <item>"&rub; - Russian Ruble (₽)"</item>
+        <item>"&sar; - Saudi Riyal (ر.س)"</item>
+        <item>"&rsd; - Serbian Dinar (дин.)"</item>
+        <item>"&sgd; - Singapore Dollar ($)"</item>
+        <item>"&zar; - South African Rand (Rs)"</item>
+        <item>"&krw; - South Korean Won (₩)"</item>
+        <item>"&ssp; - South Sudanese Pound (£)"</item>
+        <item>"&ves; - Sovereign Bolivar (Bs.)"</item>
+        <item>"&lkr; - Sri Lankan Rupee (Rs)"</item>
+        <item>"&sek; - Swedish Krona ( kr)"</item>
+        <item>"&chf; - Swiss Franc (Fr)"</item>
+        <item>"&thb; - Thai Baht (฿)"</item>
+        <item>"&ttd; - Trinidad and Tobago Dollar ($)"</item>
+        <item>"&tnd; - Tunisian Dinar (د.ت)"</item>
+        <item>"&try; - Turkish Lira (₺)"</item>
+        <item>"&ugx; - Ugandan Shilling (Sh)"</item>
+        <item>"&uah; - Ukrainian Hryvnia (₴)"</item>
+        <item>"&aed; - United Arab Emirates Dirham (د.إ)"</item>
+        <item>"&uyu; - Uruguayan Peso ($)"</item>
+        <item>"&uzs; - Uzbekistan Som (so'm)"</item>
+        <item>"&vnd; - Vietnamese Dong (₫)"</item>
     </string-array>
 
     <string-array name="pref_fiat_currency_list_values" translatable="false">
         <item>"&usd;"</item>
+        <item>"&all;"</item>
+        <item>"&dzd;"</item>
+        <item>"&ars;"</item>
+        <item>"&amd;"</item>
         <item>"&aud;"</item>
+        <item>"&azn;"</item>
+        <item>"&bhd;"</item>
+        <item>"&bdt;"</item>
+        <item>"&byn;"</item>
+        <item>"&bmd;"</item>
+        <item>"&bob;"</item>
+        <item>"&bam;"</item>
         <item>"&brl;"</item>
+        <item>"&bgn;"</item>
+        <item>"&khr;"</item>
         <item>"&cad;"</item>
-        <item>"&chf;"</item>
         <item>"&clp;"</item>
         <item>"&cny;"</item>
+        <item>"&cop;"</item>
+        <item>"&crc;"</item>
+        <item>"&hrk;"</item>
+        <item>"&cup;"</item>
         <item>"&czk;"</item>
         <item>"&dkk;"</item>
+        <item>"&dop;"</item>
+        <item>"&egp;"</item>
         <item>"&eur;"</item>
-        <item>"&gbp;"</item>
+        <item>"&gel;"</item>
+        <item>"&ghs;"</item>
+        <item>"&gtq;"</item>
+        <item>"&hnl;"</item>
         <item>"&hkd;"</item>
         <item>"&huf;"</item>
-        <item>"&idr;"</item>
-        <item>"&ils;"</item>
+        <item>"&isk;"</item>
         <item>"&inr;"</item>
+        <item>"&idr;"</item>
+        <item>"&irr;"</item>
+        <item>"&iqd;"</item>
+        <item>"&ils;"</item>
+        <item>"&jmd;"</item>
         <item>"&jpy;"</item>
-        <item>"&krw;"</item>
-        <item>"&mxn;"</item>
+        <item>"&jod;"</item>
+        <item>"&kzt;"</item>
+        <item>"&kes;"</item>
+        <item>"&kwd;"</item>
+        <item>"&kgs;"</item>
+        <item>"&lbp;"</item>
+        <item>"&mkd;"</item>
         <item>"&myr;"</item>
-        <item>"&nok;"</item>
-        <item>"&nzd;"</item>
-        <item>"&php;"</item>
-        <item>"&pkr;"</item>
-        <item>"&pln;"</item>
-        <item>"&rub;"</item>
-        <item>"&sek;"</item>
-        <item>"&sgd;"</item>
-        <item>"&thb;"</item>
-        <item>"&try;"</item>
+        <item>"&mur;"</item>
+        <item>"&mxn;"</item>
+        <item>"&mdl;"</item>
+        <item>"&mnt;"</item>
+        <item>"&mad;"</item>
+        <item>"&mmk;"</item>
+        <item>"&nad;"</item>
+        <item>"&npr;"</item>
         <item>"&twd;"</item>
+        <item>"&nzd;"</item>
+        <item>"&nio;"</item>
+        <item>"&ngn;"</item>
+        <item>"&nok;"</item>
+        <item>"&omr;"</item>
+        <item>"&pkr;"</item>
+        <item>"&pab;"</item>
+        <item>"&pen;"</item>
+        <item>"&php;"</item>
+        <item>"&pln;"</item>
+        <item>"&gbp;"</item>
+        <item>"&qar;"</item>
+        <item>"&ron;"</item>
+        <item>"&rub;"</item>
+        <item>"&sar;"</item>
+        <item>"&rsd;"</item>
+        <item>"&sgd;"</item>
         <item>"&zar;"</item>
+        <item>"&krw;"</item>
+        <item>"&ssp;"</item>
+        <item>"&ves;"</item>
+        <item>"&lkr;"</item>
+        <item>"&sek;"</item>
+        <item>"&chf;"</item>
+        <item>"&thb;"</item>
+        <item>"&ttd;"</item>
+        <item>"&tnd;"</item>
+        <item>"&try;"</item>
+        <item>"&ugx;"</item>
+        <item>"&uah;"</item>
+        <item>"&aed;"</item>
+        <item>"&uyu;"</item>
+        <item>"&uzs;"</item>
+        <item>"&vnd;"</item>
     </string-array>
 
     <string name="pref_date_format_title">"Date format"</string>

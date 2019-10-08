@@ -18,14 +18,13 @@ package com.baruckis.kriptofolio.ui.mainlist
 
 import android.content.Intent
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.text.SpannableString
 import android.view.Menu
 import android.view.MenuItem
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
+import androidx.preference.PreferenceManager
 import com.baruckis.kriptofolio.R
 import com.baruckis.kriptofolio.ui.common.BaseActivity
 import com.baruckis.kriptofolio.ui.settings.SettingsActivity
@@ -55,8 +54,8 @@ class MainActivity : BaseActivity(), HasSupportFragmentInjector {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Obtain ViewModel from ViewModelProviders, using this activity as LifecycleOwner.
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(MainViewModel::class.java)
+        // Obtain ViewModel from ViewModelProvider, using this activity as LifecycleOwner.
+        viewModel = ViewModelProvider(this, viewModelFactory)[MainViewModel::class.java]
 
         // Load the default values only for the first time when the user still hasn't used the preferences-screen.
         PreferenceManager.setDefaultValues(this, R.xml.pref_main, false)

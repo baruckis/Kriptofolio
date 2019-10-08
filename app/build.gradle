@@ -51,6 +51,13 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    // To avoid: Cannot inline bytecode built with JVM target 1.8 into bytecode that is being
+    // built with JVM target 1.6.
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
     flavorDimensions "version"
     productFlavors {
         demo {

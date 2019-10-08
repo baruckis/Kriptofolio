@@ -46,7 +46,7 @@ class LocalizationLanguage(
                         context.getString(R.string.pref_language_key),
                         context.getString(R.string.pref_default_language_value))
                 // Then we try to get our enum from that value.
-                val storedLanguage = try {
+                val storedLanguage = if (storedValue == null) null else try {
                     Language.fromLocale(Locale(storedValue))
                 } catch (ex: Exception) {
                     null

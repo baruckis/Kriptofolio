@@ -91,42 +91,103 @@
 
     <string name="pref_fiat_currency_title">"מטבע פיאט"</string>
 
-    <string name="pref_default_fiat_currency_entry">"ILS - שקל ישראלי"</string>
+    <string name="pref_default_fiat_currency_entry">"ILS - שקל ישראלי (₪)"</string>
     <string name="pref_default_fiat_currency_value">"ILS"</string>
 
     <string-array name="pref_fiat_currency_list_entries">
-        <item>"USD - דולר אמריקאי"</item>
-        <item>"AUD - דולר אוסטרלי"</item>
-        <item>"BRL - ריאל ברזילאי"</item>
-        <item>"CAD - דולר קנדי"</item>
-        <item>"CHF - פרנק שוויצרי"</item>
-        <item>"CLP - פזו צ\'יליאני"</item>
-        <item>"CNY - יואן"</item>
-        <item>"CZK - קורונה הצ\'כית"</item>
-        <item>"DKK - קרונה דנית"</item>
-        <item>"EUR - אירו"</item>
-        <item>"GBP - לירה שטרלינג"</item>
-        <item>"HKD - דולר הונג קונגי"</item>
-        <item>"HUF - פורינט הונגרי"</item>
-        <item>"IDR - רופיה האינדונזיים"</item>
-        <item>"ILS - שקל ישראלי"</item>
-        <item>"INR - רופי הודי"</item>
-        <item>"JPY - ין יפני"</item>
-        <item>"KRW - וון דרום קוראני"</item>
-        <item>"MXN - פזו מקסיקני"</item>
-        <item>"MYR - רינגיט מלזי"</item>
-        <item>"NOK - כתר נורבגי"</item>
-        <item>"NZD - דולר ניו זילנדי"</item>
-        <item>"PHP - פיליפיני Piso"</item>
-        <item>"PKR - רופי פקיסטני"</item>
-        <item>"PLN - זלוטי פולני"</item>
-        <item>"RUB - רובל רוסי"</item>
-        <item>"SEK - כתר שוודי"</item>
-        <item>"SGD - דולר סינגפורי"</item>
-        <item>"THB - באט תאילנדי"</item>
-        <item>"TRY - לירה טורקית"</item>
-        <item>"TWD - טייוואן דולר ניו"</item>
-        <item>"ZAR - ראנד דרום אפריקאי"</item>
+        <item>"USD - דולר אמריקאי ($)"</item>
+        <item>"ALL - לק אלבני (L)"</item>
+        <item>"DZD - د.ج) דינר אלג'יראי)"</item>
+        <item>"ARS - פזו ארגנטינאי ($)"</item>
+        <item>"AMD - דרמה ארמנית (֏)"</item>
+        <item>"AUD - דולר אוסטרלי ($)"</item>
+        <item>"AZN - מנאט אזרביג'אן (₼)"</item>
+        <item>"BHD - د.ب.) דינר בחרריני)"</item>
+        <item>"BDT - טאקה בנגלדש (৳)"</item>
+        <item>"BYN - רובל בלארוס (Br)"</item>
+        <item>"BMD - דולר ברמודני ($)"</item>
+        <item>"BOB - בוליביאנו בוליביה (Bs.)"</item>
+        <item>"BAM - בוסניה-הרצגובינה סימן להמרה (KM)"</item>
+        <item>"BRL - ריאל ברזילאי (R$)"</item>
+        <item>"BGN - לב בולגרי (лв)"</item>
+        <item>"KHR - ריאל הקמבודי (៛)"</item>
+        <item>"CAD - דולר קנדי ($)"</item>
+        <item>"CLP - פזו צ\'יליאני ($)"</item>
+        <item>"CNY - יואן (¥)"</item>
+        <item>"COP - פזו קולומביאני ($)"</item>
+        <item>"CRC - קולון בקוסטה ריקה (₡)"</item>
+        <item>"HRK - קונה קרואטית (kn)"</item>
+        <item>"CUP - פזו קובני ($)"</item>
+        <item>"CZK - קורונה הצ\'כית (Kč)"</item>
+        <item>"DKK - קרונה דנית (kr)"</item>
+        <item>"DOP - פזו דומיניקני ($)"</item>
+        <item>"EGP - פאונד מצרי (£)"</item>
+        <item>"EUR - אירו (€)"</item>
+        <item>"GEL - לארי הגיאורגי (₾))"</item>
+        <item>"GHS - סדי גאנה (₵)"</item>
+        <item>"GTQ - קווצאל גואטמלה (Q)"</item>
+        <item>"HNL - למפירא הונדורית (L)"</item>
+        <item>"HKD - דולר הונג קונגי ($)"</item>
+        <item>"HUF - פורינט הונגרי (Ft)"</item>
+        <item>"ISK - קרונה איסלנדית (kr)"</item>
+        <item>"INR - רופי הודי (₹)"</item>
+        <item>"IDR - רופיה האינדונזיים (Rp)"</item>
+        <item>"IRR - ﷼) ריאל איראני)"</item>
+        <item>"IQD - ع.د) דינר עירק)"</item>
+        <item>"ILS - שקל ישראלי (₪)"</item>
+        <item>"JMD - דולר ג'מייקני ($)"</item>
+        <item>"JPY - ין יפני (¥)"</item>
+        <item>"JOD - د.ا) דינר ירדני)"</item>
+        <item>"KZT - טנגה קזחסטני (₸)"</item>
+        <item>"KES - שילינג קניה (Sh)"</item>
+        <item>"KWD - د.ك) דינר כווית)"</item>
+        <item>"KGS - קירגיסטני סום (с)"</item>
+        <item>"LBP - ل.ل) לירה לבנונית)"</item>
+        <item>"MKD - דנאר מקדוני (ден)"</item>
+        <item>"MYR - רינגיט מלזי (RM)"</item>
+        <item>"MUR - רופי מאוריציאן (₨)"</item>
+        <item>"MXN - פזו מקסיקני ($)"</item>
+        <item>"MDL - לאו מולדובה (L)"</item>
+        <item>"MNT - טוגריק מונגולי (₮)"</item>
+        <item>"MAD - د.م.) דירהם מרוקאי)"</item>
+        <item>"MMK - מיאנמר קיוט (Ks)"</item>
+        <item>"NAD - דולר נמיבי ($)"</item>
+        <item>"NPR - הרופי הנפאלי (₨)"</item>
+        <item>"TWD - טייוואן דולר ניו ($)"</item>
+        <item>"NZD - דולר ניו זילנדי ($)"</item>
+        <item>"NIO - ניקרגואה קורדובה (C$)"</item>
+        <item>"NGN - נאירה הניגרית (₦)"</item>
+        <item>"NOK - כתר נורבגי (kr)"</item>
+        <item>"OMR - ر.ع.) עומני ריאל)"</item>
+        <item>"PKR - רופי פקיסטני (₨)"</item>
+        <item>"PAB - בלבואה פנמנית (B/.)"</item>
+        <item>"PEN - סול פרואני (S/.)"</item>
+        <item>"PHP - פיליפיני Piso (₱)"</item>
+        <item>"PLN - זלוטי פולני (zł)"</item>
+        <item>"GBP - לירה שטרלינג (£)"</item>
+        <item>"QAR - ر.ق) ריאל קטארי)"</item>
+        <item>"RON - לאו רומני (lei)"</item>
+        <item>"RUB - רובל רוסי (₽)"</item>
+        <item>"SAR - ر.س) ריאל סעודי)"</item>
+        <item>"RSD - דינר סרבי (дин.)"</item>
+        <item>"SGD - דולר סינגפורי ($)"</item>
+        <item>"ZAR - ראנד דרום אפריקאי (Rs)"</item>
+        <item>"KRW - וון דרום קוראני (₩)"</item>
+        <item>"SSP - לירה דרום סודן (£)"</item>
+        <item>"VES - בוליבר הריבון (Bs.)"</item>
+        <item>"LKR - רופי סרי לנקי (Rs)"</item>
+        <item>"SEK - כתר שוודי ( kr)"</item>
+        <item>"CHF - פרנק שוויצרי (Fr)"</item>
+        <item>"THB - באט תאילנדי (฿)"</item>
+        <item>"TTD - דולר טרינידד וטובגו ($)"</item>
+        <item>"TND - د.ت) דינר תוניסאי)"</item>
+        <item>"TRY - לירה טורקית (₺)"</item>
+        <item>"UGX - שילינג אוגנדי (Sh)"</item>
+        <item>"UAH - אוקראינית Hryvnia (₴)"</item>
+        <item>"AED - د.إ) דירהם של איחוד האמירויות הערביות)"</item>
+        <item>"UYU - פזו אורוגוואי ($)"</item>
+        <item>"UZS - אוזבקיסטן סום (so'm)"</item>
+        <item>"VND - דונג וייטנאמי (₫)"</item>
     </string-array>
 
     <string name="pref_date_format_title">"פורמט תאריך"</string>

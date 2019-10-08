@@ -21,7 +21,7 @@ import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.Build
 import android.os.Build.VERSION_CODES.N
-import android.preference.PreferenceManager
+import androidx.preference.PreferenceManager
 import com.baruckis.kriptofolio.R
 import java.util.*
 

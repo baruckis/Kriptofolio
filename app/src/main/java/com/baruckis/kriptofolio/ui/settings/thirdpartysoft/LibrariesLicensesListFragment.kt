@@ -27,7 +27,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -58,8 +57,8 @@ class LibrariesLicensesListFragment : Fragment(), Injectable {
 
         activity?.let { activity ->
 
-            // Obtain ViewModel from ViewModelProviders, using parent activity as LifecycleOwner.
-            viewModel = ViewModelProviders.of(activity, viewModelFactory).get(LibrariesLicensesViewModel::class.java)
+            // Obtain ViewModel from ViewModelProvider, using parent activity as LifecycleOwner.
+            viewModel = ViewModelProvider(activity, viewModelFactory)[LibrariesLicensesViewModel::class.java]
 
             activity.title = viewModel.stringsLocalization.getString(R.string.fragment_libraries_licenses_list_title)
             if (activity is AppCompatActivity) activity.supportActionBar?.subtitle = viewModel.stringsLocalization.getString(R.string.fragment_libraries_licenses_list_subtitle)

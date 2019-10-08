@@ -18,7 +18,7 @@ package com.baruckis.kriptofolio.dependencyinjection
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.preference.PreferenceManager
+import androidx.preference.PreferenceManager
 import androidx.room.Room
 import com.baruckis.kriptofolio.App
 import com.baruckis.kriptofolio.BuildConfig

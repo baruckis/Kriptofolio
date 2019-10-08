@@ -91,42 +91,103 @@
 
     <string name="pref_fiat_currency_title">"„Fiat“ valiuta"</string>
 
-    <string name="pref_default_fiat_currency_entry">"EUR - Euras"</string>
+    <string name="pref_default_fiat_currency_entry">"EUR - Euras (€)"</string>
     <string name="pref_default_fiat_currency_value">"EUR"</string>
 
     <string-array name="pref_fiat_currency_list_entries">
-        <item>"USD - JAV doleris"</item>
-        <item>"AUD - Australijos doleris"</item>
-        <item>"BRL - Brazilijos realas"</item>
-        <item>"CAD - Kanados doleris"</item>
-        <item>"CHF - Šveicarijos frankas"</item>
-        <item>"CLP - Čilės pesas"</item>
-        <item>"CNY - Kinijos ženminbi juanis"</item>
-        <item>"CZK - Čekijos krona"</item>
-        <item>"DKK - Danijos krona"</item>
-        <item>"EUR - Euras"</item>
-        <item>"GBP - Didžiosios Britanijos svaras sterlingų"</item>
-        <item>"HKD - Honkongo doleris"</item>
-        <item>"HUF - Vengrijos forintas"</item>
-        <item>"IDR - Indonezijos rupija"</item>
-        <item>"ILS - Izraelio šekelis"</item>
-        <item>"INR - Indijos rupija"</item>
-        <item>"JPY - Japonijos jena"</item>
-        <item>"KRW - Pietų Korėjos vonas"</item>
-        <item>"MXN - Meksikos pesas"</item>
-        <item>"MYR - Malaizijos ringitas"</item>
-        <item>"NOK - Norvegijos krona"</item>
-        <item>"NZD - Naujosios Zelandijos doleris"</item>
-        <item>"PHP - Filipinų pesas"</item>
-        <item>"PKR - Pakistano rupija"</item>
-        <item>"PLN - Lenkijos zlotas"</item>
-        <item>"RUB - Rusijos rublis"</item>
-        <item>"SEK - Švedijos krona"</item>
-        <item>"SGD - Singapūro doleris"</item>
-        <item>"THB - Tailando batas"</item>
-        <item>"TRY - Turkijos lira"</item>
-        <item>"TWD - Taivano naujasis doleris"</item>
-        <item>"ZAR - Pietų Afrikos Respublikos randas"</item>
+        <item>"USD - JAV doleris ($)"</item>
+        <item>"ALL - Albanijos lekas (L)"</item>
+        <item>"DZD - Alžyro dinaras (د.ج)"</item>
+        <item>"ARS - Argentinos pesas ($)"</item>
+        <item>"AMD - Armėnijos dramas (֏)"</item>
+        <item>"AUD - Australijos doleris ($)"</item>
+        <item>"AZN - Azerbaidžano manatas (₼)"</item>
+        <item>"BHD - Bahreino dinaras (.د.ب)"</item>
+        <item>"BDT - Bangladešo taka (৳)"</item>
+        <item>"BYN - Baltarusijos rublis (Br)"</item>
+        <item>"BMD - Bermudos doleris ($)"</item>
+        <item>"BOB - Bolivijos Bolivianas (Bs.)"</item>
+        <item>"BAM - Bosnijos-Hercegovinos konvertuojamoji markė (KM)"</item>
+        <item>"BRL - Brazilijos realas (R$)"</item>
+        <item>"BGN - Bulgarijos levas (лв)"</item>
+        <item>"KHR - Kambodžos rielis (៛)"</item>
+        <item>"CAD - Kanados doleris ($)"</item>
+        <item>"CLP - Čilės pesas ($)"</item>
+        <item>"CNY - Kinijos juanis (¥)"</item>
+        <item>"COP - Kolumbijos pesas ($)"</item>
+        <item>"CRC - Kosta Rikos kolonas (₡)"</item>
+        <item>"HRK - Kroatijos kuna (kn)"</item>
+        <item>"CUP - Kubos pesas ($)"</item>
+        <item>"CZK - Čekijos krona (Kč)"</item>
+        <item>"DKK - Danijos krona (kr)"</item>
+        <item>"DOP - Dominikos pesas ($)"</item>
+        <item>"EGP - Egipto svaras (£)"</item>
+        <item>"EUR - Euras (€)"</item>
+        <item>"GEL - Gruzijos laris (₾))"</item>
+        <item>"GHS - Ganos sedis (₵)"</item>
+        <item>"GTQ - Gvatemalos kvetzalas (Q)"</item>
+        <item>"HNL - Hondūro lempira (L)"</item>
+        <item>"HKD - Honkongo doleris ($)"</item>
+        <item>"HUF - Vengrijos forintas (Ft)"</item>
+        <item>"ISK - Islandijos krona (kr)"</item>
+        <item>"INR - Indijos rupija (₹)"</item>
+        <item>"IDR - Indonezijos rupija (Rp)"</item>
+        <item>"IRR - Irano rialas (﷼)"</item>
+        <item>"IQD - Irako dinaras (ع.د)"</item>
+        <item>"ILS - Izraelio naujasis šekelis (₪)"</item>
+        <item>"JMD - Jamaikos doleris ($)"</item>
+        <item>"JPY - Japonijos jena (¥)"</item>
+        <item>"JOD - Jordanijos dinaras (د.ا)"</item>
+        <item>"KZT - Kazachstano tengė (₸)"</item>
+        <item>"KES - Kenijos šilingas (Sh)"</item>
+        <item>"KWD - Kuveito dinaras (د.ك)"</item>
+        <item>"KGS - Kirgizijos Somas (с)"</item>
+        <item>"LBP - Libano svaras (ل.ل)"</item>
+        <item>"MKD - Makedonijos denaras (ден)"</item>
+        <item>"MYR - Malaizijos ringitas (RM)"</item>
+        <item>"MUR - Mauricijaus rupija (₨)"</item>
+        <item>"MXN - Meksikos pesas ($)"</item>
+        <item>"MDL - Moldavijos lėja (L)"</item>
+        <item>"MNT - Mongolijos tugrikas (₮)"</item>
+        <item>"MAD - Maroko dirhamas (د.م.)"</item>
+        <item>"MMK - Mianmaro Kijatas (Ks)"</item>
+        <item>"NAD - Namibijos doleris ($)"</item>
+        <item>"NPR - Nepalo rupija (₨)"</item>
+        <item>"TWD - Naujasis Taivano doleris ($)"</item>
+        <item>"NZD - Naujosios Zelandijos doleris ($)"</item>
+        <item>"NIO - Nikaragvos kordoba (C$)"</item>
+        <item>"NGN - Nigerijos naira (₦)"</item>
+        <item>"NOK - Norvegijos krona (kr)"</item>
+        <item>"OMR - Omano rialas (ر.ع.)"</item>
+        <item>"PKR - Pakistano rupija (₨)"</item>
+        <item>"PAB - Panamos balboa (B/.)"</item>
+        <item>"PEN - Peru solis (S/.)"</item>
+        <item>"PHP - Filipinų pesas (₱)"</item>
+        <item>"PLN - Lenkijos zlotas (zł)"</item>
+        <item>"GBP - Didžiosios Britanijos svaras sterlingų (£)"</item>
+        <item>"QAR - Kataro rialas (ر.ق)"</item>
+        <item>"RON - Rumunijos lėja (lei)"</item>
+        <item>"RUB - Rusijos rublis (₽)"</item>
+        <item>"SAR - Saudo Arabijos rialas (ر.س)"</item>
+        <item>"RSD - Serbijos dinaras (дин.)"</item>
+        <item>"SGD - Singapūro doleris ($)"</item>
+        <item>"ZAR - Pietų Afrikos randas (Rs)"</item>
+        <item>"KRW - Pietų Korėjos vonas (₩)"</item>
+        <item>"SSP - Pietų Sudano svaras (£)"</item>
+        <item>"VES - Nepriklausomas bolivaras (Bs.)"</item>
+        <item>"LKR - Šri Lankos rupija (Rs)"</item>
+        <item>"SEK - Švedijos krona ( kr)"</item>
+        <item>"CHF - Šveicarijos frankas (Fr)"</item>
+        <item>"THB - Tailando batas (฿)"</item>
+        <item>"TTD - Trinidado ir Tobago doleris ($)"</item>
+        <item>"TND - Tuniso dinaras (د.ت)"</item>
+        <item>"TRY - Turkijos lira (₺)"</item>
+        <item>"UGX - Ugandos šilingas (Sh)"</item>
+        <item>"UAH - Ukrainos grivina (₴)"</item>
+        <item>"AED - Jungtinių Arabų Emyratų dirhamas (د.إ)"</item>
+        <item>"UYU - Urugvajaus pesas ($)"</item>
+        <item>"UZS - Uzbekijos sumas (so'm)"</item>
+        <item>"VND - Vietnamo dongas (₫)"</item>
     </string-array>
 
     <string name="pref_date_format_title">"Datos formatas"</string>

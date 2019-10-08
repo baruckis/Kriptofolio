@@ -28,7 +28,6 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.baruckis.kriptofolio.R
 import com.baruckis.kriptofolio.databinding.ActivityAddSearchBinding
@@ -207,8 +206,8 @@ class AddSearchActivity : BaseActivity(), Injectable, CryptocurrencyAmountDialog
 
     private fun subscribeUi() {
 
-        // Obtain ViewModel from ViewModelProviders, using parent activity as LifecycleOwner.
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(AddSearchViewModel::class.java)
+        // Obtain ViewModel from ViewModelProvider, using parent activity as LifecycleOwner.
+        viewModel = ViewModelProvider(this, viewModelFactory)[AddSearchViewModel::class.java]
 
         // Update the list when the data changes by observing data on the ViewModel, exposed as a LiveData.
         viewModel.mediatorLiveDataCryptocurrencyResourceList.observe(this, Observer { listResource ->

@@ -56,8 +56,8 @@ class DonateCryptoDialog : DialogFragment() {
     @SuppressLint("InflateParams")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
-        val title = arguments?.getString(DonateCryptoDialog.EXTRA_TITLE)
-        val positiveButton = arguments?.getString(DonateCryptoDialog.EXTRA_POSITIVE_BUTTON)
+        val title = arguments?.getString(EXTRA_TITLE)
+        val positiveButton = arguments?.getString(EXTRA_POSITIVE_BUTTON)
 
         val dialog = activity?.let { activity ->
             val builder = AlertDialog.Builder(activity)
@@ -123,7 +123,7 @@ class DonateCryptoDialog : DialogFragment() {
         val clipboard =
                 context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?
         val clip = ClipData.newPlainText(null, address)
-        clipboard?.primaryClip = clip
+        clipboard?.setPrimaryClip(clip)
     }
 
 }
