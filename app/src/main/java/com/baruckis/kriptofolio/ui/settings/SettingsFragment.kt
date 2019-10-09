@@ -38,11 +38,6 @@ import com.baruckis.kriptofolio.dependencyinjection.Injectable
 import com.baruckis.kriptofolio.ui.mainlist.MainActivity
 import com.baruckis.kriptofolio.ui.settings.DonateCryptoDialog.Companion.DIALOG_DONATE_CRYPTO_TAG
 import com.baruckis.kriptofolio.utilities.*
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.MobileAds
-import com.google.android.gms.ads.reward.RewardItem
-import com.google.android.gms.ads.reward.RewardedVideoAd
-import com.google.android.gms.ads.reward.RewardedVideoAdListener
 import java.util.*
 import javax.inject.Inject
 
@@ -52,14 +47,12 @@ const val CHROME_PACKAGE = "com.android.chrome"
 /**
  * A simple [Fragment] subclass.
  */
-class SettingsFragment : PreferenceFragmentCompat(), Injectable, RewardedVideoAdListener {
+class SettingsFragment : PreferenceFragmentCompat(), Injectable {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
     private lateinit var viewModel: SettingsViewModel
-
-    private lateinit var rewardedVideoAd: RewardedVideoAd
 
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -78,15 +71,6 @@ class SettingsFragment : PreferenceFragmentCompat(), Injectable, RewardedVideoAd
 
             // Obtain ViewModel from ViewModelProvider, using parent activity as LifecycleOwner.
             viewModel = ViewModelProvider(activity, viewModelFactory)[SettingsViewModel::class.java]
-
-
-            // Use an activity context to get the rewarded video instance.
-            rewardedVideoAd = MobileAds.getRewardedVideoAdInstance(activity)
-            rewardedVideoAd.rewardedVideoAdListener = this
-
-            // It is highly recommended that you call load ad as early as possible to allow videos
-            // to be preloaded.
-            loadRewardedVideoAd()
 
 
             val preferenceLanguage = findPreference<Preference>(getString(R.string.pref_language_key))
@@ -182,29 +166,6 @@ class SettingsFragment : PreferenceFragmentCompat(), Injectable, RewardedVideoAd
                 preferenceShareApp.setOnPreferenceClickListener {
 
                     shareApp()
-
-                    true
-                }
-
-            }
-
-
-            val preferenceDonateView = findPreference<Preference>(getString(R.string.pref_donate_view_key))
-
-            preferenceDonateView?.let {
-
-                preferenceDonateView.setOnPreferenceClickListener {
-
-                    logConsoleVerbose("Video ad is requested.")
-
-                    if (rewardedVideoAd.isLoaded) {
-                        rewardedVideoAd.show()
-                    } else {
-                        viewModel.videoAdIsRequested = true
-                        Toast.makeText(activity, viewModel.stringsLocalization
-                                .getString(R.string.video_ad_loading), Toast.LENGTH_SHORT).show()
-                        loadRewardedVideoAd()
-                    }
 
                     true
                 }
@@ -365,80 +326,6 @@ class SettingsFragment : PreferenceFragmentCompat(), Injectable, RewardedVideoAd
 
     }
 
-
-    override fun onPause() {
-        super.onPause()
-        rewardedVideoAd.pause(activity)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        rewardedVideoAd.resume(activity)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        rewardedVideoAd.destroy(activity)
-    }
-
-
-    override fun onRewardedVideoAdClosed() {
-
-        logConsoleVerbose("onRewardedVideoAdClosed")
-
-        loadRewardedVideoAd()
-    }
-
-    override fun onRewardedVideoAdLeftApplication() {
-
-        logConsoleVerbose("onRewardedVideoAdLeftApplication")
-    }
-
-    override fun onRewardedVideoAdLoaded() {
-
-        logConsoleVerbose("onRewardedVideoAdLoaded")
-
-        if (viewModel.videoAdIsRequested) {
-            viewModel.videoAdIsRequested = false
-            rewardedVideoAd.show()
-        }
-    }
-
-    override fun onRewardedVideoAdOpened() {
-
-        logConsoleVerbose("onRewardedVideoAdOpened")
-    }
-
-    override fun onRewardedVideoCompleted() {
-
-        logConsoleVerbose("onRewardedVideoCompleted")
-    }
-
-    override fun onRewarded(reward: RewardItem?) {
-
-        logConsoleVerbose("onRewarded! Points: ${reward?.type} Amount: ${reward?.amount}")
-
-        Toast.makeText(activity, viewModel.stringsLocalization
-                .getString(R.string.video_ad_thank_you), Toast.LENGTH_LONG).show()
-    }
-
-    override fun onRewardedVideoStarted() {
-
-        logConsoleVerbose("onRewardedVideoStarted")
-    }
-
-    override fun onRewardedVideoAdFailedToLoad(p0: Int) {
-
-        logConsoleVerbose("onRewardedVideoAdFailedToLoad")
-
-        if (viewModel.videoAdIsRequested) {
-            viewModel.videoAdIsRequested = false
-            Toast.makeText(activity, viewModel.stringsLocalization
-                    .getString(R.string.video_ad_failed_load), Toast.LENGTH_LONG).show()
-        }
-    }
-
-
     private fun setListPreferenceSummary(preference: Preference, value: String) {
         if (preference is ListPreference) {
             val index = preference.findIndexOfValue(value)
@@ -451,14 +338,6 @@ class SettingsFragment : PreferenceFragmentCompat(), Injectable, RewardedVideoAd
         setListPreferenceSummary(preference, value)
         val todayDate = Calendar.getInstance().time
         preference.summary = preference.summary.toString() + " (" + formatDate(todayDate, value) + ")"
-    }
-
-    private fun loadRewardedVideoAd() {
-        // The easiest way to load test ads is to use dedicated test ad unit ID for Android
-        // rewarded video. It's been specially configured to return test ads for every request,
-        // and you're free to use it in your own apps while coding, testing, and debugging.
-        rewardedVideoAd.loadAd(ADMOB_AD_UNIT_ID,
-                AdRequest.Builder().build())
     }
 
     private fun browseUrl(uriString: String) {

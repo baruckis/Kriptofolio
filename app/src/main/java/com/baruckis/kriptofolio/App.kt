@@ -24,7 +24,6 @@ import com.baruckis.kriptofolio.dependencyinjection.AppInjector
 import com.baruckis.kriptofolio.utilities.localization.LocalizationManager
 import com.baruckis.kriptofolio.utilities.logConsoleVerbose
 import com.facebook.stetho.Stetho
-import com.google.android.gms.ads.MobileAds
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
@@ -45,8 +44,6 @@ class App : Application(), HasActivityInjector {
 
         Stetho.initializeWithDefaults(this)
 
-        // Initialize MobileAds SDK. This needs to be done only once, ideally at app launch.
-        MobileAds.initialize(this, getString(R.string.admob_app_id))
     }
 
 

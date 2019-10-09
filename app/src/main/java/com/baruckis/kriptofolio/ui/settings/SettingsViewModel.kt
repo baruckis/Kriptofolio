@@ -28,8 +28,6 @@ class SettingsViewModel @Inject constructor(
         licensesRepository: LicensesRepository,
         val stringsLocalization: StringsLocalization) : ViewModel() {
 
-    var videoAdIsRequested: Boolean = false
-
     val currentLanguage = cryptocurrencyRepository.getCurrentLanguage()
 
     val currentFiatCurrencyCode = cryptocurrencyRepository.getCurrentFiatCurrencyCode()

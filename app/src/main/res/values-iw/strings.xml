@@ -211,14 +211,6 @@
     <string name="share_app_chooser">"שתף/י עם: "</string>
 
 
-    <string name="pref_donate_view_title">"תרום את תצוגת"</string>
-    <string name="pref_donate_view_summary">"רק לצפות מודעות וידאו קצרות"</string>
-
-    <string name="video_ad_loading">"טוען סרטון פרסומת…"</string>
-    <string name="video_ad_thank_you">"תודה! מחבר אחד קיבל תשלום על הצפייה שלך. :)"</string>
-    <string name="video_ad_failed_load">"טעינת סרטן הפרסומת נכשלה. נא לבדוק את החיבור לאינטרנט ולנסות שוב."</string>
-
-
     <string name="pref_donate_crypto_title">"תרום עם הצפנה"</string>
     <string name="pref_donate_crypto_summary">"שלח Bitcoin שלך או Etherium"</string>
 

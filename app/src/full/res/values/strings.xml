@@ -21,7 +21,4 @@
     <string name="app_version" translatable="false">@string/app_version_full</string>
     <string name="app_subtitle" translatable="false">@string/app_subtitle_full</string>
 
-    <!-- TODO: Use your App ID provided by Google AdMob. -->
-    <string name="admob_app_id" translatable="false">""</string>
-
 </resources>

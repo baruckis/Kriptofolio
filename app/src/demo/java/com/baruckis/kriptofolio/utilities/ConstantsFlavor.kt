@@ -25,6 +25,3 @@ package com.baruckis.kriptofolio.utilities
 const val API_SERVICE_BASE_URL = "https://sandbox-api.coinmarketcap.com/"
 
 const val API_SERVICE_AUTHENTICATION_KEY = "" // TODO: Use your API Key provided by CoinMarketCap Professional API Developer Portal.
-
-// This is dedicated test Ad Unit ID for Android rewarded video.
-const val ADMOB_AD_UNIT_ID = "ca-app-pub-3940256099942544/5224354917"

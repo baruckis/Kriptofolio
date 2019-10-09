@@ -163,6 +163,9 @@ dependencies {
     implementation "android.arch.navigation:navigation-fragment-ktx:$versions.navigation"
     implementation "android.arch.navigation:navigation-ui-ktx:$versions.navigation"
 
+    // Chrome Custom Tabs.
+    implementation "androidx.browser:browser:$versions.browser"
+
     /* Other */
 
     // Dagger for dependency injection. It is a fully static, compile-time dependency injection
@@ -202,10 +205,6 @@ dependencies {
     // Facebook's Stetho project enables you to use Chrome debugging tools to troubleshoot
     // network traffic, database files, and view layouts.
     implementation "com.facebook.stetho:stetho:$versions.stetho"
-
-    // Google Mobile Ads SDK.
-    // A SDK that enables you to monetize your mobile apps with ads on the Android platform.
-    implementation "com.google.android.gms:play-services-ads:$versions.ads"
 
     // Helps apps to display open source software licenses and notices. When the application builds,
     // the Gradle plugin will process the licenses and add them to the app resources.

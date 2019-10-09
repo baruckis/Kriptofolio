@@ -211,14 +211,6 @@
     <string name="share_app_chooser">"Pasidalink su: "</string>
 
 
-    <string name="pref_donate_view_title">"Dovanok savo peržiūrą"</string>
-    <string name="pref_donate_view_summary">"Tiesiog peržiūrėk trumpą video reklamą"</string>
-
-    <string name="video_ad_loading">"Kraunasi video reklama…"</string>
-    <string name="video_ad_thank_you">"Ačiū! Autoriui ką tik buvo sumokėtą už jūsų peržiūrą. :)"</string>
-    <string name="video_ad_failed_load">"Nepavyko parodyti video reklamos. Prašau patikrink interneto ryšį ir bandyk dar kartą."</string>
-
-
     <string name="pref_donate_crypto_title">"Paaukok kripto"</string>
     <string name="pref_donate_crypto_summary">"Pervesk savo Bitcoin arba Etherium"</string>
 
