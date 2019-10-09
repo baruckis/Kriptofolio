@@ -18,7 +18,6 @@
 
 <resources>
 
-    <string name="app_version" translatable="false">@string/app_version_demo</string>
     <string name="app_subtitle" translatable="false">@string/app_subtitle_demo</string>
 
 </resources>

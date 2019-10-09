@@ -39,10 +39,6 @@
 
     <string name="app_name" translatable="false">"Kriptofolio"</string>
 
-    <!--  major . minor . patch -->
-    <string name="app_version_full" translatable="false">"v1.1.0"</string>
-    <string name="app_version_demo" translatable="false">"v1.1.0 DEMO"</string>
-
     <string name="app_subtitle_full" translatable="false">""</string>
     <string name="app_subtitle_demo" translatable="false">"DEMO"</string>
 
@@ -658,7 +654,6 @@
     <string name="pref_license_key" translatable="false">"license"</string>
 
     <string name="pref_app_title" translatable="false">@string/app_name</string>
-    <string name="pref_app_summary" translatable="false">@string/app_version</string>
 
 
     <!-- Strings related to Libraries Licenses List Fragment -->

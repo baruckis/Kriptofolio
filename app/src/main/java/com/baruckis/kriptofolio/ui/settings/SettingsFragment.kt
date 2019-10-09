@@ -25,6 +25,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
+import androidx.browser.customtabs.CustomTabsService
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -41,7 +42,6 @@ import com.baruckis.kriptofolio.utilities.*
 import java.util.*
 import javax.inject.Inject
 
-const val SERVICE_ACTION = "android.support.customtabs.action.CustomTabsService"
 const val CHROME_PACKAGE = "com.android.chrome"
 
 /**
@@ -222,8 +222,8 @@ class SettingsFragment : PreferenceFragmentCompat(), Injectable {
 
                 preferenceContact.setOnPreferenceClickListener {
 
-                    val subject = viewModel.stringsLocalization.getString(R.string.app_name) +
-                            " " + viewModel.stringsLocalization.getString(R.string.app_version)
+                    val subject = viewModel.stringsLocalization.getString(R.string.app_name) + " " + BuildConfig.VERSION_NAME
+                            " " + viewModel.stringsLocalization.getString(R.string.app_subtitle)
 
                     sendEmailFeedback(FEEDBACK_EMAIL,
                             viewModel.stringsLocalization.getString(R.string.feedback_email_subject, subject))
@@ -350,6 +350,7 @@ class SettingsFragment : PreferenceFragmentCompat(), Injectable {
     }
 
     private fun browseUrlWithChromeCustomTab(uriString: String) {
+
         activity?.let { context ->
             /*
             * Chrome Custom Tabs give apps more control over their web experience, and make
@@ -358,10 +359,11 @@ class SettingsFragment : PreferenceFragmentCompat(), Injectable {
             * looks and feels.
             * */
             if (context.isChromeCustomTabsSupported()) {
-                CustomTabsIntent.Builder().apply {
-                    setToolbarColor(ContextCompat.getColor(context, R.color.colorPrimary))
-                    setSecondaryToolbarColor(ContextCompat.getColor(context, R.color.colorPrimaryDark))
-                }.build().launchUrl(context, Uri.parse(uriString))
+                CustomTabsIntent.Builder()
+                        .setToolbarColor(ContextCompat.getColor(context, R.color.colorPrimary))
+                        .setSecondaryToolbarColor(ContextCompat.getColor(context, R.color.colorPrimaryDark))
+                        .build()
+                        .launchUrl(context, Uri.parse(uriString))
             } else {
                 browseUrl(uriString)
             }
@@ -369,10 +371,10 @@ class SettingsFragment : PreferenceFragmentCompat(), Injectable {
     }
 
     private fun Context.isChromeCustomTabsSupported(): Boolean {
-        val serviceIntent = Intent(SERVICE_ACTION)
+        val serviceIntent = Intent(CustomTabsService.ACTION_CUSTOM_TABS_CONNECTION)
         serviceIntent.setPackage(CHROME_PACKAGE)
         val resolveInfos = packageManager.queryIntentServices(serviceIntent, 0)
-        return resolveInfos.isNotEmpty()
+        return !resolveInfos.isNullOrEmpty()
     }
 
     // Link in Google Play store app on the phone.

@@ -26,7 +26,7 @@
 
         <variable
             name="listResource"
-            type="Resource" />
+            type="Resource&lt;Object&gt;" />
 
         <variable
             name="retryCallback"

@@ -26,14 +26,19 @@ apply plugin: 'com.google.android.gms.oss-licenses-plugin'
 
 android {
     compileSdkVersion versions.compile_sdk
+
+    // major . minor . patch
+    def version="1.1.0"
+
     defaultConfig {
         applicationId "com.baruckis.kriptofolio"
         minSdkVersion versions.min_sdk
         targetSdkVersion versions.target_sdk
         versionCode 2
-        versionName "@string/app_version"
+        versionName version
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -65,12 +70,17 @@ android {
             // This new string resource item will be generated at build time.
             resValue "string", "app_id_suffix", ".demo"
             buildConfigField 'boolean', 'IS_DEMO', 'true'
+
+            versionName "$version DEMO"
         }
         full {
             resValue "string", "app_id_suffix", ""
             buildConfigField 'boolean', 'IS_DEMO', 'false'
         }
     }
+
+    applicationVariants.all { variant ->
+        variant.resValue "string", "versionName", variant.versionName }
 }
 
 // We use Parcelize which is an experimental feature at the moment so we need to add the following
@@ -149,8 +159,6 @@ dependencies {
     // The ViewModel class is designed to store and manage UI-related data in a lifecycle conscious
     // way. LiveData is an observable data holder class.
     implementation "androidx.lifecycle:lifecycle-extensions:$versions.lifecycle"
-    kapt "androidx.lifecycle:lifecycle-compiler:$versions.lifecycle"
-    // For Kotlin we use kapt instead of annotationProcessor.
 
     // Room is a Database Object Mapping library that makes it easy to access database on Android
     // applications.
