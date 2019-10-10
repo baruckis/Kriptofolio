@@ -786,11 +786,6 @@
     <string name="library_link_stetho" translatable="false">"http://facebook.github.io/stetho"</string>
     <string name="library_license_name_stetho" translatable="false">@string/library_license_name_bsd</string>
 
-    <string name="library_title_google_ads" translatable="false">"Google Mobile Ads SDK"</string>
-    <string name="library_developer_google_ads" translatable="false">"Google"</string>
-    <string name="library_link_google_ads" translatable="false">"https://developer.android.com/distribute/play-services"</string>
-    <string name="library_license_name_google_ads" translatable="false">@string/library_license_name_android_sdk</string>
-
     <string name="library_title_oss_licenses" translatable="false">"OSS Licenses Gradle Plugin"</string>
     <string name="library_developer_oss_licenses" translatable="false">"Google"</string>
     <string name="library_link_oss_licenses" translatable="false">"https://github.com/google/play-services-plugins"</string>

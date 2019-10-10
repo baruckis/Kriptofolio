@@ -254,14 +254,6 @@ class LicensesRepository @Inject constructor(
 
 
         data.add(LibraryLicenseInfo(
-                stringsLocalization.getString(R.string.library_title_google_ads),
-                stringsLocalization.getString(R.string.library_developer_google_ads),
-                stringsLocalization.getString(R.string.library_link_google_ads),
-                stringsLocalization.getString(R.string.library_license_name_google_ads),
-                stringsLocalization.getString(R.string.license_android_sdk)))
-
-
-        data.add(LibraryLicenseInfo(
                 stringsLocalization.getString(R.string.library_title_oss_licenses),
                 stringsLocalization.getString(R.string.library_developer_oss_licenses),
                 stringsLocalization.getString(R.string.library_link_oss_licenses),
