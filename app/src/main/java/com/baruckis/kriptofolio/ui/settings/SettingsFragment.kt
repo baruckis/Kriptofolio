@@ -322,6 +322,17 @@ class SettingsFragment : PreferenceFragmentCompat(), Injectable {
 
             }
 
+
+            val preferenceApp = findPreference<Preference>(getString(R.string.pref_app_key))
+
+            preferenceApp?.let {
+
+                preferenceApp.title = viewModel.stringsLocalization.getString(R.string.app_name) +
+                        " " + viewModel.stringsLocalization.getString(R.string.app_subtitle)
+
+            }
+
+
         }
 
     }

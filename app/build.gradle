@@ -27,15 +27,12 @@ apply plugin: 'com.google.android.gms.oss-licenses-plugin'
 android {
     compileSdkVersion versions.compile_sdk
 
-    // major . minor . patch
-    def version="1.1.0"
-
     defaultConfig {
         applicationId "com.baruckis.kriptofolio"
         minSdkVersion versions.min_sdk
         targetSdkVersion versions.target_sdk
         versionCode 2
-        versionName version
+        versionName "1.1.0" // major . minor . patch
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -70,8 +67,6 @@ android {
             // This new string resource item will be generated at build time.
             resValue "string", "app_id_suffix", ".demo"
             buildConfigField 'boolean', 'IS_DEMO', 'true'
-
-            versionName "$version DEMO"
         }
         full {
             resValue "string", "app_id_suffix", ""

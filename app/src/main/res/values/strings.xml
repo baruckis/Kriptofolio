@@ -653,7 +653,7 @@
     <string name="pref_license_summary">"Copyright"</string>
     <string name="pref_license_key" translatable="false">"license"</string>
 
-    <string name="pref_app_title" translatable="false">@string/app_name</string>
+    <string name="pref_app_key" translatable="false">"app"</string>
 
 
     <!-- Strings related to Libraries Licenses List Fragment -->

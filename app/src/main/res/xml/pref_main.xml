@@ -127,9 +127,9 @@
 
         <Preference
             android:icon="@drawable/ic_info_outline"
+            android:key="@string/pref_app_key"
             android:selectable="false"
-            android:summary="@string/versionName"
-            android:title="@string/pref_app_title" />
+            android:summary="@string/versionName" />
 
     </PreferenceCategory>
 
