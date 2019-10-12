@@ -1,0 +1,1 @@
+Nemokama atviro kodo minimalistinė kriptovaliutų portfelio programėlė.

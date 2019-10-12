@@ -1,0 +1,7 @@
+This app will track all your cryptocurrencies in one place and let you know how much they are worth converted to fiat money. 
+
+The important thing for the user is that this app is going to ensure 100% trust. It will not require any login/registration process. It won’t collect users’ data by sending it to the server. Users’ provided data about cryptocurrency investments will be only stored inside a local database that is kept inside an Android device. Of course, to know the portfolio’s value converted to the fiat money, the app is going to use the Internet to get the latest conversion rates. 
+
+As the topic of money for people is so sensitive, to ensure trust, this app is being developed openly by creating blog posts series and making the project code available so everyone can see that there is nothing to hide. 
+
+https://kriptofolio.app

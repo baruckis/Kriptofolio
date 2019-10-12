@@ -1,0 +1,4 @@
+* Pridėta 61 nauja „fiat“ valiuta!
+* Naujas funkcionalumas siųsti atsiliepimą el. paštu.
+* Naujas funkcionalumas skirtas peržiūrėti privatumo politiką programėlėje. 
+* Pašalintos apmokamos vaizdo reklamos, kad išvengti visiškai bet kokių vartotojo duomenų stebėjimo.

@@ -1,0 +1,7 @@
+Ši programėlė padės tau stebėti visas tavo kriptovaliutas vienoje vietoje ir leis tau žinoti, kiek jos yra vertos konvertavus į „fiat“ pinigus. 
+
+Vartotojui svarbu tai, kad ši programėlė ketina užsitikrinti 100% jo pasitikėjimą. Ji nereikalaus jokio prisijungimo / registracijos proceso. Ji nerinks vartotojų privačių kriptovaliutų duomenų siųsdama juos serverį. Vartotojų pateikti duomenys apie investicijas į kriptovaliutas bus saugomi tik vietinėje duomenų bazėje, kuri laikoma Android įrenginyje. Žinoma, tam kad žinotum portfelio vertę konvertuotą į „fiat“ pinigus, programėlė naudosis internetu gauti naujausius perskaičiavimo kursus. 
+
+Kadangi pinigų tema žmonėms yra tokia jautri, siekiant užtikrinti patikimumą, ši programa yra kuriama atvirai rašant apie tai blog’o straipsnius ir padarant projekto kodą visiems prieinamą, kad kiekvienas galėtų matyti jog nėra nieko ko slėpti. 
+
+https://kriptofolio.app

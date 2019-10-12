@@ -1,0 +1,4 @@
+* Added new 61 fiat currencies! 
+* New functionality to send email feedback. 
+* New functionality to view Privacy Policy inside app. 
+* Removed Rewarded Video Ads to avoid any user tracking completely.
