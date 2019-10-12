@@ -16,6 +16,12 @@ Blog posts series: https://www.baruckis.com/android/kriptofolio-app-series
 <a href="https://play.google.com/store/apps/details?id=com.baruckis.kriptofolio&amp;pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1" target="_blank" rel="noopener noreferrer"><img class="aligncenter" src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" alt="Get it on Google Play" width="388" height="150"></a>
 
 
+## Promo
+https://kriptofolio.app
+
+![kriptofolio_phone_screenshots_combination_one-in-two](https://user-images.githubusercontent.com/2387056/66703930-3bd40d80-ed20-11e9-8603-a2379c1e6551.jpg)
+
+
 ## License
 
     Copyright 2018-2019 Andrius Baruckis www.baruckis.com | kriptofolio.app
