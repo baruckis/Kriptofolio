@@ -3,7 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Kriptofolio.iml" filepath="$PROJECT_DIR$/Kriptofolio.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/Kriptofolio-app.iml" filepath="$PROJECT_DIR$/app/Kriptofolio-app.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/openSource-Kriptofolio.iml" filepath="$PROJECT_DIR$/openSource-Kriptofolio.iml" />
     </modules>
   </component>
 </project>
