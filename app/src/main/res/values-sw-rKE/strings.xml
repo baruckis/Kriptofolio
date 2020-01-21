@@ -15,28 +15,8 @@
   ~ limitations under the License.
   -->
 
-<!DOCTYPE resources [<!ENTITY usd "USD"><!ENTITY all "ALL"><!ENTITY dzd "DZD"><!ENTITY ars "ARS">
-    <!ENTITY amd "AMD"><!ENTITY aud "AUD"><!ENTITY azn "AZN"><!ENTITY bhd "BHD"><!ENTITY bdt "BDT">
-    <!ENTITY byn "BYN"><!ENTITY bmd "BMD"><!ENTITY bob "BOB"><!ENTITY bam "BAM"><!ENTITY brl "BRL">
-    <!ENTITY bgn "BGN"><!ENTITY khr "KHR"><!ENTITY cad "CAD"><!ENTITY cad "CAD"><!ENTITY clp "CLP">
-    <!ENTITY cny "CNY"><!ENTITY cop "COP"><!ENTITY crc "CRC"><!ENTITY hrk "HRK"><!ENTITY cup "CUP">
-    <!ENTITY czk "CZK"><!ENTITY dkk "DKK"><!ENTITY dop "DOP"><!ENTITY egp "EGP"><!ENTITY eur "EUR">
-    <!ENTITY gel "GEL"><!ENTITY ghs "GHS"><!ENTITY gtq "GTQ"><!ENTITY hnl "HNL"><!ENTITY hkd "HKD">
-    <!ENTITY huf "HUF"><!ENTITY isk "ISK"><!ENTITY inr "INR"><!ENTITY idr "IDR"><!ENTITY irr "IRR">
-    <!ENTITY iqd "IQD"><!ENTITY ils "ILS"><!ENTITY jmd "JMD"><!ENTITY jpy "JPY"><!ENTITY jod "JOD">
-    <!ENTITY kzt "KZT"><!ENTITY kes "KES"><!ENTITY kwd "KWD"><!ENTITY kgs "KGS"><!ENTITY lbp "LBP">
-    <!ENTITY mkd "MKD"><!ENTITY myr "MYR"><!ENTITY mur "MUR"><!ENTITY mxn "MXN"><!ENTITY mdl "MDL">
-    <!ENTITY mnt "MNT"><!ENTITY mad "MAD"><!ENTITY mmk "MMK"><!ENTITY nad "NAD"><!ENTITY npr "NPR">
-    <!ENTITY twd "TWD"><!ENTITY nzd "NZD"><!ENTITY nio "NIO"><!ENTITY ngn "NGN"><!ENTITY nok "NOK">
-    <!ENTITY omr "OMR"><!ENTITY pkr "PKR"><!ENTITY pab "PAB"><!ENTITY pen "PEN"><!ENTITY php "PHP">
-    <!ENTITY pln "PLN"><!ENTITY gbp "GBP"><!ENTITY qar "QAR"><!ENTITY ron "RON"><!ENTITY rub "RUB">
-    <!ENTITY sar "SAR"><!ENTITY rsd "RSD"><!ENTITY sgd "SGD"><!ENTITY zar "ZAR"><!ENTITY krw "KRW">
-    <!ENTITY ssp "SSP"><!ENTITY ves "VES"><!ENTITY lkr "LKR"><!ENTITY sek "SEK"><!ENTITY chf "CHF">
-    <!ENTITY thb "THB"><!ENTITY ttd "TTD"><!ENTITY tnd "TND"><!ENTITY try "TRY"><!ENTITY ugx "UGX">
-    <!ENTITY uah "UAH"><!ENTITY aed "AED"><!ENTITY uyu "UYU"><!ENTITY uzs "UZS"><!ENTITY vnd "VND">
-    ]>
-
 <resources>
+  
     <string name="action_settings">"Mpangilio"</string>
 
     <string name="retry">"Jaribu tena"</string>
@@ -45,6 +25,7 @@
     <string name="unknown_error">"Kosa lisilojulikana."</string>
 
     <string name="undo">"Tendua"</string>
+    <string name="deleted">"Imefutwa: %1$d"</string>
 
     <string name="time_format_am">"Asubuhi"</string>
     <string name="time_format_pm">"Jioni"</string>
@@ -63,16 +44,17 @@
     <string name="string_crypto_list_empty_primary">"Orodha yako ya sarafu ya crypto ni tupu!"</string>
     <string name="string_crypto_list_empty_secondary">"Ongeza pesa zako kupitia kitufe cha + hapa chini."</string>
 
-    <string name="string_column_coin_crypto_hold_amount_symbol">Kiwango cha sarafu ya Crystal na alama</string>
-    <string name="string_column_coin_fiat_price_amount">Bei %1$s Kiasi %2$s</string>
-    <string name="string_column_coin_change_24h_1h_7d">± bei %% 1 h / 7 d ± bei %% 24 h ± kiasi %1$s 24 h</string>
+    <string name="string_column_coin_crypto_hold_amount_symbol">"Kiwango cha sarafu ya Crystal na alama"</string>
+    <string name="string_column_coin_fiat_price_amount">"Bei %1$s\nKiasi %2$s"</string>
+    <string name="string_column_coin_change_24h_1h_7d">"± bei %% 1 h / 7 d\n± bei %% 24 h\n± kiasi %1$s 24 h"</string>
 
-    <string name="sample_text_column_coin_fiat_price_amount">Bei $ Kiasi $</string>
-    <string name="sample_text_column_coin_change_24h_1h_7d">± bei % 1 h / 7 d ± bei % 24 h ± kiasi $ 24 h</string>
+    <string name="sample_text_column_coin_fiat_price_amount">"Bei $\nKiasi $"</string>
+    <string name="sample_text_column_coin_change_24h_1h_7d">"± bei % 1 h / 7 d\n± bei % 24 h\n± kiasi $ 24 h"</string>
 
     <string name="sample_text_total_value_on_date_time">"Thamani ya jumla ya umiliki (11/03/2018 12:55:08 UTC)"</string>
 
     <string name="action_mode_title">"Iliyochaguliwa: %1$d"</string>
+    <string name="action_select_all">"Chagua zote"</string>
     <string name="action_delete">"Futa"</string>
 
 
@@ -105,22 +87,116 @@
 
     <string name="pref_language_title">"Lugha"</string>
 
-    <string name="pref_default_language_value">"EN"</string>
+    <string name="pref_default_language_entry">Swahili</string>
+    <string name="pref_default_language_value">"SW"</string>
 
     <string name="pref_fiat_currency_title">"Fedha za Fiat"</string>
 
-    <string name="pref_default_fiat_currency_entry">"&usd; - Dola ya Merika ($)"</string>
-    <string name="pref_default_fiat_currency_value">"&usd;"</string>
+    <string name="pref_default_fiat_currency_entry">"USD - Dola ya Merika ($)"</string>
+    <string name="pref_default_fiat_currency_value">"USD"</string>
+  
+    <string-array name="pref_fiat_currency_list_entries"> <!-- TODO translate all items to SW -->
+        <item>"USD - Dola ya Merika ($)"</item>
+        <item>"ALL - Albanian Lek (L)"</item>
+        <item>"DZD - Algerian Dinar (د.ج)"</item>
+        <item>"ARS - Argentine Peso ($)"</item>
+        <item>"AMD - Armenian Dram (֏)"</item>
+        <item>"AUD - Australian Dollar ($)"</item>
+        <item>"AZN - Azerbaijani Manat (₼)"</item>
+        <item>"BHD - Bahraini Dinar (.د.ب)"</item>
+        <item>"BDT - Bangladeshi Taka (৳)"</item>
+        <item>"BYN - Belarusian Ruble (Br)"</item>
+        <item>"BMD - Bermudan Dollar ($)"</item>
+        <item>"BOB - Bolivian Boliviano (Bs.)"</item>
+        <item>"BAM - Bosnia-Herzegovina Convertible Mark (KM)"</item>
+        <item>"BRL - Brazilian Real (R$)"</item>
+        <item>"BGN - Bulgarian Lev (лв)"</item>
+        <item>"KHR - Cambodian Riel (៛)"</item>
+        <item>"CAD - Canadian Dollar ($)"</item>
+        <item>"CLP - Chilean Peso ($)"</item>
+        <item>"CNY - Chinese Yuan (¥)"</item>
+        <item>"COP - Colombian Peso ($)"</item>
+        <item>"CRC - Costa Rican Colón (₡)"</item>
+        <item>"HRK - Croatian Kuna (kn)"</item>
+        <item>"CUP - Cuban Peso ($)"</item>
+        <item>"CZK - Czech Koruna (Kč)"</item>
+        <item>"DKK - Danish Krone (kr)"</item>
+        <item>"DOP - Dominican Peso ($)"</item>
+        <item>"EGP - Egyptian Pound (£)"</item>
+        <item>"EUR - Euro (€)"</item>
+        <item>"GEL - Georgian Lari (₾))"</item>
+        <item>"GHS - Ghanaian Cedi (₵)"</item>
+        <item>"GTQ - Guatemalan Quetzal (Q)"</item>
+        <item>"HNL - Honduran Lempira (L)"</item>
+        <item>"HKD - Hong Kong Dollar ($)"</item>
+        <item>"HUF - Hungarian Forint (Ft)"</item>
+        <item>"ISK - Icelandic Króna (kr)"</item>
+        <item>"INR - Indian Rupee (₹)"</item>
+        <item>"IDR - Indonesian Rupiah (Rp)"</item>
+        <item>"IRR - Iranian Rial (﷼)"</item>
+        <item>"IQD - Iraqi Dinar (ع.د)"</item>
+        <item>"ILS - Israeli New Shekel (₪)"</item>
+        <item>"JMD - Jamaican Dollar ($)"</item>
+        <item>"JPY - Japanese Yen (¥)"</item>
+        <item>"JOD - Jordanian Dinar (د.ا)"</item>
+        <item>"KZT - Kazakhstani Tenge (₸)"</item>
+        <item>"KES - Kenyan Shilling (Sh)"</item>
+        <item>"KWD - Kuwaiti Dinar (د.ك)"</item>
+        <item>"KGS - Kyrgystani Som (с)"</item>
+        <item>"LBP - Lebanese Pound (ل.ل)"</item>
+        <item>"MKD - Macedonian Denar (ден)"</item>
+        <item>"MYR - Malaysian Ringgit (RM)"</item>
+        <item>"MUR - Mauritian Rupee (₨)"</item>
+        <item>"MXN - Mexican Peso ($)"</item>
+        <item>"MDL - Moldovan Leu (L)"</item>
+        <item>"MNT - Mongolian Tugrik (₮)"</item>
+        <item>"MAD - Moroccan Dirham (د.م.)"</item>
+        <item>"MMK - Myanma Kyat (Ks)"</item>
+        <item>"NAD - Namibian Dollar ($)"</item>
+        <item>"NPR - Nepalese Rupee (₨)"</item>
+        <item>"TWD - New Taiwan Dollar ($)"</item>
+        <item>"NZD - New Zealand Dollar ($)"</item>
+        <item>"NIO - Nicaraguan Córdoba (C$)"</item>
+        <item>"NGN - Nigerian Naira (₦)"</item>
+        <item>"NOK - Norwegian Krone (kr)"</item>
+        <item>"OMR - Omani Rial (ر.ع.)"</item>
+        <item>"PKR - Pakistani Rupee (₨)"</item>
+        <item>"PAB - Panamanian Balboa (B/.)"</item>
+        <item>"PEN - Peruvian Sol (S/.)"</item>
+        <item>"PHP - Philippine Peso (₱)"</item>
+        <item>"PLN - Polish Złoty (zł)"</item>
+        <item>"GBP - Pound Sterling (£)"</item>
+        <item>"QAR - Qatari Rial (ر.ق)"</item>
+        <item>"RON - Romanian Leu (lei)"</item>
+        <item>"RUB - Russian Ruble (₽)"</item>
+        <item>"SAR - Saudi Riyal (ر.س)"</item>
+        <item>"RSD - Serbian Dinar (дин.)"</item>
+        <item>"SGD - Singapore Dollar ($)"</item>
+        <item>"ZAR - South African Rand (Rs)"</item>
+        <item>"KRW - South Korean Won (₩)"</item>
+        <item>"SSP - South Sudanese Pound (£)"</item>
+        <item>"VES - Sovereign Bolivar (Bs.)"</item>
+        <item>"LKR - Sri Lankan Rupee (Rs)"</item>
+        <item>"SEK - Swedish Krona ( kr)"</item>
+        <item>"CHF - Swiss Franc (Fr)"</item>
+        <item>"THB - Thai Baht (฿)"</item>
+        <item>"TTD - Trinidad and Tobago Dollar ($)"</item>
+        <item>"TND - Tunisian Dinar (د.ت)"</item>
+        <item>"TRY - Turkish Lira (₺)"</item>
+        <item>"UGX - Ugandan Shilling (Sh)"</item>
+        <item>"UAH - Ukrainian Hryvnia (₴)"</item>
+        <item>"AED - United Arab Emirates Dirham (د.إ)"</item>
+        <item>"UYU - Uruguayan Peso ($)"</item>
+        <item>"UZS - Uzbekistan Som (so'm)"</item>
+        <item>"VND - Vietnamese Dong (₫)"</item>
+    </string-array>
 
     <string name="pref_date_format_title">"Muundo wa tarehe"</string>
-
-
 
     <string name="pref_default_date_format_entry">"dd/MM/yyyy"</string>
     <string name="pref_default_date_format_value">"dd/MM/yyyy"</string>
 
     <string name="pref_24h_switch_title">"Tumia umbizo la masaa 24"</string>
-
 
     <string name="pref_24h_switch_12h_summary">"01:00 Jioni"</string>
 
@@ -130,14 +206,10 @@
     <string name="pref_rate_app_title">"Kadiria programu katika Google Play"</string>
 
 
-
     <string name="pref_share_app_title">"Shiriki na marafiki wako"</string>
-
 
     <string name="share_app_message">"Ninapendekeza programu hii ya bure ya kwingineko ya cryptocurrensets Android kwako: "</string>
     <string name="share_app_chooser">"Shiriki na: "</string>
-
-
 
 
     <string name="pref_donate_crypto_title">"Toa na crypto"</string>
@@ -148,47 +220,37 @@
     <string name="dialog_donate_crypto_positive_button">"Got it"</string>
 
     <string name="dialog_donate_crypto_bitcoin_address_title">"Nakala ya anuani ya Bitcoin"</string>
-
     <string name="dialog_donate_crypto_ethereum_address_title">"Nakala ya anuani ya Ethereum"</string>
 
-
-    <string name="dialog_donate_crypto_message_second">"
-Mchango wako wowote hautasaidia tu kuhamasisha mwandishi kuendelea na maendeleo lakini pia kufunika gharama za usajili wa huduma ya data ya API ikiwa hitaji linatokea."</string>
+    <string name="dialog_donate_crypto_message_second">"Mchango wako wowote hautasaidia tu kuhamasisha mwandishi kuendelea na maendeleo lakini pia kufunika gharama za usajili wa huduma ya data ya API ikiwa hitaji linatokea."</string>
     <string name="dialog_donate_crypto_message_third">"Asante! 😇"</string>
 
     <string name="dialog_donate_crypto_bitcoin_address_copy_confirmation">"Anwani ya Bitcoin ilinakiliwa!"</string>
     <string name="dialog_donate_crypto_ethereum_address_copy_confirmation">"Anwani ya Ethereum ilinakiliwa!"</string>
 
 
-
     <string name="pref_buy_me_coffee_title">"Ninunue kahawa"</string>
 
-
-
+  
     <string name="pref_contact_title">"Wasiliana"</string>
     <string name="pref_contact_summary">"Una maoni yoyote? Tuma barua pepe kwa maswali yako, maoni, ripoti za mdudu"</string>
-
 
 
     <string name="pref_support_about_title">"Kuhusu"</string>
 
     <string name="pref_website_title">"Tovuti"</string>
 
-
     <string name="pref_author_title">"Mwandishi Andrius Baruckis"</string>
 
     <string name="pref_source_title">"Angalia chanzo"</string>
 
-
     <string name="pref_privacy_policy_title">"Sera ya faragha"</string>
-
 
     <string name="pref_third_party_software_title">"Programu ya mtu wa tatu"</string>
     <string name="pref_third_party_software_summary">"Bure &#38; leseni za chanzo wazi"</string>
 
     <string name="pref_license_title">"Leseni"</string>
     <string name="pref_license_summary">"Hakimiliki"</string>
-
 
 
     <!-- Strings related to Libraries Licenses List Fragment -->
@@ -202,9 +264,12 @@ Mchango wako wowote hautasaidia tu kuhamasisha mwandishi kuendelea na maendeleo 
     <string name="button_project_link">"Kiunga cha mradi"</string>
 
     <string name="library_license_name_glide">"BSD, sehemu ya MIT na Apache 2.0"</string>
+  
     <string name="library_license_name_glide_okhttp">@string/library_license_name_glide</string>
+  
     <string name="library_developer_junit">"Erich Gamma, Kent Beck &#38; na timu ya JUnit"</string>
 
+  
     <!-- Strings related to License Fragment -->
 
     <string name="fragment_license_title">"Leseni"</string>
@@ -213,7 +278,5 @@ Mchango wako wowote hautasaidia tu kuhamasisha mwandishi kuendelea na maendeleo 
     <!-- Strings related to Oss Licenses Menu Activity -->
 
     <string name="activity_oss_licenses_menu_title">"Leseni zote za maktaba"</string>
-    <string name="action_select_all">chagua zote</string>
-    <string name="deleted">Imefutwa: %1$d</string>
-    <string name="pref_default_language_entry">English</string>
+    
 </resources>
