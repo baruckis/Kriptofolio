@@ -16,7 +16,6 @@
 
 package com.baruckis.kriptofolio.ui.mainlist
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.text.SpannableString
