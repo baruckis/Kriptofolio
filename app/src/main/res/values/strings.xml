@@ -343,12 +343,14 @@
         <item>"English"</item>
         <item>"עִברִית"</item>
         <item>"Lietuvių"</item>
+        <item>"Swahili"</item>
     </string-array>
 
     <string-array name="pref_language_list_values" translatable="false">
         <item>"EN"</item>
         <item>"HE"</item>
         <item>"LT"</item>
+        <item>"SW"</item>
     </string-array>
 
     <string name="pref_fiat_currency_title">"Fiat currency"</string>
