@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?><!--
-  ~ Copyright 2018-2019 Andrius Baruckis www.baruckis.com | kriptofolio.app
+  ~ Copyright 2018-2020 Andrius Baruckis www.baruckis.com | kriptofolio.app
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -18,19 +18,19 @@
 <resources>
 
     <string name="license_mycryptocoins_apache_v2_copyright" translatable="false">"
-Copyright 2018-2019 Andrius Baruckis www.baruckis.com | kriptofolio.app
+Copyright 2018-2020 Andrius Baruckis www.baruckis.com | kriptofolio.app
     </string>
 
     <string name="license_kotlin_apache_v2_copyright" translatable="false">"
-Copyright 2010-2019 JetBrains s.r.o.
+Copyright 2010-2020 JetBrains s.r.o.
     </string>
 
     <string name="license_coroutines_apache_v2_copyright" translatable="false">"
-Copyright 2016-2019 JetBrains s.r.o.
+Copyright 2016-2020 JetBrains s.r.o.
     </string>
 
     <string name="license_android_apache_v2_copyright" translatable="false">"
-Copyright 2019 The Android Open Source Project, Inc.
+Copyright 2020 The Android Open Source Project, Inc.
     </string>
 
     <string name="license_dagger_apache_v2_copyright" translatable="false">"

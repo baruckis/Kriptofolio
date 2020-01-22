@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2019 Andrius Baruckis www.baruckis.com | kriptofolio.app
+ * Copyright 2018-2020 Andrius Baruckis www.baruckis.com | kriptofolio.app
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -175,7 +175,7 @@ class MainListFragment : Fragment(), Injectable, PrimaryActionModeController.Pri
 
 
             // We observe the LiveData changes of fiat currency code from shared preferences.
-            viewModel.liveDataCurrentFiatCurrencyCode.observe(this, Observer<String> { data ->
+            viewModel.liveDataCurrentFiatCurrencyCode.observe(viewLifecycleOwner, Observer<String> { data ->
                 data?.let {
                     // If value in shared preferences change, e.g. user sets new fiat currency from
                     // settings screen, then update the spinner, variables and try to get data from
@@ -412,7 +412,7 @@ class MainListFragment : Fragment(), Injectable, PrimaryActionModeController.Pri
         binding.viewmodel = viewModel
 
         // Update the list when the data changes by observing data on the ViewModel, exposed as a LiveData.
-        viewModel.mediatorLiveDataMyCryptocurrencyResourceList.observe(this, Observer { listResource ->
+        viewModel.mediatorLiveDataMyCryptocurrencyResourceList.observe(viewLifecycleOwner, Observer { listResource ->
 
             logConsoleVerbose("Main list resource status: " + listResource.status.toString())
 

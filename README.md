@@ -24,7 +24,7 @@ https://kriptofolio.app
 
 ## License
 
-    Copyright 2018-2019 Andrius Baruckis www.baruckis.com | kriptofolio.app
+    Copyright 2018-2020 Andrius Baruckis www.baruckis.com | kriptofolio.app
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.

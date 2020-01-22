@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2019 Andrius Baruckis www.baruckis.com | kriptofolio.app
+ * Copyright 2018-2020 Andrius Baruckis www.baruckis.com | kriptofolio.app
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import com.baruckis.kriptofolio.mock
 import com.baruckis.kriptofolio.utilities.ApiUtil
 import com.baruckis.kriptofolio.utilities.CountingAppExecutors
 import com.baruckis.kriptofolio.vo.Resource
-import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.ResponseBody
 import org.hamcrest.CoreMatchers
 import org.hamcrest.MatcherAssert
@@ -146,7 +146,7 @@ class NetworkBoundResourceTest(private val useRealExecutors: Boolean) {
         handleSaveCallResult = {
             saved.set(true)
         }
-        val body = ResponseBody.create(MediaType.parse("text/html"), "error")
+        val body = ResponseBody.create("text/html".toMediaTypeOrNull(), "error")
         handleCreateCall = { ApiUtil.createCall(Response.error<Foo>(500, body)) }
 
         val observer = mock<Observer<Resource<Foo>>>()
@@ -194,7 +194,7 @@ class NetworkBoundResourceTest(private val useRealExecutors: Boolean) {
         handleSaveCallResult = {
             saved.set(true)
         }
-        val body = ResponseBody.create(MediaType.parse("text/html"), "error")
+        val body = ResponseBody.create("text/html".toMediaTypeOrNull(), "error")
         val apiResponseLiveData = MutableLiveData<ApiResponse<Foo>>()
         handleCreateCall = { apiResponseLiveData }
 

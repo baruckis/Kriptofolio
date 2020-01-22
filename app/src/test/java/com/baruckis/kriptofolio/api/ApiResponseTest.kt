@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2019 Andrius Baruckis www.baruckis.com | kriptofolio.app
+ * Copyright 2018-2020 Andrius Baruckis www.baruckis.com | kriptofolio.app
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package com.baruckis.kriptofolio.api
 
-import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.ResponseBody
 import org.hamcrest.CoreMatchers
 import org.hamcrest.MatcherAssert
@@ -46,7 +46,7 @@ class ApiResponseTest {
     fun error() {
         val errorResponse = Response.error<String>(
                 400,
-                ResponseBody.create(MediaType.parse("application/txt"), "blah")
+                ResponseBody.create("application/txt".toMediaTypeOrNull(), "blah")
         )
         val (errorMessage) = ApiResponse.create<String>(errorResponse) as ApiErrorResponse<String>
         MatcherAssert.assertThat<String>(errorMessage, CoreMatchers.`is`("blah"))
