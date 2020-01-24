@@ -94,100 +94,100 @@
     <string name="pref_default_fiat_currency_entry">"USD - Dola ya Merika ($)"</string>
     <string name="pref_default_fiat_currency_value">"USD"</string>
   
-    <string-array name="pref_fiat_currency_list_entries"> <!-- TODO translate all items to SW -->
+    <string-array name="pref_fiat_currency_list_entries"> <!-- entries translated using Google Translate -->
         <item>"USD - Dola ya Merika ($)"</item>
         <item>"ALL - Albanian Lek (L)"</item>
-        <item>"DZD - Algerian Dinar (د.ج)"</item>
-        <item>"ARS - Argentine Peso ($)"</item>
-        <item>"AMD - Armenian Dram (֏)"</item>
-        <item>"AUD - Australian Dollar ($)"</item>
-        <item>"AZN - Azerbaijani Manat (₼)"</item>
-        <item>"BHD - Bahraini Dinar (.د.ب)"</item>
+        <item>"DZD - Dinar ya Algeria (د.ج)"</item>
+        <item>"ARS - Peso ya Argentina ($)"</item>
+        <item>"AMD - Dram ya Armenia (֏)"</item>
+        <item>"AUD - Dola ya Australia ($)"</item>
+        <item>"AZN - Manatari ya Azabajani (₼)"</item>
+        <item>"BHD - Dinar Bahraini (.د.ب)"</item>
         <item>"BDT - Bangladeshi Taka (৳)"</item>
-        <item>"BYN - Belarusian Ruble (Br)"</item>
-        <item>"BMD - Bermudan Dollar ($)"</item>
-        <item>"BOB - Bolivian Boliviano (Bs.)"</item>
-        <item>"BAM - Bosnia-Herzegovina Convertible Mark (KM)"</item>
-        <item>"BRL - Brazilian Real (R$)"</item>
-        <item>"BGN - Bulgarian Lev (лв)"</item>
-        <item>"KHR - Cambodian Riel (៛)"</item>
-        <item>"CAD - Canadian Dollar ($)"</item>
-        <item>"CLP - Chilean Peso ($)"</item>
-        <item>"CNY - Chinese Yuan (¥)"</item>
-        <item>"COP - Colombian Peso ($)"</item>
+        <item>"BYN - Ruble ya Belarusi (Br)"</item>
+        <item>"BMD - Dola ya Bermuda ($)"</item>
+        <item>"BOB - Boliviano ya Bolivia (Bs.)"</item>
+        <item>"BAM - Bosnia-Herzegovina Alibadilishaji Marko (KM)"</item>
+        <item>"BRL - Real ya Brazili (R$)"</item>
+        <item>"BGN - Lawi la Kibulgaria (лв)"</item>
+        <item>"KHR - Kambodia Riel (៛)"</item>
+        <item>"CAD - Dola ya Kanada ($)"</item>
+        <item>"CLP - Peso ya Chile ($)"</item>
+        <item>"CNY - Wachina Yuan (¥)"</item>
+        <item>"COP - Peso ya Colombia ($)"</item>
         <item>"CRC - Costa Rican Colón (₡)"</item>
-        <item>"HRK - Croatian Kuna (kn)"</item>
-        <item>"CUP - Cuban Peso ($)"</item>
-        <item>"CZK - Czech Koruna (Kč)"</item>
-        <item>"DKK - Danish Krone (kr)"</item>
-        <item>"DOP - Dominican Peso ($)"</item>
-        <item>"EGP - Egyptian Pound (£)"</item>
+        <item>"HRK - Kuna ya Korasia (kn)"</item>
+        <item>"CUP - Peso ya Cuba ($)"</item>
+        <item>"CZK - Koruna ya Czech (Kč)"</item>
+        <item>"DKK - Denmark Krone (kr)"</item>
+        <item>"DOP - Peso ya Dominika ($)"</item>
+        <item>"EGP - Pound ya Wamisri (£)"</item>
         <item>"EUR - Euro (€)"</item>
-        <item>"GEL - Georgian Lari (₾))"</item>
-        <item>"GHS - Ghanaian Cedi (₵)"</item>
+        <item>"GEL - Kijojia Lari (₾)"</item>
+        <item>"GHS - Cedi wa Ghana (₵)"</item>
         <item>"GTQ - Guatemalan Quetzal (Q)"</item>
         <item>"HNL - Honduran Lempira (L)"</item>
-        <item>"HKD - Hong Kong Dollar ($)"</item>
-        <item>"HUF - Hungarian Forint (Ft)"</item>
-        <item>"ISK - Icelandic Króna (kr)"</item>
-        <item>"INR - Indian Rupee (₹)"</item>
-        <item>"IDR - Indonesian Rupiah (Rp)"</item>
-        <item>"IRR - Iranian Rial (﷼)"</item>
-        <item>"IQD - Iraqi Dinar (ع.د)"</item>
-        <item>"ILS - Israeli New Shekel (₪)"</item>
-        <item>"JMD - Jamaican Dollar ($)"</item>
-        <item>"JPY - Japanese Yen (¥)"</item>
-        <item>"JOD - Jordanian Dinar (د.ا)"</item>
+        <item>"HKD - Dola ya Hong Kong ($)"</item>
+        <item>"HUF - Rangi ya Kihungari (Ft)"</item>
+        <item>"ISK - Kiajemi Króna (kr)"</item>
+        <item>"INR - Rupia ya India (₹)"</item>
+        <item>"IDR - Rupiah wa Indonesia (Rp)"</item>
+        <item>"IRR - Rial ya Iran (﷼)"</item>
+        <item>"IQD - Dinar ya Iraqi (ع.د)"</item>
+        <item>"ILS - Shekel Mpya ya Israeli (₪)"</item>
+        <item>"JMD - Dola ya Jamaika ($)"</item>
+        <item>"JPY - Japan Yen (¥)"</item>
+        <item>"JOD - Dinar Jordan (د.ا)"</item>
         <item>"KZT - Kazakhstani Tenge (₸)"</item>
-        <item>"KES - Kenyan Shilling (Sh)"</item>
-        <item>"KWD - Kuwaiti Dinar (د.ك)"</item>
-        <item>"KGS - Kyrgystani Som (с)"</item>
-        <item>"LBP - Lebanese Pound (ل.ل)"</item>
-        <item>"MKD - Macedonian Denar (ден)"</item>
-        <item>"MYR - Malaysian Ringgit (RM)"</item>
-        <item>"MUR - Mauritian Rupee (₨)"</item>
-        <item>"MXN - Mexican Peso ($)"</item>
+        <item>"KES - Shilingi ya Kenya (Sh)"</item>
+        <item>"KWD - Dinar ya Kuwait (د.ك)"</item>
+        <item>"KGS - Som ya Kirigistani (с)"</item>
+        <item>"LBP - Pound ya Lebanon (ل.ل)"</item>
+        <item>"MKD - Denari ya Makedonia (ден)"</item>
+        <item>"MYR - Malaysia Ringgit (RM)"</item>
+        <item>"MUR - Mauritius Rupia (₨)"</item>
+        <item>"MXN - Peso ya Mexico ($)"</item>
         <item>"MDL - Moldovan Leu (L)"</item>
-        <item>"MNT - Mongolian Tugrik (₮)"</item>
-        <item>"MAD - Moroccan Dirham (د.م.)"</item>
-        <item>"MMK - Myanma Kyat (Ks)"</item>
-        <item>"NAD - Namibian Dollar ($)"</item>
-        <item>"NPR - Nepalese Rupee (₨)"</item>
-        <item>"TWD - New Taiwan Dollar ($)"</item>
-        <item>"NZD - New Zealand Dollar ($)"</item>
+        <item>"MNT - Tugrik ya Kimongolia (₮)"</item>
+        <item>"MAD - Dirham ya Moroko (د.م.)"</item>
+        <item>"MMK - Myanmar Kyat (Ks)"</item>
+        <item>"NAD - Dola ya Namibia ($)"</item>
+        <item>"NPR - Mbwa wa Nepalese (₨)"</item>
+        <item>"TWD - Dola mpya ya Taiwan ($)"</item>
+        <item>"NZD - Dola ya New Zealand ($)"</item>
         <item>"NIO - Nicaraguan Córdoba (C$)"</item>
-        <item>"NGN - Nigerian Naira (₦)"</item>
-        <item>"NOK - Norwegian Krone (kr)"</item>
-        <item>"OMR - Omani Rial (ر.ع.)"</item>
-        <item>"PKR - Pakistani Rupee (₨)"</item>
-        <item>"PAB - Panamanian Balboa (B/.)"</item>
-        <item>"PEN - Peruvian Sol (S/.)"</item>
-        <item>"PHP - Philippine Peso (₱)"</item>
-        <item>"PLN - Polish Złoty (zł)"</item>
+        <item>"NGN - Naira wa Nigeria (₦)"</item>
+        <item>"NOK - Norone Krone (kr)"</item>
+        <item>"OMR - Omani Piga (ر.ع.)"</item>
+        <item>"PKR - Mbwa wa Pakistani (₨)"</item>
+        <item>"PAB - Panama Balboa (B/.)"</item>
+        <item>"PEN - Sol ya Peru (S/.)"</item>
+        <item>"PHP - Ufilipino Peso (₱)"</item>
+        <item>"PLN - Złoty ya Kipolishi (zł)"</item>
         <item>"GBP - Pound Sterling (£)"</item>
-        <item>"QAR - Qatari Rial (ر.ق)"</item>
-        <item>"RON - Romanian Leu (lei)"</item>
-        <item>"RUB - Russian Ruble (₽)"</item>
+        <item>"QAR - Mbio ya Qatari (ر.ق)"</item>
+        <item>"RON - Kirumi Leu (lei)"</item>
+        <item>"RUB - Ruble ya Kirusi (₽)"</item>
         <item>"SAR - Saudi Riyal (ر.س)"</item>
-        <item>"RSD - Serbian Dinar (дин.)"</item>
-        <item>"SGD - Singapore Dollar ($)"</item>
-        <item>"ZAR - South African Rand (Rs)"</item>
-        <item>"KRW - South Korean Won (₩)"</item>
-        <item>"SSP - South Sudanese Pound (£)"</item>
-        <item>"VES - Sovereign Bolivar (Bs.)"</item>
-        <item>"LKR - Sri Lankan Rupee (Rs)"</item>
-        <item>"SEK - Swedish Krona ( kr)"</item>
-        <item>"CHF - Swiss Franc (Fr)"</item>
+        <item>"RSD - Dinari ya Serbia (дин.)"</item>
+        <item>"SGD - Dollar ya Singapore ($)"</item>
+        <item>"ZAR - Rand ya Afrika Kusini (Rs)"</item>
+        <item>"KRW - Won ya Korea Kusini (₩)"</item>
+        <item>"SSP - Pound ya Sudan Kusini (£)"</item>
+        <item>"VES - Mfalme Bolivar (Bs.)"</item>
+        <item>"LKR - Rupee ya Sri Lankan (Rs)"</item>
+        <item>"SEK - Kiswidi Krona ( kr)"</item>
+        <item>"CHF - Franc ya Uswisi (Fr)"</item>
         <item>"THB - Thai Baht (฿)"</item>
-        <item>"TTD - Trinidad and Tobago Dollar ($)"</item>
-        <item>"TND - Tunisian Dinar (د.ت)"</item>
-        <item>"TRY - Turkish Lira (₺)"</item>
-        <item>"UGX - Ugandan Shilling (Sh)"</item>
-        <item>"UAH - Ukrainian Hryvnia (₴)"</item>
-        <item>"AED - United Arab Emirates Dirham (د.إ)"</item>
-        <item>"UYU - Uruguayan Peso ($)"</item>
+        <item>"TTD - Dollar ya Trinidad na Tobago ($)"</item>
+        <item>"TND - Dinar Tunisia (د.ت)"</item>
+        <item>"TRY - Kituruki Lira (₺)"</item>
+        <item>"UGX - Shilingi ya Uganda (Sh)"</item>
+        <item>"UAH - Kiukreni Hryvnia (₴)"</item>
+        <item>"AED - Falme za Kiarabu Dirham (د.إ)"</item>
+        <item>"UYU - Peso ya Uruguay ($)"</item>
         <item>"UZS - Uzbekistan Som (so'm)"</item>
-        <item>"VND - Vietnamese Dong (₫)"</item>
+        <item>"VND - Dong ya Kivietinamu (₫)"</item>
     </string-array>
 
     <string name="pref_date_format_title">"Muundo wa tarehe"</string>
