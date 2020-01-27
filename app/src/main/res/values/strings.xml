@@ -566,7 +566,7 @@
     </string-array>
 
     <string-array name="pref_date_format_list_values" translatable="false">
-        <item>"dd/MM/yyyy"</item> <!-- English (Europe, UK), Hebrew -->
+        <item>"dd/MM/yyyy"</item> <!-- English (Europe, UK), Hebrew, Swahili -->
         <item>"MM/dd/yyyy"</item> <!-- English (USA) -->
         <item>"yyyy-MM-dd"</item> <!-- Lithuanian -->
     </string-array>
