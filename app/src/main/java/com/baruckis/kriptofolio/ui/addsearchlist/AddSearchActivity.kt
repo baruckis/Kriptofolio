@@ -342,13 +342,13 @@ class AddSearchActivity : BaseActivity(), Injectable, CryptocurrencyAmountDialog
     // This listener lets you identify when search was launched and closed.
     private val searchExpandListener = object : MenuItem.OnActionExpandListener {
 
-        override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
+        override fun onMenuItemActionExpand(item: MenuItem): Boolean {
             swipeRefreshLayout.isEnabled = false
             info_activity_add_search.text = StringBuilder(getString(R.string.string_info_results_of_search, listAdapter.count.toString())).toString()
             return true
         }
 
-        override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
+        override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
             textChangeDelayJob?.cancel()
             swipeRefreshLayout.isEnabled = true
             info_activity_add_search.text = StringBuilder(getString(R.string.string_info_last_updated_on_date_time, viewModel.lastUpdatedOnDate)).toString()

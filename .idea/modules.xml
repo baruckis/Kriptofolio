@@ -2,8 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Kriptofolio.iml" filepath="$PROJECT_DIR$/Kriptofolio.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Kriptofolio.iml" filepath="$PROJECT_DIR$/.idea/modules/Kriptofolio.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Kriptofolio.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Kriptofolio.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Kriptofolio.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Kriptofolio.app.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Kriptofolio.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Kriptofolio.app.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Kriptofolio.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Kriptofolio.app.unitTest.iml" />
     </modules>
   </component>
 </project>

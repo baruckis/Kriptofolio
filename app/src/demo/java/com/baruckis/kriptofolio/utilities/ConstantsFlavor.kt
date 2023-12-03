@@ -21,7 +21,7 @@ package com.baruckis.kriptofolio.utilities
  */
 
 // This testing sandbox has free access to all endpoints and all subscription plans to test with a
-// snapshot of CoinMarketCap market data. It is used for DEMO purpose.
+// mock data. It is used for DEMO purpose.
 const val API_SERVICE_BASE_URL = "https://sandbox-api.coinmarketcap.com/"
 
-const val API_SERVICE_AUTHENTICATION_KEY = "" // TODO: Use your API Key provided by CoinMarketCap Professional API Developer Portal.
+const val API_SERVICE_AUTHENTICATION_KEY = "b54bcf4d-1bca-4e8e-9a24-22ff2c3d462c" // Test API Key   provided byCoinMarketCap Professional API Developer Portal.

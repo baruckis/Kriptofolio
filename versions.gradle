@@ -17,9 +17,9 @@
 def versions = [:]
 
 // Sdk and tools
-versions.compile_sdk = 29
+versions.compile_sdk = 34
 versions.min_sdk = 21
-versions.target_sdk = 29
+versions.target_sdk = 34
 
 // App dependencies
 versions.app_compat = '1.1.0'
@@ -32,17 +32,17 @@ versions.dagger = '2.23.2'
 versions.design = "1.0.0"
 versions.espresso = '3.3.0-alpha03'
 versions.flip_view = "1.2.0"
-versions.gradle = '3.5.3'
+versions.gradle = '7.4.2'
 versions.glide = '4.11.0'
 versions.junit = '4.13'
-versions.kotlin = '1.3.61'
+versions.kotlin = '1.6.21'
 versions.ktx = '1.2.0-rc01'
-versions.licenses = "0.9.5"
+versions.licenses = '0.10.6'
 versions.lifecycle = '2.2.0-rc03'
 versions.mockito = "2.0.2-beta"
 versions.navigation = "1.0.0"
 versions.okhttp = '4.3.1'
-versions.oss_licenses = "17.0.0"
+versions.oss_licenses = "17.0.1"
 versions.preference = '1.1.0'
 versions.recyclerview = '1.2.0-alpha01'
 versions.recyclerview_selection = '1.1.0-beta01'

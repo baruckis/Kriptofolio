@@ -31,8 +31,8 @@ android {
         applicationId "com.baruckis.kriptofolio"
         minSdkVersion versions.min_sdk
         targetSdkVersion versions.target_sdk
-        versionCode 3
-        versionName "1.2.0" // major . minor . patch
+        versionCode 4
+        versionName "1.2.1" // major . minor . patch
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -74,7 +74,7 @@ android {
         }
     }
 
-    applicationVariants.all { variant ->
+    applicationVariants.configureEach { variant ->
         variant.resValue "string", "versionName", variant.versionName }
 }
 
