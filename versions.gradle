@@ -17,7 +17,7 @@
 def versions = [:]
 
 // Sdk and tools
-versions.compile_sdk = 34
+versions.compile_sdk = 35
 versions.min_sdk = 21
 versions.target_sdk = 34
 
@@ -32,10 +32,10 @@ versions.dagger = '2.23.2'
 versions.design = "1.0.0"
 versions.espresso = '3.3.0-alpha03'
 versions.flip_view = "1.2.0"
-versions.gradle = '7.4.2'
+versions.gradle = '8.6.0'
 versions.glide = '4.11.0'
 versions.junit = '4.13'
-versions.kotlin = '1.6.21'
+versions.kotlin = '1.9.25'
 versions.ktx = '1.2.0-rc01'
 versions.licenses = '0.10.6'
 versions.lifecycle = '2.2.0-rc03'

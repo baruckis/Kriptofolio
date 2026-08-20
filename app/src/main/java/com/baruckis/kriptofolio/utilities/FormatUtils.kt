@@ -120,6 +120,9 @@ fun formatDate(timeStamp: Date?, dateFormatPattern: String?, timeFormatPattern: 
                     Calendar.PM -> addOn = textPM ?: ""
                 }
             }
+            else -> {
+                // 24 hours format and no format at all need no AM/PM add on.
+            }
         }
 
         pattern += if (timeFormatPattern != null) " " + timeFormatPattern.pattern else ""

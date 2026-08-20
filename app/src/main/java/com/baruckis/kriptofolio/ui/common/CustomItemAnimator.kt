@@ -62,6 +62,9 @@ open class CustomItemAnimator : DefaultItemAnimator(), RecyclerView.ItemAnimator
                         onItemAnimatorListener!!.onAnimationsFinishedOnItemAdded()
                     }
                 }
+                else -> {
+                    // Nothing to do when no animation type is set.
+                }
             }
         }
     }

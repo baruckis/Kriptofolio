@@ -21,7 +21,7 @@ import android.text.SpannableString
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
+import androidx.lifecycle.switchMap
 import com.baruckis.kriptofolio.R
 import com.baruckis.kriptofolio.db.Cryptocurrency
 import com.baruckis.kriptofolio.db.MyCryptocurrency
@@ -237,7 +237,7 @@ class MainViewModel @Inject constructor(private val context: Context,
 
         // At last we can show user owned all cryptocurrencies portfolio value in default crypto
         // (Bitcoin) as formatted text.
-        liveDataTotalHoldingsValueCryptoText = Transformations.switchMap(liveDataTotalHoldingsValueCrypto) { totalHoldingsValueCrypto ->
+        liveDataTotalHoldingsValueCryptoText = liveDataTotalHoldingsValueCrypto.switchMap { totalHoldingsValueCrypto ->
             MutableLiveData<String>().apply {
                 value = String.format("$currentCryptoCurrencySign ${
                 if (totalHoldingsValueCrypto.isNaN()) context.getString(R.string.string_no_number)
