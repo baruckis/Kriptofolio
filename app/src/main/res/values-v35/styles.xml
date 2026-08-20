@@ -1,0 +1,34 @@
+<!--
+  ~ Copyright 2018-2020 Andrius Baruckis www.baruckis.com | kriptofolio.app
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+
+    <!-- TEMPORARY - remove together with this whole values-v35 folder in the 2.0 rewrite.
+
+         Android 15 (API 35) draws apps that target it edge to edge: the activity window
+         extends behind the status and navigation bars, and Window.setStatusBarColor stops
+         having any effect. Every XML screen in this app was laid out before that, so it
+         would need real WindowInsets handling to look right.
+
+         This flag asks the platform to keep the pre Android 15 behaviour. It is deprecated
+         from the day it was introduced and Google has said it will stop working in a
+         future Android release, so it buys time - it is not a solution. Handling insets
+         properly is a 2.0 task, tracked in UPGRADE-NOTES.md. -->
+    <style name="AppTheme" parent="BaseAppTheme">
+        <item name="android:windowOptOutEdgeToEdgeEnforcement">true</item>
+    </style>
+
+</resources>

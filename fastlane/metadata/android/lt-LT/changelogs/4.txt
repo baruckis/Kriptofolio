@@ -1,0 +1,1 @@
+* Programėlė atnaujinta, kad toliau veiktų su „Android 14“.

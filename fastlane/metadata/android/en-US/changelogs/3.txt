@@ -1,0 +1,2 @@
+* Added support for the Swahili language.
+* Added the missing Swahili translations of the fiat currency list.

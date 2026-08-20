@@ -18,7 +18,7 @@ package com.baruckis.kriptofolio.db
 
 import android.os.Parcelable
 import androidx.room.*
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 /**
  * Entity object for Room database.

@@ -29,7 +29,6 @@ import android.widget.Toast
 import androidx.core.view.doOnLayout
 import androidx.fragment.app.DialogFragment
 import com.baruckis.kriptofolio.R
-import kotlinx.android.synthetic.main.dialog_donate_crypto.view.*
 
 
 class DonateCryptoDialog : DialogFragment() {
@@ -68,24 +67,28 @@ class DonateCryptoDialog : DialogFragment() {
             // Pass null as the parent view because its going in the dialog layout.
             val dialogView = activity.layoutInflater.inflate(R.layout.dialog_donate_crypto, null)
 
-            dialogView.item_bitcoin_address.setOnClickListener {
+            val scrollView = dialogView.findViewById<ScrollView>(R.id.scrollview)
+            val dividerBottom = dialogView.findViewById<View>(R.id.divider_bottom)
+            val dividerTop = dialogView.findViewById<View>(R.id.divider_top)
+
+            dialogView.findViewById<View>(R.id.item_bitcoin_address).setOnClickListener {
                 copyCryptoAddressToClipBoard(activity, getString(R.string.dialog_donate_crypto_bitcoin_address))
                 Toast.makeText(context, getString(R.string.dialog_donate_crypto_bitcoin_address_copy_confirmation), Toast.LENGTH_SHORT).show()
             }
 
-            dialogView.item_ethereum_address.setOnClickListener {
+            dialogView.findViewById<View>(R.id.item_ethereum_address).setOnClickListener {
                 copyCryptoAddressToClipBoard(activity, getString(R.string.dialog_donate_crypto_ethereum_address))
                 Toast.makeText(context, getString(R.string.dialog_donate_crypto_ethereum_address_copy_confirmation), Toast.LENGTH_SHORT).show()
             }
 
-            dialogView.scrollview.viewTreeObserver.addOnScrollChangedListener {
-                controlScrollDividersVisibility(dialogView.scrollview, dialogView.divider_bottom, dialogView.divider_top)
+            scrollView.viewTreeObserver.addOnScrollChangedListener {
+                controlScrollDividersVisibility(scrollView, dividerBottom, dividerTop)
             }
 
             // OnGlobalLayoutListener is *massively* overkill 99% of the time. That is why
             // android-ktx has doOnLayout() and doOnNextLayout() which use View.OnLayoutChangeListener.
-            dialogView.scrollview.doOnLayout {
-                controlScrollDividersVisibility(dialogView.scrollview, dialogView.divider_bottom, dialogView.divider_top)
+            scrollView.doOnLayout {
+                controlScrollDividersVisibility(scrollView, dividerBottom, dividerTop)
             }
 
             // Set the layout for the dialog.

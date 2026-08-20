@@ -1,0 +1,2 @@
+* Pridėtas suahilių kalbos palaikymas.
+* Pridėti trūkstami „fiat“ valiutų sąrašo vertimai į suahilių kalbą.

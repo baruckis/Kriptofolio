@@ -46,8 +46,8 @@ import com.baruckis.kriptofolio.ui.settings.SettingsActivity
 import com.baruckis.kriptofolio.utilities.*
 import com.baruckis.kriptofolio.vo.Status
 import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 import javax.inject.Inject
 
@@ -203,7 +203,7 @@ class MainListFragment : Fragment(), Injectable, PrimaryActionModeController.Pri
 
 
             // Set event for floating action button.
-            it.fab.setOnClickListener { _ ->
+            it.findViewById<FloatingActionButton>(R.id.fab).setOnClickListener { _ ->
                 snackbarUndoDelete?.let { snackbar ->
                     clean()
                     snackbar.dismiss()

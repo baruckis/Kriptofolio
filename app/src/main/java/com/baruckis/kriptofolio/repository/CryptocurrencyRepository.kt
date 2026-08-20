@@ -21,7 +21,7 @@ import android.content.SharedPreferences
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
+import androidx.lifecycle.switchMap
 import com.baruckis.kriptofolio.R
 import com.baruckis.kriptofolio.api.*
 import com.baruckis.kriptofolio.db.Cryptocurrency
@@ -139,7 +139,7 @@ class CryptocurrencyRepository @Inject constructor(
             // Contains the logic to get data from the Room database.
             override fun loadFromDb(): LiveData<List<Cryptocurrency>> {
 
-                return Transformations.switchMap(cryptocurrencyDao.getAllCryptocurrencyLiveDataList()) { data ->
+                return cryptocurrencyDao.getAllCryptocurrencyLiveDataList().switchMap { data ->
                     if (data.isEmpty()) {
                         AbsentLiveData.create()
                     } else {
@@ -196,8 +196,8 @@ class CryptocurrencyRepository @Inject constructor(
     }
 
     fun getCurrentTimeFormatLiveData(): LiveData<TimeFormat> {
-        return Transformations.switchMap(sharedPreferences.
-                booleanLiveData(context.resources.getString(R.string.pref_24h_switch_key), true)) {
+        return sharedPreferences.
+                booleanLiveData(context.resources.getString(R.string.pref_24h_switch_key), true).switchMap {
             MutableLiveData<TimeFormat>().apply {
                 value = if (it) TimeFormat.Hours24() else TimeFormat.Hours12()
             }
@@ -245,7 +245,7 @@ class CryptocurrencyRepository @Inject constructor(
     }
 
     fun getCurrentFiatCurrencySignLiveData(): LiveData<String> {
-        return Transformations.switchMap(getCurrentFiatCurrencyCodeLiveData()) { data ->
+        return getCurrentFiatCurrencyCodeLiveData().switchMap { data ->
             MutableLiveData<String>().takeIf { data != null }?.apply {
                 value = getCurrentFiatCurrencySign(data) }
         }

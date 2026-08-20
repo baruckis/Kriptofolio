@@ -16,7 +16,7 @@
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions' // To implement view binding
+apply plugin: 'kotlin-parcelize' // For the @Parcelize annotation
 apply plugin: 'kotlin-kapt' // For annotation processing
 
 // Helps fetch & display the open source libraries used within your project.
@@ -25,14 +25,15 @@ apply plugin: 'com.google.android.gms.oss-licenses-plugin'
 // Version values at Project level versions.gradle.
 
 android {
+    namespace 'com.baruckis.kriptofolio'
     compileSdkVersion versions.compile_sdk
 
     defaultConfig {
         applicationId "com.baruckis.kriptofolio"
         minSdkVersion versions.min_sdk
         targetSdkVersion versions.target_sdk
-        versionCode 4
-        versionName "1.2.1" // major . minor . patch
+        versionCode 5
+        versionName "1.2.2" // major . minor . patch
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -44,8 +45,10 @@ android {
     }
     // The Data Binding Library is a support library that allows you to bind UI components in your
     // layouts to data sources in your app using a declarative format rather than programmatically.
-    dataBinding {
-        enabled = true
+    // BuildConfig has to be requested explicitly since Android Gradle plugin 8.
+    buildFeatures {
+        dataBinding true
+        buildConfig true
     }
     // Configure only for each module that uses Java 8 language features
     // (either in its source code or through dependencies).
@@ -76,12 +79,6 @@ android {
 
     applicationVariants.configureEach { variant ->
         variant.resValue "string", "versionName", variant.versionName }
-}
-
-// We use Parcelize which is an experimental feature at the moment so we need to add the following
-// snippet to our application.
-androidExtensions {
-    experimental = true
 }
 
 dependencies {
@@ -202,8 +199,12 @@ dependencies {
     implementation "com.github.bumptech.glide:okhttp3-integration:$versions.glide" + "@aar"
 
     // UI. FlipView is a ViewGroup (FrameLayout) that is designed to display 2 views/layouts by
-    // flipping the front one in favor of the back one, and vice versa.
-    implementation "eu.davidea:flipview:$versions.flip_view"
+    // flipping the front one in favor of the back one, and vice versa. The library is plain Java,
+    // its Kotlin standard library dependency is an artifact of how it was republished, and left
+    // alone it would drag a much newer Kotlin runtime into the app.
+    implementation("eu.davidea:flipview:$versions.flip_view") {
+        exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib'
+    }
 
     // Facebook's Stetho project enables you to use Chrome debugging tools to troubleshoot
     // network traffic, database files, and view layouts.
@@ -232,7 +233,7 @@ dependencies {
     // Dependencies for local unit tests. JUnit is a unit testing framework for Java.
     testImplementation "junit:junit:$versions.junit"
 
-    testImplementation "org.mockito:mockito-all:$versions.mockito"
+    testImplementation "org.mockito:mockito-core:$versions.mockito"
 
     testImplementation "androidx.arch.core:core-testing:$versions.arch_core"
 }

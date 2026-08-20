@@ -119,7 +119,7 @@ class Transformation {
 
         @NonNull
         private fun getNonNullConfig(@NonNull bitmap: Bitmap): Bitmap.Config {
-            return if (bitmap.config != null) bitmap.config else Bitmap.Config.ARGB_8888
+            return bitmap.config ?: Bitmap.Config.ARGB_8888
         }
 
         // Avoids warnings in M+.

@@ -21,6 +21,7 @@ import android.os.Bundle
 import android.text.SpannableString
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -31,8 +32,6 @@ import com.baruckis.kriptofolio.ui.settings.SettingsActivity
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_main_list.*
 import javax.inject.Inject
 
 /**
@@ -61,7 +60,7 @@ class MainActivity : BaseActivity(), HasSupportFragmentInjector {
         PreferenceManager.setDefaultValues(this, R.xml.pref_main, false)
 
         setContentView(R.layout.activity_main)
-        setSupportActionBar(toolbar)
+        setSupportActionBar(findViewById(R.id.toolbar))
 
         supportActionBar?.subtitle = getString(R.string.app_subtitle)
 
@@ -98,26 +97,28 @@ class MainActivity : BaseActivity(), HasSupportFragmentInjector {
             val txt = StringBuilder(getString(R.string.string_total_value_holdings))
             if (data.toString().isNotEmpty())
                 txt.append(getString(R.string.string_total_value_on_date_time, data))
-            textview_total_value_on_date_time.text = txt
+            findViewById<TextView>(R.id.textview_total_value_on_date_time).text = txt
         })
 
         viewModel.liveDataTotalHoldingsValueFiat24hText.observe(this, Observer<SpannableString> { data ->
-            textview_total_value_change_24h.text = data
+            findViewById<TextView>(R.id.textview_total_value_change_24h).text = data
         })
 
         viewModel.liveDataTotalHoldingsValueFiatText.observe(this, Observer<String> { data ->
-            textview_fiat_value.text = data
-            textview_fiat_value.requestLayout() // After text view size changed, force it to retry to align vertically in the center correctly.
+            val textViewFiatValue = findViewById<TextView>(R.id.textview_fiat_value)
+            textViewFiatValue.text = data
+            textViewFiatValue.requestLayout() // After text view size changed, force it to retry to align vertically in the center correctly.
         })
 
         viewModel.liveDataTotalHoldingsValueCryptoText.observe(this, Observer<String> { data ->
-            textview_crypto_value.text = data
-            textview_crypto_value.requestLayout() // After text view size changed, force it to retry to align vertically in the center correctly.
+            val textViewCryptoValue = findViewById<TextView>(R.id.textview_crypto_value)
+            textViewCryptoValue.text = data
+            textViewCryptoValue.requestLayout() // After text view size changed, force it to retry to align vertically in the center correctly.
         })
 
         viewModel.liveDataCurrentFiatCurrencySign.observe(this, Observer<String> { data ->
-            text_column_coin_fiat_btc_price.text = StringBuilder(getString(R.string.string_column_coin_fiat_price_amount, data, data))
-            text_column_coin_change_24h_1h_7d.text = StringBuilder(getString(R.string.string_column_coin_change_24h_1h_7d, data))
+            findViewById<TextView>(R.id.text_column_coin_fiat_btc_price).text = StringBuilder(getString(R.string.string_column_coin_fiat_price_amount, data, data))
+            findViewById<TextView>(R.id.text_column_coin_change_24h_1h_7d).text = StringBuilder(getString(R.string.string_column_coin_change_24h_1h_7d, data))
         })
 
     }
