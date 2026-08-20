@@ -250,17 +250,23 @@ Every item on the official list was checked against what this app actually does.
 
 ## 6. How to build this branch
 
+**This branch needs exactly Java 21 — not 17, and not anything newer.** The window is one
+version wide, and both edges were hit for real. Set it explicitly; do not assume the default
+is right.
+
 ```bash
-export JAVA_HOME=$(/usr/libexec/java_home -v 21)     # 21 or newer, see below
+export JAVA_HOME=$(/usr/libexec/java_home -v 21)     # exactly 21 - see the floor and ceiling below
 ./gradlew assembleFullDebug assembleDemoDebug
 ./gradlew testFullDebugUnitTest testDemoDebugUnitTest
 ./gradlew lintFullDebug
 ./gradlew bundleFullRelease
 ```
 
-**A JDK 21 or newer is required, not 17.** This was not a preference. `eu.davidea:flipview:1.2.0`
-is now published as Java 21 bytecode, data binding generates Java that imports `FlipView`, and
-javac refuses to read a class file newer than itself:
+### The floor: Java 21, because of a dependency
+
+`eu.davidea:flipview:1.2.0` is now published as Java 21 bytecode (class file major version 65),
+data binding generates Java that imports `FlipView`, and javac refuses to read a class file
+newer than itself. On JDK 17:
 
 ```
 error: cannot access FlipView
@@ -268,8 +274,52 @@ error: cannot access FlipView
     class file has wrong version 65.0, should be 61.0
 ```
 
-Android Studio's bundled JBR is already newer than 21, so the IDE needs no special setup;
-only a command line or CI build with `JAVA_HOME` pinned to 17 would fail.
+### The ceiling: Java 21, because of Gradle 8.7
+
+Gradle 8.7's supported Java range stops at 21. This bites in two different places, with two
+very different error messages:
+
+**In Android Studio**, the sync is refused before Gradle even runs:
+
+```
+Gradle 8.7 supports Java versions between 1.8 and 21
+```
+
+**On the command line**, Gradle 8.7 starts happily on a newer JVM — `./gradlew --version` and
+`./gradlew help` both succeed on JBR 25 — and the build then dies much later, in kapt, with
+the JVM version as the entire error text:
+
+```
+Execution failed for task ':app:kaptFullDebugKotlin'.
+> Error while evaluating property 'javacOptions' of task ':app:kaptFullDebugKotlin'.
+   > Failed to calculate the value of task ':app:kaptFullDebugKotlin' property 'javacOptions'.
+      > 25.0.2
+```
+
+Kotlin 1.9.25 predates that JVM and cannot parse its version. So "the wrapper started, therefore
+the JDK is fine" is not a safe inference here — verify with `./gradlew --version`, which prints
+the JVM actually in use.
+
+### Android Studio setup — required, and it is not the default
+
+Android Studio runs Gradle on its **bundled JBR**, which is newer than 21, so a fresh clone
+fails to sync out of the box with the message above. Point the IDE at a real JDK 21:
+
+**Settings → Build, Execution, Deployment → Build Tools → Gradle → Gradle JDK → 21**
+
+The sync error also offers a **"Change Gradle JDK configuration"** link that opens the same
+setting. If no JDK 21 is listed, add one there via *Download JDK…* or *Add JDK…*.
+
+> **Do not commit that change.** `.idea/gradle.xml` is tracked in this repository. Depending
+> on how the JDK is selected, Android Studio writes the choice either into the ignored
+> `.gradle/config.properties` (when the entry resolves to `#GRADLE_LOCAL_JAVA_HOME`) or
+> directly into the tracked `.idea/gradle.xml` — and a committed absolute JDK path is a path
+> that is wrong on everybody else's machine. Check `git status` after changing it, and leave
+> any `.idea/` modifications out of your commits. The same applies to the other `.idea/` files
+> Studio rewrites on first open.
+
+Nothing about this is specific to macOS or to Android Studio; a CI job needs the same single
+version pinned.
 
 ## 7. 2.0 backlog
 
@@ -283,6 +333,12 @@ Things that were noticed while doing this stage and deliberately not done.
    stopped at 35.
 2. **Stop relying on `Window.setStatusBarColor`** in `PrimaryActionModeController` — it is
    deprecated and only still works because of the opt-out above.
+3. **Widen the supported JDK range.** The build currently works on exactly one Java version
+   (section 6), which is brittle: it breaks the moment a contributor, a CI image or Android
+   Studio's bundled runtime moves on. Raising the ceiling means a newer Gradle, and a newer
+   Gradle means a newer Android Gradle plugin — they are upgraded together, not separately.
+   A newer Kotlin is part of it too: kapt is what actually failed on the newer JVM here, so
+   moving to KSP removes that particular constraint entirely.
 
 ### Dependencies that were tempting and skipped
 
