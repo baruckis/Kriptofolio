@@ -28,7 +28,6 @@ import androidx.fragment.app.DialogFragment
 import com.baruckis.kriptofolio.R
 import com.baruckis.kriptofolio.utilities.nonEmpty
 import com.baruckis.kriptofolio.utilities.validate
-import kotlinx.android.synthetic.main.dialog_add_crypto_amount.view.*
 
 /**
  * UI for add crypto coins screen dialog where you enter amount of the coins that you have.
@@ -108,7 +107,7 @@ class CryptocurrencyAmountDialog : DialogFragment() {
             val dialogView = it.layoutInflater.inflate(R.layout.dialog_add_crypto_amount, null)
 
             // Set hint for edit text.
-            dialogView.edit_text_amount.hint = hint
+            dialogView.findViewById<EditText>(R.id.edit_text_amount).hint = hint
 
             // Set the layout for the dialog.
             builder.setView(dialogView)
@@ -124,7 +123,7 @@ class CryptocurrencyAmountDialog : DialogFragment() {
                 mListener.onCryptocurrencyAmountDialogCancel()
             }
 
-            editTextAmount = dialogView.edit_text_amount
+            editTextAmount = dialogView.findViewById(R.id.edit_text_amount)
 
             // Initialize the AlertDialog using builder object.
             builder.create()

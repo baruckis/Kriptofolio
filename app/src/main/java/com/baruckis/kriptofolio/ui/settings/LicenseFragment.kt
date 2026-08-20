@@ -20,10 +20,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.baruckis.kriptofolio.R
-import kotlinx.android.synthetic.main.fragment_license.view.*
 
 
 /**
@@ -60,7 +60,7 @@ class LicenseFragment : Fragment() {
         // Inflate the layout for this fragment.
         val view = inflater.inflate(R.layout.fragment_license, container, false)
 
-        val textViewLicense = view.license
+        val textViewLicense = view.findViewById<TextView>(R.id.license)
         textViewLicense.text = arguments?.getString(LICENSE_ARGUMENT)
 
         return view

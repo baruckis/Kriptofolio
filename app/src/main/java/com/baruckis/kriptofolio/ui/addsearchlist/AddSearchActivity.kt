@@ -23,6 +23,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.ListView
+import android.widget.TextView
 import androidx.appcompat.widget.SearchView
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.databinding.DataBindingUtil
@@ -41,7 +43,6 @@ import com.baruckis.kriptofolio.utilities.*
 import com.baruckis.kriptofolio.utilities.localization.StringsLocalization
 import com.baruckis.kriptofolio.vo.Status
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.content_add_search.*
 import kotlinx.coroutines.*
 import javax.inject.Inject
 
@@ -59,6 +60,7 @@ class AddSearchActivity : BaseActivity(), Injectable, CryptocurrencyAmountDialog
     lateinit var binding: ActivityAddSearchBinding
 
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
+    private lateinit var infoTextView: TextView
     private lateinit var listAdapter: AddSearchListAdapter
 
     private var snackbar: Snackbar? = null
@@ -94,9 +96,11 @@ class AddSearchActivity : BaseActivity(), Injectable, CryptocurrencyAmountDialog
 
         // Setup ListView.
         listAdapter = AddSearchListAdapter(this) { cryptocurrency -> cryptocurrencyClick(cryptocurrency) }
-        listview_activity_add_search.adapter = listAdapter
+        findViewById<ListView>(R.id.listview_activity_add_search).adapter = listAdapter
 
-        swipeRefreshLayout = swiperefresh_activity_add_search
+        swipeRefreshLayout = findViewById(R.id.swiperefresh_activity_add_search)
+
+        infoTextView = findViewById(R.id.info_activity_add_search)
 
         // Make swipe refresh layout circle colorful.
         swipeRefreshLayout.setColorSchemeResources(
@@ -233,7 +237,7 @@ class AddSearchActivity : BaseActivity(), Injectable, CryptocurrencyAmountDialog
                             stringsLocalization.getString(R.string.time_format_am),
                             stringsLocalization.getString(R.string.time_format_pm))
                             else ""
-                info_activity_add_search.text = StringBuilder(getString(R.string.string_info_last_updated_on_date_time, viewModel.lastUpdatedOnDate)).toString()
+                infoTextView.text = StringBuilder(getString(R.string.string_info_last_updated_on_date_time, viewModel.lastUpdatedOnDate)).toString()
 
 
                 // First we check if there was an error from the server.
@@ -333,7 +337,7 @@ class AddSearchActivity : BaseActivity(), Injectable, CryptocurrencyAmountDialog
                 if (it == null) return@Observer
                 listAdapter.setData(it)
                 if (searchMenuItem?.isActionViewExpanded == true) {
-                    info_activity_add_search.text = StringBuilder(getString(R.string.string_info_results_of_search, it.size.toString())).toString()
+                    infoTextView.text = StringBuilder(getString(R.string.string_info_results_of_search, it.size.toString())).toString()
                 }
             })
         }
@@ -344,14 +348,14 @@ class AddSearchActivity : BaseActivity(), Injectable, CryptocurrencyAmountDialog
 
         override fun onMenuItemActionExpand(item: MenuItem): Boolean {
             swipeRefreshLayout.isEnabled = false
-            info_activity_add_search.text = StringBuilder(getString(R.string.string_info_results_of_search, listAdapter.count.toString())).toString()
+            infoTextView.text = StringBuilder(getString(R.string.string_info_results_of_search, listAdapter.count.toString())).toString()
             return true
         }
 
         override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
             textChangeDelayJob?.cancel()
             swipeRefreshLayout.isEnabled = true
-            info_activity_add_search.text = StringBuilder(getString(R.string.string_info_last_updated_on_date_time, viewModel.lastUpdatedOnDate)).toString()
+            infoTextView.text = StringBuilder(getString(R.string.string_info_last_updated_on_date_time, viewModel.lastUpdatedOnDate)).toString()
             return true
         }
 

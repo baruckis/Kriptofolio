@@ -22,6 +22,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import com.baruckis.kriptofolio.R
 import com.baruckis.kriptofolio.databinding.ActivityAddSearchListItemBinding
@@ -31,7 +33,6 @@ import com.baruckis.kriptofolio.utilities.*
 import com.baruckis.kriptofolio.utilities.glide.WhiteBackground
 import com.bumptech.glide.load.MultiTransformation
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
-import kotlinx.android.synthetic.main.flipview_front_custom.view.*
 
 
 class AddSearchListAdapter(val context: Context, private val cryptocurrencyClickCallback: ((Cryptocurrency) -> Unit)?) : BaseAdapter() {
@@ -72,7 +73,7 @@ class AddSearchListAdapter(val context: Context, private val cryptocurrencyClick
 
 
         // Show only first 3 characters of symbol. If symbol has less than 3 characters than show less.
-        itemBinding.itemImageIcon.textview_front.text = getTextFirstChars(cryptocurrency.symbol, FLIPVIEW_CHARACTER_LIMIT)
+        itemBinding.itemImageIcon.findViewById<TextView>(R.id.textview_front).text = getTextFirstChars(cryptocurrency.symbol, FLIPVIEW_CHARACTER_LIMIT)
 
         // We make an Uri of image that we need to load. Every image unique name is its id.
         val imageUri = Uri.parse(CRYPTOCURRENCY_IMAGE_URL).buildUpon()
@@ -91,7 +92,7 @@ class AddSearchListAdapter(val context: Context, private val cryptocurrencyClick
                 // CircleCrop is default transformation that Glide ships with.
                 .transform(MultiTransformation(WhiteBackground(), CircleCrop()))
                 // The target ImageView your image is supposed to get displayed in.
-                .into(itemBinding.itemImageIcon.imageview_front)
+                .into(itemBinding.itemImageIcon.findViewById<ImageView>(R.id.imageview_front))
 
 
         itemBinding.itemName.text = cryptocurrency.name

@@ -16,7 +16,7 @@
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions' // To implement view binding
+apply plugin: 'kotlin-parcelize' // For the @Parcelize annotation
 apply plugin: 'kotlin-kapt' // For annotation processing
 
 // Helps fetch & display the open source libraries used within your project.
@@ -76,12 +76,6 @@ android {
 
     applicationVariants.configureEach { variant ->
         variant.resValue "string", "versionName", variant.versionName }
-}
-
-// We use Parcelize which is an experimental feature at the moment so we need to add the following
-// snippet to our application.
-androidExtensions {
-    experimental = true
 }
 
 dependencies {

@@ -35,7 +35,6 @@ import com.baruckis.kriptofolio.databinding.FragmentLibrariesLicensesListBinding
 import com.baruckis.kriptofolio.dependencyinjection.Injectable
 import com.baruckis.kriptofolio.ui.settings.LicenseFragment
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
-import kotlinx.android.synthetic.main.fragment_libraries_licenses_list.*
 import javax.inject.Inject
 
 
@@ -63,7 +62,7 @@ class LibrariesLicensesListFragment : Fragment(), Injectable {
             activity.title = viewModel.stringsLocalization.getString(R.string.fragment_libraries_licenses_list_title)
             if (activity is AppCompatActivity) activity.supportActionBar?.subtitle = viewModel.stringsLocalization.getString(R.string.fragment_libraries_licenses_list_subtitle)
 
-            recyclerView = recyclerview_fragment_libraries_licenses_list
+            recyclerView = binding.recyclerviewFragmentLibrariesLicensesList
 
             setupList()
         }

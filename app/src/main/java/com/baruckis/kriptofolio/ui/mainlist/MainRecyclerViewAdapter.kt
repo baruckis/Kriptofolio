@@ -21,6 +21,7 @@ import android.os.Parcelable
 import android.text.SpannableStringBuilder
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.recyclerview.selection.ItemDetailsLookup
 import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.widget.RecyclerView
@@ -32,8 +33,7 @@ import com.baruckis.kriptofolio.utilities.*
 import com.baruckis.kriptofolio.utilities.glide.WhiteBackground
 import com.bumptech.glide.load.MultiTransformation
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
-import kotlinx.android.parcel.Parcelize
-import kotlinx.android.synthetic.main.flipview_front_custom.view.*
+import kotlinx.parcelize.Parcelize
 
 
 class MainRecyclerViewAdapter : RecyclerView.Adapter<MainRecyclerViewAdapter.BindingViewHolder>() {
@@ -216,7 +216,7 @@ class MainRecyclerViewAdapter : RecyclerView.Adapter<MainRecyclerViewAdapter.Bin
                     // CircleCrop is default transformation that Glide ships with.
                     .transform(MultiTransformation(WhiteBackground(), CircleCrop()))
                     // The target ImageView your image is supposed to get displayed in.
-                    .into(binding.itemImageIcon.imageview_front)
+                    .into(binding.itemImageIcon.findViewById<ImageView>(R.id.imageview_front))
 
 
             if (flipViewAnimate) binding.itemImageIcon.flip(isSelected) else binding.itemImageIcon.flipSilently(isSelected)
