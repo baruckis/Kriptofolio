@@ -226,7 +226,7 @@ dependencies {
     // Dependencies for local unit tests. JUnit is a unit testing framework for Java.
     testImplementation "junit:junit:$versions.junit"
 
-    testImplementation "org.mockito:mockito-all:$versions.mockito"
+    testImplementation "org.mockito:mockito-core:$versions.mockito"
 
     testImplementation "androidx.arch.core:core-testing:$versions.arch_core"
 }
