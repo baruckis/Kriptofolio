@@ -16,8 +16,9 @@
 
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <!-- Base application theme. Everything the app theme contains lives here, so that the
+         API level specific AppTheme variants only have to add what is specific to them. -->
+    <style name="BaseAppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -30,6 +31,9 @@
         If you leave it as default, it will be the back arrow. -->
         <item name="actionModeCloseDrawable">@drawable/ic_close</item>
     </style>
+
+    <!-- Application theme actually used by the manifest. Overridden in values-v35. -->
+    <style name="AppTheme" parent="BaseAppTheme" />
 
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
