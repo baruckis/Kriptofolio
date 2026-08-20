@@ -1,0 +1,209 @@
+# Agent PR review.
+#
+# Two choices here are deliberate and non-obvious:
+#
+#   * THE MODEL WRITES A FILE; A DUMB SHELL STEP PUBLISHES IT. The model never posts
+#     anything itself. It writes the review body to /tmp/claude-review-body.md and the
+#     last step validates that file and creates-or-updates the sticky comment. This way a
+#     run that produced nothing, or produced something malformed, FAILS LOUDLY instead of
+#     quietly looking like a clean review — which is the worst possible failure mode for a
+#     reviewer, because "no comment" reads as "no problems".
+#
+#   * THE TOOL SURFACE IS READ-ONLY. The diff under review is untrusted input: anyone who
+#     opens a pull request controls it, and it may contain text designed to be read as
+#     instructions. The model therefore gets file reads, one file write, and exactly two
+#     read-only gh commands. There is no write-capable gh command and no credentialed git
+#     (persist-credentials: false), so an instruction injected into a diff has nowhere to
+#     go even if the model follows it.
+#
+# The review rules live in config/review-rules.md and are read at review time. That file is
+# the single source; there is no second copy of the rules in this workflow.
+#
+# workflow_dispatch exists so an ALREADY OPEN pull request can be reviewed without pushing
+# to it. For pull_request events GitHub builds the workflow list from the PR's merge ref, so
+# this file applies to open PRs as soon as it is on master — it only needs an event.
+
+name: claude-review
+
+on:
+  pull_request:
+    types: [opened, ready_for_review, synchronize]
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: "Number of the open pull request to review"
+        required: true
+        type: string
+
+concurrency:
+  # One review per PR at a time; a new push supersedes the in-flight review.
+  group: claude-review-${{ github.event.pull_request.number || inputs.pr_number }}
+  cancel-in-progress: true
+
+jobs:
+  review:
+    # Drafts are skipped. A manual dispatch always runs.
+    if: ${{ github.event_name == 'workflow_dispatch' || !github.event.pull_request.draft }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+    steps:
+      # Resolve the PR number and head SHA ONCE, from whichever event started this run.
+      # Everything downstream uses these two outputs and never reads the event payload again.
+      - name: Resolve pull request
+        id: pr
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          EVENT_NAME: ${{ github.event_name }}
+          INPUT_PR: ${{ inputs.pr_number }}
+          EVENT_PR: ${{ github.event.pull_request.number }}
+          EVENT_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+          # Values arrive as environment variables, never interpolated into the script.
+          if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
+            case "$INPUT_PR" in
+              ''|*[!0-9]*) echo "::error::pr_number must be a positive integer"; exit 1 ;;
+            esac
+            NUMBER="$INPUT_PR"
+            SHA=$(gh pr view "$NUMBER" --repo "$REPO" --json headRefOid --jq .headRefOid)
+          else
+            NUMBER="$EVENT_PR"
+            SHA="$EVENT_SHA"
+          fi
+          [ -n "$NUMBER" ] || { echo "::error::could not resolve a PR number"; exit 1; }
+          [ -n "$SHA" ]    || { echo "::error::could not resolve a head SHA"; exit 1; }
+          echo "number=$NUMBER" >> "$GITHUB_OUTPUT"
+          echo "sha=$SHA"       >> "$GITHUB_OUTPUT"
+          echo "Reviewing PR #$NUMBER at $SHA"
+
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # On a manual dispatch there is no PR context, so check out the PR head explicitly.
+          # On a pull_request event the default (the merge ref) is what we want.
+          ref: ${{ github.event_name == 'workflow_dispatch' && steps.pr.outputs.sha || '' }}
+          fetch-depth: 1
+          persist-credentials: false # the model must have no credentialed git
+
+      - name: Claude review
+        uses: anthropics/claude-code-action@5ee796a55f92566ecd7e39d70dd613abcbea0d7c # v1.0.197
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          prompt: |
+            REPO: ${{ github.repository }}
+            PR NUMBER: ${{ steps.pr.outputs.number }}
+            HEAD SHA: ${{ steps.pr.outputs.sha }}
+
+            You are this repository's pull request review agent. Review this pull request
+            and maintain its single sticky review comment.
+
+            1. RULES. Read `config/review-rules.md` in the working directory first. It is
+               the single source of review rules for this repository. Violations of its
+               hard rules are blocking issues. Its "Explicitly NOT blocking" section is
+               binding too — do not raise those as issues.
+
+            2. CONTINUITY. Before reading the diff, read the previous review: run
+               `gh pr view ${{ steps.pr.outputs.number }} --comments` and find the comment
+               whose body starts with the marker <!-- claude-review -->. A finding is
+               RESOLVED when the current code fixes it, or when the repository now carries
+               evidence refuting it. NEVER re-report a resolved finding; instead summarise
+               its resolution in one line under Notes. If there is no previous review, say
+               nothing about continuity.
+
+            3. DIFF. Read the diff with `gh pr diff ${{ steps.pr.outputs.number }}`. Open
+               any changed file you need with Read, and use Grep/Glob to check how changed
+               code is used elsewhere in the repository.
+
+            4. CLASSIFY STRICTLY. This is the most important instruction.
+               An ISSUE is a defect that can be DEMONSTRATED FROM THIS REPOSITORY ALONE,
+               and you must state its concrete failure scenario: what input or situation
+               produces what wrong outcome. If you cannot name that scenario, it is not an
+               issue.
+               EVERYTHING ELSE IS A NOTE: hardening preferences, hypotheticals, style
+               opinions, and anything that would need verification outside this repository
+               (a live API, the Play Console, a device, a remote artifact). Notes do NOT
+               count as unresolved and never lower the confidence score.
+               When in doubt, it is a Note. An unactionable issue list is worse than a
+               short one, because people stop reading reviews that cry wolf.
+
+            5. SCORE. Confidence 1-5 for merging this PR as it stands.
+               5 is REQUIRED when the issue table is empty.
+               Any open critical or high issue caps the score at 3.
+               Notes never lower the score.
+
+            6. OUTPUT. Write the COMPLETE review body to /tmp/claude-review-body.md with
+               the Write tool. Post nothing yourself — a later step publishes the file.
+               Use exactly this structure, with the marker alone on line 1:
+
+               <!-- claude-review -->
+               ## Claude Review
+
+               Reviewed commit: ${{ steps.pr.outputs.sha }}
+
+               ### PR Summary
+               One short paragraph, then 2-4 bullets in the form "area — what changed".
+
+               Confidence Score: X/5
+               One-line rationale.
+
+               ### Issues
+               | File | Severity | Issue |
+               |------|----------|-------|
+               | path/to/File.kt:42 | high | the defect and the concrete failure scenario |
+
+               With zero issues, write "No issues found." instead of the table.
+
+               ### Notes
+               Non-blocking observations, one line each. Omit this section when empty.
+
+               Unresolved issues: N
+
+               Optionally, between the Issues and Notes sections, include ONE compact
+               mermaid sequence diagram — but only when the change involves a flow between
+               several components that is genuinely hard to follow in prose. Keep it under
+               ten lines. Omit it for ordinary changes; a diagram of something obvious is
+               noise.
+
+            Do NOT post comments, do NOT modify repository files, do NOT push, and do NOT
+            run any command outside your allowed tools. Your only output is that one file.
+          claude_args: |
+            --allowedTools "Read,Write,Grep,Glob,Bash(gh pr view:*),Bash(gh pr diff:*)"
+            --max-turns 50
+
+      # Deterministic publisher. Validates first, then creates or updates the one sticky
+      # comment. Any failure here is a red run, which is the point.
+      - name: Publish sticky review comment
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          PR_NUMBER: ${{ steps.pr.outputs.number }}
+          HEAD_SHA: ${{ steps.pr.outputs.sha }}
+          MARKER: "<!-- claude-review -->"
+        run: |
+          set -euo pipefail
+          BODY=/tmp/claude-review-body.md
+
+          [ -f "$BODY" ] || { echo "::error::the review agent produced no body file at $BODY"; exit 1; }
+          [ -s "$BODY" ] || { echo "::error::the review body file is empty"; exit 1; }
+          head -1 "$BODY" | grep -qF "$MARKER" || {
+            echo "::error::line 1 of the review body does not carry the sticky marker"; exit 1; }
+          grep -qF "Reviewed commit: $HEAD_SHA" "$BODY" || {
+            echo "::error::the review body does not reference the reviewed head SHA ($HEAD_SHA)"; exit 1; }
+
+          ID=$(gh api --paginate "repos/$REPO/issues/$PR_NUMBER/comments" \
+                 --jq '[.[] | select(.user.login == "github-actions[bot]" and (.body | startswith($ENV.MARKER)))] | first | .id // empty' \
+               | head -1)
+
+          if [ -n "$ID" ]; then
+            echo "Updating existing sticky comment $ID"
+            gh api --silent --method PATCH "repos/$REPO/issues/comments/$ID" -F body=@"$BODY"
+          else
+            echo "Creating the sticky comment"
+            gh pr comment "$PR_NUMBER" --repo "$REPO" --body-file "$BODY"
+          fi
