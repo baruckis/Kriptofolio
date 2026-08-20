@@ -109,11 +109,13 @@ records what is used instead for the "no new Lint errors" comparison.
 | `refactor: Replaced the Kotlin Android Extensions plugin...` | synthetics → `findViewById`, `@Parcelize` → `kotlin-parcelize` | red |
 | `chore: Replaced the shut down JCenter repository...` | `jcenter()` → `mavenCentral()` | red |
 | `test: Replaced mockito-all 2.0.2-beta with mockito-core 5.3.1.` | test dependency only | red |
-| `chore: Upgraded to Gradle 8.7, Android Gradle plugin 8.6 and Kotlin 1.9.25.` | the toolchain, plus `compileSdk 35` | **green — first buildable commit** |
+| `chore: Upgraded to Gradle 8.7, Android Gradle plugin 8.6 and Kotlin 1.9.25.` | the toolchain, plus `compileSdk 35` (the wrapper moved to 8.8 later, see below) | **green — first buildable commit** |
 | `fix: Opted out of the Android 15 edge to edge enforcement...` | `values-v35/styles.xml` | green |
 | `chore: Raised targetSdk to 35.` | the actual point of the stage | green |
 | `chore: Bumped versionCode to 5 and versionName to 1.2.2.` | release version | green |
 | `docs: Added the missing fastlane release changelogs.` | closes issue #4 | green |
+| `docs: Corrected the required JDK...` | section 6 rewritten | green |
+| `chore: Raised the Gradle wrapper to 8.8 so Android Studio can sync.` | wrapper only | green |
 
 The first four commits cannot be green because `master` itself is not green (section 1).
 Everything from the toolchain commit onward builds and tests clean.
@@ -126,7 +128,7 @@ Every line here was forced by an error that was actually observed. Nothing was r
 | Item | Old | New | Why |
 |---|---|---|---|
 | Android Gradle plugin | 7.4.2 | 8.6.0 | AGP 7.4.2's D8 cannot dex the Java 21 class files in `flipview`. 8.6.0 is the lowest 8.x that supports `compileSdk 35` silently — 8.4.2 and 8.5.2 both print "tested up to compileSdk 34". |
-| Gradle wrapper | 7.5 | 8.7 | Minimum for AGP 8.6. |
+| Gradle wrapper | 7.5 | 8.8 | 8.7 is the minimum AGP 8.6 accepts, and was the original choice. It had to move again: Android Studio injects a diagnostic init script calling `gradle.lifecycle.afterProject`, and `Gradle.getLifecycle()` only exists from **Gradle 8.8**, so on 8.7 every IDE sync fails with `Could not get unknown property 'lifecycle'`. 8.8 is the oldest release that has it. |
 | Kotlin | 1.6.21 | 1.9.25 | AGP 8 needs Kotlin ≥ 1.8, and 1.8 is where `kotlin-android-extensions` was removed anyway. 1.9.25 is the last 1.9; 2.x is deliberately out of scope. |
 | `compileSdk` | 34 | 35 | `flipview` declares `minCompileSdk 35`, and 35 is needed for `targetSdk 35`. |
 | `targetSdk` | 34 | 35 | The whole point of the stage. |
@@ -274,20 +276,20 @@ error: cannot access FlipView
     class file has wrong version 65.0, should be 61.0
 ```
 
-### The ceiling: Java 21, because of Gradle 8.7
+### The ceiling: pin 21, because nothing above it has been verified
 
-Gradle 8.7's supported Java range stops at 21. This bites in two different places, with two
-very different error messages:
+Java 21 is the only version this project has actually been built and tested on:
 
-**In Android Studio**, the sync is refused before Gradle even runs:
+| JVM | Result |
+|---|---|
+| Temurin 17.0.19 | fails in kapt — see the floor above |
+| **Temurin 21.0.11** | **green: both flavors, all tests, both bundles** |
+| JetBrains Runtime 25.0.2 (Android Studio's bundled runtime) | fails |
 
-```
-Gradle 8.7 supports Java versions between 1.8 and 21
-```
-
-**On the command line**, Gradle 8.7 starts happily on a newer JVM — `./gradlew --version` and
-`./gradlew help` both succeed on JBR 25 — and the build then dies much later, in kapt, with
-the JVM version as the entire error text:
+Gradle 8.8 itself documents support up to Java 22, so 22 may well work — but it has not been
+tried here, and the component that breaks first is not Gradle. On JBR 25 the wrapper starts
+happily (`./gradlew --version` and `./gradlew help` both succeed) and the build dies much later,
+inside kapt, with the JVM version as the entire error text:
 
 ```
 Execution failed for task ':app:kaptFullDebugKotlin'.
@@ -298,17 +300,38 @@ Execution failed for task ':app:kaptFullDebugKotlin'.
 
 Kotlin 1.9.25 predates that JVM and cannot parse its version. So "the wrapper started, therefore
 the JDK is fine" is not a safe inference here — verify with `./gradlew --version`, which prints
-the JVM actually in use.
+the JVM actually in use, and pin 21 until somebody tests otherwise.
 
 ### Android Studio setup — required, and it is not the default
 
 Android Studio runs Gradle on its **bundled JBR**, which is newer than 21, so a fresh clone
-fails to sync out of the box with the message above. Point the IDE at a real JDK 21:
+fails to sync out of the box:
 
-**Settings → Build, Execution, Deployment → Build Tools → Gradle → Gradle JDK → 21**
+```
+The project's Gradle version Gradle 8.8 is incompatible with the Gradle JVM version 25.
+```
 
-The sync error also offers a **"Change Gradle JDK configuration"** link that opens the same
-setting. If no JDK 21 is listed, add one there via *Download JDK…* or *Add JDK…*.
+Point the IDE at a real JDK 21 in
+**Settings → Build, Execution, Deployment → Build Tools → Gradle → Gradle JDK**, or through the
+**"Change Gradle JDK configuration"** link the sync error offers.
+
+> **Do not trust an entry in that dropdown just because it is named 21.** Android Studio keeps
+> its registered JDKs in `jdk.table.xml`, and the entry named **`jbr-21`** points at
+> `$APPLICATION_HOME_DIR$/jbr` — the bundled runtime, *whatever version it happens to be after
+> the last IDE update*. On Android Studio 2026.1.3 that entry is still named `jbr-21`, and even
+> records `JetBrains Runtime 21.0.10` as its version, while the runtime actually behind it is
+> 25.0.2. The one-click **"Use JVM 21"** button in the sync dialog picks that entry, so the sync
+> fails again with exactly the same error. Register a real JDK 21 via *Add JDK…*, or check what
+> is behind an entry before trusting its name.
+
+The most reliable option is the one this repository already uses: the Gradle JDK is set to
+`#GRADLE_LOCAL_JAVA_HOME`, which reads `java.home` from `.gradle/config.properties` — a file
+that is git-ignored. Setting the path there keeps the choice out of version control entirely:
+
+```properties
+# .gradle/config.properties  (git-ignored)
+java.home=/path/to/a/real/jdk-21
+```
 
 > **Do not commit that change.** `.idea/gradle.xml` is tracked in this repository. Depending
 > on how the JDK is selected, Android Studio writes the choice either into the ignored
@@ -333,12 +356,18 @@ Things that were noticed while doing this stage and deliberately not done.
    stopped at 35.
 2. **Stop relying on `Window.setStatusBarColor`** in `PrimaryActionModeController` — it is
    deprecated and only still works because of the opt-out above.
-3. **Widen the supported JDK range.** The build currently works on exactly one Java version
+3. **Widen the supported JDK range.** The build is verified on exactly one Java version
    (section 6), which is brittle: it breaks the moment a contributor, a CI image or Android
-   Studio's bundled runtime moves on. Raising the ceiling means a newer Gradle, and a newer
-   Gradle means a newer Android Gradle plugin — they are upgraded together, not separately.
-   A newer Kotlin is part of it too: kapt is what actually failed on the newer JVM here, so
-   moving to KSP removes that particular constraint entirely.
+   Studio's bundled runtime moves on. Raising the ceiling means a newer Gradle, and eventually a
+   newer Android Gradle plugin — they move together, not separately. A newer Kotlin is part of
+   it too: kapt is what actually failed on the newer JVM here, so moving to KSP removes that
+   particular constraint entirely.
+4. **Expect the IDE to keep pushing the Gradle floor up.** The wrapper had to move from 8.7 to
+   8.8 purely because Android Studio injects an init script using a Gradle API that 8.7 lacks
+   (section 3). That pressure is continuous — each IDE release may assume a newer Gradle than
+   the one pinned here — and there is no CI to catch it. Whoever owns 2.0 should expect to track
+   Gradle more actively than a keep-alive release does, and should add CI that builds on a
+   pinned JDK so this class of breakage is caught by a machine rather than by opening the IDE.
 
 ### Dependencies that were tempting and skipped
 
