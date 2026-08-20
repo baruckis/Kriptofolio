@@ -344,7 +344,93 @@ java.home=/path/to/a/real/jdk-21
 Nothing about this is specific to macOS or to Android Studio; a CI job needs the same single
 version pinned.
 
-## 7. 2.0 backlog
+## 7. Cutting a release
+
+Everything above describes how to *build* this branch. This section is what has to happen to
+turn that build into a release, in order. It exists because two of these steps are invisible in
+the repository — nothing in the source tree reminds you about them, and the gap between releases
+here is measured in years.
+
+### 1. The API key is not in this repository, and must go in by hand
+
+`app/src/full/java/com/baruckis/kriptofolio/utilities/ConstantsFlavor.kt` ships with
+
+```kotlin
+const val API_SERVICE_AUTHENTICATION_KEY = "" // TODO: put your CoinMarketCap API key here
+```
+
+That empty string is deliberate and correct — the key is a secret and this is a public
+repository. It also means **a release built straight from a clean checkout is broken**: it
+installs, it launches, it passes review, and every screen that needs data shows "Unable to get
+data". There is no build error and no warning; the app is simply useless.
+
+So, before building a release:
+
+1. paste the real CoinMarketCap key into that constant;
+2. build and sign;
+3. **put the empty string back** and confirm with `git status` that nothing is staged.
+
+The failure this guards against is silent in both directions — forget step 1 and you ship a dead
+app, forget step 3 and you publish your key permanently into a public git history. A local
+`pre-commit` hook that refuses to commit a non-empty key is a cheap safety net; `.git/hooks/` is
+never pushed, so it costs nothing and protects only the person who installs it.
+
+### 2. Add the changelog for the new versionCode
+
+`fastlane/metadata/android/<locale>/changelogs/<versionCode>.txt`, for **every** locale directory
+that exists (currently `en-US` and `lt-LT`). F-Droid and its downstream repositories read these,
+and a missing file means no release notes for those users.
+
+This is not hypothetical: issue #4 was open from 2020 to 2026 for exactly this reason — the file
+for versionCode 3 was never added, and nobody noticed until someone outside the project pointed
+it out.
+
+### 3. Sign with the same key as the previous release
+
+Verify before uploading, rather than discovering it afterwards:
+
+```bash
+apksigner verify --print-certs <new>.apk        | grep "SHA-256 digest"
+apksigner verify --print-certs <previous>.apk   | grep "SHA-256 digest"
+```
+
+The two digests must be identical. A mismatch cannot be fixed later — Google Play will not accept
+an update signed with a different key, and existing installs cannot be upgraded.
+
+### 4. Verify the upgrade path on a device before uploading
+
+Install the **previously published** artifact, create real data with it, then install the new
+build over it. Turn networking off first: with no network, whatever is on screen afterwards can
+only have come from the existing database, so a wiped database cannot hide behind a fast refetch.
+
+This matters more here than in most apps: portfolios exist only on the device, there is no cloud
+backup and no export, and `fallbackToDestructiveMigration()` is enabled — so a schema mismatch
+does not fail loudly, it deletes.
+
+### 5. Upload, then confirm rather than assume
+
+Use a staged rollout. The only proof that a compliance requirement has been met is the warning
+disappearing from the Play Console — not the value in the manifest, and not a successful upload.
+
+### 6. Tag and publish the source release
+
+Tag the merge commit and create the matching GitHub release, keeping the naming used by the
+existing tags.
+
+### A note on the demo flavor
+
+`sandbox-api.coinmarketcap.com` no longer resolves — CoinMarketCap retired the sandbox that the
+demo flavor was built against. The demo build still compiles, launches and navigates, but it can
+never fetch anything.
+
+Publishing a demo build that cannot work is worse than publishing none: someone downloads it,
+sees an error state, and concludes the app is broken. **The demo flavor is therefore not being
+published for 1.2.2.** It must still build — that is a review rule, and it is how the app is kept
+honest about supporting both flavors — but it is not shipped until it has a data source again.
+Giving it bundled offline fixture data is on the 2.0 list, and would make it a better demo than
+it ever was.
+
+## 8. 2.0 backlog
 
 Things that were noticed while doing this stage and deliberately not done.
 
@@ -362,7 +448,12 @@ Things that were noticed while doing this stage and deliberately not done.
    newer Android Gradle plugin — they move together, not separately. A newer Kotlin is part of
    it too: kapt is what actually failed on the newer JVM here, so moving to KSP removes that
    particular constraint entirely.
-4. **Expect the IDE to keep pushing the Gradle floor up.** The wrapper had to move from 8.7 to
+4. **Promote section 7 to a real `RELEASING.md`.** The release procedure currently lives inside
+   a document about one specific upgrade, which is the wrong home for it — it will keep being
+   true long after this stage is history. Moving it out, and having CI check the parts a machine
+   can check (is the API key empty on `master`? does a changelog exist for the current
+   versionCode?), turns three of those steps from discipline into automation.
+5. **Expect the IDE to keep pushing the Gradle floor up.** The wrapper had to move from 8.7 to
    8.8 purely because Android Studio injects an init script using a Gradle API that 8.7 lacks
    (section 3). That pressure is continuous — each IDE release may assume a newer Gradle than
    the one pinned here — and there is no CI to catch it. Whoever owns 2.0 should expect to track
