@@ -45,10 +45,19 @@ the exhibits.
    findings, not opinions.
 
 6. **No secrets in the repository.** The real CoinMarketCap API key never enters source
-   control. The **empty string with a TODO** in the full flavor's `ConstantsFlavor.kt` is
-   intentional and correct — do not flag it as a bug, do not suggest a default, and never
-   propose replacing it with a real key. A real-looking key appearing anywhere in a diff is
-   blocking.
+   control. Two things here look like violations of that and are not:
+
+   - the **empty string with a TODO** in the **full** flavor's `ConstantsFlavor.kt`. It is
+     deliberate: the key is a secret, this repository is public, and the key is pasted in by
+     hand at release time. Do not flag it, do not suggest a default value, and never propose
+     putting a real key there.
+   - the **key in the demo flavor's `ConstantsFlavor.kt`**. It is CoinMarketCap's publicly
+     documented shared *sandbox* key, not a private credential — it appears in dozens of public
+     repositories, and the host it points at (`sandbox-api.coinmarketcap.com`) no longer exists.
+     Do not flag it, and do not propose rotating or removing it.
+
+   Anything else that resembles a live credential — an API key, token, password, private key or
+   keystore — appearing in a diff is blocking.
 
 7. **Privacy is the product promise.** No analytics, no crash reporting, no advertising and
    no tracking SDKs, and no portfolio data leaving the device. This is what the app is
