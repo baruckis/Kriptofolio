@@ -1,0 +1,2 @@
+* Programėlė atnaujinta, kad toliau veiktų su „Android 15“.
+* Programėlės veikimas nepasikeitė - jūsų portfelis lieka toks pat.

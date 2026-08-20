@@ -1,0 +1,2 @@
+* Updated the app so that it keeps working on Android 15.
+* Nothing changed in how the app works - your portfolio stays exactly as it was.

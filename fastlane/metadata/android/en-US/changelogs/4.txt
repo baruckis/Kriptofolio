@@ -1,0 +1,1 @@
+* Updated the app so that it keeps working on Android 14.
