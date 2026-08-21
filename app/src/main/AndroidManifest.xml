@@ -76,7 +76,8 @@
         <activity
             android:name="com.baruckis.kriptofolio.ui.settings.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName="com.baruckis.kriptofolio.ui.mainlist.MainActivity">
+            android:parentActivityName="com.baruckis.kriptofolio.ui.mainlist.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
 
             <!-- Parent activity meta-data to support 4.0 and lower. -->
             <meta-data
