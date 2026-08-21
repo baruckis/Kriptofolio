@@ -1,0 +1,186 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "ad1c80913f23361aa985d56ecf84d645",
+    "entities": [
+      {
+        "tableName": "my_cryptocurrencies",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`my_id` INTEGER NOT NULL, `amount` REAL, `amount_fiat` REAL, `amount_fiat_change_24h` REAL, `id` INTEGER NOT NULL, `name` TEXT NOT NULL, `rank` INTEGER NOT NULL, `symbol` TEXT NOT NULL, `currency_fiat` TEXT NOT NULL, `price_fiat` REAL NOT NULL, `price_percent_change_1h` REAL NOT NULL, `price_percent_change_7d` REAL NOT NULL, `price_percent_change_24h` REAL NOT NULL, `last_fetched_date` INTEGER, PRIMARY KEY(`my_id`))",
+        "fields": [
+          {
+            "fieldPath": "myId",
+            "columnName": "my_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "amount",
+            "columnName": "amount",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "amountFiat",
+            "columnName": "amount_fiat",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "amountFiatChange24h",
+            "columnName": "amount_fiat_change_24h",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "cryptoData.id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "cryptoData.name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "cryptoData.rank",
+            "columnName": "rank",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "cryptoData.symbol",
+            "columnName": "symbol",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "cryptoData.currencyFiat",
+            "columnName": "currency_fiat",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "cryptoData.priceFiat",
+            "columnName": "price_fiat",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "cryptoData.pricePercentChange1h",
+            "columnName": "price_percent_change_1h",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "cryptoData.pricePercentChange7d",
+            "columnName": "price_percent_change_7d",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "cryptoData.pricePercentChange24h",
+            "columnName": "price_percent_change_24h",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "cryptoData.lastFetchedDate",
+            "columnName": "last_fetched_date",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "my_id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "all_cryptocurrencies",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, `rank` INTEGER NOT NULL, `symbol` TEXT NOT NULL, `currency_fiat` TEXT NOT NULL, `price_fiat` REAL NOT NULL, `price_percent_change_1h` REAL NOT NULL, `price_percent_change_7d` REAL NOT NULL, `price_percent_change_24h` REAL NOT NULL, `last_fetched_date` INTEGER, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "rank",
+            "columnName": "rank",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "symbol",
+            "columnName": "symbol",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "currencyFiat",
+            "columnName": "currency_fiat",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "priceFiat",
+            "columnName": "price_fiat",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "pricePercentChange1h",
+            "columnName": "price_percent_change_1h",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "pricePercentChange7d",
+            "columnName": "price_percent_change_7d",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "pricePercentChange24h",
+            "columnName": "price_percent_change_24h",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lastFetchedDate",
+            "columnName": "last_fetched_date",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ad1c80913f23361aa985d56ecf84d645')"
+    ]
+  }
+}
