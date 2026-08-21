@@ -17,9 +17,11 @@
 package com.baruckis.kriptofolio.utilities
 
 
+import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.annotation.MenuRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
@@ -35,6 +37,8 @@ class PrimaryActionModeController : ActionMode.Callback {
 
     private lateinit var activity: AppCompatActivity
     private var statusBarColor: Int = 0
+    private var statusBarBackground: View? = null
+    private var statusBarBackgroundColor: Int = 0
 
     // A simple interface that listens for some action mode events.
     interface PrimaryActionModeListener {
@@ -63,9 +67,23 @@ class PrimaryActionModeController : ActionMode.Callback {
             mode.subtitle = subtitle
             this.mode = it
 
+            val actionModeColor = ContextCompat.getColor(activity, R.color.colorForActionModeStatusBar)
+
+            // From Android 15 on, Window.setStatusBarColor below does nothing at all. The status
+            // bar area is painted by a view of the app's own instead, see BaseActivity, so that
+            // is what has to be recoloured. On Android 14 and below that view has no height and
+            // is invisible, and the call below is what still does the work, so the two are safe
+            // to do together - on any one device exactly one of them has an effect.
+            statusBarBackground = activity.findViewById(R.id.status_bar_background)
+            statusBarBackground?.let { view ->
+                statusBarBackgroundColor = (view.background as? ColorDrawable)?.color
+                        ?: ContextCompat.getColor(activity, R.color.colorForStatusBarBackground)
+                view.setBackgroundColor(actionModeColor)
+            }
+
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 statusBarColor = activity.window.statusBarColor
-                activity.window.statusBarColor = ContextCompat.getColor(activity, R.color.colorForActionModeStatusBar)
+                activity.window.statusBarColor = actionModeColor
             }
         }
         return true
@@ -81,6 +99,9 @@ class PrimaryActionModeController : ActionMode.Callback {
         primaryActionModeListener?.onLeaveActionMode()
 
         this.mode = null
+
+        statusBarBackground?.setBackgroundColor(statusBarBackgroundColor)
+        statusBarBackground = null
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             activity.window.statusBarColor = statusBarColor
