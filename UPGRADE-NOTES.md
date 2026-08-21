@@ -1,7 +1,18 @@
-# UPGRADE-NOTES.md — Stage 0 "keep-alive" release (compileSdk / targetSdk 35)
+# UPGRADE-NOTES.md — the keep-alive upgrades
 
-Working notes for the smallest change set that makes Kriptofolio releasable again before
-Google Play stops showing apps that target API 34 or lower to new users (2026-08-31).
+Working notes for the smallest change sets that keep Kriptofolio releasable on Google Play.
+
+* **Stage 0** (sections 1-8) — compileSdk / targetSdk **35**, released as **1.2.2**, versionCode 5.
+* **Stage 0.5** (section 9) — compileSdk / targetSdk **36**, prepared as **1.2.3**, versionCode 6.
+
+Sections 6 and 7 - how to build, and how to cut a release - apply to both and are kept current.
+
+---
+
+## Stage 0 scope
+
+The smallest change set that made the app releasable again before Google Play stopped showing
+apps that target API 34 or lower to new users (2026-08-31).
 
 Scope of this stage, deliberately narrow:
 
@@ -436,6 +447,10 @@ Things that were noticed while doing this stage and deliberately not done.
 
 ### Must be done before the app can target 36
 
+> **Done in Stage 0.5 (section 9).** Items 1 and 2 below are the work that stage did. They are
+> left here unedited, as they were written, because what they got right and what they missed is
+> part of the record - the list said two things had to happen and there turned out to be three.
+
 1. **Real window insets handling.** `android:windowOptOutEdgeToEdgeEnforcement` is deprecated
    and Google has said it will stop working. Delete `app/src/main/res/values-v35/` and lay out
    all 15 XML screens against `WindowInsets` instead. This is the single reason this stage
@@ -510,3 +525,283 @@ Things that were noticed while doing this stage and deliberately not done.
 4. **JCenter's redirect is what changed `flipview` underneath this project.** Any other
    dependency resolved through that redirect could change the same way. Pinning with a
    dependency lock file, or at minimum verification metadata, belongs on the 2.0 list.
+
+---
+
+## 9. Stage 0.5 — targetSdk 36 (Android 16)
+
+Prepared on **2026-08-21**, branched from `master` at `2ec3b24`, branch `stage0.5/target-sdk-36`,
+released as **1.2.3**, versionCode 6.
+
+### 9.1 Why this stage exists, and why the deadline is not what it looks like
+
+Google Play's policy page carries three target-API entries, not one, and they are different
+numbers with different consequences:
+
+| | Requirement | Consequence | From |
+|---|---|---|---|
+| 🔴 enforced | targetSdk ≥ **35** | app updates are rejected | 2025-08-31 |
+| 🟡 warning | targetSdk ≥ **35** | app is not available to new users on newer Android | 2026-08-31 |
+| 🟡 warning | targetSdk ≥ **36** | app updates are rejected | 2026-08-31 |
+
+1.2.2 satisfies both API-35 rows. The only thing at stake is the third: **from 2026-08-31 no
+update of any kind can be submitted until the binary targets 36.** Nothing is removed, unlisted
+or suspended, existing users are unaffected, and new users keep installing it on every Android
+version. A targetSdk 36 build submitted after the date is accepted normally, with no penalty and
+no reinstatement step.
+
+So this stage is not a race. The cost of being late is precisely that there is no path to ship a
+hotfix while the gate is closed.
+
+Two other dated requirements were found on the same page and are recorded here so the next
+person does not rediscover them: **Play Console app registration by 2026-09-30**, whose stated
+penalty is global removal (verified done for this app on 2026-08-21), and **16 KB page size
+support by 2027-02-01** for apps targeting 35 and above, which this app satisfies with nothing to
+do because it ships no native libraries. Android 17 (API 37) was released on 2026-06-16 and the
+Android Developers Blog has already announced API 37 as required for Play distribution in August
+2027; the canonical requirements page does not mention it yet.
+
+### 9.2 What actually breaks at targetSdk 36, measured before any code was written
+
+Android ships a compatibility framework that gates behaviour changes on the declared target, and
+it exposes exactly the switch this stage needed:
+
+```
+ChangeId(309578419; name=ENFORCE_EDGE_TO_EDGE;         enableSinceTargetSdk=35)
+ChangeId(377864165; name=DISABLE_OPT_OUT_EDGE_TO_EDGE; enableSinceTargetSdk=36)
+
+adb shell am compat enable DISABLE_OPT_OUT_EDGE_TO_EDGE com.baruckis.kriptofolio.demo
+```
+
+Enabling the second one on a **demo** debug build - installed beside the production app, so the
+real install and its database were never touched - reproduces target 36 behaviour with no change
+to the repository at all. On an Android 16 emulator:
+
+| Screen | What happened |
+|---|---|
+| main (`AppTheme.NoActionBar`) | the toolbar drew under the status bar; the title overlapped the clock, the overflow button sat under the battery icon |
+| add / search (`AppTheme.NoActionBar`) | the same |
+| settings (decor ActionBar) | the action bar was positioned correctly by AppCompat's `ActionBarOverlayLayout`, but the strip above it was painted `#FAFAFA` while the status bar icons stayed white - an effectively invisible status bar |
+| bottom, gesture navigation | content drew behind the transparent bar; the FAB sat in the gesture area |
+| bottom, 3-button navigation | the FAB was cut in half by the system's translucent scrim |
+
+That last distinction mattered: a static analysis of AppCompat's own bytecode had predicted a
+colour problem rather than a hidden-content problem, and it was right for exactly one screen out
+of three. Ten minutes on an emulator settled what no amount of reading would have.
+
+### 9.3 The three problems, not one
+
+Section 8 listed two things that had to be done before the app could target 36. There were three.
+
+1. **Real window insets handling.** `android:windowOptOutEdgeToEdgeEnforcement` is disabled at
+   target 36, and its removal is silent - no error, no lint warning, no log line.
+2. **`Window.setStatusBarColor` is a no-op.** `PrimaryActionModeController` used it to turn the
+   status bar black while coins are selected. Play's own pre-release analysis of the 1.2.2 bundle
+   named the two methods and the file.
+3. **Predictive back.** Section 5 recorded this as "does not apply", reasoning that the app has no
+   `onBackPressed()` override anywhere. True, and incomplete: the app does not use back, but
+   **AppCompat does** - it is how the contextual action mode is cancelled and how an expanded
+   `SearchView` is collapsed. `strings classes*.dex | grep -i onbackinvoked` on the shipped APK
+   returns nothing, because appcompat 1.1.0 and activity 1.1.0-rc01 both predate the 1.6.0
+   releases that added `OnBackInvokedCallback`. Measured at targetSdk 36: selecting a coin and
+   pressing back left `topResumedActivity=NexusLauncherActivity`. Back closed the app instead of
+   cancelling the selection.
+
+The lesson worth keeping: *"we never call that API"* is not the same as *"nothing we depend on
+calls that API"*.
+
+### 9.4 The approach
+
+Two strategies were possible: keep the app's current appearance, or go properly edge-to-edge.
+This is a compliance release, so the appearance is kept.
+
+The design decision that makes it cheap is what is **not** done:
+`WindowCompat.setDecorFitsSystemWindows(window, false)` is never called. On Android 14 and below
+the decor view still consumes the system window insets itself, so the listener installed on each
+activity's content view is handed zeros, applies zero padding and leaves the bar views at zero
+height - those versions are laid out exactly as before. On Android 15 and above the platform
+forces edge-to-edge and the same listener receives real insets and puts them back as padding.
+**One code path from API 21 to 36, with no `Build.VERSION` branch anywhere.**
+
+Because the padding goes on the content root, every child keeps its existing arithmetic: the
+RecyclerView's 72dp bottom padding still clears the FAB and nothing else, the FAB's 16dp margin is
+still measured from where content ends, and both `SwipeRefreshLayout`s still start below the app
+bar. **No layout below an activity root needed a change.**
+
+Four views, included from `layout/system_bar_backgrounds.xml`, paint the areas the platform used
+to paint from the theme. The left and right ones are declared last so they draw over the ends of
+the top and bottom ones, which is what reproduces the black cutout column with the coloured status
+strip starting beside it. Their gravity is `left`/`right` rather than `start`/`end` on purpose:
+window insets are physical, and must not mirror in Hebrew.
+
+`WindowInsetsCompat.Type.systemBars()` is asked for together with `displayCutout()`, because the
+pre-Android-15 window avoided the cutout too.
+
+### 9.5 What changed, commit by commit
+
+| Commit | What | Build after it |
+|---|---|---|
+| `chore: Raised androidx.core to 1.16.0.` | the only dependency change | green |
+| `chore: Raised compileSdk to 36, keeping the Android Gradle plugin at 8.6.0.` | compileSdk + one property | green |
+| `feat: Handled window insets so the app keeps its layout when edge to edge is enforced.` | `BaseActivity`, 2 activity roots, the bar views | green, and visually identical at targetSdk 35 |
+| `fix: Gave the settings screen its own toolbar so it can paint its status bar area.` | `activity_settings.xml`, `SettingsActivity`, manifest theme | green |
+| `refactor: Recoloured the action mode status bar area without Window.setStatusBarColor.` | `PrimaryActionModeController` | green |
+| `fix: Opted out of predictive back until the back handling is migrated.` | one manifest attribute | green |
+| `chore: Raised targetSdk to 36 and removed the Android 15 edge to edge opt out.` | the point of the stage; `values-v35/` deleted | green |
+| `chore: Annotated the predictive back opt-out with the API level it needs.` | `tools:targetApi` | green |
+| `fix: Painted the display cutout area, which landscape on a notched device exposed.` | 2 more bar views | green |
+| `chore: Bumped versionCode to 6 and versionName to 1.2.3.` | release version | green |
+| `docs: Added the fastlane release changelogs for versionCode 6.` | `en-US`, `lt-LT` | green |
+
+The order is deliberate. Every fix landed and was verified **before** `targetSdk` moved, so a
+visual regression could only have come from the change being tested at that moment.
+
+### 9.6 Dependency and toolchain changes
+
+| Item | Old | New | Why |
+|---|---|---|---|
+| `androidx.core:core-ktx` | 1.2.0-rc01 | **1.16.0** | 1.2.0 has no `WindowInsetsCompat.Type` and no `getInsets(int)`. This is not a convenience: on API 30+ the platform maps the deprecated `getSystemWindowInsetBottom()` to `systemBars()` **plus** `ime()`, so a root padding listener written with it would grow by the keyboard height whenever the keyboard opened. `Type.systemBars()` first exists in core 1.5.0; 1.16.0 is the newest core whose AAR metadata still fits this toolchain exactly (`minCompileSdk 35`, `minAndroidGradlePluginVersion 8.6.0`). 1.17.0 demands AGP 8.9.1 and drags `kotlin-stdlib 2.0.21` into a Kotlin 1.9.25 project. |
+| `compileSdk` | 35 | **36** | required by `targetSdk 36` |
+| `targetSdk` | 35 | **36** | the point of the stage |
+| Android Gradle plugin | 8.6.0 | **8.6.0** | unchanged — see below |
+| Gradle wrapper | 8.8 | **8.8** | unchanged |
+| Kotlin | 1.9.25 | **1.9.25** | unchanged |
+| JDK | 21 | **21** | unchanged |
+| `minSdk` | 21 | **21** | unchanged |
+
+Resolved after the core bump, confirmed from the dependency graph: `appcompat 1.1.0`,
+`material 1.0.0`, `fragment 1.2.0-rc01`, `activity 1.1.0-rc01` — **all unchanged**.
+
+#### Why the Android Gradle plugin did not move, which is the surprise of this stage
+
+AGP 8.10.0 is the oldest plugin whose release notes state a maximum API level of 36, so it was the
+obvious choice. It does not work here.
+
+**Every AGP from 8.9 onward ships `androidx.databinding:databinding-ktx` built with Kotlin 2.1.0,
+and places a `strictly 2.1.0` constraint on `kotlin-stdlib` on the application's own compile
+classpath.** Kotlin 1.9.25's compiler reads metadata up to 2.0.0. The result is hundreds of
+errors, starting with the standard library:
+
+```
+e: jetified-kotlin-stdlib-2.1.0.jar!/META-INF/kotlin-stdlib.kotlin_module
+   Module was compiled with an incompatible version of Kotlin.
+   The binary version of its metadata is 2.1.0, expected version is 1.9.0.
+e: Converters.kt:31:23 Unresolved reference: let
+```
+
+Observed with 8.10.0 and with 8.9.0, so it is the plugin generation, not one bad release. Data
+binding is what pulls `databinding-ktx` in, and this project cannot drop data binding.
+
+Three doors were built and measured rather than argued about. All three build green and pass both
+unit-test suites:
+
+| Door | Toolchain | Lint result |
+|---|---|---|
+| **1 — chosen** | AGP 8.6.0, Gradle 8.8, Kotlin 1.9.25, `android.suppressUnsupportedCompileSdk=36` | 2 errors, 52 warnings, 1 info — **byte identical to the recorded baseline** |
+| 2 | AGP 8.10.0, Gradle 8.11.1, Kotlin 1.9.25, `-Xskip-metadata-version-check` | 2 errors, 66 warnings, 1 hint |
+| 3 | AGP 8.10.0, Gradle 8.11.1, Kotlin 2.2.10 | 2 errors, 65 warnings, 1 hint |
+
+Door 1 was chosen because it is the only one that changes nothing this project can measure:
+running lint under AGP 8.6.0 at compileSdk 35 and again at compileSdk 36 produces an identical
+issue set, id by id and count by count. Door 2 asks the Kotlin compiler to stop checking metadata
+versions across the entire dependency graph — the check that caught this problem in the first
+place. Door 3 changes the compiler to K2 for the whole application inside a compliance release; it
+needed no source change, which is encouraging and is recorded in the 2.0 backlog, but a behaviour
+difference would surface at runtime rather than at build time.
+
+What door 1 costs is exactly what its property says: **AGP 8.6.0 was not tested by Google against
+compileSdk 36.** The exposure is small and checkable — the app calls no API 36 method, ships no
+native code, and every screen was exercised on an Android 16 emulator — but it is real, and the
+property is written into `gradle.properties` with a comment rather than hidden.
+
+### 9.7 Verification
+
+All commands run with `JAVA_HOME` pointing at Temurin 21 (section 6).
+
+| Check | Result |
+|---|---|
+| `assembleFullDebug assembleDemoDebug` | pass |
+| `assembleFullRelease assembleDemoRelease` | pass (unsigned) |
+| `bundleFullRelease bundleDemoRelease` | pass |
+| `testFullDebugUnitTest` | pass — 14 tests, 0 failures |
+| `testDemoDebugUnitTest` | pass — 14 tests, 0 failures |
+| `lintFullDebug` | 2 errors, 52 warnings, 1 informational — **the same counts as the Stage 0 baseline** |
+| Native `.so` libraries in either release bundle | **none** |
+| Shipped manifest | `minSdkVersion 21`, `targetSdkVersion 36`, `compileSdkVersion 36`, `versionCode 6`, `versionName 1.2.3` |
+| Room identity hash in the generated code | `ad1c80913f23361aa985d56ecf84d645` — **unchanged** from v1.2.1 and v1.2.2 |
+| `ConstantsFlavor.kt` API key on the branch | empty string, as it must be |
+
+#### Lint, compared exactly
+
+Two warnings changed identity and the totals did not move:
+
+```
+MergeRootFrame   1 -> 2   the FrameLayout activity_main.xml now uses to hold the bar views
+Overdraw         1 -> 0   that same opaque wrapper removes the overdraw lint used to see
+```
+
+`UnusedAttribute` appeared once for `android:enableOnBackInvokedCallback`, which exists from API
+33 while `minSdk` is 21, and was answered with `tools:targetApi` rather than silenced.
+
+#### Measured on an Android 16 emulator (API 36, arm64), not eyeballed
+
+The published v1.2.2 APK and this branch were compared by sampling the same pixels in the same
+screens. Status bar area, portrait, with a real portfolio in the database:
+
+| | published v1.2.2 | this branch |
+|---|---|---|
+| main screen | `#00796b` | `#00796b` |
+| contextual action mode | `#000000` | `#000000` |
+| after leaving the action mode | `#00796b` | `#00796b` |
+| target 36 before this branch | — | `#009688` (the toolbar showing through) |
+
+Hebrew, landscape, with the corner display-cutout overlay enabled:
+
+| | published v1.2.2 | this branch |
+|---|---|---|
+| cutout column | `#000000` | `#000000` |
+| cutout column, top corner | `#000000` | `#000000` |
+| status bar strip | `#00796b` | `#00796b` |
+| navigation bar | `#ebebeb` | `#ebebeb` |
+| right edge | `#009688` | `#009688` |
+
+Also exercised at real targetSdk 36, with no crash and no logcat exception: the main list with
+data, the add/search screen, settings, the third-party software list, a full licence page, the
+donate dialog, the contextual action mode including its dismissal, Hebrew with full RTL mirroring,
+rotation to landscape and back, and both gesture and 3-button navigation.
+
+Back navigation was checked directly, because it is the one thing that cannot be simulated with a
+compatibility flag: selecting a coin and pressing back at targetSdk 36 without the opt-out left
+the launcher on screen; with the opt-out it cancels the action mode and restores `#00796b`.
+
+Not reachable without an API key and left for manual testing on a signed build: fetching live
+data, pull-to-refresh, and adding a coin. To make the visual checks above possible at all, a
+**Room v1 database was constructed by hand** from the schema and identity hash in the generated
+`AppDatabase_Impl.java` and pushed into the *demo* app with `run-as`. That the app opened it
+without a destructive fallback is itself evidence that the schema has not moved.
+
+#### The one difference from v1.2.2 that could not be removed
+
+In **3-button navigation** the navigation bar is drawn by the system as a light bar with dark
+icons, where v1.2.2 had a black bar with white icons. This is not a choice this app can make any
+more: setting `WindowInsetsControllerCompat.isAppearanceLightNavigationBars` to `true` and to
+`false` produces byte-identical screenshots on Android 16, so the platform ignores it. Since the
+icon colour cannot be controlled, the background is left to the system too, which at least pairs
+them correctly. In **gesture navigation**, which is the default, the bar is black exactly as
+before.
+
+### 9.8 Still deferred after this stage
+
+* **Migrate back handling to `OnBackPressedDispatcher`** and drop
+  `android:enableOnBackInvokedCallback="false"`. This needs appcompat 1.6.0+ and activity 1.6.0+,
+  which is an AndroidX upgrade, not a compliance change. The opt-out is a stay of execution.
+* **Move the Android Gradle plugin forward**, which now requires Kotlin 2.x first because of the
+  `databinding-ktx` metadata problem in 9.6. Kotlin 2.2.10 was verified to build this project
+  green with AGP 8.10.0 and Gradle 8.11.1 with **no source change**, so the migration is smaller
+  than it looks — it just needs its own stage and its own verification.
+* **API 37 / Android 17**, required for Play distribution around August 2027. Its headline change
+  is enforced resizability and adaptive layouts on large screens, and the temporary opt-out
+  property for that is documented as not working at target 37. This app declares no orientation,
+  resizability or aspect-ratio restriction, so it has nothing to opt out of — but it also has no
+  size or orientation resource qualifiers at all, and stretches one phone layout across a tablet.
+* Everything else already listed in section 8.
