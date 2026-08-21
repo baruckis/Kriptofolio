@@ -19,6 +19,7 @@
 
     <color name="colorForStatusBarBackground">@color/colorPrimaryDark</color>
     <color name="colorForNavigationBarBackground">@color/colorBlack</color>
+    <color name="colorForSideBarBackground">@color/colorBlack</color>
 
     <color name="colorForMainTopBar">@color/colorPrimary</color>
 

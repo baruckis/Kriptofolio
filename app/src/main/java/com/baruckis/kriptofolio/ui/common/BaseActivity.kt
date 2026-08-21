@@ -75,6 +75,8 @@ abstract class BaseActivity : AppCompatActivity() {
     protected fun fitContentInsideSystemBars(content: View) {
         val statusBarBackground: View = findViewById(R.id.status_bar_background)
         val navigationBarBackground: View = findViewById(R.id.navigation_bar_background)
+        val leftBarBackground: View = findViewById(R.id.left_bar_background)
+        val rightBarBackground: View = findViewById(R.id.right_bar_background)
 
         ViewCompat.setOnApplyWindowInsetsListener(content) { view, windowInsets ->
             val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars() or
@@ -83,6 +85,8 @@ abstract class BaseActivity : AppCompatActivity() {
             view.setPadding(insets.left, insets.top, insets.right, insets.bottom)
             setViewHeight(statusBarBackground, insets.top)
             setViewHeight(navigationBarBackground, insets.bottom)
+            setViewWidth(leftBarBackground, insets.left)
+            setViewWidth(rightBarBackground, insets.right)
 
             windowInsets
         }
@@ -92,6 +96,14 @@ abstract class BaseActivity : AppCompatActivity() {
         val layoutParams = view.layoutParams
         if (layoutParams.height != height) {
             layoutParams.height = height
+            view.layoutParams = layoutParams
+        }
+    }
+
+    private fun setViewWidth(view: View, width: Int) {
+        val layoutParams = view.layoutParams
+        if (layoutParams.width != width) {
+            layoutParams.width = width
             view.layoutParams = layoutParams
         }
     }

@@ -14,16 +14,24 @@
   ~ limitations under the License.
   -->
 
-<!-- The two strips that paint the areas behind the system bars.
+<!-- The four strips that paint the areas behind the system bars.
 
      Until Android 15 the platform painted them, from the theme, and Window.setStatusBarColor
      could recolour the status bar at runtime. Apps that target Android 16 no longer get either:
      the window always extends behind the bars and both setters are no operations. So the app
      paints those areas itself.
 
-     Both views are zero height in the layout on purpose. BaseActivity gives them the height the
-     system reports for each bar, which is zero on Android 14 and below, where the decor view
-     still keeps the window inside the bars and nothing needs painting. -->
+     All four views are zero sized in the layout on purpose. BaseActivity gives each of them the
+     size the system reports for that edge, which is zero on Android 14 and below, where the decor
+     view still keeps the window inside the bars and nothing needs painting.
+
+     The left and right strips are last, so they draw over the ends of the top and bottom ones.
+     That reproduces what the platform used to do in landscape on a device with a display cutout:
+     a black column down the cutout side, with the coloured status bar strip starting beside it.
+
+     Their gravity is left and right rather than start and end on purpose. Window insets are
+     physical - the cutout is on one side of the device, not on the writing-direction side of the
+     layout - so these two must not mirror in a right to left locale. -->
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:parentTag="android.widget.FrameLayout">
@@ -41,5 +49,21 @@
         android:layout_height="0dp"
         android:layout_gravity="bottom"
         android:background="@color/colorForNavigationBarBackground" />
+
+    <View
+        android:id="@+id/left_bar_background"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="left"
+        android:background="@color/colorForSideBarBackground"
+        tools:ignore="RtlHardcoded" />
+
+    <View
+        android:id="@+id/right_bar_background"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="right"
+        android:background="@color/colorForSideBarBackground"
+        tools:ignore="RtlHardcoded" />
 
 </merge>
