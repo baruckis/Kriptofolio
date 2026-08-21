@@ -21,8 +21,12 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import com.baruckis.kriptofolio.BuildConfig
+import com.baruckis.kriptofolio.R
 import com.baruckis.kriptofolio.utilities.localization.LocalizationManager
 import com.baruckis.kriptofolio.utilities.logConsoleVerbose
 import java.util.*
@@ -44,6 +48,65 @@ abstract class BaseActivity : AppCompatActivity() {
         logConsoleVerbose("onCreate " + this@BaseActivity.toString())
         resetActivityTitle(this)
         logLocalizationInfo()
+    }
+
+    /**
+     * Keeps the window layout this app was designed for, whatever the platform does.
+     *
+     * Apps that target Android 15 are drawn edge to edge, and apps that target Android 16 cannot
+     * opt out of it any more, so the window extends behind the status and navigation bars. This
+     * gives the space back as padding on [content], and sizes the four views included from
+     * layout/system_bar_backgrounds.xml to match each edge, so those areas keep the colours the
+     * theme used to paint. Window.setStatusBarColor, which did that before, is a no operation
+     * from Android 15 on.
+     *
+     * There is deliberately no version check. On Android 14 and below the decor view still keeps
+     * the window inside the system bars, so the listener is handed zero insets, the padding stays
+     * zero and all four bar views stay zero sized - the screen is laid out exactly as it was
+     * before.
+     *
+     * The display cutout is asked for together with the system bars because the pre Android 15
+     * window avoided it as well, and in landscape it is the only thing keeping text out of the
+     * notch.
+     *
+     * Call it after setContentView, with the view that holds the screen's content. The padding is
+     * set rather than added, because the listener runs again on every configuration change and an
+     * addition would accumulate.
+     */
+    protected fun fitContentInsideSystemBars(content: View) {
+        val statusBarBackground: View = findViewById(R.id.status_bar_background)
+        val navigationBarBackground: View = findViewById(R.id.navigation_bar_background)
+        val leftBarBackground: View = findViewById(R.id.left_bar_background)
+        val rightBarBackground: View = findViewById(R.id.right_bar_background)
+
+        ViewCompat.setOnApplyWindowInsetsListener(content) { view, windowInsets ->
+            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars() or
+                    WindowInsetsCompat.Type.displayCutout())
+
+            view.setPadding(insets.left, insets.top, insets.right, insets.bottom)
+            setViewHeight(statusBarBackground, insets.top)
+            setViewHeight(navigationBarBackground, insets.bottom)
+            setViewWidth(leftBarBackground, insets.left)
+            setViewWidth(rightBarBackground, insets.right)
+
+            windowInsets
+        }
+    }
+
+    private fun setViewHeight(view: View, height: Int) {
+        val layoutParams = view.layoutParams
+        if (layoutParams.height != height) {
+            layoutParams.height = height
+            view.layoutParams = layoutParams
+        }
+    }
+
+    private fun setViewWidth(view: View, width: Int) {
+        val layoutParams = view.layoutParams
+        if (layoutParams.width != width) {
+            layoutParams.width = width
+            view.layoutParams = layoutParams
+        }
     }
 
     // This is a possible workaround to set activity titles using local resources instance.

@@ -60,6 +60,7 @@ class MainActivity : BaseActivity(), HasSupportFragmentInjector {
         PreferenceManager.setDefaultValues(this, R.xml.pref_main, false)
 
         setContentView(R.layout.activity_main)
+        fitContentInsideSystemBars(findViewById(R.id.coordinator_main))
         setSupportActionBar(findViewById(R.id.toolbar))
 
         supportActionBar?.subtitle = getString(R.string.app_subtitle)

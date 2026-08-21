@@ -33,33 +33,41 @@
             type="com.baruckis.kriptofolio.ui.common.RetryCallback" />
     </data>
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:id="@+id/coordinator_add_search"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".ui.addsearchlist.AddSearchActivity">
+        android:layout_height="match_parent">
 
-        <com.google.android.material.appbar.AppBarLayout
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:id="@+id/coordinator_add_search"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/AppTheme.AppBarOverlay">
+            android:layout_height="match_parent"
+            tools:context=".ui.addsearchlist.AddSearchActivity">
 
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar2"
+            <com.google.android.material.appbar.AppBarLayout
                 android:layout_width="match_parent"
-                android:layout_height="?android:attr/actionBarSize"
-                android:background="?android:attr/colorPrimary"
-                app:popupTheme="@style/AppTheme.PopupOverlay"
-                app:subtitle="@string/activity_add_search_subtitle"
-                app:title="@string/activity_add_search_title" />
+                android:layout_height="wrap_content"
+                android:theme="@style/AppTheme.AppBarOverlay">
 
-        </com.google.android.material.appbar.AppBarLayout>
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/toolbar2"
+                    android:layout_width="match_parent"
+                    android:layout_height="?android:attr/actionBarSize"
+                    android:background="?android:attr/colorPrimary"
+                    app:popupTheme="@style/AppTheme.PopupOverlay"
+                    app:subtitle="@string/activity_add_search_subtitle"
+                    app:title="@string/activity_add_search_title" />
 
-        <include
-            layout="@layout/content_add_search"
-            app:listResource="@{myListResource}"
-            app:retryCallback="@{myRetryCallback}" />
+            </com.google.android.material.appbar.AppBarLayout>
 
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+            <include
+                layout="@layout/content_add_search"
+                app:listResource="@{myListResource}"
+                app:retryCallback="@{myRetryCallback}" />
+
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+        <include layout="@layout/system_bar_backgrounds" />
+
+    </FrameLayout>
 
 </layout>

@@ -32,8 +32,8 @@ android {
         applicationId "com.baruckis.kriptofolio"
         minSdkVersion versions.min_sdk
         targetSdkVersion versions.target_sdk
-        versionCode 5
-        versionName "1.2.2" // major . minor . patch
+        versionCode 6
+        versionName "1.2.3" // major . minor . patch
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 

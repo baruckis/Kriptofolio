@@ -41,10 +41,12 @@ class SettingsActivity : BaseActivity(), HasSupportFragmentInjector {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        setContentView(R.layout.activity_settings)
+        fitContentInsideSystemBars(findViewById(R.id.container))
+
+        setSupportActionBar(findViewById(R.id.toolbar_settings))
         // Get a support ActionBar corresponding to this toolbar and enable the Up button.
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-        setContentView(R.layout.activity_settings)
     }
 
     // We want to finish the activity when we are at the start destination of Navigation component.

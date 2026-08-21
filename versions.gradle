@@ -17,9 +17,9 @@
 def versions = [:]
 
 // Sdk and tools
-versions.compile_sdk = 35
+versions.compile_sdk = 36
 versions.min_sdk = 21
-versions.target_sdk = 35
+versions.target_sdk = 36
 
 // App dependencies
 versions.app_compat = '1.1.0'
@@ -36,7 +36,7 @@ versions.gradle = '8.6.0'
 versions.glide = '4.11.0'
 versions.junit = '4.13'
 versions.kotlin = '1.9.25'
-versions.ktx = '1.2.0-rc01'
+versions.ktx = '1.16.0'
 versions.licenses = '0.10.6'
 versions.lifecycle = '2.2.0-rc03'
 versions.mockito = "5.3.1"

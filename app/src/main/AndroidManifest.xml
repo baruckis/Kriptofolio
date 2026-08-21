@@ -13,18 +13,28 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <!-- Apps that target Android 16 get predictive back by default, and with it the platform
+         stops calling onBackPressed and stops dispatching KEYCODE_BACK. This app overrides
+         neither, but AppCompat uses both: back is how the contextual action mode is cancelled
+         and how an expanded search field is collapsed. The versions of AppCompat and Activity
+         this app is on predate OnBackInvokedCallback, so both would fall through to finishing
+         the activity instead. This documented opt-out keeps the old dispatch until the back
+         handling is migrated, which belongs with the AndroidX upgrade in 2.0. -->
     <application
         android:name="com.baruckis.kriptofolio.App"
         android:allowBackup="false"
+        android:enableOnBackInvokedCallback="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:targetApi="tiramisu">
 
         <!-- The main/home activity (it has no parent activity). -->
         <activity
@@ -76,7 +86,8 @@
         <activity
             android:name="com.baruckis.kriptofolio.ui.settings.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName="com.baruckis.kriptofolio.ui.mainlist.MainActivity">
+            android:parentActivityName="com.baruckis.kriptofolio.ui.mainlist.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
 
             <!-- Parent activity meta-data to support 4.0 and lower. -->
             <meta-data
