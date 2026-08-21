@@ -81,6 +81,14 @@ android {
         variant.resValue "string", "versionName", variant.versionName }
 }
 
+// Where Room writes the exported schema. The directory is committed, so a change to the database
+// contract shows up in a diff like any other change.
+kapt {
+    arguments {
+        arg("room.schemaLocation", "$projectDir/schemas")
+    }
+}
+
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
