@@ -1,0 +1,3 @@
+* Updated the app so that it keeps working on Android 16.
+* The screens are laid out for the new full screen window, so nothing is hidden behind the status or navigation bar.
+* Nothing changed in how the app works - your portfolio stays exactly as it was.

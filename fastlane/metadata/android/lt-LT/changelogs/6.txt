@@ -1,0 +1,3 @@
+* Programėlė atnaujinta, kad toliau veiktų su „Android 16“.
+* Ekranai pritaikyti naujam per visą ekraną išsidėsčiusiam langui, todėl niekas nebelieka po būsenos ar naršymo juosta.
+* Programėlės veikimas nepasikeitė - jūsų portfelis lieka toks pat.
