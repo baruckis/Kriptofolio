@@ -14,182 +14,190 @@
   ~ limitations under the License.
   -->
 
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/coordinator_main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorForMainListBackground"
-    tools:context=".ui.mainlist.MainActivity">
+    android:layout_height="match_parent">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/app_bar_layout"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/coordinator_main"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/main_app_bar_layout_height"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:layout_height="match_parent"
+        android:background="@color/colorForMainListBackground"
+        tools:context=".ui.mainlist.MainActivity">
 
-        <com.google.android.material.appbar.CollapsingToolbarLayout
-            android:id="@+id/collapsingToolbarLayout"
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/app_bar_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/colorForMainCollapsingBar"
-            app:contentScrim="@color/colorForMainCollapsingBarScrim"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
-            app:titleEnabled="false">
+            android:layout_height="@dimen/main_app_bar_layout_height"
+            android:theme="@style/AppTheme.AppBarOverlay">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <com.google.android.material.appbar.CollapsingToolbarLayout
+                android:id="@+id/collapsingToolbarLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:foregroundGravity="center"
-                android:paddingStart="@dimen/main_collapsing_toolbar_layout_inner_margin"
-                android:paddingTop="?android:attr/actionBarSize"
-                android:paddingEnd="@dimen/main_collapsing_toolbar_layout_inner_margin"
-                app:layout_collapseMode="parallax"
-                app:layout_collapseParallaxMultiplier="0.5">
+                android:background="@color/colorForMainCollapsingBar"
+                app:contentScrim="@color/colorForMainCollapsingBarScrim"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
+                app:titleEnabled="false">
 
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/textview_total_value_on_date_time"
-                    style="@style/AutoSizeText"
-                    android:gravity="center"
-                    android:text="@string/string_total_value_holdings"
-                    android:textAlignment="center"
-                    app:layout_constraintBottom_toTopOf="@+id/textview_total_value_change_24h"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    tools:text="@string/sample_text_total_value_on_date_time" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/textview_total_value_change_24h_label"
-                    style="@style/AutoSizeText"
-                    android:layout_width="wrap_content"
-                    android:gravity="center"
-                    android:text="@string/string_total_value_change_24h_label"
-                    android:textAlignment="center"
-                    app:layout_constraintBottom_toTopOf="@+id/textview_separator_value"
-                    app:layout_constraintEnd_toStartOf="@+id/textview_total_value_change_24h"
-                    app:layout_constraintHorizontal_chainStyle="packed"
-                    app:layout_constraintStart_toStartOf="parent" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/textview_total_value_change_24h"
-                    style="@style/AutoSizeText"
-                    android:layout_width="wrap_content"
-                    android:gravity="center"
-                    android:text="@string/string_total_value_change_24h"
-                    android:textAlignment="center"
-                    android:textColor="@color/colorWhite"
-                    android:textDirection="firstStrongLtr"
-                    app:layout_constraintBottom_toTopOf="@+id/textview_separator_value"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/textview_total_value_change_24h_label"
-                    tools:background="@color/colorForValueChangePositive"
-                    tools:text="@string/sample_text_total_value_change_24h" />
-
-                <TextView
-                    android:id="@+id/textview_separator_value"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_gravity="center"
-                    android:padding="@dimen/main_collapsing_toolbar_layout_text_between_margin"
-                    android:text="@string/string_separator_value"
-                    android:textAppearance="@android:style/TextAppearance.Large"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:foregroundGravity="center"
+                    android:paddingStart="@dimen/main_collapsing_toolbar_layout_inner_margin"
+                    android:paddingTop="?android:attr/actionBarSize"
+                    android:paddingEnd="@dimen/main_collapsing_toolbar_layout_inner_margin"
+                    app:layout_collapseMode="parallax"
+                    app:layout_collapseParallaxMultiplier="0.5">
 
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/textview_crypto_value"
-                    style="@style/AutoSizeText"
-                    android:gravity="center_vertical|end"
-                    android:paddingEnd="@dimen/main_collapsing_toolbar_layout_text_between_margin"
-                    android:text="@string/string_crypto_value"
-                    android:textAlignment="viewEnd"
-                    android:textAppearance="@android:style/TextAppearance.Large"
-                    android:textDirection="firstStrongLtr"
-                    app:layout_constraintBottom_toBottomOf="@+id/textview_separator_value"
-                    app:layout_constraintEnd_toStartOf="@+id/textview_separator_code"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/textview_separator_value"
-                    tools:ignore="RtlSymmetry"
-                    tools:text="@string/sample_text_crypto_value" />
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/textview_total_value_on_date_time"
+                        style="@style/AutoSizeText"
+                        android:gravity="center"
+                        android:text="@string/string_total_value_holdings"
+                        android:textAlignment="center"
+                        app:layout_constraintBottom_toTopOf="@+id/textview_total_value_change_24h"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        tools:text="@string/sample_text_total_value_on_date_time" />
 
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/textview_fiat_value"
-                    style="@style/AutoSizeText"
-                    android:gravity="center_vertical|start"
-                    android:paddingStart="@dimen/main_collapsing_toolbar_layout_text_between_margin"
-                    android:text="@string/string_fiat_value"
-                    android:textAlignment="viewStart"
-                    android:textAppearance="@android:style/TextAppearance.Large"
-                    android:textDirection="firstStrongLtr"
-                    app:layout_constraintBottom_toBottomOf="@+id/textview_separator_value"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/textview_separator_code"
-                    app:layout_constraintTop_toTopOf="@+id/textview_separator_value"
-                    tools:ignore="RtlSymmetry"
-                    tools:text="@string/sample_text_fiat_value" />
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/textview_total_value_change_24h_label"
+                        style="@style/AutoSizeText"
+                        android:layout_width="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/string_total_value_change_24h_label"
+                        android:textAlignment="center"
+                        app:layout_constraintBottom_toTopOf="@+id/textview_separator_value"
+                        app:layout_constraintEnd_toStartOf="@+id/textview_total_value_change_24h"
+                        app:layout_constraintHorizontal_chainStyle="packed"
+                        app:layout_constraintStart_toStartOf="parent" />
 
-                <TextView
-                    android:id="@+id/textview_separator_code"
-                    style="@style/Widget.AppCompat.DropDownItem.Spinner"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/string_separator_code"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textview_separator_value" />
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/textview_total_value_change_24h"
+                        style="@style/AutoSizeText"
+                        android:layout_width="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/string_total_value_change_24h"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorWhite"
+                        android:textDirection="firstStrongLtr"
+                        app:layout_constraintBottom_toTopOf="@+id/textview_separator_value"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/textview_total_value_change_24h_label"
+                        tools:background="@color/colorForValueChangePositive"
+                        tools:text="@string/sample_text_total_value_change_24h" />
 
-                <TextView
-                    android:id="@+id/textview_crypto_code"
-                    style="@style/Widget.AppCompat.DropDownItem.Spinner"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/string_crypto_code"
-                    app:layout_constraintBaseline_toBaselineOf="@+id/textview_separator_code"
-                    app:layout_constraintEnd_toStartOf="@+id/textview_separator_code" />
+                    <TextView
+                        android:id="@+id/textview_separator_value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:padding="@dimen/main_collapsing_toolbar_layout_text_between_margin"
+                        android:text="@string/string_separator_value"
+                        android:textAppearance="@android:style/TextAppearance.Large"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                <androidx.appcompat.widget.AppCompatSpinner
-                    android:id="@+id/spinner_fiat_code"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:dropDownWidth="@dimen/main_collapsing_toolbar_layout_spinner_dropdown_width"
-                    android:entries="@array/fiat_currency_code_array"
-                    android:saveEnabled="false"
-                    android:spinnerMode="dropdown"
-                    app:layout_constraintBaseline_toBaselineOf="@+id/textview_separator_code"
-                    app:layout_constraintStart_toEndOf="@+id/textview_separator_code"
-                    app:popupTheme="@style/AppTheme.PopupOverlay" />
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/textview_crypto_value"
+                        style="@style/AutoSizeText"
+                        android:gravity="center_vertical|end"
+                        android:paddingEnd="@dimen/main_collapsing_toolbar_layout_text_between_margin"
+                        android:text="@string/string_crypto_value"
+                        android:textAlignment="viewEnd"
+                        android:textAppearance="@android:style/TextAppearance.Large"
+                        android:textDirection="firstStrongLtr"
+                        app:layout_constraintBottom_toBottomOf="@+id/textview_separator_value"
+                        app:layout_constraintEnd_toStartOf="@+id/textview_separator_code"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/textview_separator_value"
+                        tools:ignore="RtlSymmetry"
+                        tools:text="@string/sample_text_crypto_value" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/textview_fiat_value"
+                        style="@style/AutoSizeText"
+                        android:gravity="center_vertical|start"
+                        android:paddingStart="@dimen/main_collapsing_toolbar_layout_text_between_margin"
+                        android:text="@string/string_fiat_value"
+                        android:textAlignment="viewStart"
+                        android:textAppearance="@android:style/TextAppearance.Large"
+                        android:textDirection="firstStrongLtr"
+                        app:layout_constraintBottom_toBottomOf="@+id/textview_separator_value"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/textview_separator_code"
+                        app:layout_constraintTop_toTopOf="@+id/textview_separator_value"
+                        tools:ignore="RtlSymmetry"
+                        tools:text="@string/sample_text_fiat_value" />
 
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?android:attr/actionBarSize"
-                android:background="@color/colorForMainTopBar"
-                android:stateListAnimator="@animator/appbar_elevation"
-                app:layout_collapseMode="pin"
-                app:popupTheme="@style/AppTheme.PopupOverlay">
+                    <TextView
+                        android:id="@+id/textview_separator_code"
+                        style="@style/Widget.AppCompat.DropDownItem.Spinner"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/string_separator_code"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textview_separator_value" />
 
-            </androidx.appcompat.widget.Toolbar>
+                    <TextView
+                        android:id="@+id/textview_crypto_code"
+                        style="@style/Widget.AppCompat.DropDownItem.Spinner"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/string_crypto_code"
+                        app:layout_constraintBaseline_toBaselineOf="@+id/textview_separator_code"
+                        app:layout_constraintEnd_toStartOf="@+id/textview_separator_code" />
 
-        </com.google.android.material.appbar.CollapsingToolbarLayout>
+                    <androidx.appcompat.widget.AppCompatSpinner
+                        android:id="@+id/spinner_fiat_code"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:dropDownWidth="@dimen/main_collapsing_toolbar_layout_spinner_dropdown_width"
+                        android:entries="@array/fiat_currency_code_array"
+                        android:saveEnabled="false"
+                        android:spinnerMode="dropdown"
+                        app:layout_constraintBaseline_toBaselineOf="@+id/textview_separator_code"
+                        app:layout_constraintStart_toEndOf="@+id/textview_separator_code"
+                        app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-    </com.google.android.material.appbar.AppBarLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <include layout="@layout/content_main" />
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?android:attr/actionBarSize"
+                    android:background="@color/colorForMainTopBar"
+                    android:stateListAnimator="@animator/appbar_elevation"
+                    app:layout_collapseMode="pin"
+                    app:popupTheme="@style/AppTheme.PopupOverlay">
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        android:tint="@color/colorTintForFab"
-        app:fabSize="normal"
-        app:srcCompat="@drawable/ic_add" />
+                </androidx.appcompat.widget.Toolbar>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+            </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <include layout="@layout/content_main" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/fab_margin"
+            android:tint="@color/colorTintForFab"
+            app:fabSize="normal"
+            app:srcCompat="@drawable/ic_add" />
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    <include layout="@layout/system_bar_backgrounds" />
+
+</FrameLayout>

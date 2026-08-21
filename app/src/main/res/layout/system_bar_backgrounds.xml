@@ -1,0 +1,45 @@
+<!--
+  ~ Copyright 2018-2020 Andrius Baruckis www.baruckis.com | kriptofolio.app
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<!-- The two strips that paint the areas behind the system bars.
+
+     Until Android 15 the platform painted them, from the theme, and Window.setStatusBarColor
+     could recolour the status bar at runtime. Apps that target Android 16 no longer get either:
+     the window always extends behind the bars and both setters are no operations. So the app
+     paints those areas itself.
+
+     Both views are zero height in the layout on purpose. BaseActivity gives them the height the
+     system reports for each bar, which is zero on Android 14 and below, where the decor view
+     still keeps the window inside the bars and nothing needs painting. -->
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:parentTag="android.widget.FrameLayout">
+
+    <View
+        android:id="@+id/status_bar_background"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="top"
+        android:background="@color/colorForStatusBarBackground" />
+
+    <View
+        android:id="@+id/navigation_bar_background"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="bottom"
+        android:background="@color/colorForNavigationBarBackground" />
+
+</merge>

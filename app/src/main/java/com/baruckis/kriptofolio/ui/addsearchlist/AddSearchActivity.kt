@@ -89,6 +89,7 @@ class AddSearchActivity : BaseActivity(), Injectable, CryptocurrencyAmountDialog
 
         // Manage activity with data binding.
         binding = DataBindingUtil.setContentView(this, R.layout.activity_add_search)
+        fitContentInsideSystemBars(binding.coordinatorAddSearch)
 
         setSupportActionBar(binding.toolbar2)
         // Get a support ActionBar corresponding to this toolbar and enable the Up button.
