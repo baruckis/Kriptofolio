@@ -55,14 +55,15 @@ abstract class BaseActivity : AppCompatActivity() {
      *
      * Apps that target Android 15 are drawn edge to edge, and apps that target Android 16 cannot
      * opt out of it any more, so the window extends behind the status and navigation bars. This
-     * gives the space back as padding on [content], and gives the two views included from
-     * layout/system_bar_backgrounds.xml the height of each bar, so those areas keep the colours
-     * the theme used to paint. Window.setStatusBarColor, which did that before, is a no operation
+     * gives the space back as padding on [content], and sizes the four views included from
+     * layout/system_bar_backgrounds.xml to match each edge, so those areas keep the colours the
+     * theme used to paint. Window.setStatusBarColor, which did that before, is a no operation
      * from Android 15 on.
      *
      * There is deliberately no version check. On Android 14 and below the decor view still keeps
      * the window inside the system bars, so the listener is handed zero insets, the padding stays
-     * zero and both bar views stay zero height - the screen is laid out exactly as it was before.
+     * zero and all four bar views stay zero sized - the screen is laid out exactly as it was
+     * before.
      *
      * The display cutout is asked for together with the system bars because the pre Android 15
      * window avoided it as well, and in landscape it is the only thing keeping text out of the
