@@ -32,18 +32,19 @@ never will be; deleting one destroys history that the published articles link to
 marks the state of the app before the modernization. These are the protected branches listed
 above.
 
-**Working branches — deleted once their pull request is merged.** Everything else: a feature,
+**Working branches — deleted automatically once their pull request is merged.** Everything else: a feature,
 a fix, a documentation change, a CI change. Nothing is lost by deleting one. Its commits stay
 reachable from `master`, and the pull request keeps the full diff, the review and the
 discussion — GitHub can restore the branch from the pull request page at any time. The
 durable markers for a release are tags (`v1.2.1`, `v1.2.2`), never branches.
 
-Deletion is **deliberate, never automatic**. `delete_branch_on_merge` is intentionally switched
-off in the repository settings: the owner decides when a branch goes and says so. So:
+GitHub `delete_branch_on_merge` is enabled. It removes only the merged pull request's head
+branch; it does not delete `master`, protected exhibit branches, tags, or commits in history. So:
 
-- never delete a branch on your own initiative — ask, and wait to be asked;
-- before deleting any branch, verify it is an ancestor of `master`
-  (`git merge-base --is-ancestor origin/<branch> origin/master`) and refuse if it is not;
+- never manually delete a remote branch unless the owner explicitly asks;
+- if automatic deletion did not occur, verify that the branch is an ancestor of `master`
+  (`git merge-base --is-ancestor origin/<branch> origin/master`) before asking the owner whether
+  to remove it;
 - never delete, rename or rewrite `Part-1`…`Part-5`, `legacy`, or `master`.
 
 ## Project facts
