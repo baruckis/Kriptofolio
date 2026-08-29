@@ -22,6 +22,11 @@ https://kriptofolio.app
 ![kriptofolio_phone_screenshots_combination_one-in-two](https://user-images.githubusercontent.com/2387056/66703930-3bd40d80-ed20-11e9-8603-a2379c1e6551.jpg)
 
 
+## Support
+
+See [SUPPORT.md](SUPPORT.md) for help, privacy-safe bug reports, and security reports.
+
+
 ## License
 
     Copyright 2018-2023 Andrius Baruckis www.baruckis.com | kriptofolio.app
