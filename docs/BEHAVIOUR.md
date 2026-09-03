@@ -568,6 +568,8 @@ deliberately.
 - **U10** The `all_cryptocurrencies` table's currency after a currency change on the portfolio
   screen: the listing table stays in the old currency until the add screen refreshes, so the
   Bitcoin price used for the header total (§1) may be in a different currency than the total.
+  Observed while recording the 1.2.1 database asset: portfolio rows in EUR, 5 000 cached coins
+  still in USD, the ₿ total computed from a USD Bitcoin price.
 
 ## 14. Known behaviour (2019)
 
@@ -615,7 +617,11 @@ touches it.
   plan §3.1), with its own specification added to this document before PR 2.7.
 - **K11 — A settings-screen currency change can strand the preference.** The preference is
   written before the fetch (§5, *Currency change protocol*); a failed fetch leaves the totals at
-  `― ― ―` until a refresh succeeds. The header-spinner path does not have this problem.
+  `― ― ―` until a refresh succeeds. The header-spinner path does not have this problem. After a
+  restart in that state **nothing fetches on its own**: the repository initialises its
+  "selected" code from the preference (`CryptocurrencyRepository.kt:57`), so the observer that
+  would trigger a refresh sees no change (`MainListFragment.kt:183`), and the dashes stay until
+  the user pulls to refresh. Observed on the emulator while recording the 1.2.1 database asset.
 - **K12 — `SEARCH` intent filter without a handler.** The add screen declares
   `android.intent.action.SEARCH` (`AndroidManifest.xml:70-72`) but never reads the intent; the
   system search dispatch would open the screen with no query.
