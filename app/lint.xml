@@ -18,9 +18,10 @@
 <!--
   Lint runs in CI (.github/workflows/check.yml) and aborts the build on errors. This file
   silences the two errors the 2019 code reports, each for a stated reason and as narrowly as
-  lint allows. Everything else lint finds - 52 warnings and one informational note, listed in
-  UPGRADE-NOTES.md section 4 - stays visible in the uploaded report; warnings do not fail the
-  build, so they never needed silencing.
+  lint allows. Both are already described in UPGRADE-NOTES.md section 4, which recorded them
+  when the keep-alive releases compared lint output by hand. Everything else lint finds - 52
+  warnings and one informational note - stays visible in the uploaded report; warnings do not
+  fail the build, so they never needed silencing.
 
   There is no lint baseline file on purpose: a baseline would freeze all 55 findings, including
   the 52 that could never fail anything, and hide any new warning among them.
@@ -43,10 +44,10 @@
     <!--
       A real bug, and a deliberately unfixed one: SettingsFragment builds the feedback email
       subject across two lines without a "+", so the second line is computed and thrown away
-      and the subject loses the app subtitle. It is recorded as known behaviour K9 in
-      docs/BEHAVIOUR.md and in UPGRADE-NOTES.md section 8, and the rewrite decides it in the
-      pull request that touches that screen - this stage does not change behaviour in the 2019
-      code. Adding the "+" would change what a user's email client shows.
+      and the subject loses the app subtitle. It is described in UPGRADE-NOTES.md section 8,
+      "Bugs and facts found while working, not fixed here", item 1, and the rewrite decides it
+      in the pull request that touches that screen - this stage does not change behaviour in
+      the 2019 code. Adding the "+" would change what a user's email client shows.
 
       Scoped to that one file, so the same mistake anywhere else still fails the build.
       -->

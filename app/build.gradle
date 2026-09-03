@@ -79,7 +79,6 @@ android {
 
     applicationVariants.configureEach { variant ->
         variant.resValue "string", "versionName", variant.versionName }
-
 }
 
 // Where Room writes the exported schema. The directory is committed, so a change to the database

@@ -80,7 +80,7 @@ jobs:
       - name: Fail if the build changed the committed Room schema
         run: |
           if [ -n "$(git status --porcelain -- app/schemas)" ]; then
-            echo "::error::app/schemas changed during the build. The database contract moved; see UPGRADE-NOTES.md and docs/BEHAVIOUR.md section 11."
+            echo "::error::app/schemas changed during the build - the database contract moved. See UPGRADE-NOTES.md section 8 (the androidx.room row) for why that is destructive here."
             git --no-pager diff -- app/schemas
             exit 1
           fi
