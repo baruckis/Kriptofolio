@@ -20,7 +20,7 @@ or by nothing yet.
 
 ## 1. Portfolio maths
 
-**pinned by** `CalculateUtilsTest`, `PortfolioMathTest`
+**pinned by** `CalculateUtilsTest` (the two functions), `LegacyDatabaseTest` (the stored results on real files); the sums and the NaN rule live inside a ViewModel and are pinned by the UI inventory only
 
 Two pure functions are the whole of the arithmetic, and both work on `Double`
 (`java/com/baruckis/kriptofolio/utilities/CalculateUtils.kt:24-29`):
@@ -230,7 +230,7 @@ stores; it becomes `last_fetched_date` of every row written by that response
 
 ## 5. Portfolio screen
 
-**pinned by** `PortfolioMathTest` (the maths), `docs/ui-inventory.md` (the states)
+**pinned by** `docs/ui-inventory.md` (the states and the `― ― ―` totals); the arithmetic behind the totals by `CalculateUtilsTest`
 
 **Source of truth** is the `my_cryptocurrencies` table, read as `LiveData` with
 `WHERE amount IS NOT NULL ORDER BY amount_fiat DESC, rank ASC` (`MyCryptocurrencyDao.kt:31-32`).
