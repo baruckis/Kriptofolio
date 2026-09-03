@@ -1,0 +1,101 @@
+# Build gate for the 2019 code base.
+#
+# Until this file existed nothing built this repository on a machine: the only workflow was
+# the review one, and every "it compiles" claim came from a developer's laptop. This is the
+# first form of the quality gate the rewrite will grow into (schema gate, lint, coverage, ...).
+#
+# Two rules are worth stating up front:
+#
+#   * ONE JOB, ONE GRADLE COMMAND. The command below is the whole gate and it is the same
+#     command a developer runs locally (AGENTS.md, "Build commands"). If it passes here it
+#     passes there, and there is nothing to keep in sync.
+#
+#   * TRIGGER ONLY ON master AND ON PULL REQUESTS. The Part-1…Part-5 and legacy branches are
+#     exhibits (AGENTS.md, "Branches"): their code predates this toolchain and is not meant to
+#     build with it. A workflow that ran on every push would paint them red forever, which is
+#     noise, not information. (ADR-021)
+
+name: check
+
+on:
+  pull_request:
+  push:
+    branches: [master]
+
+# The token can read the repository and nothing else. Uploading artifacts needs no extra
+# permission; a job that only builds should not be able to write to the repository.
+permissions:
+  contents: read
+
+# A new push to the same branch or pull request supersedes the run in flight; master runs are
+# never cancelled so every merge commit gets a complete result.
+concurrency:
+  group: check-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    # A cold build with dependency download takes a few minutes; anything beyond this is hung.
+    timeout-minutes: 30
+    steps:
+      # Actions are pinned to full commit SHAs, with the version they correspond to in the
+      # comment. A tag can be moved; a commit cannot.
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # No credentialed git is needed after checkout: this job never pushes.
+          persist-credentials: false
+
+      # EXACTLY JDK 21. The code on master builds on Java 21 and on nothing else: 17 fails
+      # because a dependency ships Java 21 bytecode, 25 fails inside kapt with Kotlin 1.9.25.
+      # Both edges were hit for real and are recorded in UPGRADE-NOTES.md section 6. Do not
+      # "modernize" this number; the rewrite (JDK toolchain 17, KSP) is what changes it.
+      - name: Set up JDK 21 (see UPGRADE-NOTES.md section 6)
+        uses: actions/setup-java@dd06d9cba3e5552c54d9f8ea23572deb30010f7c # v6.0.0
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      # Caches the Gradle user home (wrapper distribution, dependencies) between runs, keyed on
+      # the build files. On a pull request the cache is read-only; only master writes it, so a
+      # branch cannot poison the cache that every other run reads.
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@9c971963bec38e04b3d30dcc455b5382be2fdbfb # v6.3.0
+        with:
+          cache-read-only: ${{ github.event_name == 'pull_request' }}
+
+      # The gate. Both flavors must compile (AGENTS.md), the unit tests run on the full flavor
+      # (the demo flavor differs only in constants and resources), lint runs on the full flavor.
+      # --stacktrace so a failure in CI carries enough context to be read without re-running.
+      - name: Build both flavors, run unit tests and lint
+        run: ./gradlew assembleFullDebug assembleDemoDebug testFullDebugUnitTest lintFullDebug --stacktrace
+
+      # THE SCHEMA GATE, first form. Room writes app/schemas/<database>/<version>.json during
+      # the build (kapt argument room.schemaLocation in app/build.gradle). The committed file is
+      # the database contract: its identity hash is what Room compares against on every open,
+      # and this app is configured to DELETE the user's data when it does not match. If a
+      # change to an entity altered the file, the build above has just rewritten it, and this
+      # step turns that into a red check instead of a silent diff on a phone.
+      - name: Fail if the build changed the committed Room schema
+        run: |
+          if [ -n "$(git status --porcelain -- app/schemas)" ]; then
+            echo "::error::app/schemas changed during the build. The database contract moved; see UPGRADE-NOTES.md and docs/BEHAVIOUR.md section 11."
+            git --no-pager diff -- app/schemas
+            exit 1
+          fi
+          echo "app/schemas is unchanged."
+
+      # Reports are uploaded even when the build fails - that is when they are needed.
+      - name: Upload test and lint reports
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: reports
+          path: |
+            app/build/reports/tests/
+            app/build/test-results/
+            app/build/reports/lint-results-fullDebug.html
+            app/build/reports/lint-results-fullDebug.xml
+          if-no-files-found: warn
+          retention-days: 14
