@@ -79,6 +79,17 @@ android {
 
     applicationVariants.configureEach { variant ->
         variant.resValue "string", "versionName", variant.versionName }
+
+    // Lint runs in CI (.github/workflows/check.yml) and aborts the build on errors. This 2019
+    // code has two known errors - NotificationPermission, raised by a Glide class the app never
+    // uses, and SuspiciousIndentation at the feedback email subject in SettingsFragment - and
+    // 52 warnings, all recorded in UPGRADE-NOTES.md section 4 as the set the keep-alive releases
+    // compared against by hand. The baseline freezes exactly that set, so the gate means "no
+    // new lint issues" rather than being red forever. It is not a licence to add to it: a new
+    // error fails the build. The file goes away with the 2019 code in the 2.0 rewrite.
+    lint {
+        baseline = file("lint-baseline.xml")
+    }
 }
 
 // Where Room writes the exported schema. The directory is committed, so a change to the database
