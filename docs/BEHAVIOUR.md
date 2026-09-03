@@ -445,8 +445,10 @@ no email app exists (`:453-459`).
 
 **About** (`pref_main.xml:91-134`): *Website*, *Author*, *View source on GitHub* open the URLs in
 `strings.xml:634,639,644` with `ACTION_VIEW` and a toast if nothing handles it (`:354-361`);
-*Privacy policy* opens `https://kriptofolio.app/privacy-policy-app` in a Chrome Custom Tab when
-Chrome is installed, else a plain browser intent (`:279-290`, `:363-389`); *Third-party software*
+*Privacy policy* is coded to open `https://kriptofolio.app/privacy-policy-app` in a Chrome
+Custom Tab when Chrome is installed and to fall back to a plain browser intent otherwise
+(`:279-290`, `:363-389`) — but on Android 11 and newer the probe always fails and every device
+gets the plain browser (see K16); *Third-party software*
 and *License* navigate to the licence screens (§8); the last row shows "Kriptofolio" + the flavor
 subtitle as title and the version name as summary, and is not selectable (`:326-333`,
 `pref_main.xml:128-132`).
@@ -473,7 +475,8 @@ name as subtitle (`:52-54,63-64`).
 **pinned by** `docs/ui-inventory.md` (RTL screenshots), `SettingsKeysTest` (per-locale defaults)
 
 Four languages: English (default), Hebrew (`res/values-iw/`), Lithuanian (`res/values-lt/`),
-Swahili (`res/values-sw-rKE/`). The language codes stored and used are `EN`, `HE`, `LT`, `SW`
+Swahili (`res/values-sw-rKE/`). Everything in this section describes an install that carries all
+four; a Play install may not (K17). The language codes stored and used are `EN`, `HE`, `LT`, `SW`
 (`dependencyinjection/LanguageCodes.kt:23-34`); `Locale("HE")` resolves the `values-iw` folder
 because Android aliases the two codes. An unknown stored code falls back to English
 (`LanguageCodes.kt:41-42`).
@@ -631,6 +634,48 @@ touches it.
   second definition is ignored by the XML parser.
 - **K15 — Rank is a 16-bit integer** (`Cryptocurrency.kt:44`, `cmcRank.toShort()` at
   `CryptocurrencyRepository.kt:262`); CoinMarketCap ranks are below 32 767 today.
+- **K16 — The privacy policy has not opened in a Chrome Custom Tab since v1.2.1.**
+  `isChromeCustomTabsSupported()` asks `packageManager.queryIntentServices()` for an intent
+  whose package is pinned to `com.android.chrome` (`SettingsFragment.kt:384-389`, package name
+  at `:45`). Android 11 filters that query for any app targeting SDK 30 or higher unless the
+  manifest declares a matching `<queries>` element, and there is none: `grep -c queries` on the
+  **merged** manifest of both flavors returns 0, so neither the app nor `androidx.browser 1.2.0`
+  contributes one. The probe therefore returns an empty list, the function returns `false`, and
+  the only caller — the *Privacy policy* row — takes the plain-browser branch (`:379`). Dead
+  since **v1.2.1** (2023-12-03), where `targetSdk` went from 29 to 34 in
+  `4f727ed "chore: Project setup support for Android 14"`; v1.2.0 (targetSdk 29) was exempt from
+  the filtering and did open a Custom Tab. Nothing about it is visible in a build: no error, no
+  lint error, only the `QueryPermissionsNeeded` warning. The user-visible difference is a
+  browser task with its own tab strip instead of an in-app tab coloured `colorPrimary`, and
+  Back leaving the app instead of returning to Settings. Not pinned by a test (no test covers
+  this screen).
+- **K17 — The in-app language switcher may serve English on a Play install.** The app builds one
+  `Resources` per language by copying the configuration and calling
+  `createConfigurationContext` (`dependencyinjection/LocalizationModule.kt:66-71`, one
+  `@Provides` per language at `:35-57`), then reads every string out of that map
+  (`utilities/localization/StringsLocalization.kt:48`). That only works while the resources for
+  all four languages are present in the installed app. The release artifact is an App Bundle
+  (`UPGRADE-NOTES.md` §7), `app/build.gradle` has no `bundle { language { enableSplit = false } }`
+  block, and no `com.google.android.play:core` dependency exists anywhere in the project — so
+  Play's default applies and a device receives only the language splits it asked for. On such an
+  install, picking a language the device does not have should fall back to the default resources
+  (English strings) while `Locale.setDefault` still switches number, date and RTL handling
+  (`LocalizationManager.kt:48-63`), giving English text with the chosen locale's formatting.
+  **Unverified on a device:** every capture in `docs/ui-inventory.md` and every database asset
+  was produced from a locally built APK or a GitHub-release APK, both of which carry all four
+  languages, so this describes the mechanism and Play's documented default, not an observation.
+  Confirming it needs a Play-installed build on a device without the extra locales. Lint reports
+  the mechanism as `AppBundleLocaleChanges`.
+- **K18 — The main screen's floating action button has no accessibility label.** The
+  `FloatingActionButton` at `res/layout/activity_main.xml:189-197` — the add-coin action wired
+  at `MainListFragment.kt:206` — declares no `android:contentDescription`, and nothing sets one
+  at runtime (a grep for `contentDescription` and `importantForAccessibility` across the Kotlin
+  sources returns nothing). A screen reader announces an unlabeled button for the screen's
+  primary control, in all four languages. Elsewhere the 2019 code does use the idiom
+  deliberately: the decorative images in `dialog_donate_crypto.xml` and `flipview_front_custom.xml`
+  carry `contentDescription="@null"`. The string the label would need already exists in all four
+  locales (`activity_add_search_title`). This document has no other accessibility statement:
+  nothing else in the app was audited for it in this stage.
 
 ## 15. Insights (2.0, proposed)
 
