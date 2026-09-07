@@ -1,10 +1,14 @@
 # Kriptofolio 1.2.3 — behaviour specification
 
 *The contract the 2.0 rewrite is measured against. Extracted from the code on `master` at
-`238d6b3` (the code that ships as 1.2.3, versionCode 6; nothing under `app/src/main` has changed
-since the `v1.2.3` tag). Every statement cites the file and line
-that produces the behaviour, in the form `path:line`; paths are relative to `app/src/main/`
-unless they start with `app/` or `res/`.*
+`238d6b3` (the code that ships as 1.2.3, versionCode 6). Since the `v1.2.3` tag exactly one file
+under `app/src/main` has changed, `db/AppDatabase.kt`: `exportSchema` went from `false` to `true`
+with an explanatory comment (pull request #18), which writes the schema file at build time and
+changes nothing at runtime. Every statement cites the file and line that produces the behaviour,
+in the form `path:line`. Kotlin paths are relative to `app/src/main/java/com/baruckis/kriptofolio/`
+(so `utilities/FormatUtils.kt` means `app/src/main/java/com/baruckis/kriptofolio/utilities/FormatUtils.kt`);
+`res/…` paths are relative to `app/src/main/`; paths starting with `app/` or naming a top-level
+file are relative to the repository root.*
 
 This document describes **what the app does**, not what it should do. Where the code does
 something surprising, the surprise is recorded under *Known behaviour (2019)* and left alone:
@@ -20,7 +24,7 @@ or by nothing yet.
 
 ## 1. Portfolio maths
 
-**pinned by** `CalculateUtilsTest` (the two functions), `LegacyDatabaseTest` (the stored results on real files); the sums and the NaN rule live inside a ViewModel and are pinned by the UI inventory only
+**pinned by** `CalculateUtilsTest` (the two functions) and `LegacyDatabaseTest` (the stored results on real files); the sums and the NaN rule live inside a ViewModel and are pinned by the UI inventory (`docs/ui-inventory.md`)
 
 Two pure functions are the whole of the arithmetic, and both work on `Double`
 (`java/com/baruckis/kriptofolio/utilities/CalculateUtils.kt:24-29`):
@@ -121,7 +125,7 @@ default locale** (no locale is passed), sets `RoundingMode.DOWN` and formats. So
 `fiat_currency_code_array` (`res/values/strings.xml:109-203`) and `fiat_currency_sign_array`
 (`strings.xml:205-299`), zipped by index (`repository/CryptocurrencyRepository.kt:233-245`). Both
 arrays have 93 entries, in the same order as the settings entries and values
-(`strings.xml:363-457`, `:459-553`) and as the 93 codes accepted from the API (§3). A code that is
+(`strings.xml:363-457`, `:459-553`) and as the 93 codes accepted from the API (§4). A code that is
 not in the array throws `NoSuchElementException` (`CryptocurrencyRepository.kt:244`, see U2). Four
 signs are wrong in the array — see K4.
 
@@ -230,7 +234,7 @@ stores; it becomes `last_fetched_date` of every row written by that response
 
 ## 5. Portfolio screen
 
-**pinned by** `docs/ui-inventory.md` (the states and the `― ― ―` totals); the arithmetic behind the totals by `CalculateUtilsTest`
+**pinned by** `docs/ui-inventory.md` (the states, and the totals including `― ― ―`); the two functions behind the totals by `CalculateUtilsTest` (§1)
 
 **Source of truth** is the `my_cryptocurrencies` table, read as `LiveData` with
 `WHERE amount IS NOT NULL ORDER BY amount_fiat DESC, rank ASC` (`MyCryptocurrencyDao.kt:31-32`).
@@ -288,8 +292,8 @@ old row untouched, including its old `currency_fiat` — the NaN rule (§1) then
 until it is returned again.
 
 **Currency change protocol.** The new code is held in the view model
-(`MainViewModel.kt:76,288`) and written to the preference only after the fetch **succeeds**
-(`MainListFragment.kt:482-485`, `MainViewModel.kt:436-438`); on failure the spinner snaps back to
+(`MainViewModel.kt:76,302`) and written to the preference only after the fetch **succeeds**
+(`MainListFragment.kt:482-485`, `MainViewModel.kt:450-452`); on failure the spinner snaps back to
 the stored currency (`MainListFragment.kt:476-478`). A change from the settings screen is the
 other way round: the preference is written first and the fetch follows (`:178-202`), so a failed
 fetch leaves the preference on the new currency and the rows in the old one — the NaN state.
@@ -397,17 +401,18 @@ language:
 
 | Setting | Key (exact string) | Type | Default en / sw | Default lt | Default iw (he) | Values |
 |---|---|---|---|---|---|---|
-| language | `preference language` (`strings.xml:337`) | String | `EN` (`:340`) | `LT` (`values-lt/strings.xml:90`) | `HE` (`values-iw/strings.xml:90`) | `EN`, `HE`, `LT`, `SW` (`strings.xml:349-354`) |
-| fiat currency | `preference fiat currency` (`:358`) | String | `USD` (`:361`, `values-sw-rKE/strings.xml:95`) | `EUR` (`values-lt:95`) | `ILS` (`values-iw:95`) | the 93 codes (`:459-553`) |
-| date format | `preference date format` (`:557`) | String | `dd/MM/yyyy` (`:560`) | `yyyy-MM-dd` (`values-lt:196`) | `dd/MM/yyyy` (`values-iw:196`) | `dd/MM/yyyy`, `MM/dd/yyyy`, `yyyy-MM-dd` (`:568-572`) |
+| language | `preference language` (`strings.xml:337`) | String | `EN` (`:340`) / `SW` (`values-sw-rKE/strings.xml:90`) | `LT` (`values-lt/strings.xml:90`) | `HE` (`values-iw/strings.xml:90`) | `EN`, `HE`, `LT`, `SW` (`strings.xml:349-354`) |
+| fiat currency | `preference fiat currency` (`:358`) | String | `USD` (`:361`) / `USD` (`values-sw-rKE:95`) | `EUR` (`values-lt:95`) | `ILS` (`values-iw:95`) | the 93 codes (`:459-553`) |
+| date format | `preference date format` (`:557`) | String | `dd/MM/yyyy` (`:560`) / `dd/MM/yyyy` (`values-sw-rKE:196`) | `yyyy-MM-dd` (`values-lt:196`) | `dd/MM/yyyy` (`values-iw:196`) | `dd/MM/yyyy`, `MM/dd/yyyy`, `yyyy-MM-dd` (`:568-572`) |
 | 24-hour time | `preference 24h switch` (`:576`) | Boolean | `true` (`res/xml/pref_main.xml:51`; code default `true`, `CryptocurrencyRepository.kt:194,200`) | `true` | `true` | — |
 
 The defaults are materialized into the preference file **once, on the first launch of the main
 screen**, from `pref_main.xml` in the language the app resolves at that moment
 (`MainActivity.kt:60`, `PreferenceManager.setDefaultValues(…, false)`; the marker file
 `_has_set_default_values.xml` records that it happened). A device whose system language is
-Lithuanian therefore starts with `LT`/`EUR`/`yyyy-MM-dd`; an English or Swahili device starts
-with `EN`/`USD`/`dd/MM/yyyy` (`values-sw-rKE/strings.xml:90,95,196`). When a key is missing at
+Lithuanian therefore starts with `LT`/`EUR`/`yyyy-MM-dd`; an English device with
+`EN`/`USD`/`dd/MM/yyyy`; a Swahili device with `SW`/`USD`/`dd/MM/yyyy`
+(`values-sw-rKE/strings.xml:90,95,196`). When a key is missing at
 read time, the code falls back to the default string resolved in the **current** UI language
 (`CryptocurrencyRepository.kt:181-185,208-212,221-225`).
 
@@ -534,7 +539,7 @@ both from a synthetic portfolio) are what the 2.0 migration tests open.
 **pinned by** `docs/ui-inventory.md`
 
 Same code, different constants: application id `com.baruckis.kriptofolio.demo`
-(`app/build.gradle:63-66`), toolbar subtitle `DEMO` (`strings.xml:43`, `app/src/demo/res/values/strings.xml`),
+(`app/build.gradle:68-73`), toolbar subtitle `DEMO` (`strings.xml:43`, `app/src/demo/res/values/strings.xml`),
 base URL `https://sandbox-api.coinmarketcap.com/` with CoinMarketCap's public sandbox key
 (`app/src/demo/java/.../ConstantsFlavor.kt:25-27`), *Donate with crypto* (a dialog with two
 copy-to-clipboard addresses, `ui/settings/DonateCryptoDialog.kt:74-82`) and *Buy me a coffee*
@@ -616,8 +621,8 @@ touches it.
   second line is a dangling expression, so the subject is `Feedback Kriptofolio 1.2.3 for Android`
   rather than including the subtitle. Harmless in the full flavor (its subtitle is empty).
 - **K10 — Adding an owned coin overwrites its amount** instead of adding to it
-  (`MyCryptocurrencyDao.kt:103-105`). This is issue #10 and changes in 2.0 by decision (master
-  plan §3.1), with its own specification added to this document before PR 2.7.
+  (`MyCryptocurrencyDao.kt:103-105`). This is issue #10, and 2.0 changes it by decision; the new
+  rule is specified in this document before the pull request that implements it.
 - **K11 — A settings-screen currency change can strand the preference.** The preference is
   written before the fetch (§5, *Currency change protocol*); a failed fetch leaves the totals at
   `― ― ―` until a refresh succeeds. The header-spinner path does not have this problem. After a
@@ -654,8 +659,9 @@ touches it.
   `createConfigurationContext` (`dependencyinjection/LocalizationModule.kt:66-71`, one
   `@Provides` per language at `:35-57`), then reads every string out of that map
   (`utilities/localization/StringsLocalization.kt:48`). That only works while the resources for
-  all four languages are present in the installed app. The release artifact is an App Bundle
-  (`UPGRADE-NOTES.md` §7), `app/build.gradle` has no `bundle { language { enableSplit = false } }`
+  all four languages are present in the installed app. The release artifact uploaded to Play is an
+  App Bundle (`AGENTS.md`, "Build commands": `bundleFullRelease`; `UPGRADE-NOTES.md` §4 records
+  the bundle tasks passing), `app/build.gradle` has no `bundle { language { enableSplit = false } }`
   block, and no `com.google.android.play:core` dependency exists anywhere in the project — so
   Play's default applies and a device receives only the language splits it asked for. On such an
   install, picking a language the device does not have should fall back to the default resources
@@ -679,9 +685,11 @@ touches it.
 
 ## 15. Insights (2.0, proposed)
 
-*Proposed — pending Andrius' confirmation of ADR-027 before PR 2.9 (deadline 2026-10-20). Nothing
-in this section exists in 1.2.3.* It turns the four ADR-027 answers into what the screen shows, so
-the tests for PR 2.9 can be written from it.
+*Proposed — pending Andrius' confirmation, which the Insights pull request needs before it is
+opened. Nothing in this section exists in 1.2.3.* It turns the four privacy-and-scope decisions
+for Insights (what leaves the device; on-device first, bring-your-own-key second, nothing third;
+one provider; content rules) into what the screen shows, so the feature's tests can be written from
+it before its code.
 
 **One screen, one button, one answer.** The screen shows an anonymised summary of the portfolio
 (coin symbols, each coin's share of the total in per cent, each coin's 24 h change in per cent —
