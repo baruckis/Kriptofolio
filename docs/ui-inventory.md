@@ -4,11 +4,11 @@
 languages it ships, photographed before the 2.0 rewrite replaces the UI. This is the visual half
 of the contract; the behavioural half is `docs/BEHAVIOUR.md`.*
 
-The screenshots themselves are **not in this repository** — 105 PNGs of 1080×2400 pixels
-belong next to the article material, not in a public code base. This document refers to them
+The screenshots themselves are **not in this repository** — 105 PNGs, 1080×2400 pixels (the
+one landscape capture 2400×1080), belong next to the article material, not in a public code base. This document refers to them
 by file name: `<screen>-<state>-<locale>.png`, locale codes `en`, `lt`, `iw` (Hebrew, the
 right-to-left locale, named after its resource folder `values-iw`), `sw` (Swahili, `values-sw-rKE`).
-The 2.0 screenshot tests (ADR-012) will produce the "after" set with the same names.
+The 2.0 screenshot tests will produce the "after" set with the same names.
 
 ## How they were captured
 
@@ -20,7 +20,7 @@ The 2.0 screenshot tests (ADR-012) will produce the "after" set with the same na
 | Locale switching | through the app's own Settings → Language, which is how a user does it; the system locale stayed `en-US` |
 | Network states | `svc wifi disable` + `svc data disable` for "no network"; the emulator console's `network speed gsm` to hold a loading state long enough to photograph |
 | Automation | `adb` + `uiautomator dump`, driven by a script in the author's private workspace; animations off (`*_animation_scale 0`) |
-| Date | 2026-09-03 |
+| Date | 2026-09-03; the eight `portfolio-undo-snackbar-*` and `add-error-withdata-*` files were re-captured on 2026-09-08 after a review found the first set had been photographed a second too late — the snackbar had already gone. The second script asserts the snackbar is in the UI tree at the moment of the capture and refuses to write the file otherwise |
 
 Android 14 was chosen on purpose: it is the newest version on which the 1.2.3 layout is still
 drawn *inside* the system bars, which is how the app looked to almost every user until Android 15.
@@ -40,11 +40,11 @@ holdings, a FAB. Behaviour: `docs/BEHAVIOUR.md` §5.
 | error (refresh over data) | `Status.ERROR` after a failed fetch (`:449-478`) | the rows stay; indefinite snackbar "Unable to refresh." + RETRY | `portfolio-error-en` | `portfolio-error-lt` | `portfolio-error-iw` | `portfolio-error-sw` |
 | multi-select, one item | long press on a card (`:344-358`) | contextual action bar "Selected: 1", black status bar, the card's icon flipped, select-all and delete actions | `portfolio-multiselect-en` | `portfolio-multiselect-lt` | `portfolio-multiselect-iw` | `portfolio-multiselect-sw` |
 | multi-select, all | *Select all* (`:277-283`) | "Selected: 4", every icon flipped | `portfolio-selectall-en` | `portfolio-selectall-lt` | `portfolio-selectall-iw` | `portfolio-selectall-sw` |
-| undo after delete | *Delete* on a selection (`:284-310`, `:502-536`) | the card gone, totals recomputed, snackbar "Deleted: 1" + UNDO for a few seconds | `portfolio-undo-snackbar-en` | `portfolio-undo-snackbar-lt` | `portfolio-undo-snackbar-iw` | `portfolio-undo-snackbar-sw` |
+| undo after delete | *Delete* on a selection (`:284-310`, `:502-536`) | the card gone, totals recomputed, snackbar "Deleted: 1" + UNDO for 2.75 s (`Snackbar.LENGTH_LONG`) | `portfolio-undo-snackbar-en` | `portfolio-undo-snackbar-lt` | `portfolio-undo-snackbar-iw` | `portfolio-undo-snackbar-sw` |
 | fiat dropdown | tap on the currency spinner in the header (`activity_main.xml:158-168`) | the 93-code dropdown over the header | `portfolio-fiat-dropdown-en` | `portfolio-fiat-dropdown-lt` | `portfolio-fiat-dropdown-iw` | `portfolio-fiat-dropdown-sw` |
 | totals undefined | rows priced in another currency than the selected one (`MainViewModel.kt:146-150`) | `― ― ―` in place of both totals | `portfolio-nan-mixed-currency-en` | — | — | — |
 | loading, nothing yet | `LOADING` with `data == null` (`loading_state.xml:35-49`) | a progress bar under the column card | *not captured, see below* | | | |
-| data, other settings | date format `MM/dd/yyyy`, 24-hour off | the header date in the other pattern with the `PM` word (`FormatUtils.kt:114-133`) | `portfolio-data-after-settings-en` | — | — | — |
+| data, other settings | date format `MM/dd/yyyy`, 24-hour off | the header date in the other pattern, 12-hour time with the `PM` word (`FormatUtils.kt:114-133`) | `portfolio-data-after-settings-en` | — | — | — |
 | landscape | rotation | the same screen, header shorter | `portfolio-data-landscape-en` | — | — | — |
 | system dark mode | `cmd uimode night yes` | **identical to light** — the app has no dark theme (`styles.xml:20`) | `portfolio-data-systemdark-en` | — | — | — |
 
@@ -98,7 +98,7 @@ Reached from Settings → Third-party software and Settings → License. Behavio
 |---|---|---|---|---|---|---|
 | library list | Third-party software | 28 cards: library, developer, licence name, *Project link* and *Read license* buttons; toolbar action *More* | `licenses-list-en` | `licenses-list-lt` | `licenses-list-iw` | `licenses-list-sw` |
 | one library's text | *Read license* on the first card | the licence text screen titled "License", the library as subtitle | `licenses-library-text-en` | `licenses-library-text-lt` | `licenses-library-text-iw` | `licenses-library-text-sw` |
-| all libraries (Google) | *More* (`:97-101`) | Google's `OssLicensesMenuActivity`, "All libraries licenses", a plain list of every dependency | `licenses-oss-menu-en` | `licenses-oss-menu-lt` | `licenses-oss-menu-iw` | `licenses-oss-menu-sw` |
+| all libraries (Google) | *More* (`LibrariesLicensesListFragment.kt:97-101`) | Google's `OssLicensesMenuActivity`, "All libraries licenses", a plain list of every dependency | `licenses-oss-menu-en` | `licenses-oss-menu-lt` | `licenses-oss-menu-iw` | `licenses-oss-menu-sw` |
 | the app's own licence | Settings → License | the same text screen with the Apache 2.0 notice | `licenses-app-text-en` | `licenses-app-text-lt` | `licenses-app-text-iw` | `licenses-app-text-sw` |
 
 ## The demo flavor
@@ -120,12 +120,11 @@ from this commit, installed beside the full flavor:
 | Portfolio "loading, nothing yet" (progress bar under the column card) | the portfolio screen never fetches without rows to fetch for (`CryptocurrencyRepository.kt:93-96`), so this state lasts one frame between `LOADING(null)` and `SUCCESS_DB` on a cold start; the emulator could not catch it. It exists in the code, not in practice. |
 | Add/search "loading, nothing cached" in lt, iw, sw | happens once per install (see Screen 2) |
 | Add/search "error over data" retry succeeding | a transition, not a state — the result is `add-data-*` |
-| Undo restoring the deleted card | the snackbar lasts 2.75 s; the automation tapped UNDO too late every time and the coin was re-added by hand instead. The restored state is `portfolio-data-*`. A human can do it; the script could not. |
+| Undo restoring the deleted card | the snackbar lasts 2.75 s (`Snackbar.LENGTH_LONG`); the automation tapped UNDO too late every time and the coin was re-added through the add screen instead. The restored state is `portfolio-data-*`. A human can do it; the script could not. |
 | Settings rows that leave the app: Rate (Play Store), Share (share sheet), Contact (mail client), Website / Author / Source (browser), Privacy policy (Chrome Custom Tab) | system UI of other apps, none of which is installed on a `default` emulator image; each falls back to a toast "No application can handle this request." which was seen but is not part of this app's UI |
 | Buy me a coffee (demo) | a browser link, same as above |
-| The 12-hour time format on screen | a settings change, not a screen state; the effect is pinned by `FormatUtilsTest` |
 | Dark theme | there is none (`styles.xml:20`); `portfolio-data-systemdark-en` is the proof — identical to `portfolio-data-en` |
-| Android 15/16 edge-to-edge rendering | Stage 0.5 material, `blog-material/screenshots/stage-0.5/` |
+| Android 15/16 edge-to-edge rendering | photographed during the 1.2.3 release work (targetSdk 36), kept with the same private article material as this set; `UPGRADE-NOTES.md` §9 describes what was seen |
 | Tablet / large window | the app has no adaptive layout; a tablet shows the phone layout stretched, which the 2.0 Compose UI must not assume either (Play's API 37 resizability requirement) |
 
 ## Facts the captures established
@@ -133,8 +132,9 @@ from this commit, installed beside the full flavor:
 Things the pictures showed that reading the code did not, each now a line in
 `docs/BEHAVIOUR.md`:
 
-1. **The timestamp says UTC and shows local time.** On the Vilnius emulator the header read
-   `15:41:09 UTC` for a snapshot the API stamped `12:41:09Z`. (K1)
+1. **The timestamp says UTC and shows local time.** `portfolio-nan-mixed-currency-en` reads
+   `16:24:39 UTC` in the header; the `last_fetched_date` of the same rows, in the 1.2.3 database
+   asset recorded minutes later, is `13:24:39Z`. The emulator's zone was `Europe/Vilnius`, UTC+3. (K1)
 2. **The amount field cannot receive an invalid number from the keyboard.** The `numberDecimal`
    input filter drops `-`, `,`, `e` and a second `.` before the validator runs; `1.2.3` became
    `1.23` and was accepted — replacing the existing Bitcoin amount, which is issue #10 seen
@@ -142,8 +142,8 @@ Things the pictures showed that reading the code did not, each now a line in
 3. **A Lithuanian comma is dropped, not rejected.** Typing `1,5` in the Lithuanian UI produced
    `15`; the decimal separator is the dot in every language, and the Lithuanian keyboard's comma
    key does nothing. (§6)
-4. **Undo is a three-second window** with no other confirmation; the delete has already hit the
-   database when the snackbar appears. (§5)
+4. **Undo is a 2.75-second window** (`Snackbar.LENGTH_LONG`) with no other confirmation; the
+   delete has already hit the database when the snackbar appears. (§5)
 5. **No dark theme.** (§9)
 6. **The demo build is an error screen.** Every fetch fails on the retired sandbox host; the demo
    never shows data. (§12)
@@ -158,5 +158,5 @@ Things the pictures showed that reading the code did not, each now a line in
 | screens | 4 (+ Google's licence activity) |
 | screen × state combinations photographed | 33 |
 | locales | 4, one RTL |
-| files in `before/` | 105 (19 MB) |
+| files in `before/` | 105 (≈20 MB) |
 | code changes in this pull request | 0 |
