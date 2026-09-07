@@ -75,7 +75,7 @@ class AmountValidationTest {
     @Test
     fun `everything Double_parseDouble accepts is accepted, keyboard or not`() {
         // Known behaviour K8. None of these can be typed through the numberDecimal filter.
-        for (text in listOf("-5", "1e3", "1E-8", "Infinity", "NaN", "0x1p3", "12d", " 7 ", "1_000".replace("_", ""))) {
+        for (text in listOf("-5", "1e3", "1E-8", "Infinity", "NaN", "0x1p3", "12d", " 7 ", "1000")) {
             assertTrue("'$text' should be accepted", accepted(text))
         }
     }

@@ -33,7 +33,12 @@ import java.util.Locale
  */
 object Fixtures {
 
-    /** The four UI languages exactly as the app builds them (dependencyinjection/LanguageCodes.kt). */
+    /**
+     * The four UI languages exactly as the app builds them (dependencyinjection/LanguageCodes.kt),
+     * through the same deprecated [Locale] constructor on purpose: the tests must see the Locale
+     * objects the app sees, not the ones a newer factory would produce.
+     */
+    @Suppress("DEPRECATION")
     val APP_LOCALES: List<Locale> = listOf("EN", "HE", "LT", "SW").map { Locale(it) }
 
     /** Resource folder qualifier for each language, as used under src/main/res. */

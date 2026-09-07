@@ -50,6 +50,7 @@ import java.util.TimeZone
  * Robolectric to the 2019 build is not part of this stage. And the currency sign lookup is a
  * resource-array zip, pinned in [SettingsKeysTest] where the arrays are read from strings.xml.
  */
+@Suppress("DEPRECATION") // Locale(String): the constructor the app itself uses, see Fixtures.APP_LOCALES
 @RunWith(JUnit4::class)
 class FormatUtilsTest {
 

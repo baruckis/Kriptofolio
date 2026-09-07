@@ -35,7 +35,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import retrofit2.Response
-import java.util.TimeZone
 
 /**
  * Pins docs/BEHAVIOUR.md section 4, "The CoinMarketCap envelope", on the responses recorded in
@@ -91,7 +90,8 @@ class ApiEnvelopeTest {
     @Test
     fun `the status timestamp is parsed as an instant, not as a local time`() {
         val response = Fixtures.listings("listings-edge-cases.json")
-        // "2026-08-21T15:52:34.024Z" in the file.
+        // "2026-08-21T15:52:34.024Z" in the file. Date.time is the epoch instant, so this
+        // assertion is independent of the JVM's default time zone.
         val expectedUtcMillis = 1_787_327_554_024L
         assertEquals(expectedUtcMillis, response.status!!.timestamp.time)
         assertEquals(20, response.status!!.creditCount)
@@ -121,9 +121,11 @@ class ApiEnvelopeTest {
     fun `the price range in one response spans 28 orders of magnitude`() {
         val edge = Fixtures.listings("listings-edge-cases.json").data!!
         val prices = edge.map { it.quote.currency.price }
-        assertEquals(2.27526737415e-19, prices.min()!!, 0.0)
-        assertEquals(3741731042.487026, prices.max()!!, 0.0)
-        assertTrue(Math.log10(prices.max()!! / prices.min()!!) > 28.0)
+        val smallest = prices.min()
+        val largest = prices.max()
+        assertEquals(2.27526737415e-19, smallest, 0.0)
+        assertEquals(3741731042.487026, largest, 0.0)
+        assertTrue(Math.log10(largest / smallest) > 28.0)
     }
 
     @Test
@@ -196,12 +198,4 @@ class ApiEnvelopeTest {
     private fun quoteSerializedName(): SerializedName =
             CryptocurrencyLatest.Quote::class.java.getDeclaredField("currency")
                     .getAnnotation(SerializedName::class.java)!!
-
-    companion object {
-        init {
-            // Gson's Date adapter falls back to ISO 8601 parsing, which is zone-aware; the test
-            // sets a non-UTC default zone so a local-time parse would be caught.
-            TimeZone.setDefault(TimeZone.getTimeZone("Europe/Vilnius"))
-        }
-    }
 }

@@ -37,6 +37,7 @@ import javax.xml.parsers.DocumentBuilderFactory
  * test is what has to stay green when it does, with the resource lookups replaced by the
  * constants.
  */
+@Suppress("DEPRECATION") // Locale(String): the constructor the app itself uses, see Fixtures.APP_LOCALES
 @RunWith(JUnit4::class)
 class SettingsKeysTest {
 

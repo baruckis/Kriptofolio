@@ -22,7 +22,6 @@ import com.baruckis.kriptofolio.utilities.getAmountFiatCounted
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -212,6 +211,8 @@ class LegacyDatabaseTest(private val version: String, private val fiat: String) 
         assertEquals("string" to fiat, entries.getValue("preference fiat currency"))
         assertEquals("string", entries.getValue("preference date format").first)
         assertEquals("boolean", entries.getValue("preference 24h switch").first)
-        assertNotNull(StringsXml.forLanguage("EN").array("pref_date_format_list_values").contains(entries.getValue("preference date format").second))
+        val dateFormat = entries.getValue("preference date format").second
+        assertTrue("$dateFormat is one of the three allowed patterns",
+                StringsXml.forLanguage("EN").array("pref_date_format_list_values").contains(dateFormat))
     }
 }
