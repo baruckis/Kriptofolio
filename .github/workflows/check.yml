@@ -13,7 +13,7 @@
 #   * TRIGGER ONLY ON master AND ON PULL REQUESTS. The Part-1…Part-5 and legacy branches are
 #     exhibits (AGENTS.md, "Branches"): their code predates this toolchain and is not meant to
 #     build with it. A workflow that ran on every push would paint them red forever, which is
-#     noise, not information. (ADR-021)
+#     noise, not information.
 
 name: check
 
@@ -27,10 +27,13 @@ on:
 permissions:
   contents: read
 
-# A new push to the same branch or pull request supersedes the run in flight; master runs are
-# never cancelled so every merge commit gets a complete result.
+# Pull request runs share one group per pull request, so a new push supersedes the run in
+# flight. Master runs get a group of their own (the run id), so every merge commit is built
+# to completion: GitHub cancels a *queued* run whenever a newer run joins its group, whatever
+# cancel-in-progress says, and a shared master group would have thrown away the result of a
+# merge that landed while the previous one was still queued.
 concurrency:
-  group: check-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  group: check-${{ github.event_name == 'pull_request' && github.event.pull_request.number || github.run_id }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
@@ -74,13 +77,16 @@ jobs:
       # THE SCHEMA GATE, first form. Room writes app/schemas/<database>/<version>.json during
       # the build (kapt argument room.schemaLocation in app/build.gradle). The committed file is
       # the database contract: its identity hash is what Room compares against on every open,
-      # and this app is configured to DELETE the user's data when it does not match. If a
-      # change to an entity altered the file, the build above has just rewritten it, and this
-      # step turns that into a red check instead of a silent diff on a phone.
+      # and this app is configured to DELETE the user's data when it does not match (see the
+      # comment on AppDatabase.kt). If a change to an entity altered the file, the build above
+      # has just rewritten it, and this step turns that into a red check instead of a silent
+      # diff on a phone. A version bump writes a NEW file, which `git diff` does not show, so
+      # the status list is printed as well.
       - name: Fail if the build changed the committed Room schema
         run: |
           if [ -n "$(git status --porcelain -- app/schemas)" ]; then
-            echo "::error::app/schemas changed during the build - the database contract moved. See UPGRADE-NOTES.md section 8 (the androidx.room row) for why that is destructive here."
+            echo "::error::app/schemas changed during the build - the database contract moved. See the comment on AppDatabase.kt for why that is destructive here."
+            git status --porcelain -- app/schemas
             git --no-pager diff -- app/schemas
             exit 1
           fi
@@ -97,5 +103,8 @@ jobs:
             app/build/test-results/
             app/build/reports/lint-results-fullDebug.html
             app/build/reports/lint-results-fullDebug.xml
+          # A missing report is a warning, not a failure: the build step above already failed
+          # loudly if it could not produce one, and this step must not mask that reason.
           if-no-files-found: warn
+          # Long enough to look at a failed run after a weekend; short enough not to hoard.
           retention-days: 14
