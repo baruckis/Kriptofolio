@@ -53,7 +53,7 @@ branch; it does not delete `master`, protected exhibit branches, tags, or commit
 - Product flavors: `full` (real CoinMarketCap API) and `demo` (sandbox API, applicationIdSuffix `.demo`).
   Both must always build.
 - Room database `version = 1`, entities `MyCryptocurrency` and `Cryptocurrency`,
-  `exportSchema = false`. User portfolios live ONLY on-device (no cloud backup). Any change
+  `exportSchema = true`. User portfolios live ONLY on-device (no cloud backup). Any change
   that could break opening an existing v1 database is forbidden without an explicit migration
   plus a test against a real old database file.
 - Localization: default (en), `values-lt`, `values-iw` (Hebrew — RTL!), `values-sw-rKE`.
@@ -89,3 +89,21 @@ branch; it does not delete `master`, protected exhibit branches, tags, or commit
 ```
 
 Signing, Play Console uploads, and merging PRs are always done by the human.
+
+## Shared Software Factory baseline
+
+Owner-managed Factory sessions use `baruckis-workflows` 0.3.0 and the
+[software-factory baseline 1.0.0](https://github.com/baruckis/baruckis-hq/blob/ebde53c37f8569df80e03544298ab453b09e8265/plugins/baruckis-workflows/skills/software-factory/SKILL.md)
+from the installed plugin or this immutable HQ commit. `config/software-factory.json`
+pins its content digest, local instruction sources and verification commands. Using the
+actual skill location, run `python3 <software-factory>/scripts/factory.py inspect --repo <worktree>`.
+A missing or mismatched baseline blocks dependent Factory implementation; read-only audits
+may continue. A release candidate may be tested in its worktree without claiming installation.
+
+HQ provides common process minimums; local rules add project facts, protocols and stronger
+checks. Do not silently weaken a minimum: an exception requires an explicit user decision.
+The profile's `review_instructions` points to the local review process and does not replace
+reviewer configuration. Existing merge, deployment and paid-review authorization rules apply.
+
+The private baseline is an owner automation dependency, not an app/build dependency.
+External contributors follow the public rules above and do not need access to HQ.
