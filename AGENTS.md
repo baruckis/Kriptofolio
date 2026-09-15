@@ -90,20 +90,24 @@ branch; it does not delete `master`, protected exhibit branches, tags, or commit
 
 Signing, Play Console uploads, and merging PRs are always done by the human.
 
-## Shared Software Factory baseline
+## Reproducible modernization
 
-Owner-managed Factory sessions use `baruckis-workflows` 0.3.0 and the
-[software-factory baseline 1.0.0](https://github.com/baruckis/baruckis-hq/blob/ebde53c37f8569df80e03544298ab453b09e8265/plugins/baruckis-workflows/skills/software-factory/SKILL.md)
-from the installed plugin or this immutable HQ commit. `config/software-factory.json`
-pins its content digest, local instruction sources and verification commands. Using the
-actual skill location, run `python3 <software-factory>/scripts/factory.py inspect --repo <worktree>`.
-A missing or mismatched baseline blocks dependent Factory implementation; read-only audits
-may continue. A release candidate may be tested in its worktree without claiming installation.
+This repository is a worked example of Android modernization. Keep the project-specific
+instructions, build/test commands, decisions and acceptance evidence needed to reproduce
+each published step in this repository. Apply the same documented project requirements
+to owner and contributor work.
 
-HQ provides common process minimums; local rules add project facts, protocols and stronger
-checks. Do not silently weaken a minimum: an exception requires an explicit user decision.
-The profile's `review_instructions` points to the local review process and does not replace
-reviewer configuration. Existing merge, deployment and paid-review authorization rules apply.
+- Record each modernization step's starting revision, intended behavior, implementation
+  and actual verification results in its PR or relevant project document. Report checks
+  that were not run explicitly.
+- Do not require access to the owner's private coordination repository, workflow plugin,
+  accounts or undocumented instructions to follow a published step.
+- An owner-hosted review service may support the work. Before teaching a step that depends
+  on it, document how to reproduce that review with the reader's own setup or a documented
+  alternative. Owner service output alone does not prove that alternative works.
+- Verify reproducibility from a clean checkout at the documented revision and record
+  required tools and prerequisites. This is an acceptance requirement, not a claim that
+  every existing modernization step has already passed it.
 
-The private baseline is an owner automation dependency, not an app/build dependency.
-External contributors follow the public rules above and do not need access to HQ.
+These rules preserve the existing protections for history, user data, signing and human
+merge decisions.
