@@ -18,13 +18,14 @@ the exhibits.
 ## Hard rules — treat violations as blocking issues
 
 1. **History is untouchable.** Branches `Part-1`, `Part-2`, `Part-3`, `Part-4`, `Part-5`,
-   branch `legacy`, tag `v1.2.1-legacy` and `README.md` are frozen: the 2018 blog series
+   branch `legacy` and tag `v1.2.1-legacy` are frozen: the 2018 blog series
    links directly to them, so rewriting them breaks published articles that this project
    does not control. No force push, no rebase of pushed branches, no direct pushes to
-   `master`. Everything goes through a pull request.
+   `master`. Everything goes through a pull request. `README.md` and other documentation
+   may change only when the task explicitly authorizes documentation changes, as in `AGENTS.md`.
 
 2. **User data must survive an update.** The Room database is `version = 1` with
-   `exportSchema = false`, and portfolios exist **only on the device** — there is no cloud
+   `exportSchema = true`, and portfolios exist **only on the device** — there is no cloud
    backup and no export, so a wiped database is a permanently lost portfolio with no way to
    recover it. Any change that could break opening an existing v1 database is blocking
    unless it ships with a migration *and* a test against a real old database file. Treat
