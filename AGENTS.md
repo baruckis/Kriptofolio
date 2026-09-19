@@ -1,7 +1,6 @@
 # AGENTS.md — Kriptofolio
 
-Rules for ALL AI coding agents (Claude Code, Codex, Cursor, Gemini CLI, and any other)
-working in this repository. Read this file fully before doing anything.
+Rules for every AI coding agent working in this repository, independent of provider or model. Read this file fully before doing anything.
 
 ## What this project is
 
@@ -91,6 +90,14 @@ branch; it does not delete `master`, protected exhibit branches, tags, or commit
 Signing, Play Console uploads, and merging PRs are always done by the human.
 
 ## Reproducible modernization
+
+`AGENTS.md` is the agent entry point; linked project documents hold the details.
+`CLAUDE.md` is only an optional import adapter, with no separate rules. No AI provider,
+subscription, owner-hosted reviewer or tool-specific command is required by the method.
+Choose tools by capability and record the setup actually used for each published step.
+Automated review is an optional implementation: any required review must still identify
+its revision, findings and unresolved limitations. Disabling an integration is not a
+passing review; reproducible tests and the human merge decision remain required.
 
 This repository is a worked example of Android modernization. Keep the project-specific
 instructions, build/test commands, decisions and acceptance evidence needed to reproduce
