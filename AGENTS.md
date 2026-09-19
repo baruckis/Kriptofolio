@@ -89,6 +89,11 @@ branch; it does not delete `master`, protected exhibit branches, tags, or commit
 
 Signing, Play Console uploads, and merging PRs are always done by the human.
 
+## Review
+
+Apply the additional [review criteria](config/review-rules.md) when reviewing a change.
+The reviewer may be a person or a separately chosen tool; no private service is required.
+
 ## Reproducible modernization
 
 `AGENTS.md` is the agent entry point; linked project documents hold the details.

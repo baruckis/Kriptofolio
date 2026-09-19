@@ -1,8 +1,10 @@
 # Kriptofolio review rules
 
-**This file is the single source of the code-review rules for this repository.** The PR
-review workflow (`.github/workflows/claude-review.yml`) reads this file at review time, so
-there is no second copy anywhere. Change a rule here and every reviewer changes with it.
+Read [AGENTS.md](../AGENTS.md) first. This file adds review-specific criteria for any
+reviewer: a person, a separate agent session, or an automation chosen by the contributor.
+There is no required hosted service or AI provider. The old automated workflow is removed;
+its absence is not a passing review. Record the reviewed revision, findings and limitations
+in the pull request, alongside actual build/test evidence.
 
 Rules are written as *the rule, and why it exists*. The reason matters: a reviewer that
 understands why a rule is there applies it correctly to cases this list does not name.
