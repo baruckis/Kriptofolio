@@ -1,7 +1,6 @@
 # AGENTS.md — Kriptofolio
 
-Rules for ALL AI coding agents (Claude Code, Codex, Cursor, Gemini CLI, and any other)
-working in this repository. Read this file fully before doing anything.
+Rules for every AI coding agent working in this repository, independent of provider or model. Read this file fully before doing anything.
 
 ## What this project is
 
@@ -53,7 +52,7 @@ branch; it does not delete `master`, protected exhibit branches, tags, or commit
 - Product flavors: `full` (real CoinMarketCap API) and `demo` (sandbox API, applicationIdSuffix `.demo`).
   Both must always build.
 - Room database `version = 1`, entities `MyCryptocurrency` and `Cryptocurrency`,
-  `exportSchema = false`. User portfolios live ONLY on-device (no cloud backup). Any change
+  `exportSchema = true`. User portfolios live ONLY on-device (no cloud backup). Any change
   that could break opening an existing v1 database is forbidden without an explicit migration
   plus a test against a real old database file.
 - Localization: default (en), `values-lt`, `values-iw` (Hebrew — RTL!), `values-sw-rKE`.
@@ -89,3 +88,38 @@ branch; it does not delete `master`, protected exhibit branches, tags, or commit
 ```
 
 Signing, Play Console uploads, and merging PRs are always done by the human.
+
+## Review
+
+Apply the additional [review criteria](config/review-rules.md) when reviewing a change.
+The reviewer may be a person or a separately chosen tool; no private service is required.
+
+## Reproducible modernization
+
+`AGENTS.md` is the agent entry point; linked project documents hold the details.
+`CLAUDE.md` is only an optional import adapter, with no separate rules. No AI provider,
+subscription, owner-hosted reviewer or tool-specific command is required by the method.
+Choose tools by capability and record the setup actually used for each published step.
+Automated review is an optional implementation: any required review must still identify
+its revision, findings and unresolved limitations. Disabling an integration is not a
+passing review; reproducible tests and the human merge decision remain required.
+
+This repository is a worked example of Android modernization. Keep the project-specific
+instructions, build/test commands, decisions and acceptance evidence needed to reproduce
+each published step in this repository. Apply the same documented project requirements
+to owner and contributor work.
+
+- Record each modernization step's starting revision, intended behavior, implementation
+  and actual verification results in its PR or relevant project document. Report checks
+  that were not run explicitly.
+- Do not require access to the owner's private coordination repository, workflow plugin,
+  accounts or undocumented instructions to follow a published step.
+- An owner-hosted review service may support the work. Before teaching a step that depends
+  on it, document how to reproduce that review with the reader's own setup or a documented
+  alternative. Owner service output alone does not prove that alternative works.
+- Verify reproducibility from a clean checkout at the documented revision and record
+  required tools and prerequisites. This is an acceptance requirement, not a claim that
+  every existing modernization step has already passed it.
+
+These rules preserve the existing protections for history, user data, signing and human
+merge decisions.
