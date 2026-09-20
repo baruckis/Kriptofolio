@@ -104,4 +104,4 @@ failure scenario — what input or situation produces what wrong outcome. Issues
 
 Everything else is a **Note**: hardening preferences, hypotheticals, style opinions, and
 anything needing verification outside this repository. Notes never count as unresolved and
-never lower the confidence score.
+do not become blocking issues merely because a reviewer prefers a different approach.

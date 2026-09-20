@@ -24,6 +24,10 @@ https://kriptofolio.app
 
 ## Support
 
+For current development, see [Contributing](CONTRIBUTING.md) and [AGENTS.md](AGENTS.md).
+The original tutorial above describes the 2018–2019 implementation; it is not the current
+modernization procedure.
+
 See [SUPPORT.md](SUPPORT.md) for help, privacy-safe bug reports, and security reports.
 
 
