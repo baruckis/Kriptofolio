@@ -1,8 +1,10 @@
 # Kriptofolio review rules
 
-**This file is the single source of the code-review rules for this repository.** The PR
-review workflow (`.github/workflows/claude-review.yml`) reads this file at review time, so
-there is no second copy anywhere. Change a rule here and every reviewer changes with it.
+Read [AGENTS.md](../AGENTS.md) first. This file adds review-specific criteria for any
+reviewer: a person, a separate agent session, or an automation chosen by the contributor.
+There is no required hosted service or AI provider. The old automated workflow is removed;
+its absence is not a passing review. Record the reviewed revision, findings and limitations
+in the pull request, alongside actual build/test evidence.
 
 Rules are written as *the rule, and why it exists*. The reason matters: a reviewer that
 understands why a rule is there applies it correctly to cases this list does not name.
@@ -18,13 +20,14 @@ the exhibits.
 ## Hard rules — treat violations as blocking issues
 
 1. **History is untouchable.** Branches `Part-1`, `Part-2`, `Part-3`, `Part-4`, `Part-5`,
-   branch `legacy`, tag `v1.2.1-legacy` and `README.md` are frozen: the 2018 blog series
+   branch `legacy` and tag `v1.2.1-legacy` are frozen: the 2018 blog series
    links directly to them, so rewriting them breaks published articles that this project
    does not control. No force push, no rebase of pushed branches, no direct pushes to
-   `master`. Everything goes through a pull request.
+   `master`. Everything goes through a pull request. `README.md` and other documentation
+   may change only when the task explicitly authorizes documentation changes, as in `AGENTS.md`.
 
 2. **User data must survive an update.** The Room database is `version = 1` with
-   `exportSchema = false`, and portfolios exist **only on the device** — there is no cloud
+   `exportSchema = true`, and portfolios exist **only on the device** — there is no cloud
    backup and no export, so a wiped database is a permanently lost portfolio with no way to
    recover it. Any change that could break opening an existing v1 database is blocking
    unless it ships with a migration *and* a test against a real old database file. Treat
@@ -101,4 +104,4 @@ failure scenario — what input or situation produces what wrong outcome. Issues
 
 Everything else is a **Note**: hardening preferences, hypotheticals, style opinions, and
 anything needing verification outside this repository. Notes never count as unresolved and
-never lower the confidence score.
+do not become blocking issues merely because a reviewer prefers a different approach.
