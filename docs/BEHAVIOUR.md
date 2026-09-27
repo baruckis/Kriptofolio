@@ -1,14 +1,15 @@
 # Kriptofolio 1.2.3 — behaviour specification
 
 *The contract the 2.0 rewrite is measured against. Extracted from the code on `master` at
-`238d6b3` (the code that ships as 1.2.3, versionCode 6). Since the `v1.2.3` tag exactly one file
-under `app/src/main` has changed, `db/AppDatabase.kt`: `exportSchema` went from `false` to `true`
-with an explanatory comment (pull request #18), which writes the schema file at build time and
-changes nothing at runtime. Every statement cites the file and line that produces the behaviour,
-in the form `path:line`. Kotlin paths are relative to `app/src/main/java/com/baruckis/kriptofolio/`
-(so `utilities/FormatUtils.kt` means `app/src/main/java/com/baruckis/kriptofolio/utilities/FormatUtils.kt`);
-`res/…` paths are relative to `app/src/main/`; paths starting with `app/` or naming a top-level
-file are relative to the repository root.*
+`0b77c42cfeedd5de61ddbd1ee6d9624caac19da9` (the code that ships as 1.2.3, versionCode 6).
+Since the `v1.2.3` tag exactly one file under `app/src/main` has changed, `db/AppDatabase.kt`:
+`exportSchema` went from `false` to `true` with an explanatory comment (pull request #18), which
+writes the schema file at build time and changes nothing at runtime. Every statement cites the
+file and line that produces the behaviour, in the form `path:line`. Kotlin paths are relative to
+`app/src/main/java/com/baruckis/kriptofolio/` (so `utilities/FormatUtils.kt` means
+`app/src/main/java/com/baruckis/kriptofolio/utilities/FormatUtils.kt`); `res/…` paths are relative
+to `app/src/main/`; paths starting with `app/` or naming a top-level file are relative to the
+repository root.*
 
 This document describes **what the app does**, not what it should do. Where the code does
 something surprising, the surprise is recorded under *Known behaviour (2019)* and left alone:
@@ -16,15 +17,19 @@ this stage adds documents and tests, it does not fix. The rewrite decides each i
 note in the same pull request that changes it. Where the code leaves something undefined, it is
 listed under *Undefined* rather than guessed.
 
-The characterization tests in `app/src/test` pin the sections marked **pinned by** with a test
-class name; a section without that mark is pinned by the UI inventory (`docs/ui-inventory.md`)
-or by nothing yet.
+The test classes proposed in [PR #24](https://github.com/baruckis/Kriptofolio/pull/24) pin only
+the behavior named in their assertions and comments. The public UI inventory proposed in
+[PR #23](https://github.com/baruckis/Kriptofolio/pull/23) repeats five portfolio states; it does
+not verify every screen and state described here. At this specification's base revision
+(`0b77c42`), neither candidate's contents are part of `master`. A **pinned by** mark names the
+candidate evidence that reaches that claim. Other behavior is supported by source citations here,
+not by an unlisted screenshot or test.
 
 ---
 
 ## 1. Portfolio maths
 
-**pinned by** `CalculateUtilsTest` (the two functions) and `LegacyDatabaseTest` (the stored results on real files); the sums and the NaN rule live inside a ViewModel and are pinned by the UI inventory (`docs/ui-inventory.md`)
+**pinned by** `CalculateUtilsTest` (the two pure functions) and `LegacyDatabaseTest` (stored values in the SQLite fixtures). ViewModel portfolio sums and the mixed-currency `NaN` state are described from source; the public UI subset does not capture the latter.
 
 Two pure functions are the whole of the arithmetic, and both work on `Double`
 (`java/com/baruckis/kriptofolio/utilities/CalculateUtils.kt:24-29`):
@@ -234,7 +239,7 @@ stores; it becomes `last_fetched_date` of every row written by that response
 
 ## 5. Portfolio screen
 
-**pinned by** `docs/ui-inventory.md` (the states, and the totals including `― ― ―`); the two functions behind the totals by `CalculateUtilsTest` (§1)
+**pinned by** the five public portfolio captures in `docs/ui-inventory.md` (empty, data, cached refresh error, delete/undo, and Hebrew RTL); the two pure functions behind stored totals by `CalculateUtilsTest` (§1). The mixed-currency `― ― ―` state and other historical states are not in the public screenshot subset.
 
 **Source of truth** is the `my_cryptocurrencies` table, read as `LiveData` with
 `WHERE amount IS NOT NULL ORDER BY amount_fiat DESC, rank ASC` (`MyCryptocurrencyDao.kt:31-32`).
@@ -328,7 +333,7 @@ adding a coin that is **already in the portfolio replaces its amount** rather th
 
 ## 6. Add / search screen
 
-**pinned by** `docs/ui-inventory.md`, `AmountValidationTest` (the dialog's validator)
+**pinned by** `AmountValidationTest` (the validator rule). Add/search screens and the amount dialog are not part of the public screenshot subset.
 
 **Source of truth** is the `all_cryptocurrencies` table, `ORDER BY rank ASC`
 (`CryptocurrencyDao.kt:29-30`). The screen fetches `listings/latest` **only when the table is
@@ -460,7 +465,7 @@ subtitle as title and the version name as summary, and is not selectable (`:326-
 
 ## 8. Licence screens
 
-**pinned by** `docs/ui-inventory.md`
+The licence screens are described from source citations; they are not part of the public screenshot subset.
 
 *Third-party software* (`ui/settings/thirdpartysoft/LibrariesLicensesListFragment.kt`) is a
 hard-coded list of **28 libraries** built from string resources
@@ -477,7 +482,7 @@ name as subtitle (`:52-54,63-64`).
 
 ## 9. Localization and RTL
 
-**pinned by** `docs/ui-inventory.md` (RTL screenshots), `SettingsKeysTest` (per-locale defaults)
+**pinned by** the public portfolio data captures in `docs/ui-inventory.md` for English and Hebrew RTL, and `SettingsKeysTest` for per-language defaults. Other screens and locale combinations are not captured in the public subset.
 
 Four languages: English (default), Hebrew (`res/values-iw/`), Lithuanian (`res/values-lt/`),
 Swahili (`res/values-sw-rKE/`). Everything in this section describes an install that carries all
@@ -502,7 +507,7 @@ The app has **no dark theme**: the theme is `Theme.AppCompat.Light.DarkActionBar
 
 ## 10. Offline behaviour
 
-**pinned by** `docs/ui-inventory.md`
+**pinned by** the public cached-portfolio refresh-error capture in `docs/ui-inventory.md`. Add/search offline states are source-described, not publicly captured here.
 
 | Situation | Portfolio screen | Add/search screen |
 |---|---|---|
@@ -516,6 +521,11 @@ Nothing on either screen says how old the data is beyond the date in the header;
 ## 11. Data persistence
 
 **pinned by** `LegacyDatabaseTest`
+
+`LegacyDatabaseTest` reads fixture files through plain SQLite JDBC. It checks their recorded
+schema identity, table definitions, selected rows, stored calculations and preference values. It
+does not instantiate Room, open the files through `AppDatabase`, install an old APK, or exercise an
+on-device app update or migration; those remain separate checks for a future migration change.
 
 Room database `kriptofolio-db` (`Constants.kt:23`), version 1, identity hash
 `ad1c80913f23361aa985d56ecf84d645` (`app/schemas/com.baruckis.kriptofolio.db.AppDatabase/1.json`),
@@ -536,7 +546,8 @@ both from a synthetic portfolio) are what the 2.0 migration tests open.
 
 ## 12. The demo flavor
 
-**pinned by** `docs/ui-inventory.md`
+The empty demo portfolio screenshot in `docs/ui-inventory.md` shows the local debug screen with
+network disabled. It does not demonstrate the normal sandbox request; the sandbox host is retired.
 
 Same code, different constants: application id `com.baruckis.kriptofolio.demo`
 (`app/build.gradle:68-73`), toolbar subtitle `DEMO` (`strings.xml:43`, `app/src/demo/res/values/strings.xml`),
@@ -667,9 +678,9 @@ touches it.
   install, picking a language the device does not have should fall back to the default resources
   (English strings) while `Locale.setDefault` still switches number, date and RTL handling
   (`LocalizationManager.kt:48-63`), giving English text with the chosen locale's formatting.
-  **Unverified on a device:** every capture in `docs/ui-inventory.md` and every database asset
-  was produced from a locally built APK or a GitHub-release APK, both of which carry all four
-  languages, so this describes the mechanism and Play's documented default, not an observation.
+  The public Hebrew capture in `docs/ui-inventory.md` confirms the local `demoDebug` build displays
+  the selected language and RTL layout. **Unverified on a Play install:** that screenshot is not
+  from the Play app bundle, so it does not test language-split delivery or this possible fallback.
   Confirming it needs a Play-installed build on a device without the extra locales. Lint reports
   the mechanism as `AppBundleLocaleChanges`.
 - **K18 — The main screen's floating action button has no accessibility label.** The
