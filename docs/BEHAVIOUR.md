@@ -2,11 +2,13 @@
 
 *The contract the 2.0 rewrite is measured against. Extracted from the code on `master` at
 `0b77c42cfeedd5de61ddbd1ee6d9624caac19da9` (the code that ships as 1.2.3, versionCode 6).
-Since the `v1.2.3` tag exactly one file under `app/src/main` has changed,
-`app/src/main/java/com/baruckis/kriptofolio/db/AppDatabase.kt`: `exportSchema` went from `false`
+Since the `v1.2.3` tag exactly one production source file has changed,
+`app/src/main/java/com/baruckis/kriptofolio/db/AppDatabase.kt:32`: `exportSchema` went from `false`
 to `true` with an explanatory comment (pull request #18), which writes the schema file at build
-time and changes nothing at runtime. Every source citation uses a repository-root-relative path
-and line in the form `app/...:line[-line]`, including resource and locale-specific files.*
+time and changes nothing at runtime. Every source-code citation uses a repository-root-relative
+path and line in the form `app/...:line[-line]`, including resource and locale-specific files.
+Whole-file links to fixtures and supporting documents identify evidence artifacts rather than
+source-code citations.*
 
 This document describes **what the app does**, not what it should do. Where the code does
 something surprising, the surprise is recorded under *Known behaviour (2019)* and left alone:
@@ -17,7 +19,7 @@ listed under *Undefined* rather than guessed.
 The behavior tests in [PR #24 at candidate HEAD
 `3d17901`](https://github.com/baruckis/Kriptofolio/tree/3d17901b2831e15ddec707393d7795002d4374ed)
 pin only the behavior named in their assertions and comments. The public UI inventory in [PR #23
-at candidate HEAD `24ece1b`](https://github.com/baruckis/Kriptofolio/blob/24ece1bf00409129620eea9968b8ca28fee3614b/docs/ui-inventory.md)
+at candidate HEAD `7799ce5`](https://github.com/baruckis/Kriptofolio/blob/7799ce5dbc45384f9b78f7acb5421c1bb8e64ebf/docs/ui-inventory.md)
 repeats five portfolio states; it does not verify every screen and state described here. At this
 specification's base revision (`0b77c42`), the PR #23 inventory and PR #24 test code are separate,
 unmerged candidates. A **pinned by** mark names the candidate evidence that reaches that claim.
@@ -82,7 +84,7 @@ default locale** (no locale is passed), sets `RoundingMode.DOWN` and formats. So
 - values are **truncated**, never rounded: `0.999999999` BTC shows as `0.99999999`, `-0.005 %`
   shows as `-0.00`, `1.999` USD shows as `1.99`;
 - a value smaller than the last digit shows as zero: a price of `2.27e-19` shows as `0.00`, which
-  is what the smallest coin in `app/src/test/resources/api/listings-edge-cases.json` looks like on
+  is what the smallest coin in [the committed edge-case fixture](https://github.com/baruckis/Kriptofolio/blob/0b77c42cfeedd5de61ddbd1ee6d9624caac19da9/app/src/test/resources/api/listings-edge-cases.json) looks like on
   screen; the 28 orders of magnitude in that file collapse to "0.00 … 3,741,731,042.48";
 - `null` is formatted as `DecimalFormat.format(null)` would — see *Undefined* U1; in practice the
   callers pass a non-null value or substitute `0.0` first (`app/src/main/java/com/baruckis/kriptofolio/utilities/FormatUtils.kt:72-74`);
@@ -204,8 +206,8 @@ in `app/src/main/res/values/strings.xml:109-203`.
 | HTTP error with a non-JSON body | `ApiErrorResponse` | the raw body if non-empty, else the HTTP reason phrase (`app/src/main/java/com/baruckis/kriptofolio/api/ApiResponse.kt:64-71`) |
 | transport failure (no connection, DNS, timeout) | `ApiErrorResponse` (`app/src/main/java/com/baruckis/kriptofolio/api/ApiResponse.kt:31-33`) | the exception message, or `"Unknown error."` |
 
-So `app/src/test/resources/api/error-401-invalid-key.json` yields the message `This API Key is invalid. ` and
-`app/src/test/resources/api/error-400-invalid-id.json` yields `No data found for 'id': '999999999'`. **The message is never
+So [`error-401-invalid-key.json`](https://github.com/baruckis/Kriptofolio/blob/0b77c42cfeedd5de61ddbd1ee6d9624caac19da9/app/src/test/resources/api/error-401-invalid-key.json) yields the message `This API Key is invalid. ` and
+[`error-400-invalid-id.json`](https://github.com/baruckis/Kriptofolio/blob/0b77c42cfeedd5de61ddbd1ee6d9624caac19da9/app/src/test/resources/api/error-400-invalid-id.json) yields `No data found for 'id': '999999999'`. **The message is never
 shown to the user**: the UI shows its own fixed string instead (§5, §6). It is only visible in the
 debug log.
 
@@ -219,7 +221,7 @@ is a success like any other, and what happens next depends only on `data`:
   every row of `all_cryptocurrencies` (`app/src/main/java/com/baruckis/kriptofolio/repository/CryptocurrencyRepository.kt:124-127`,
   `app/src/main/java/com/baruckis/kriptofolio/db/CryptocurrencyDao.kt:48-52`) — see K5.
 
-**Null quote for an unsupported currency.** `app/src/test/resources/api/response-200-unknown-convert.json` is what
+**Null quote for an unsupported currency.** [`response-200-unknown-convert.json`](https://github.com/baruckis/Kriptofolio/blob/0b77c42cfeedd5de61ddbd1ee6d9624caac19da9/app/src/test/resources/api/response-200-unknown-convert.json) is what
 `convert=XXX` returns: HTTP 200, `error_code: 0`, and a quote keyed `XXX` with every number
 `null`. No alternate name matches `XXX`, so Gson leaves `quote.currency` **null** although the
 Kotlin type is non-null. Reading `it.quote.currency.price` while saving then throws a
@@ -230,7 +232,7 @@ agree, and nothing checks that they do.
 **Null `max_supply`.** The API fixture README reports `"max_supply": null` for 1,735 of 5,000
 records (34.7 %) in the full capture; the committed fixture is a nine-record sample, so this
 prevalence is recorded provenance and cannot be recomputed from that sample alone
-(`app/src/test/resources/api/README.md`, section *Two things the capture revealed about the current code*).
+([the API fixture README, section *Two things the capture revealed about the current code*](https://github.com/baruckis/Kriptofolio/blob/0b77c42cfeedd5de61ddbd1ee6d9624caac19da9/app/src/test/resources/api/README.md#two-things-the-capture-revealed-about-the-current-code)).
 The field is declared as non-null `Double` (`app/src/main/java/com/baruckis/kriptofolio/api/CryptocurrencyLatest.kt:36-37`).
 Gson does not assign `null` to a primitive-backed field, so the value silently becomes `0.0`.
 Harmless, because the field is never read.
@@ -241,7 +243,7 @@ stores; it becomes `last_fetched_date` of every row written by that response
 
 ## 5. Portfolio screen
 
-**pinned by** the five public portfolio captures in [the PR #23 UI inventory at its candidate HEAD](https://github.com/baruckis/Kriptofolio/blob/24ece1bf00409129620eea9968b8ca28fee3614b/docs/ui-inventory.md) (empty, data, cached refresh error, delete/undo, and Hebrew RTL); the two pure functions behind stored totals by `CalculateUtilsTest` (§1). The mixed-currency `― ― ―` state and other historical states are not in the public screenshot subset.
+**pinned by** the five public portfolio captures in [the PR #23 UI inventory at its candidate HEAD](https://github.com/baruckis/Kriptofolio/blob/7799ce5dbc45384f9b78f7acb5421c1bb8e64ebf/docs/ui-inventory.md) (empty, data, cached refresh error, delete/undo, and Hebrew RTL); the two pure functions behind stored totals by `CalculateUtilsTest` (§1). The mixed-currency `― ― ―` state and other historical states are not in the public screenshot subset.
 
 **Source of truth** is the `my_cryptocurrencies` table, read as `LiveData` with
 `WHERE amount IS NOT NULL ORDER BY amount_fiat DESC, rank ASC` (`app/src/main/java/com/baruckis/kriptofolio/db/MyCryptocurrencyDao.kt:31-32`).
@@ -254,7 +256,7 @@ The list is therefore ordered by holding value, largest first, ties by rank; a r
 (`app/src/main/java/com/baruckis/kriptofolio/repository/NetworkBoundResource.kt:48-63`). Nothing is auto-refreshed on open, however old the
 rows are; there is no notion of staleness anywhere in the code (U5).
 
-**Visible states** (`app/src/main/res/layout/fragment_main_list.xml:147-208`, `app/src/main/res/layout/loading_state.xml`,
+**Visible states** (`app/src/main/res/layout/fragment_main_list.xml:147-208`, `app/src/main/res/layout/loading_state.xml:35-67`,
 `app/src/main/java/com/baruckis/kriptofolio/ui/mainlist/MainListFragment.kt:415-493`):
 
 | State | Condition | What shows |
@@ -264,7 +266,7 @@ rows are; there is no notion of staleness anywhere in the code (U5).
 | data | `data` non-empty | the card list; header totals |
 | refreshing | a network call in flight over existing data | the swipe-refresh spinner; the currency spinner disabled (`app/src/main/java/com/baruckis/kriptofolio/ui/mainlist/MainListFragment.kt:116,168,197,434`) |
 | error | `ERROR` after a fetch | the existing rows stay; an **indefinite** snackbar "Unable to refresh." with a **Retry** action (`app/src/main/java/com/baruckis/kriptofolio/ui/mainlist/MainListFragment.kt:449-478`, `app/src/main/res/values/strings.xml:48-49`) |
-| multi-select | one or more cards selected | a contextual action bar titled "Selected: N" with *Select all* and *Delete* (`app/src/main/java/com/baruckis/kriptofolio/ui/mainlist/MainListFragment.kt:344-358`, `app/src/main/res/menu/menu_action_mode.xml`, `app/src/main/res/values/strings.xml:302-304`); the status bar turns black (`app/src/main/java/com/baruckis/kriptofolio/utilities/PrimaryActionModeController.kt:70-87`, `app/src/main/res/values/colors.xml:42`); swipe-to-refresh is disabled (`app/src/main/java/com/baruckis/kriptofolio/ui/mainlist/MainListFragment.kt:264-266`) |
+| multi-select | one or more cards selected | a contextual action bar titled "Selected: N" with *Select all* and *Delete* (`app/src/main/java/com/baruckis/kriptofolio/ui/mainlist/MainListFragment.kt:344-358`, `app/src/main/res/menu/menu_action_mode.xml:23-40`, `app/src/main/res/values/strings.xml:302-304`); the status bar turns black (`app/src/main/java/com/baruckis/kriptofolio/utilities/PrimaryActionModeController.kt:70-87`, `app/src/main/res/values/colors.xml:42`); swipe-to-refresh is disabled (`app/src/main/java/com/baruckis/kriptofolio/ui/mainlist/MainListFragment.kt:264-266`) |
 | undo | just after a delete | a `LENGTH_LONG` snackbar "Deleted: N" with an **Undo** action (`app/src/main/java/com/baruckis/kriptofolio/ui/mainlist/MainListFragment.kt:502-536`, `app/src/main/res/values/strings.xml:53-54`) |
 
 The retry action of the error snackbar starts a new fetch with the same parameters
@@ -308,7 +310,7 @@ fetch leaves the preference on the new currency and the rows in the old one — 
 **Multi-select and delete** (`app/src/main/java/com/baruckis/kriptofolio/ui/mainlist/MainListFragment.kt:274-316`, `app/src/main/java/com/baruckis/kriptofolio/ui/mainlist/MainRecyclerViewAdapter.kt:113-181`):
 
 - a long press on a card, or a tap on its coin icon, selects it (`app/src/main/java/com/baruckis/kriptofolio/ui/mainlist/MainRecyclerViewAdapter.kt:54-58`,
-  `app/src/main/java/com/baruckis/kriptofolio/ui/mainlist/MainListItemLookup.kt`); the icon flips to show the selection;
+  `app/src/main/java/com/baruckis/kriptofolio/ui/mainlist/MainListItemLookup.kt:29-35`); the icon flips to show the selection;
 - *Select all* selects every row currently in the adapter (`app/src/main/java/com/baruckis/kriptofolio/ui/mainlist/MainListFragment.kt:277-283`);
 - *Delete* removes the selected rows from the list with an animation, closes the action bar,
   shows the empty state if nothing is left, **deletes the rows from the database immediately**
@@ -331,7 +333,7 @@ adding a coin that is **already in the portfolio replaces its amount** rather th
 **Header column labels and the spinner.** The spinner lists the 93 codes
 (`app/src/main/res/layout/activity_main.xml:158-168`) and is set to the stored currency on every creation
 (`app/src/main/java/com/baruckis/kriptofolio/ui/mainlist/MainListFragment.kt:136`). The app subtitle under the title is `""` in the full flavor and
-`DEMO` in the demo flavor (`app/src/main/java/com/baruckis/kriptofolio/ui/mainlist/MainActivity.kt:66`, `app/src/main/res/values/strings.xml:42-43`, demo flavor `app/src/demo/res/values/strings.xml`).
+`DEMO` in the demo flavor (`app/src/main/java/com/baruckis/kriptofolio/ui/mainlist/MainActivity.kt:66`, `app/src/main/res/values/strings.xml:42-43`, demo flavor `app/src/demo/res/values/strings.xml:21`).
 
 ## 6. Add / search screen
 
@@ -350,7 +352,7 @@ the listing (`app/src/main/java/com/baruckis/kriptofolio/db/MyCryptocurrencyDao.
 replaced and the two computed values are recomputed. Portfolio coins outside the top 5 000 keep
 their old row.
 
-**Visible states** (`app/src/main/res/layout/content_add_search.xml`, `app/src/main/java/com/baruckis/kriptofolio/ui/addsearchlist/AddSearchActivity.kt:218-263`):
+**Visible states** (`app/src/main/res/layout/content_add_search.xml:35-80`, `app/src/main/java/com/baruckis/kriptofolio/ui/addsearchlist/AddSearchActivity.kt:218-263`):
 
 | State | What shows |
 |---|---|
@@ -373,7 +375,7 @@ search text is kept across rotation (`app/src/main/java/com/baruckis/kriptofolio
 `app/src/main/java/com/baruckis/kriptofolio/ui/addsearchlist/AddSearchListAdapter.kt:79-82`) with the first 3 symbol characters as the fallback,
 the name and the symbol (`app/src/main/java/com/baruckis/kriptofolio/ui/addsearchlist/AddSearchListAdapter.kt:72-99`).
 
-**The amount dialog** (`app/src/main/java/com/baruckis/kriptofolio/ui/addsearchlist/CryptocurrencyAmountDialog.kt`, opened by a tap on a row,
+**The amount dialog** (`app/src/main/java/com/baruckis/kriptofolio/ui/addsearchlist/CryptocurrencyAmountDialog.kt:94-123`, opened by a tap on a row,
 `app/src/main/java/com/baruckis/kriptofolio/ui/addsearchlist/AddSearchActivity.kt:195-210`):
 
 - title "How many <name> coins do you have?", hint "Enter amount", buttons **OK** (positive) and
@@ -414,7 +416,7 @@ language:
 | 24-hour time | `preference 24h switch` (`app/src/main/res/values/strings.xml:576`) | Boolean | `true` (`app/src/main/res/xml/pref_main.xml:51`; code default `true`, `app/src/main/java/com/baruckis/kriptofolio/repository/CryptocurrencyRepository.kt:194,200`) | `true` | `true` | — |
 
 The defaults are materialized into the preference file **once, on the first launch of the main
-screen**, from `app/src/main/res/xml/pref_main.xml` in the language the app resolves at that moment
+screen**, from `app/src/main/res/xml/pref_main.xml:19-56` in the language the app resolves at that moment
 (`app/src/main/java/com/baruckis/kriptofolio/ui/mainlist/MainActivity.kt:60`, `PreferenceManager.setDefaultValues(…, false)`; the marker file
 `_has_set_default_values.xml` (Android-generated marker in the app data directory, not a repository file) records that it happened). A device whose system language is
 Lithuanian therefore starts with `LT`/`EUR`/`yyyy-MM-dd`; an English device with
@@ -469,7 +471,7 @@ subtitle as title and the version name as summary, and is not selectable (`app/s
 
 The licence screens are described from source citations; they are not part of the public screenshot subset.
 
-*Third-party software* (`app/src/main/java/com/baruckis/kriptofolio/ui/settings/thirdpartysoft/LibrariesLicensesListFragment.kt`) is a
+*Third-party software* (`app/src/main/java/com/baruckis/kriptofolio/ui/settings/thirdpartysoft/LibrariesLicensesListFragment.kt:104-118`) is a
 hard-coded list of **28 libraries** built from string resources
 (`app/src/main/java/com/baruckis/kriptofolio/repository/LicensesRepository.kt:34-291`), each card with the library, developer, licence name,
 a *Project link* button (browser intent, `app/src/main/java/com/baruckis/kriptofolio/ui/settings/thirdpartysoft/LibrariesLicensesListFragment.kt:110-112,127-134`) and a *Read license* button that opens
@@ -479,12 +481,12 @@ the licence text screen (`app/src/main/java/com/baruckis/kriptofolio/ui/settings
 
 *License* opens the same text screen with the app's own Apache 2.0 notice
 (`app/src/main/java/com/baruckis/kriptofolio/ui/settings/SettingsFragment.kt:312-318`, `app/src/main/java/com/baruckis/kriptofolio/repository/LicensesRepository.kt:298-302`). The text screen
-(`app/src/main/java/com/baruckis/kriptofolio/ui/settings/LicenseFragment.kt`) is a scrollable `TextView` titled "License" with the library
+(`app/src/main/java/com/baruckis/kriptofolio/ui/settings/LicenseFragment.kt:58-66`) is a scrollable `TextView` titled "License" with the library
 name as subtitle (`app/src/main/java/com/baruckis/kriptofolio/ui/settings/LicenseFragment.kt:52-54,63-64`).
 
 ## 9. Localization and RTL
 
-**pinned by** the public portfolio data captures in [the PR #23 UI inventory at its candidate HEAD](https://github.com/baruckis/Kriptofolio/blob/24ece1bf00409129620eea9968b8ca28fee3614b/docs/ui-inventory.md) for English and Hebrew RTL, and `SettingsKeysTest` for per-language defaults. Other screens and locale combinations are not captured in the public subset.
+**pinned by** the public portfolio data captures in [the PR #23 UI inventory at its candidate HEAD](https://github.com/baruckis/Kriptofolio/blob/7799ce5dbc45384f9b78f7acb5421c1bb8e64ebf/docs/ui-inventory.md) for English and Hebrew RTL, and `SettingsKeysTest` for per-language defaults. Other screens and locale combinations are not captured in the public subset.
 
 Four languages: English (default), Hebrew (`app/src/main/res/values-iw/`), Lithuanian (`app/src/main/res/values-lt/`),
 Swahili (`app/src/main/res/values-sw-rKE/`). Everything in this section describes an install that carries all
@@ -498,7 +500,7 @@ mirrored: the header shows *fiat / Bitcoin* instead of *Bitcoin / fiat*, list co
 to left, the FAB sits bottom-left. Numbers are kept left-to-right inside their cells with
 `textDirection="firstStrongLtr"` (`app/src/main/res/values/styles.xml:55,61`, `app/src/main/res/layout/activity_main.xml:87,115,131`).
 The system-bar background views use physical `left`/`right` gravity on purpose
-(`app/src/main/res/layout/system_bar_backgrounds.xml`).
+(`app/src/main/res/layout/system_bar_backgrounds.xml:57-65`).
 
 Strings that are the same in every language are marked `translatable="false"`; the four files are
 key-complete for the strings the screens use. `pref_default_language_entry` for Swahili is the
@@ -509,7 +511,7 @@ The app has **no dark theme**: the theme is `Theme.AppCompat.Light.DarkActionBar
 
 ## 10. Offline behaviour
 
-**pinned by** the public cached-portfolio refresh-error capture in [the PR #23 UI inventory at its candidate HEAD](https://github.com/baruckis/Kriptofolio/blob/24ece1bf00409129620eea9968b8ca28fee3614b/docs/ui-inventory.md). Add/search offline states are source-described, not publicly captured here.
+**pinned by** the public cached-portfolio refresh-error capture in [the PR #23 UI inventory at its candidate HEAD](https://github.com/baruckis/Kriptofolio/blob/7799ce5dbc45384f9b78f7acb5421c1bb8e64ebf/docs/ui-inventory.md). Add/search offline states are source-described, not publicly captured here.
 
 | Situation | Portfolio screen | Add/search screen |
 |---|---|---|
@@ -530,7 +532,7 @@ does not instantiate Room, open the files through `AppDatabase`, install an old 
 on-device app update or migration; those remain separate checks for a future migration change.
 
 Room database `kriptofolio-db` (`app/src/main/java/com/baruckis/kriptofolio/utilities/Constants.kt:23`), version 1, identity hash
-`ad1c80913f23361aa985d56ecf84d645` (`app/schemas/com.baruckis.kriptofolio.db.AppDatabase/1.json`),
+`ad1c80913f23361aa985d56ecf84d645` (`app/schemas/com.baruckis.kriptofolio.db.AppDatabase/1.json:5`),
 opened with `fallbackToDestructiveMigration()` (`app/src/main/java/com/baruckis/kriptofolio/dependencyinjection/AppModule.kt:89-95`) — so a build with a
 different schema **deletes** the user's data on first open rather than failing. Two tables:
 
@@ -539,25 +541,26 @@ different schema **deletes** the user's data on first open rather than failing. 
 | `my_cryptocurrencies` | one per portfolio coin: `my_id`, `amount`, `amount_fiat`, `amount_fiat_change_24h` + the embedded coin columns | `my_id` = CoinMarketCap id | `app/src/main/java/com/baruckis/kriptofolio/db/MyCryptocurrency.kt:26-44` |
 | `all_cryptocurrencies` | one per listed coin: `id`, `name`, `rank`, `symbol`, `currency_fiat`, `price_fiat`, three `price_percent_change_*`, `last_fetched_date` | `id` | `app/src/main/java/com/baruckis/kriptofolio/db/Cryptocurrency.kt:29-58`; `rank` is a `Short` (`app/src/main/java/com/baruckis/kriptofolio/db/Cryptocurrency.kt:44`) |
 
-Money and percentages are `REAL` (`Double`); dates are `INTEGER` epoch milliseconds
-(`app/src/main/java/com/baruckis/kriptofolio/db/Converters.kt`). `android:allowBackup="false"` (`app/src/main/AndroidManifest.xml:30`): there is no cloud
+Money and percentages use `REAL` affinity and dates use `INTEGER` epoch milliseconds; the Room
+schema records those SQL types and affinities (`app/schemas/com.baruckis.kriptofolio.db.AppDatabase/1.json:9,68-94,142-167`),
+and the date converter maps between `Date` and `Long` (`app/src/main/java/com/baruckis/kriptofolio/db/Converters.kt:30-37`). `android:allowBackup="false"` (`app/src/main/AndroidManifest.xml:30`): there is no cloud
 backup, no export, and the database is the only copy of the portfolio.
 
 The [PR #24 candidate's fixture notes](https://github.com/baruckis/Kriptofolio/blob/3d17901b2831e15ddec707393d7795002d4374ed/app/src/test/resources/db/README.md)
 document the two SQLite files in its `app/src/test/resources/db/`: one from version 1.2.1 and one
 from 1.2.3, each populated with synthetic portfolio values. The candidate's
-[`LegacyDatabaseTest`](https://github.com/baruckis/Kriptofolio/blob/3d17901b2831e15ddec707393d7795002d4374ed/app/src/test/java/com/baruckis/kriptofolio/behaviour/LegacyDatabaseTest.kt)
+[`LegacyDatabaseTest` (lines 82–214)](https://github.com/baruckis/Kriptofolio/blob/3d17901b2831e15ddec707393d7795002d4374ed/app/src/test/java/com/baruckis/kriptofolio/behaviour/LegacyDatabaseTest.kt#L82-L214)
 reads them through SQLite JDBC and checks fixture metadata and selected stored values. This does
 not prove that Room opens either file or that an installed app migrates safely; a future schema
 change still needs Room and app-update migration tests.
 
 ## 12. The demo flavor
 
-The empty demo portfolio screenshot in [the PR #23 UI inventory at its candidate HEAD](https://github.com/baruckis/Kriptofolio/blob/24ece1bf00409129620eea9968b8ca28fee3614b/docs/ui-inventory.md) shows the local debug screen with
+The empty demo portfolio screenshot in [the PR #23 UI inventory at its candidate HEAD](https://github.com/baruckis/Kriptofolio/blob/7799ce5dbc45384f9b78f7acb5421c1bb8e64ebf/docs/ui-inventory.md) shows the local debug screen with
 network disabled. It does not demonstrate the normal sandbox request; the sandbox host is retired.
 
 Same code, different constants: application id `com.baruckis.kriptofolio.demo`
-(`app/build.gradle:68-73`), toolbar subtitle `DEMO` (`app/src/main/res/values/strings.xml:43`, `app/src/demo/res/values/strings.xml`),
+(`app/build.gradle:68-73`), toolbar subtitle `DEMO` (`app/src/main/res/values/strings.xml:43`, `app/src/demo/res/values/strings.xml:21`),
 base URL `https://sandbox-api.coinmarketcap.com/` with CoinMarketCap's public sandbox key
 (`app/src/demo/java/com/baruckis/kriptofolio/utilities/ConstantsFlavor.kt:25-27`), *Donate with crypto* (a dialog with two
 copy-to-clipboard addresses, `app/src/main/java/com/baruckis/kriptofolio/ui/settings/DonateCryptoDialog.kt:74-82`) and *Buy me a coffee*
@@ -655,8 +658,8 @@ touches it.
   the API fixture README reports `max_supply` as null for 1,735 of 5,000 records (34.7 %) in the
   full capture, against a non-null field. The committed fixture is a nine-record sample, so this
   prevalence is recorded provenance and cannot be recomputed from that sample alone
-  (`app/src/test/resources/api/README.md`, section *Two things the capture revealed about the current code*).
-- **K14 — Duplicate `CAD` entity** in the DOCTYPE of `app/src/main/res/values/strings.xml` (`app/src/main/res/values/strings.xml:20`); harmless, the
+  ([the API fixture README, section *Two things the capture revealed about the current code*](https://github.com/baruckis/Kriptofolio/blob/0b77c42cfeedd5de61ddbd1ee6d9624caac19da9/app/src/test/resources/api/README.md#two-things-the-capture-revealed-about-the-current-code)).
+- **K14 — Duplicate `CAD` entity** in the DOCTYPE of `app/src/main/res/values/strings.xml:20`; harmless, the
   second definition is ignored by the XML parser.
 - **K15 — Rank is a 16-bit integer** (`app/src/main/java/com/baruckis/kriptofolio/db/Cryptocurrency.kt:44`, `cmcRank.toShort()` at
   `app/src/main/java/com/baruckis/kriptofolio/repository/CryptocurrencyRepository.kt:262`); CoinMarketCap ranks are below 32 767 today.
@@ -682,13 +685,13 @@ touches it.
   (`app/src/main/java/com/baruckis/kriptofolio/utilities/localization/StringsLocalization.kt:48`). That only works while the resources for
   all four languages are present in the installed app. The release artifact uploaded to Play is an
   App Bundle (`AGENTS.md`, "Build commands": `bundleFullRelease`; `UPGRADE-NOTES.md` §4 records
-  the bundle tasks passing), `app/build.gradle` has no `bundle { language { enableSplit = false } }`
+  the bundle tasks passing), `app/build.gradle:1-247` has no `bundle { language { enableSplit = false } }`
   block, and no `com.google.android.play:core` dependency exists anywhere in the project — so
   Play's default applies and a device receives only the language splits it asked for. On such an
   install, picking a language the device does not have should fall back to the default resources
   (English strings) while `Locale.setDefault` still switches number, date and RTL handling
   (`app/src/main/java/com/baruckis/kriptofolio/utilities/localization/LocalizationManager.kt:48-63`), giving English text with the chosen locale's formatting.
-  The public Hebrew capture in [the PR #23 UI inventory at its candidate HEAD](https://github.com/baruckis/Kriptofolio/blob/24ece1bf00409129620eea9968b8ca28fee3614b/docs/ui-inventory.md) confirms the local `demoDebug` build displays
+  The public Hebrew capture in [the PR #23 UI inventory at its candidate HEAD](https://github.com/baruckis/Kriptofolio/blob/7799ce5dbc45384f9b78f7acb5421c1bb8e64ebf/docs/ui-inventory.md) confirms the local `demoDebug` build displays
   the selected language and RTL layout. **Unverified on a Play install:** that screenshot is not
   from the Play app bundle, so it does not test language-split delivery or this possible fallback.
   Confirming it needs a Play-installed build on a device without the extra locales. Lint reports
@@ -699,7 +702,7 @@ touches it.
   at runtime (a grep for `contentDescription` and `importantForAccessibility` across the Kotlin
   sources returns nothing). A screen reader announces an unlabeled button for the screen's
   primary control, in all four languages. Elsewhere the 2019 code does use the idiom
-  deliberately: the decorative images in `app/src/main/res/layout/dialog_donate_crypto.xml` and `app/src/main/res/layout/flipview_front_custom.xml`
+  deliberately: the decorative images in `app/src/main/res/layout/dialog_donate_crypto.xml:67-80` and `app/src/main/res/layout/flipview_front_custom.xml:22-43`
   carry `contentDescription="@null"`. The string the label would need already exists in all four
   locales (`activity_add_search_title`). This document has no other accessibility statement:
   nothing else in the app was audited for it in this stage.
