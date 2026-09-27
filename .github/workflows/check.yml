@@ -33,7 +33,7 @@ permissions:
 # cancel-in-progress says, and a shared master group would have thrown away the result of a
 # merge that landed while the previous one was still queued.
 concurrency:
-  group: check-${{ github.event_name == 'pull_request' && github.event.pull_request.number || github.run_id }}
+  group: check-${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.event.pull_request.number || github.run_id }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
@@ -72,7 +72,7 @@ jobs:
       # (the demo flavor differs only in constants and resources), lint runs on the full flavor.
       # --stacktrace so a failure in CI carries enough context to be read without re-running.
       - name: Build both flavors, run unit tests and lint
-        run: ./gradlew assembleFullDebug assembleDemoDebug testFullDebugUnitTest lintFullDebug --stacktrace
+        run: ./gradlew assembleFullDebug assembleDemoDebug testFullDebugUnitTest testDemoDebugUnitTest lintFullDebug --stacktrace
 
       # THE SCHEMA GATE, first form. Room writes app/schemas/<database>/<version>.json during
       # the build (kapt argument room.schemaLocation in app/build.gradle). The committed file is
