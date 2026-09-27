@@ -36,10 +36,12 @@
       and would show up on the Play listing. The dependency disappears in the 2.0 rewrite
       (Glide gives way to Coil), and with it this finding.
 
-      This one cannot be scoped to a path: lint reports it against the merged manifest as a
-      whole, with no element or line to attach tools:ignore to.
+      Scoped to the source manifest path, where lint reports this dependency finding. A future
+      app-owned NotificationManager.notify() call elsewhere still fails lint.
       -->
-    <issue id="NotificationPermission" severity="ignore" />
+    <issue id="NotificationPermission">
+        <ignore path="src/main/AndroidManifest.xml" />
+    </issue>
 
     <!--
       A real bug, and a deliberately unfixed one: SettingsFragment builds the feedback email
