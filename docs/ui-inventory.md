@@ -39,6 +39,11 @@ above exposes the candidate file. This document does not claim the fixture is al
 | Delete and Undo, English | [Undo screenshot](ui-evidence/portfolio-undo-demo-api34-en.png) | Long-press one holding, tap delete, capture the `Deleted: 1` / `UNDO` snackbar within its 2.75-second window |
 | Portfolio data, Hebrew RTL | [RTL screenshot](ui-evidence/portfolio-data-demo-api34-iw.png) | Fixture copied, then choose Hebrew (`עִברִית`) in Settings → Language; the toolbar, totals, columns, cards and FAB mirror |
 
+The populated screenshots show the fixture's stored fetch time using the device's `Europe/Vilnius`
+time zone. The app appends the literal label `UTC` even though it formats that value locally, so
+the displayed time must not be read as UTC; this existing behaviour is documented as K1 in the
+behaviour specification.
+
 The states listed here are the complete public screenshot set in this PR. Other states from the
 historical inventory are deliberately not represented by these images.
 
@@ -69,6 +74,9 @@ synthetic fixture from PR #24, and set its owner to the disposable emulator's ap
 ```sh
 adb root
 adb shell am force-stop "$APP"
+adb shell rm -f "/data/data/$APP/databases/kriptofolio-db" \
+  "/data/data/$APP/databases/kriptofolio-db-wal" \
+  "/data/data/$APP/databases/kriptofolio-db-shm"
 APP_UID=$(adb shell stat -c '%u' "/data/data/$APP" | tr -d '\r')
 adb push app/src/test/resources/db/kriptofolio-v1.2.3.db \
   "/data/data/$APP/databases/kriptofolio-db"
