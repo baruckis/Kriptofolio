@@ -68,8 +68,8 @@ jobs:
         with:
           cache-read-only: ${{ github.event_name == 'pull_request' }}
 
-      # The gate. Both flavors must compile (AGENTS.md), the unit tests run on the full flavor
-      # (the demo flavor differs only in constants and resources), lint runs on the full flavor.
+      # The gate. Both flavors must compile and pass their unit tests (AGENTS.md); lint runs on
+      # the full flavor because demo differs only in constants and resources.
       # --stacktrace so a failure in CI carries enough context to be read without re-running.
       - name: Build both flavors, run unit tests and lint
         run: ./gradlew assembleFullDebug assembleDemoDebug testFullDebugUnitTest testDemoDebugUnitTest lintFullDebug --stacktrace
