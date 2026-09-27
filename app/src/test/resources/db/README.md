@@ -1,9 +1,10 @@
 # Real database files from released versions
 
 Two SQLite databases and two preference files, each written by a **released, signed build** of
-this app running on a clean emulator, holding a **fictional portfolio**. They are the upgrade
-contract for the 2.0 rewrite: whatever the database module becomes, it has to open these files
-and read the same rows back, because they are byte-for-byte what a user's phone contains.
+this app running on a clean emulator and holding a **fictional portfolio**. Their schema and file
+format preserve representative on-device data for future rewrite migration tests. This PR's
+plain SQLite tests inspect the fixtures; they do not yet verify that Room or the app opens or
+migrates them.
 
 | File | Written by | Fiat | Where it came from |
 |---|---|---|---|
@@ -14,8 +15,10 @@ and read the same rows back, because they are byte-for-byte what a user's phone 
 
 Both databases carry Room schema version 1 with identity hash `ad1c80913f23361aa985d56ecf84d645`,
 the hash in `app/schemas/com.baruckis.kriptofolio.db.AppDatabase/1.json`. `LegacyDatabaseTest`
-opens each with a plain SQLite driver and checks that hash, the `CREATE TABLE` statements against
-the schema file, and the rows.
+reads each with a plain SQLite driver and checks that hash, the `CREATE TABLE` statements against
+the schema file, selected rows and preferences. This verifies fixture contents and schema metadata.
+It does not instantiate Room or `AppDatabase`, run a migration, install an old APK, or exercise an
+on-device upgrade; it is not evidence that the current app opens or migrates these files.
 
 ## The portfolio is fictional
 

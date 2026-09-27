@@ -32,17 +32,14 @@ import java.sql.DriverManager
 import javax.xml.parsers.DocumentBuilderFactory
 
 /**
- * Pins docs/BEHAVIOUR.md section 11, "Data persistence", on two real database files written by
- * released builds (see src/test/resources/db/README.md) — the upgrade-test contract for the
- * rewrite's database module.
+ * Reads two synthetic-portfolio database files produced by released builds (see
+ * src/test/resources/db/README.md) through plain SQLite JDBC. It checks the fixture's recorded
+ * identity hash, table SQL, rows and preferences against the exported schema and expected values.
  *
- * What "opens with the current AppDatabase" means here: Room opens a database by comparing the
- * identity hash stored in `room_master_table` with the hash of its generated schema, which is
- * the hash exported to app/schemas. A file whose hash matches, and whose tables are created by
- * the exact SQL the schema records, is a file the shipped 1.2.3 code opens without touching
- * `fallbackToDestructiveMigration()`. This test checks both, on the JVM, through a plain SQLite
- * driver; it deliberately does not add Robolectric to the 2019 build. The rewrite's own
- * migration tests (Room's MigrationTestHelper) open the same files for real.
+ * This test does not instantiate Room, open the database through AppDatabase, install a released
+ * APK, or simulate an on-device update or migration. Those behaviors require a separate test
+ * through Room's MigrationTestHelper or an instrumented app-upgrade scenario. SQLite readability
+ * and matching schema metadata alone do not prove that the shipped app opens or migrates a file.
  */
 @RunWith(Parameterized::class)
 class LegacyDatabaseTest(private val version: String, private val fiat: String) {
@@ -82,7 +79,7 @@ class LegacyDatabaseTest(private val version: String, private val fiat: String) 
     }
 
     @Test
-    fun `the identity hash matches the exported schema, so Room opens it without a migration`() {
+    fun `the fixture identity hash and user version match exported schema metadata`() {
         val schema = schemaJson()
         assertEquals(IDENTITY_HASH, schema.get("identityHash").asString)
         assertEquals(1, schema.get("version").asInt)
