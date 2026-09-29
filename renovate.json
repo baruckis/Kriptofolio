@@ -19,7 +19,8 @@
   ],
   "enabledManagers": [
     "github-actions",
-    "gradle"
+    "gradle",
+    "gradle-wrapper"
   ],
   "baseBranchPatterns": [
     "master"
