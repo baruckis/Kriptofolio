@@ -123,3 +123,7 @@ to owner and contributor work.
 
 These rules preserve the existing protections for history, user data, signing and human
 merge decisions.
+
+## Renovate dashboard (information only)
+
+Renovate runs daily at 05:17 UTC and can also be started from **Actions → Renovate dependency updates → Run workflow** on `master`. Its [issue dashboard](https://github.com/baruckis/Kriptofolio/issues) is informational: every update waits for an explicit dashboard selection. Vulnerability auto-fix PRs, automerge, and platform automerge are disabled. An unselected dashboard run should not create dependency branches or pull requests. To enable it, set the repository Actions variables `RENOVATE_ENABLED=true` and `RENOVATE_APP_CLIENT_ID`, plus the secret `RENOVATE_APP_PRIVATE_KEY`; install the writer App only in this repository. Set `RENOVATE_ENABLED=false` or remove it to pause runs. The maintainer owns App settings and must never commit its private key.
