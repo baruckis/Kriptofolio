@@ -1,0 +1,46 @@
+name: Renovate dependency updates
+
+on:
+  schedule:
+    - cron: '17 5 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: renovate-${{ github.repository }}
+  cancel-in-progress: false
+
+jobs:
+  renovate:
+    if: ${{ vars.RENOVATE_ENABLED == 'true' && github.ref == 'refs/heads/master' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - name: Create repository-scoped Renovate token
+        id: renovate-token
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        with:
+          app-id: ${{ vars.RENOVATE_APP_CLIENT_ID }}
+          private-key: ${{ secrets.RENOVATE_APP_PRIVATE_KEY }}
+          owner: baruckis
+          repositories: Kriptofolio
+
+      - name: Check out default branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: master
+          token: ${{ steps.renovate-token.outputs.token }}
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Run Renovate
+        env:
+          RENOVATE_REPOSITORIES: ${{ github.repository }}
+        uses: renovatebot/github-action@1cd96b855fee0da6f230617e89dbff0e06ea393a # v46.3.5
+        with:
+          configurationFile: .github/renovate/config.cjs
+          token: ${{ steps.renovate-token.outputs.token }}
+          renovate-image: ghcr.io/renovatebot/renovate:44.118.1@sha256:04afed9c34a2a1714938a7325afb1767fa74b718ff48e6b5877ea63193a09276
+          mount-docker-socket: false
