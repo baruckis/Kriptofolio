@@ -1,5 +1,6 @@
 import hashlib
 import json
+import shutil
 import struct
 import sys
 import tempfile
@@ -195,18 +196,59 @@ class AndroidScenarioEvidenceTests(unittest.TestCase):
         with self.assertRaisesRegex(evidence.EvidenceError, "unexpected directory"):
             self.validate()
 
+    def test_rejects_unreadable_media_directory(self):
+        def fail_on_unreadable(top, *, followlinks, onerror):
+            if Path(top) == self.root:
+                onerror(PermissionError(13, "permission denied", str(self.root / "frames")))
+            return iter(())
+
+        with patch.object(evidence.os, "walk", side_effect=fail_on_unreadable):
+            with self.assertRaisesRegex(evidence.EvidenceError,
+                                        "unable to read package directory.*frames"):
+                self.validate()
+
     def test_cleanup_removes_an_owned_older_package(self):
         output_root = Path(self.temporary.name) / "outputs"
         run_id = "run-123"
         package = output_root / run_id
-        package.mkdir(parents=True)
-        (package / "scenario-evidence.json").write_text(json.dumps({
-            "repository": "baruckis/Kriptofolio",
-            "run": {"id": run_id, "kind": "local"},
-        }), encoding="utf-8")
+        output_root.mkdir()
+        shutil.copytree(self.root, package)
         with patch.object(evidence, "OUTPUT_ROOT", output_root):
             self.assertTrue(evidence.cleanup_run(run_id))
         self.assertFalse(package.exists())
+
+    def test_cleanup_refuses_unlisted_file(self):
+        output_root = Path(self.temporary.name) / "outputs"
+        run_id = "run-123"
+        package = output_root / run_id
+        output_root.mkdir()
+        shutil.copytree(self.root, package)
+        extra = package / "frames/extra.png"
+        extra.write_bytes(tiny_png())
+        with patch.object(evidence, "OUTPUT_ROOT", output_root):
+            with self.assertRaisesRegex(evidence.EvidenceError, "missing or undeclared files"):
+                evidence.cleanup_run(run_id)
+        self.assertTrue(package.is_dir())
+        self.assertTrue(extra.is_file())
+
+    def test_cleanup_refuses_unreadable_directory(self):
+        output_root = Path(self.temporary.name) / "outputs"
+        run_id = "run-123"
+        package = output_root / run_id
+        output_root.mkdir()
+        shutil.copytree(self.root, package)
+
+        def fail_on_unreadable(top, *, followlinks, onerror):
+            if Path(top) == package:
+                onerror(PermissionError(13, "permission denied", str(package / "frames")))
+            return iter(())
+
+        with patch.object(evidence, "OUTPUT_ROOT", output_root), \
+                patch.object(evidence.os, "walk", side_effect=fail_on_unreadable):
+            with self.assertRaisesRegex(evidence.EvidenceError,
+                                        "unable to read package directory.*frames"):
+                evidence.cleanup_run(run_id)
+        self.assertTrue(package.is_dir())
 
     def test_cleanup_refuses_a_foreign_package(self):
         output_root = Path(self.temporary.name) / "outputs"

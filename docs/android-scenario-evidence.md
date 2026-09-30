@@ -77,10 +77,12 @@ and restores those states.
 ## Storage, cleanup, and limits
 
 - Evidence is local, ignored by Git, capped by the tool, and not sent to GitHub or another service.
-- A run can be removed by its exact ID; automatic cleanup considers only valid packages created by
-  this repository's local capture tool, identified by its repository and run ID, that are more than
-  24 hours old. Cleanup can remove an older package even when a newer validator no longer accepts
-  its format:
+- A run can be removed by its exact ID; automatic cleanup considers only packages marked as created
+  by this repository's local capture tool, identified by their repository and run ID, that are more
+  than 24 hours old. Cleanup can remove an older package even when a newer validator no longer
+  accepts its format, but it still checks the package's declared video and frame inventory. It
+  refuses to remove a package if a directory cannot be read or if it contains undeclared files;
+  inspect or move those files before retrying cleanup:
 
   ```sh
   python3 scripts/android_scenario_evidence.py cleanup --run-id <run-id>

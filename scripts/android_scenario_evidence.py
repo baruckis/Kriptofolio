@@ -260,7 +260,14 @@ def walk_package(root: Path, declared_paths: set[str]) -> None:
     require(not root.is_symlink() and root.is_dir(), "package directory is invalid")
     expected = {"scenario-evidence.json", *declared_paths}
     found = {"scenario-evidence.json"}
-    for directory, directory_names, file_names in os.walk(root, followlinks=False):
+
+    def fail_on_walk_error(error: OSError) -> None:
+        failed_path = error.filename or root
+        raise EvidenceError(f"unable to read package directory {failed_path}: {error}") from error
+
+    for directory, directory_names, file_names in os.walk(
+        root, followlinks=False, onerror=fail_on_walk_error
+    ):
         current = Path(directory)
         for name in directory_names:
             path = current / name
@@ -274,6 +281,30 @@ def walk_package(root: Path, declared_paths: set[str]) -> None:
             found.add(path.relative_to(root).as_posix())
     require(found == expected,
             "package has missing or undeclared files: " + ", ".join(sorted(found ^ expected)))
+
+
+def cleanup_declared_paths(manifest: dict) -> set[str]:
+    scenarios = manifest.get("scenarios")
+    require(isinstance(scenarios, list) and len(scenarios) == 1 and
+            isinstance(scenarios[0], dict) and scenarios[0].get("id") == SCENARIO_ID,
+            "refusing to remove a package with an unknown scenario")
+    videos = manifest.get("videos")
+    require(isinstance(videos, list) and len(videos) == 1 and isinstance(videos[0], dict),
+            "refusing to remove a package with an unknown video list")
+    video_path = safe_relative_path(videos[0].get("path"), "video.path", "videos",
+                                    SCENARIO_ID, ".mp4")
+    frames = manifest.get("frames")
+    require(isinstance(frames, list) and len(frames) <= 2,
+            "refusing to remove a package with an unknown frame list")
+    paths = {video_path.as_posix()}
+    for index, frame in enumerate(frames):
+        require(isinstance(frame, dict) and isinstance(frame.get("id"), str) and
+                ID_RE.fullmatch(frame["id"]) is not None,
+                f"refusing to remove an invalid frames[{index}] entry")
+        frame_path = safe_relative_path(frame.get("path"), f"frames[{index}].path",
+                                        "frames", frame["id"], ".png")
+        paths.add(frame_path.as_posix())
+    return paths
 
 
 def validate_manifest(manifest: dict, root: Path, expected_head: str,
@@ -674,6 +705,7 @@ def cleanup_run(run_id: str) -> bool:
             run.get("id") == run_id and run.get("kind") == "local",
             "refusing to remove a package that is not owned by this tool")
     # Cleanup uses stable ownership fields so a newer validator can still remove an older run.
+    walk_package(path, cleanup_declared_paths(manifest))
     shutil.rmtree(path)
     return True
 
