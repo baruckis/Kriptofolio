@@ -62,6 +62,7 @@ class MainListFragmentTest {
             if (!evidenceRunId.matches(Regex("run-[A-Za-z0-9-]{1,80}"))) {
                 throw AssertionError("Invalid scenario evidence run ID")
             }
+            awaitScenarioEvidenceRecorder(evidenceRunId)
 
             onView(withId(R.id.fab)).check(matches(isDisplayed()))
             onView(withId(R.id.layout_fragment_main_list_empty)).check(matches(isDisplayed()))
@@ -81,6 +82,19 @@ class MainListFragmentTest {
                 throw AssertionError("Scenario evidence intentional failure probe")
             }
         }
+    }
+
+    private fun awaitScenarioEvidenceRecorder(runId: String) {
+        val marker = File(InstrumentationRegistry.getTargetContext().cacheDir,
+                "scenario-evidence-$runId-recording-ready")
+        val deadline = SystemClock.elapsedRealtime() + 20_000L
+        while (!marker.isFile && SystemClock.elapsedRealtime() < deadline) {
+            SystemClock.sleep(50)
+        }
+        if (!marker.isFile) {
+            throw AssertionError("Scenario evidence recorder did not become ready")
+        }
+        marker.delete()
     }
 
     private fun saveEvidenceCheckpoint(runId: String, checkpointId: String) {

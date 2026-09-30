@@ -139,6 +139,15 @@ class AndroidScenarioEvidenceTests(unittest.TestCase):
                 patch.object(evidence.time, "sleep"):
             evidence.wait_for_network_state("adb", "emulator-5554", False, False)
 
+    def test_reads_resumed_activity_package_from_api_34_dump(self):
+        dump = """ACTIVITY MANAGER ACTIVITIES (dumpsys activity activities)
+  topResumedActivity=ActivityRecord{f3a1 u0 com.baruckis.kriptofolio.demo/.ui.mainlist.MainActivity t42}
+"""
+        self.assertEqual(evidence.resumed_activity_package(dump), "com.baruckis.kriptofolio.demo")
+
+    def test_ignores_activity_dump_without_a_resumed_component(self):
+        self.assertIsNone(evidence.resumed_activity_package("mResumedActivity: none\n"))
+
     def test_accepts_complete_passed_android_package(self):
         self.assertEqual(self.validate()[:2], (1, 2))
 

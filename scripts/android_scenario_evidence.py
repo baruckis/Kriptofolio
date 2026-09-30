@@ -572,6 +572,24 @@ def screenrecord_uptime_ms(adb: str, serial: str) -> int:
     return round(float(value) * 1000)
 
 
+def resumed_activity_package(value: str) -> str | None:
+    for line in value.splitlines():
+        if not any(field in line for field in ("mResumedActivity", "topResumedActivity", "ResumedActivity")):
+            continue
+        match = re.search(r"\b([A-Za-z][A-Za-z0-9_.]*)/[^\s}]+", line)
+        if match is not None:
+            return match.group(1)
+    return None
+
+
+def foreground_package(adb: str, serial: str) -> str | None:
+    try:
+        value = adb_text(adb, serial, "shell", "dumpsys", "activity", "activities", timeout=5)
+    except EvidenceError:
+        return None
+    return resumed_activity_package(value)
+
+
 def app_checkpoint(adb: str, serial: str, run_id: str, checkpoint: str):
     package_path = f"cache/scenario-evidence-{run_id}-{checkpoint}"
     timestamp = subprocess.run(
@@ -701,6 +719,7 @@ def capture(run_id: str, serial: str, probe_failure: bool) -> tuple[int, Path]:
 
     run_started = datetime.now(timezone.utc).replace(microsecond=0)
     remote_video = f"/sdcard/Download/kriptofolio-scenario-evidence-{run_id}.mp4"
+    recording_marker = f"cache/scenario-evidence-{run_id}-recording-ready"
     recorder = None
     recorder_pid = None
     local_directory = None
@@ -722,16 +741,6 @@ def capture(run_id: str, serial: str, probe_failure: bool) -> tuple[int, Path]:
         wait_for_network_state(adb, serial, False, False)
         adb_command(adb, serial, "shell", "rm", "-f", remote_video)
         require(not screenrecord_pids(adb, serial), "an unrelated screenrecord process is already running")
-        recorder = subprocess.Popen(
-            [adb, "-s", serial, "shell", "screenrecord", "--time-limit", "90",
-             "--size", f"{device['width']}x{device['height']}", "--bit-rate", "750000", remote_video],
-            stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, errors="replace")
-        time.sleep(0.5)
-        require(recorder.poll() is None, "Android screenrecord did not start")
-        pids = screenrecord_pids(adb, serial)
-        require(len(pids) == 1 and pids[0].isdigit(), "could not identify the task-owned screenrecord process")
-        recorder_pid = pids[0]
-        record_start_uptime = screenrecord_uptime_ms(adb, serial)
 
         gradle_args = ["./gradlew", "--no-daemon", "--console=plain",
                        ":app:connectedDemoDebugAndroidTest",
@@ -745,8 +754,24 @@ def capture(run_id: str, serial: str, probe_failure: bool) -> tuple[int, Path]:
                                           stderr=subprocess.STDOUT, text=True, start_new_session=True)
         checkpoint_ids = ("before-main-list", "add-search-screen")
         test_deadline = time.monotonic() + 180
+        recording_ready = False
         while gradle_process.poll() is None and len(checkpoint_results) < len(checkpoint_ids) and \
                 time.monotonic() < test_deadline:
+            if recorder is None and foreground_package(adb, serial) == APP_ID:
+                recorder = subprocess.Popen(
+                    [adb, "-s", serial, "shell", "screenrecord", "--time-limit", "90",
+                     "--size", f"{device['width']}x{device['height']}", "--bit-rate", "750000",
+                     remote_video], stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+                    text=True, errors="replace")
+                time.sleep(0.5)
+                require(recorder.poll() is None, "Android screenrecord did not start")
+                pids = screenrecord_pids(adb, serial)
+                require(len(pids) == 1 and pids[0].isdigit(),
+                        "could not identify the task-owned screenrecord process")
+                recorder_pid = pids[0]
+                record_start_uptime = screenrecord_uptime_ms(adb, serial)
+                adb_command(adb, serial, "shell", "run-as", APP_ID, "touch", recording_marker)
+                recording_ready = True
             for checkpoint in checkpoint_ids:
                 if checkpoint not in checkpoint_results:
                     value = app_checkpoint(adb, serial, run_id, checkpoint)
@@ -774,6 +799,8 @@ def capture(run_id: str, serial: str, probe_failure: bool) -> tuple[int, Path]:
             raise EvidenceError("the exact Espresso test produced no fresh test result")
         require(set(checkpoint_results) == set(checkpoint_ids),
                 "the Espresso process removed its app before both checkpoints could be collected")
+        require(recording_ready and recorder is not None,
+                "the app never reached the foreground; recording was not started")
         failures = list(case.findall("failure")) + list(case.findall("error"))
         if not failures:
             test_status = "passed"
@@ -946,6 +973,8 @@ def capture(run_id: str, serial: str, probe_failure: bool) -> tuple[int, Path]:
             package_path = f"cache/scenario-evidence-{run_id}-{checkpoint}"
             best_effort_cleanup([adb, "-s", serial, "shell", "run-as", APP_ID, "rm", "-f",
                                  package_path + ".png", package_path + ".ms"])
+        best_effort_cleanup([adb, "-s", serial, "shell", "run-as", APP_ID, "rm", "-f",
+                             recording_marker])
         restore_errors = cleanup_errors
         for service, enabled in (("wifi", wifi_was_enabled), ("data", mobile_data_was_enabled)):
             try:
