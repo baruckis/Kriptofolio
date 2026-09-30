@@ -140,6 +140,36 @@ class AndroidScenarioEvidenceTests(unittest.TestCase):
                 patch.object(evidence.time, "sleep"):
             evidence.wait_for_network_state("adb", "emulator-5554", False, False)
 
+    def test_restores_both_previous_network_states_and_verifies_them(self):
+        with patch.object(evidence, "adb_command") as adb_command, \
+                patch.object(evidence, "wait_for_network_state") as wait_for_state:
+            errors = evidence.restore_emulator_network_state("adb", "emulator-5554", True, False)
+
+        self.assertEqual(errors, [])
+        self.assertEqual(adb_command.call_count, 2)
+        self.assertEqual(adb_command.call_args_list[0].args,
+                         ("adb", "emulator-5554", "shell", "svc", "wifi", "enable"))
+        self.assertEqual(adb_command.call_args_list[1].args,
+                         ("adb", "emulator-5554", "shell", "svc", "data", "disable"))
+        wait_for_state.assert_called_once_with("adb", "emulator-5554", True, False)
+
+    def test_reports_network_restore_command_and_verification_failures(self):
+        with patch.object(evidence, "adb_command", side_effect=[
+                evidence.EvidenceError("wifi restore failed"),
+                evidence.EvidenceError("mobile data restore failed")]), \
+                patch.object(evidence, "wait_for_network_state",
+                             side_effect=evidence.EvidenceError("state mismatch")):
+            errors = evidence.restore_emulator_network_state("adb", "emulator-5554", True, True)
+
+        self.assertEqual(errors, ["wifi restore failed", "mobile data restore failed", "state mismatch"])
+
+    def test_sigterm_handler_ignores_repeated_termination_before_cleanup(self):
+        with patch.object(evidence.signal, "signal") as set_signal:
+            with self.assertRaisesRegex(evidence.EvidenceError, "cleanup will run"):
+                evidence.interrupt_capture_on_sigterm(evidence.signal.SIGTERM, None)
+
+        set_signal.assert_called_once_with(evidence.signal.SIGTERM, evidence.signal.SIG_IGN)
+
     def test_reads_resumed_activity_package_from_api_34_dump(self):
         dump = """ACTIVITY MANAGER ACTIVITIES (dumpsys activity activities)
   topResumedActivity=ActivityRecord{f3a1 u0 com.baruckis.kriptofolio.demo/.ui.mainlist.MainActivity t42}

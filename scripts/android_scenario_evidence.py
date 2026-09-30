@@ -539,6 +539,27 @@ def wait_for_network_state(adb: str, serial: str, wifi_enabled: bool,
             (": " + last_error if last_error else ""))
 
 
+def restore_emulator_network_state(adb: str, serial: str, wifi_enabled: bool,
+                                   mobile_data_enabled: bool) -> list[str]:
+    errors = []
+    for service, enabled in (("wifi", wifi_enabled), ("data", mobile_data_enabled)):
+        try:
+            adb_command(adb, serial, "shell", "svc", service,
+                        "enable" if enabled else "disable", timeout=10)
+        except EvidenceError as error:
+            errors.append(str(error))
+    try:
+        wait_for_network_state(adb, serial, wifi_enabled, mobile_data_enabled)
+    except EvidenceError as error:
+        errors.append(str(error))
+    return errors
+
+
+def interrupt_capture_on_sigterm(signum, _frame) -> None:
+    signal.signal(signum, signal.SIG_IGN)
+    raise EvidenceError("capture interrupted by SIGTERM; emulator cleanup will run")
+
+
 def local_git_value(*args) -> str:
     return command(["git", *args]).stdout.strip()
 
@@ -978,72 +999,106 @@ def capture(run_id: str, serial: str, probe_failure: bool) -> tuple[int, Path]:
             shutil.rmtree(local_directory)
         raise
     finally:
-        cleanup_errors = []
-
-        def best_effort_cleanup(args):
-            try:
-                subprocess.run(args, capture_output=True, timeout=10, check=False)
-            except (OSError, subprocess.TimeoutExpired) as error:
-                cleanup_errors.append(str(error))
-
-        if gradle_process is not None and gradle_process.poll() is None:
-            try:
-                os.killpg(gradle_process.pid, signal.SIGTERM)
-                gradle_process.communicate(timeout=10)
-            except Exception:
-                try:
-                    os.killpg(gradle_process.pid, signal.SIGKILL)
-                except ProcessLookupError:
-                    pass
-                gradle_process.communicate()
-        if gradle_log is not None:
-            gradle_log.close()
-        if recorder_pid is not None:
-            try:
-                pids = screenrecord_pids(adb, serial)
-                if recorder_pid in pids:
-                    adb_command(adb, serial, "shell", "kill", "-INT", recorder_pid)
-                    for _ in range(30):
-                        if recorder_pid not in screenrecord_pids(adb, serial):
-                            break
-                        time.sleep(0.1)
-                    if recorder_pid in screenrecord_pids(adb, serial):
-                        adb_command(adb, serial, "shell", "kill", "-TERM", recorder_pid,
-                                    capture=True, timeout=10)
-            except Exception:
-                pass
-        if recorder is not None and recorder.poll() is None:
-            try:
-                recorder.communicate(timeout=10)
-            except Exception:
-                recorder.kill()
-                recorder.communicate()
-        best_effort_cleanup([adb, "-s", serial, "shell", "rm", "-f", remote_video])
-        for checkpoint in ("before-main-list", "add-search-screen"):
-            package_path = f"cache/scenario-evidence-{run_id}-{checkpoint}"
-            best_effort_cleanup([adb, "-s", serial, "shell", "run-as", APP_ID, "rm", "-f",
-                                 package_path + ".png", package_path + ".ms"])
-        best_effort_cleanup([adb, "-s", serial, "shell", "run-as", APP_ID, "rm", "-f",
-                             screen_ready_marker])
-        best_effort_cleanup([adb, "-s", serial, "shell", "run-as", APP_ID, "rm", "-f",
-                             recording_marker])
-        restore_errors = cleanup_errors
-        for service, enabled in (("wifi", wifi_was_enabled), ("data", mobile_data_was_enabled)):
-            try:
-                adb_command(adb, serial, "shell", "svc", service,
-                            "enable" if enabled else "disable", timeout=10)
-            except EvidenceError as error:
-                restore_errors.append(str(error))
+        sigint_handler = signal.getsignal(signal.SIGINT)
+        sigterm_handler = signal.getsignal(signal.SIGTERM)
+        signal.signal(signal.SIGINT, signal.SIG_IGN)
+        signal.signal(signal.SIGTERM, signal.SIG_IGN)
         try:
-            wait_for_network_state(adb, serial, wifi_was_enabled, mobile_data_was_enabled)
-        except EvidenceError as error:
-            restore_errors.append(str(error))
-        if restore_errors:
-            print("android-scenario-evidence: warning: emulator network restoration: " +
-                  "; ".join(restore_errors) +
-                  f". Previously observed state: Wi-Fi={'enabled' if wifi_was_enabled else 'disabled'}, "
-                  f"mobile data={'enabled' if mobile_data_was_enabled else 'disabled'}.",
-                  file=sys.stderr)
+            cleanup_errors = []
+
+            def best_effort_cleanup(args):
+                try:
+                    result = subprocess.run(args, capture_output=True, timeout=10, check=False)
+                    if result.returncode != 0:
+                        detail = (result.stderr or result.stdout or b"").decode(
+                            "utf-8", "replace").strip()[-300:]
+                        cleanup_errors.append(
+                            f"{Path(args[0]).name} exited {result.returncode}" +
+                            (f": {detail}" if detail else ""))
+                except (OSError, subprocess.TimeoutExpired) as error:
+                    cleanup_errors.append(str(error))
+
+            if gradle_process is not None and gradle_process.poll() is None:
+                try:
+                    os.killpg(gradle_process.pid, signal.SIGTERM)
+                    gradle_process.communicate(timeout=10)
+                except Exception as error:
+                    try:
+                        os.killpg(gradle_process.pid, signal.SIGKILL)
+                        gradle_process.communicate(timeout=10)
+                    except Exception as kill_error:
+                        cleanup_errors.append(f"Gradle process cleanup failed: {kill_error}")
+                    else:
+                        cleanup_errors.append(f"Gradle process required SIGKILL: {error}")
+                if gradle_process.poll() is None:
+                    cleanup_errors.append("Gradle process remained active after cleanup")
+            if gradle_log is not None:
+                try:
+                    gradle_log.close()
+                except OSError as error:
+                    cleanup_errors.append(f"Gradle log cleanup failed: {error}")
+            if recorder_pid is not None:
+                try:
+                    pids = screenrecord_pids(adb, serial)
+                    if recorder_pid in pids:
+                        adb_command(adb, serial, "shell", "kill", "-INT", recorder_pid)
+                        for _ in range(30):
+                            if recorder_pid not in screenrecord_pids(adb, serial):
+                                break
+                            time.sleep(0.1)
+                        if recorder_pid in screenrecord_pids(adb, serial):
+                            adb_command(adb, serial, "shell", "kill", "-TERM", recorder_pid,
+                                        capture=True, timeout=10)
+                            for _ in range(10):
+                                if recorder_pid not in screenrecord_pids(adb, serial):
+                                    break
+                                time.sleep(0.1)
+                        if recorder_pid in screenrecord_pids(adb, serial):
+                            cleanup_errors.append("Android screenrecord remained active after cleanup")
+                except Exception as error:
+                    cleanup_errors.append(f"Android screenrecord cleanup failed: {error}")
+            if recorder is not None and recorder.poll() is None:
+                try:
+                    recorder.communicate(timeout=10)
+                except Exception as error:
+                    try:
+                        recorder.kill()
+                        recorder.communicate(timeout=10)
+                    except Exception as kill_error:
+                        cleanup_errors.append(f"ADB screenrecord process cleanup failed: {kill_error}")
+                    else:
+                        cleanup_errors.append(f"ADB screenrecord required forced cleanup: {error}")
+            best_effort_cleanup([adb, "-s", serial, "shell", "rm", "-f", remote_video])
+            for checkpoint in ("before-main-list", "add-search-screen"):
+                package_path = f"cache/scenario-evidence-{run_id}-{checkpoint}"
+                best_effort_cleanup([adb, "-s", serial, "shell", "run-as", APP_ID, "rm", "-f",
+                                     package_path + ".png", package_path + ".ms"])
+            best_effort_cleanup([adb, "-s", serial, "shell", "run-as", APP_ID, "rm", "-f",
+                                 screen_ready_marker])
+            best_effort_cleanup([adb, "-s", serial, "shell", "run-as", APP_ID, "rm", "-f",
+                                 recording_marker])
+            restore_errors = restore_emulator_network_state(
+                adb, serial, wifi_was_enabled, mobile_data_was_enabled)
+            if cleanup_errors or restore_errors:
+                package_discarded = not local_directory_created or local_directory is None or \
+                    not local_directory.exists()
+                if local_directory_created and local_directory is not None and local_directory.exists():
+                    try:
+                        shutil.rmtree(local_directory)
+                        package_discarded = True
+                    except OSError as error:
+                        cleanup_errors.append(f"local evidence package cleanup failed: {error}")
+                errors = cleanup_errors + restore_errors
+                print("android-scenario-evidence: cleanup failed: " + "; ".join(errors) +
+                      f". Previously observed state: Wi-Fi={'enabled' if wifi_was_enabled else 'disabled'}, "
+                      f"mobile data={'enabled' if mobile_data_was_enabled else 'disabled'}.",
+                      file=sys.stderr)
+                disposition = "the evidence package was discarded" if package_discarded else \
+                    "the evidence package could not be removed; do not use it"
+                raise EvidenceError("capture cleanup failed; " + disposition)
+        finally:
+            signal.signal(signal.SIGINT, sigint_handler)
+            signal.signal(signal.SIGTERM, sigterm_handler)
 
 
 def parser() -> argparse.ArgumentParser:
@@ -1066,7 +1121,12 @@ def main(argv=None) -> int:
     try:
         if args.command == "capture":
             run_id = datetime.now(timezone.utc).strftime("run-%Y%m%dT%H%M%SZ-") + os.urandom(4).hex()
-            code, path = capture(run_id, args.serial, args.probe_failure)
+            previous_sigterm_handler = signal.getsignal(signal.SIGTERM)
+            try:
+                signal.signal(signal.SIGTERM, interrupt_capture_on_sigterm)
+                code, path = capture(run_id, args.serial, args.probe_failure)
+            finally:
+                signal.signal(signal.SIGTERM, previous_sigterm_handler)
             print(f"run: {run_id}")
             print(f"status: {'failed probe (expected)' if code == 2 else 'passed'}")
             print(f"package: {path}")
@@ -1087,6 +1147,9 @@ def main(argv=None) -> int:
     except EvidenceError as error:
         print("android-scenario-evidence: " + str(error), file=sys.stderr)
         return 1
+    except KeyboardInterrupt:
+        print("android-scenario-evidence: capture interrupted by SIGINT after cleanup", file=sys.stderr)
+        return 130
 
 
 if __name__ == "__main__":

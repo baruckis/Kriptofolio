@@ -71,8 +71,12 @@ That probe first performs the same Espresso UI assertions and captures both chec
 raises a deliberate assertion. Exit status `2` and a valid manifest marked `failed` are expected
 for this command; the failed package is not passing feature evidence. Other test failures discard
 the recording. It refuses to start if it cannot read the emulator's Wi-Fi or mobile-data state. On
-normal success or failure exits, the script removes its temporary emulator video/checkpoint files
-and restores those states.
+normal success, test failure, Ctrl-C (`SIGINT`), or `SIGTERM`, the script stops its task-owned recorder,
+removes temporary emulator video/checkpoint files, and restores the observed network states before
+exiting. It ignores further interrupt signals while cleanup is running. If temporary-file cleanup or
+network restoration cannot be verified, the command exits nonzero, attempts to discard its local evidence
+package, and reports the previously observed Wi-Fi and mobile-data states so they can be restored manually.
+If the package itself cannot be removed, the error says not to use it.
 
 ## Storage, cleanup, and limits
 
