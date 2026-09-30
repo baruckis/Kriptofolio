@@ -81,8 +81,9 @@ video/checkpoint files and restores the emulator's previous Wi-Fi state.
 
 - The validator checks the manifest schema, package paths, PNG structure and decoded pixel data,
   MP4 container markers and declared duration, byte limits, checksums, exact HEAD, and checkpoint
-  links. It does not decode or play the MP4. A successful Espresso result is the behavioral check;
-  a reviewer still needs to view the video to assess what is visible.
+  links. Capture strips ancillary PNG chunks before packaging so emulator color metadata does not
+  enter the evidence. It does not decode or play the MP4. A successful Espresso result is the
+  behavioral check; a reviewer still needs to view the video to assess what is visible.
 - Because this local-only pilot does not upload or attach artifacts, a remote pull request reviewer
   cannot access its video. Public PR video delivery remains blocked until a zero-cost, permitted
   artifact route is verified; do not commit the binary or enable a paid workflow to work around it.

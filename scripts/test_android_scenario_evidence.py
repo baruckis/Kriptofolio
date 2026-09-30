@@ -28,6 +28,13 @@ def tiny_png():
     return signature + png_chunk(b"IHDR", ihdr) + png_chunk(b"IDAT", pixels) + png_chunk(b"IEND", b"")
 
 
+def png_with_color_metadata():
+    value = tiny_png()
+    ihdr_end = 8 + 25
+    return value[:ihdr_end] + png_chunk(b"sRGB", b"\x00") + \
+        png_chunk(b"sBIT", b"\x08\x08\x08") + value[ihdr_end:]
+
+
 def tiny_mp4(duration_ms=2000):
     ftyp = struct.pack(">I4s4s4s", 16, b"ftyp", b"isom", b"isom")
     mvhd = struct.pack(">I4sIIIIII", 32, b"mvhd", 0, 0, 0, 1000, duration_ms, 0)
@@ -158,6 +165,21 @@ class AndroidScenarioEvidenceTests(unittest.TestCase):
     def test_rejects_nested_directories(self):
         (self.root / "videos/frames").mkdir()
         with self.assertRaisesRegex(evidence.EvidenceError, "unexpected directory"):
+            self.validate()
+
+    def test_strips_emulator_color_metadata_for_factory_contract(self):
+        sanitized = evidence.strip_png_metadata(png_with_color_metadata(), "test frame")
+        self.assertNotIn(b"sRGB", sanitized)
+        self.assertNotIn(b"sBIT", sanitized)
+        self.assertEqual(evidence.validate_png(sanitized, "test frame"), (1, 1))
+
+    def test_rejects_ancillary_png_metadata_in_package(self):
+        self.write_bundle()
+        path = self.root / "frames/before-main-list.png"
+        path.write_bytes(png_with_color_metadata())
+        (self.root / "scenario-evidence.json").write_text(
+            json.dumps(self.manifest(), ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        with self.assertRaisesRegex(evidence.EvidenceError, "PNG metadata is not allowed"):
             self.validate()
 
 

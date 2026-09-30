@@ -168,6 +168,8 @@ def validate_png(data: bytes, where: str) -> tuple[int, int]:
             require(length == 0 and end == len(data), f"{where}: invalid PNG IEND")
             seen_end = True
             break
+        else:
+            raise EvidenceError(f"{where}: PNG metadata is not allowed")
         offset = end
     require(width is not None and height is not None and seen_end and
             chunks[0] == b"IHDR" and chunks[-1] == b"IEND" and b"IDAT" in chunks,
@@ -189,6 +191,49 @@ def validate_png(data: bytes, where: str) -> tuple[int, int]:
     require(all(decoded[index] <= 4 for index in range(0, len(decoded), row_bytes)),
             f"{where}: PNG row filter is invalid")
     return width, height
+
+
+def strip_png_metadata(data: bytes, where: str) -> bytes:
+    require(data.startswith(b"\x89PNG\r\n\x1a\n"), f"{where}: not a PNG file")
+    offset = 8
+    chunks = [data[:8]]
+    seen_header = False
+    seen_data = False
+    seen_end = False
+    while offset < len(data):
+        require(offset + 12 <= len(data), f"{where}: truncated PNG chunk")
+        length = struct.unpack(">I", data[offset:offset + 4])[0]
+        end = offset + 12 + length
+        require(length <= MAX_FRAME_BYTES and end <= len(data), f"{where}: invalid PNG chunk length")
+        kind = data[offset + 4:offset + 8]
+        value = data[offset + 8:offset + 8 + length]
+        checksum = struct.unpack(">I", data[offset + 8 + length:end])[0]
+        require(zlib.crc32(kind + value) & 0xFFFFFFFF == checksum,
+                f"{where}: PNG chunk checksum mismatch")
+        if kind == b"IHDR":
+            require(not seen_header and offset == 8 and length == 13,
+                    f"{where}: invalid PNG IHDR")
+            seen_header = True
+        elif kind == b"IDAT":
+            require(seen_header and not seen_end, f"{where}: invalid PNG IDAT")
+            seen_data = True
+        elif kind == b"IEND":
+            require(seen_data and length == 0 and end == len(data),
+                    f"{where}: invalid PNG IEND")
+            seen_end = True
+        else:
+            require(len(kind) == 4 and kind.isalpha(), f"{where}: PNG chunk type is invalid")
+            if kind[:1].islower():
+                offset = end
+                continue
+            raise EvidenceError(f"{where}: unsupported critical PNG chunk {kind!r}")
+        chunks.append(struct.pack(">I", length) + kind + value +
+                      struct.pack(">I", zlib.crc32(kind + value) & 0xFFFFFFFF))
+        offset = end
+        if seen_end:
+            break
+    require(seen_header and seen_data and seen_end, f"{where}: PNG structure is incomplete")
+    return b"".join(chunks)
 
 
 def mp4_duration_ms(data: bytes, where: str) -> int:
@@ -504,7 +549,7 @@ def app_checkpoint(adb: str, serial: str, run_id: str, checkpoint: str):
         capture_output=True, timeout=20, check=False)
     if image.returncode != 0 or not image.stdout.startswith(b"\x89PNG\r\n\x1a\n"):
         return None
-    return image.stdout, int(timestamp_text)
+    return strip_png_metadata(image.stdout, checkpoint), int(timestamp_text)
 
 
 def recent_test_case(started_at: float):
