@@ -72,7 +72,9 @@ video/checkpoint files and restores the emulator's previous Wi-Fi state.
 
 - Evidence is local, ignored by Git, capped by the tool, and not sent to GitHub or another service.
 - A run can be removed by its exact ID; automatic cleanup considers only valid packages created by
-  this tool that are more than 24 hours old:
+  this repository's local capture tool, identified by its repository and run ID, that are more than
+  24 hours old. Cleanup can remove an older package even when a newer validator no longer accepts
+  its format:
 
   ```sh
   python3 scripts/android_scenario_evidence.py cleanup --run-id <run-id>

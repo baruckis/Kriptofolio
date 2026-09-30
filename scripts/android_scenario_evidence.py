@@ -610,9 +610,9 @@ def cleanup_run(run_id: str) -> bool:
     require(isinstance(manifest, dict), "refusing to remove an invalid evidence manifest")
     run = manifest.get("run")
     require(manifest.get("repository") == REPOSITORY and isinstance(run, dict) and
-            run.get("id") == run_id,
+            run.get("id") == run_id and run.get("kind") == "local",
             "refusing to remove a package that is not owned by this tool")
-    validate(manifest_path, manifest.get("tested_commit_sha", ""))
+    # Cleanup uses stable ownership fields so a newer validator can still remove an older run.
     shutil.rmtree(path)
     return True
 

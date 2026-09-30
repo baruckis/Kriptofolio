@@ -6,6 +6,7 @@ import tempfile
 import unittest
 import zlib
 from pathlib import Path
+from unittest.mock import patch
 
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -166,6 +167,33 @@ class AndroidScenarioEvidenceTests(unittest.TestCase):
         (self.root / "videos/frames").mkdir()
         with self.assertRaisesRegex(evidence.EvidenceError, "unexpected directory"):
             self.validate()
+
+    def test_cleanup_removes_an_owned_older_package(self):
+        output_root = Path(self.temporary.name) / "outputs"
+        run_id = "run-123"
+        package = output_root / run_id
+        package.mkdir(parents=True)
+        (package / "scenario-evidence.json").write_text(json.dumps({
+            "repository": "baruckis/Kriptofolio",
+            "run": {"id": run_id, "kind": "local"},
+        }), encoding="utf-8")
+        with patch.object(evidence, "OUTPUT_ROOT", output_root):
+            self.assertTrue(evidence.cleanup_run(run_id))
+        self.assertFalse(package.exists())
+
+    def test_cleanup_refuses_a_foreign_package(self):
+        output_root = Path(self.temporary.name) / "outputs"
+        run_id = "run-123"
+        package = output_root / run_id
+        package.mkdir(parents=True)
+        (package / "scenario-evidence.json").write_text(json.dumps({
+            "repository": "someone/else",
+            "run": {"id": run_id, "kind": "local"},
+        }), encoding="utf-8")
+        with patch.object(evidence, "OUTPUT_ROOT", output_root):
+            with self.assertRaisesRegex(evidence.EvidenceError, "not owned by this tool"):
+                evidence.cleanup_run(run_id)
+        self.assertTrue(package.is_dir())
 
     def test_strips_emulator_color_metadata_for_factory_contract(self):
         sanitized = evidence.strip_png_metadata(png_with_color_metadata(), "test frame")
