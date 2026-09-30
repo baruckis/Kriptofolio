@@ -30,6 +30,10 @@ modernization procedure.
 
 See [SUPPORT.md](SUPPORT.md) for help, privacy-safe bug reports, and security reports.
 
+For a local, synthetic Android UI recording and its limits, see
+[Scenario evidence](docs/android-scenario-evidence.md). The recording stays in the ignored local
+build directory; this procedure does not upload it to a pull request.
+
 
 ## License
 
