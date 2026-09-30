@@ -6,7 +6,7 @@ commit, emulator profile, and demo APK hash. Everything stays under the ignored
 `app/build/outputs/android-scenario-evidence/` directory.
 
 This example verifies one navigation behavior: from an empty demo portfolio, tapping the add
-button opens the add/search screen. The test does not request CoinMarketCap data, prove search
+button opens the add/search screen. The offline capture cannot load CoinMarketCap data, prove search
 results, exercise the full app, or cover a physical device. It must never run on a device that
 contains a personal portfolio. The test checks that the demo portfolio is empty before saving the
 first frame, and the capture script disables emulator Wi-Fi and mobile data while the test runs,

@@ -842,7 +842,7 @@ def capture(run_id: str, serial: str, probe_failure: bool) -> tuple[int, Path]:
             "actual": "The add-search container is visible", "source": "android_espresso_test",
         }]
         scenario_limits = ["Demo flavor only; emulator Wi-Fi and mobile data are disabled during the test.",
-                           "No CoinMarketCap request is made while both emulator data transports are disabled.",
+                           "Live CoinMarketCap data cannot load while both emulator data transports are disabled.",
                            "This navigation check does not prove crypto search results or network behavior."]
         if probe_failure:
             criterion_ids.append("AC-ANDROID-FAILURE-PROBE")
@@ -901,6 +901,14 @@ def capture(run_id: str, serial: str, probe_failure: bool) -> tuple[int, Path]:
             shutil.rmtree(local_directory)
         raise
     finally:
+        cleanup_errors = []
+
+        def best_effort_cleanup(args):
+            try:
+                subprocess.run(args, capture_output=True, timeout=10, check=False)
+            except (OSError, subprocess.TimeoutExpired) as error:
+                cleanup_errors.append(str(error))
+
         if gradle_process is not None and gradle_process.poll() is None:
             try:
                 os.killpg(gradle_process.pid, signal.SIGTERM)
@@ -933,14 +941,12 @@ def capture(run_id: str, serial: str, probe_failure: bool) -> tuple[int, Path]:
             except Exception:
                 recorder.kill()
                 recorder.communicate()
-        subprocess.run([adb, "-s", serial, "shell", "rm", "-f", remote_video],
-                       capture_output=True, timeout=10, check=False)
+        best_effort_cleanup([adb, "-s", serial, "shell", "rm", "-f", remote_video])
         for checkpoint in ("before-main-list", "add-search-screen"):
             package_path = f"cache/scenario-evidence-{run_id}-{checkpoint}"
-            subprocess.run([adb, "-s", serial, "shell", "run-as", APP_ID, "rm", "-f",
-                            package_path + ".png", package_path + ".ms"],
-                           capture_output=True, timeout=10, check=False)
-        restore_errors = []
+            best_effort_cleanup([adb, "-s", serial, "shell", "run-as", APP_ID, "rm", "-f",
+                                 package_path + ".png", package_path + ".ms"])
+        restore_errors = cleanup_errors
         for service, enabled in (("wifi", wifi_was_enabled), ("data", mobile_data_was_enabled)):
             try:
                 adb_command(adb, serial, "shell", "svc", service,
@@ -953,7 +959,10 @@ def capture(run_id: str, serial: str, probe_failure: bool) -> tuple[int, Path]:
             restore_errors.append(str(error))
         if restore_errors:
             print("android-scenario-evidence: warning: emulator network restoration: " +
-                  "; ".join(restore_errors), file=sys.stderr)
+                  "; ".join(restore_errors) +
+                  f". Previously observed state: Wi-Fi={'enabled' if wifi_was_enabled else 'disabled'}, "
+                  f"mobile data={'enabled' if mobile_data_was_enabled else 'disabled'}.",
+                  file=sys.stderr)
 
 
 def parser() -> argparse.ArgumentParser:
