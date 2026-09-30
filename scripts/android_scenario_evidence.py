@@ -470,8 +470,8 @@ def adb_command(adb: str, serial: str, *args, capture=True, timeout=30):
     return command([adb, "-s", serial, *args], timeout=timeout, capture=capture)
 
 
-def adb_text(adb: str, serial: str, *args) -> str:
-    return adb_command(adb, serial, *args).stdout.strip()
+def adb_text(adb: str, serial: str, *args, timeout=30) -> str:
+    return adb_command(adb, serial, *args, timeout=timeout).stdout.strip()
 
 
 def wifi_enabled_from_dump(value: str) -> bool:
@@ -483,6 +483,29 @@ def wifi_enabled_from_dump(value: str) -> bool:
 def mobile_data_enabled_from_settings(value: str) -> bool:
     require(value in {"0", "1"}, "could not determine the emulator's previous mobile-data state")
     return value == "1"
+
+
+def emulator_network_state(adb: str, serial: str) -> tuple[bool, bool]:
+    wifi = wifi_enabled_from_dump(adb_text(adb, serial, "shell", "dumpsys", "wifi", timeout=5))
+    mobile_data = mobile_data_enabled_from_settings(
+        adb_text(adb, serial, "shell", "settings", "get", "global", "mobile_data", timeout=5))
+    return wifi, mobile_data
+
+
+def wait_for_network_state(adb: str, serial: str, wifi_enabled: bool,
+                           mobile_data_enabled: bool, timeout_seconds: float = 10) -> None:
+    deadline = time.monotonic() + timeout_seconds
+    last_error = ""
+    while time.monotonic() < deadline:
+        try:
+            if emulator_network_state(adb, serial) == (wifi_enabled, mobile_data_enabled):
+                return
+        except EvidenceError as error:
+            last_error = str(error)
+        time.sleep(0.2)
+    state = f"Wi-Fi={wifi_enabled}, mobile-data={mobile_data_enabled}"
+    require(False, "emulator did not reach network state " + state +
+            (": " + last_error if last_error else ""))
 
 
 def local_git_value(*args) -> str:
@@ -531,9 +554,7 @@ def capture_device(adb: str, serial: str) -> dict:
                 f"emulator animation setting must be 1.0 for this scenario: {name}")
         animations.append(value)
     model = adb_text(adb, serial, "shell", "getprop", "ro.product.model")
-    wifi_enabled = wifi_enabled_from_dump(adb_text(adb, serial, "shell", "dumpsys", "wifi"))
-    mobile_data_enabled = mobile_data_enabled_from_settings(
-        adb_text(adb, serial, "shell", "settings", "get", "global", "mobile_data"))
+    wifi_enabled, mobile_data_enabled = emulator_network_state(adb, serial)
     return {
         "api": api,
         "device": f"AVD {avd_name}; SDK/API {api}; {width}x{height} px; density {densities[-1]} dpi; locale {locale}; animations {'/'.join(animations)}",
@@ -698,11 +719,7 @@ def capture(run_id: str, serial: str, probe_failure: bool) -> tuple[int, Path]:
             print("Removed owned expired runs: " + ", ".join(removed))
         adb_command(adb, serial, "shell", "svc", "wifi", "disable")
         adb_command(adb, serial, "shell", "svc", "data", "disable")
-        require(not wifi_enabled_from_dump(adb_text(adb, serial, "shell", "dumpsys", "wifi")),
-                "emulator Wi-Fi stayed enabled; refusing to run an offline-only test")
-        require(not mobile_data_enabled_from_settings(
-                    adb_text(adb, serial, "shell", "settings", "get", "global", "mobile_data")),
-                "emulator mobile data stayed enabled; refusing to run an offline-only test")
+        wait_for_network_state(adb, serial, False, False)
         adb_command(adb, serial, "shell", "rm", "-f", remote_video)
         require(not screenrecord_pids(adb, serial), "an unrelated screenrecord process is already running")
         recorder = subprocess.Popen(
@@ -923,12 +940,20 @@ def capture(run_id: str, serial: str, probe_failure: bool) -> tuple[int, Path]:
             subprocess.run([adb, "-s", serial, "shell", "run-as", APP_ID, "rm", "-f",
                             package_path + ".png", package_path + ".ms"],
                            capture_output=True, timeout=10, check=False)
-        subprocess.run([adb, "-s", serial, "shell", "svc", "wifi",
-                        "enable" if wifi_was_enabled else "disable"],
-                       capture_output=True, timeout=10, check=False)
-        subprocess.run([adb, "-s", serial, "shell", "svc", "data",
-                        "enable" if mobile_data_was_enabled else "disable"],
-                       capture_output=True, timeout=10, check=False)
+        restore_errors = []
+        for service, enabled in (("wifi", wifi_was_enabled), ("data", mobile_data_was_enabled)):
+            try:
+                adb_command(adb, serial, "shell", "svc", service,
+                            "enable" if enabled else "disable", timeout=10)
+            except EvidenceError as error:
+                restore_errors.append(str(error))
+        try:
+            wait_for_network_state(adb, serial, wifi_was_enabled, mobile_data_was_enabled)
+        except EvidenceError as error:
+            restore_errors.append(str(error))
+        if restore_errors:
+            print("android-scenario-evidence: warning: emulator network restoration: " +
+                  "; ".join(restore_errors), file=sys.stderr)
 
 
 def parser() -> argparse.ArgumentParser:

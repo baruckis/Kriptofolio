@@ -133,6 +133,12 @@ class AndroidScenarioEvidenceTests(unittest.TestCase):
         with self.assertRaisesRegex(evidence.EvidenceError, "previous mobile-data state"):
             evidence.mobile_data_enabled_from_settings("null")
 
+    def test_waits_for_network_state_transition(self):
+        with patch.object(evidence, "emulator_network_state",
+                          side_effect=[(True, True), (False, False)]), \
+                patch.object(evidence.time, "sleep"):
+            evidence.wait_for_network_state("adb", "emulator-5554", False, False)
+
     def test_accepts_complete_passed_android_package(self):
         self.assertEqual(self.validate()[:2], (1, 2))
 
