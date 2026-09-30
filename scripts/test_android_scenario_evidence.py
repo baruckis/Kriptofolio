@@ -121,6 +121,18 @@ class AndroidScenarioEvidenceTests(unittest.TestCase):
     def validate(self):
         return evidence.validate(self.root / "scenario-evidence.json", HEAD)
 
+    def test_reads_wifi_state_from_its_dump_line(self):
+        self.assertTrue(evidence.wifi_enabled_from_dump("Verbose logging is off\nWi-Fi is enabled\n"))
+        self.assertFalse(evidence.wifi_enabled_from_dump("Verbose logging is off\nWi-Fi is disabled\n"))
+        with self.assertRaisesRegex(evidence.EvidenceError, "previous Wi-Fi state"):
+            evidence.wifi_enabled_from_dump("Verbose logging is off\n")
+
+    def test_reads_mobile_data_state_explicitly(self):
+        self.assertTrue(evidence.mobile_data_enabled_from_settings("1"))
+        self.assertFalse(evidence.mobile_data_enabled_from_settings("0"))
+        with self.assertRaisesRegex(evidence.EvidenceError, "previous mobile-data state"):
+            evidence.mobile_data_enabled_from_settings("null")
+
     def test_accepts_complete_passed_android_package(self):
         self.assertEqual(self.validate()[:2], (1, 2))
 

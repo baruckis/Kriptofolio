@@ -474,6 +474,17 @@ def adb_text(adb: str, serial: str, *args) -> str:
     return adb_command(adb, serial, *args).stdout.strip()
 
 
+def wifi_enabled_from_dump(value: str) -> bool:
+    match = re.search(r"(?m)^\s*Wi-Fi is (enabled|disabled)\s*$", value)
+    require(match is not None, "could not determine the emulator's previous Wi-Fi state")
+    return match.group(1) == "enabled"
+
+
+def mobile_data_enabled_from_settings(value: str) -> bool:
+    require(value in {"0", "1"}, "could not determine the emulator's previous mobile-data state")
+    return value == "1"
+
+
 def local_git_value(*args) -> str:
     return command(["git", *args]).stdout.strip()
 
@@ -520,6 +531,9 @@ def capture_device(adb: str, serial: str) -> dict:
                 f"emulator animation setting must be 1.0 for this scenario: {name}")
         animations.append(value)
     model = adb_text(adb, serial, "shell", "getprop", "ro.product.model")
+    wifi_enabled = wifi_enabled_from_dump(adb_text(adb, serial, "shell", "dumpsys", "wifi"))
+    mobile_data_enabled = mobile_data_enabled_from_settings(
+        adb_text(adb, serial, "shell", "settings", "get", "global", "mobile_data"))
     return {
         "api": api,
         "device": f"AVD {avd_name}; SDK/API {api}; {width}x{height} px; density {densities[-1]} dpi; locale {locale}; animations {'/'.join(animations)}",
@@ -527,7 +541,8 @@ def capture_device(adb: str, serial: str) -> dict:
         "height": height,
         "locale": locale,
         "model": model,
-        "wifi": adb_text(adb, serial, "shell", "dumpsys", "wifi").splitlines()[0],
+        "wifi_enabled": wifi_enabled,
+        "mobile_data_enabled": mobile_data_enabled,
     }
 
 
@@ -656,7 +671,8 @@ def capture(run_id: str, serial: str, probe_failure: bool) -> tuple[int, Path]:
              ":app:assembleDemoDebug", ":app:assembleDemoDebugAndroidTest"], timeout=300)
     apk_sha, gradle_version = gradle_apk_facts()
     adb_version = command([adb, "version"]).stdout.splitlines()[0]
-    wifi_was_enabled = "Wi-Fi is enabled" in device["wifi"]
+    wifi_was_enabled = device["wifi_enabled"]
+    mobile_data_was_enabled = device["mobile_data_enabled"]
     if local_occupied_bytes() + 20_000_000 > MAX_LOCAL_BYTES:
         cleanup_expired()
         require(local_occupied_bytes() + 20_000_000 <= MAX_LOCAL_BYTES,
@@ -681,6 +697,7 @@ def capture(run_id: str, serial: str, probe_failure: bool) -> tuple[int, Path]:
         if removed:
             print("Removed owned expired runs: " + ", ".join(removed))
         adb_command(adb, serial, "shell", "svc", "wifi", "disable")
+        adb_command(adb, serial, "shell", "svc", "data", "disable")
         adb_command(adb, serial, "shell", "rm", "-f", remote_video)
         require(not screenrecord_pids(adb, serial), "an unrelated screenrecord process is already running")
         recorder = subprocess.Popen(
@@ -802,7 +819,8 @@ def capture(run_id: str, serial: str, probe_failure: bool) -> tuple[int, Path]:
             "result": "passed", "expected": "The add-search container is visible",
             "actual": "The add-search container is visible", "source": "android_espresso_test",
         }]
-        scenario_limits = ["Demo flavor only; no CoinMarketCap request is made while Wi-Fi is disabled.",
+        scenario_limits = ["Demo flavor only; emulator Wi-Fi and mobile data are disabled during the test.",
+                           "No CoinMarketCap request is made while both emulator data transports are disabled.",
                            "This navigation check does not prove crypto search results or network behavior."]
         if probe_failure:
             criterion_ids.append("AC-ANDROID-FAILURE-PROBE")
@@ -902,6 +920,9 @@ def capture(run_id: str, serial: str, probe_failure: bool) -> tuple[int, Path]:
                            capture_output=True, timeout=10, check=False)
         subprocess.run([adb, "-s", serial, "shell", "svc", "wifi",
                         "enable" if wifi_was_enabled else "disable"],
+                       capture_output=True, timeout=10, check=False)
+        subprocess.run([adb, "-s", serial, "shell", "svc", "data",
+                        "enable" if mobile_data_was_enabled else "disable"],
                        capture_output=True, timeout=10, check=False)
 
 

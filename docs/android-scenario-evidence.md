@@ -9,8 +9,8 @@ This example verifies one navigation behavior: from an empty demo portfolio, tap
 button opens the add/search screen. The test does not request CoinMarketCap data, prove search
 results, exercise the full app, or cover a physical device. It must never run on a device that
 contains a personal portfolio. The test checks that the demo portfolio is empty before saving the
-first frame, and the capture script disables emulator Wi-Fi while the test runs and restores its
-previous state afterward.
+first frame, and the capture script disables emulator Wi-Fi and mobile data while the test runs,
+then restores their previous states afterward.
 
 ## Prepare a disposable emulator
 
@@ -65,8 +65,9 @@ python3 scripts/android_scenario_evidence.py capture \
 That probe first performs the same Espresso UI assertions and captures both checkpoints, then
 raises a deliberate assertion. Exit status `2` and a valid manifest marked `failed` are expected
 for this command; the failed package is not passing feature evidence. Other test failures discard
-the recording. On normal success or failure exits, the script removes its temporary emulator
-video/checkpoint files and restores the emulator's previous Wi-Fi state.
+the recording. It refuses to start if it cannot read the emulator's Wi-Fi or mobile-data state. On
+normal success or failure exits, the script removes its temporary emulator video/checkpoint files
+and restores those states.
 
 ## Storage, cleanup, and limits
 
