@@ -698,6 +698,11 @@ def capture(run_id: str, serial: str, probe_failure: bool) -> tuple[int, Path]:
             print("Removed owned expired runs: " + ", ".join(removed))
         adb_command(adb, serial, "shell", "svc", "wifi", "disable")
         adb_command(adb, serial, "shell", "svc", "data", "disable")
+        require(not wifi_enabled_from_dump(adb_text(adb, serial, "shell", "dumpsys", "wifi")),
+                "emulator Wi-Fi stayed enabled; refusing to run an offline-only test")
+        require(not mobile_data_enabled_from_settings(
+                    adb_text(adb, serial, "shell", "settings", "get", "global", "mobile_data")),
+                "emulator mobile data stayed enabled; refusing to run an offline-only test")
         adb_command(adb, serial, "shell", "rm", "-f", remote_video)
         require(not screenrecord_pids(adb, serial), "an unrelated screenrecord process is already running")
         recorder = subprocess.Popen(

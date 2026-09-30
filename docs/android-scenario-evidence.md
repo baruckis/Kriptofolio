@@ -10,7 +10,7 @@ button opens the add/search screen. The test does not request CoinMarketCap data
 results, exercise the full app, or cover a physical device. It must never run on a device that
 contains a personal portfolio. The test checks that the demo portfolio is empty before saving the
 first frame, and the capture script disables emulator Wi-Fi and mobile data while the test runs,
-then restores their previous states afterward.
+verifies both are disabled, then restores their previous states afterward.
 
 ## Prepare a disposable emulator
 
