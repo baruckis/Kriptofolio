@@ -13,6 +13,7 @@ import signal
 import struct
 import subprocess
 import sys
+import tempfile
 import time
 import zlib
 from datetime import datetime, timezone
@@ -490,18 +491,20 @@ def screenrecord_uptime_ms(adb: str, serial: str) -> int:
     return round(float(value) * 1000)
 
 
-def app_checkpoint(adb: str, serial: str, run_id: str, checkpoint: str,
-                   destination: Path) -> int:
+def app_checkpoint(adb: str, serial: str, run_id: str, checkpoint: str):
     package_path = f"cache/scenario-evidence-{run_id}-{checkpoint}"
-    result = subprocess.run([adb, "-s", serial, "exec-out", "run-as", APP_ID, "cat",
-                             package_path + ".png"], capture_output=True, timeout=20, check=False)
-    require(result.returncode == 0, f"could not read screenshot checkpoint: {checkpoint}")
-    image = result.stdout
-    timestamp_text = adb_text(adb, serial, "shell", "run-as", APP_ID, "cat",
-                               package_path + ".ms")
-    require(timestamp_text.isdigit(), f"checkpoint time is invalid: {checkpoint}")
-    destination.write_bytes(image)
-    return int(timestamp_text)
+    timestamp = subprocess.run(
+        [adb, "-s", serial, "exec-out", "run-as", APP_ID, "cat", package_path + ".ms"],
+        capture_output=True, text=True, timeout=20, check=False)
+    timestamp_text = timestamp.stdout.strip()
+    if timestamp.returncode != 0 or not timestamp_text.isdigit():
+        return None
+    image = subprocess.run(
+        [adb, "-s", serial, "exec-out", "run-as", APP_ID, "cat", package_path + ".png"],
+        capture_output=True, timeout=20, check=False)
+    if image.returncode != 0 or not image.stdout.startswith(b"\x89PNG\r\n\x1a\n"):
+        return None
+    return image.stdout, int(timestamp_text)
 
 
 def recent_test_case(started_at: float):
@@ -625,6 +628,9 @@ def capture(run_id: str, serial: str, probe_failure: bool) -> tuple[int, Path]:
     test_exit = 1
     test_started = 0.0
     record_start_uptime = 0
+    gradle_process = None
+    gradle_log = None
+    checkpoint_results = {}
     try:
         removed = cleanup_expired()
         if removed:
@@ -650,22 +656,40 @@ def capture(run_id: str, serial: str, probe_failure: bool) -> tuple[int, Path]:
         if probe_failure:
             gradle_args.append("-Pandroid.testInstrumentationRunnerArguments.scenarioEvidenceProbe=assertion-failure")
         test_started = time.time()
-        gradle_process = subprocess.Popen(gradle_args, cwd=ROOT, stdout=subprocess.PIPE,
+        gradle_log = tempfile.TemporaryFile(mode="w+t")
+        gradle_process = subprocess.Popen(gradle_args, cwd=ROOT, stdout=gradle_log,
                                           stderr=subprocess.STDOUT, text=True, start_new_session=True)
+        checkpoint_ids = ("before-main-list", "add-search-screen")
+        test_deadline = time.monotonic() + 180
+        while gradle_process.poll() is None and len(checkpoint_results) < len(checkpoint_ids) and \
+                time.monotonic() < test_deadline:
+            for checkpoint in checkpoint_ids:
+                if checkpoint not in checkpoint_results:
+                    value = app_checkpoint(adb, serial, run_id, checkpoint)
+                    if value is not None:
+                        checkpoint_results[checkpoint] = value
+            if len(checkpoint_results) < len(checkpoint_ids):
+                time.sleep(0.1)
         try:
-            gradle_output, _ = gradle_process.communicate(timeout=180)
+            gradle_process.communicate(timeout=max(0.1, test_deadline - time.monotonic()))
         except subprocess.TimeoutExpired:
             os.killpg(gradle_process.pid, signal.SIGTERM)
             try:
-                gradle_output, _ = gradle_process.communicate(timeout=10)
+                gradle_process.communicate(timeout=10)
             except subprocess.TimeoutExpired:
                 os.killpg(gradle_process.pid, signal.SIGKILL)
-                gradle_output, _ = gradle_process.communicate()
+                gradle_process.communicate()
+        gradle_log.seek(0, os.SEEK_END)
+        log_size = gradle_log.tell()
+        gradle_log.seek(max(0, log_size - 8_000))
+        gradle_output = gradle_log.read()
         test_exit = gradle_process.returncode or 0
         case, test_failure = recent_test_case(test_started)
         if case is None:
             print(gradle_output[-2500:], file=sys.stderr)
             raise EvidenceError("the exact Espresso test produced no fresh test result")
+        require(set(checkpoint_results) == set(checkpoint_ids),
+                "the Espresso process removed its app before both checkpoints could be collected")
         failures = list(case.findall("failure")) + list(case.findall("error"))
         if not failures:
             test_status = "passed"
@@ -708,7 +732,8 @@ def capture(run_id: str, serial: str, probe_failure: bool) -> tuple[int, Path]:
         checkpoints = {}
         for checkpoint in ("before-main-list", "add-search-screen"):
             target = frame_directory / f"{checkpoint}.png"
-            device_timestamp = app_checkpoint(adb, serial, run_id, checkpoint, target)
+            image, device_timestamp = checkpoint_results[checkpoint]
+            target.write_bytes(image)
             checkpoints[checkpoint] = max(0, device_timestamp - record_start_uptime)
         require(checkpoints["add-search-screen"] > checkpoints["before-main-list"],
                 "checkpoint timestamps did not increase")
@@ -791,6 +816,18 @@ def capture(run_id: str, serial: str, probe_failure: bool) -> tuple[int, Path]:
             shutil.rmtree(local_directory)
         raise
     finally:
+        if gradle_process is not None and gradle_process.poll() is None:
+            try:
+                os.killpg(gradle_process.pid, signal.SIGTERM)
+                gradle_process.communicate(timeout=10)
+            except Exception:
+                try:
+                    os.killpg(gradle_process.pid, signal.SIGKILL)
+                except ProcessLookupError:
+                    pass
+                gradle_process.communicate()
+        if gradle_log is not None:
+            gradle_log.close()
         if recorder_pid is not None:
             try:
                 pids = screenrecord_pids(adb, serial)
