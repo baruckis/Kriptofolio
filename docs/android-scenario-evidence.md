@@ -44,9 +44,10 @@ python3 scripts/android_scenario_evidence.py capture --serial emulator-5554
 The command builds the demo APK and instrumentation APK. Espresso first verifies that the empty
 portfolio screen is visible and publishes a temporary app-private readiness marker. Once the demo
 activity is in the foreground, the recorder starts and releases the test through a second marker.
-It runs only `MainListFragmentTest.clickAddFab_opensAddCryptoUi` and saves a package after that test
-passes. The video therefore starts after the tested screen is visible, without recording Gradle
-startup, the emulator launcher, or the app's launch transition.
+After the test saves its final UI checkpoint, capture stops before Espresso closes the activity.
+The command runs only `MainListFragmentTest.clickAddFab_opensAddCryptoUi` and saves a package after
+that test passes. The video therefore starts after the tested screen is visible and ends on the
+tested flow, without recording Gradle startup, the emulator launcher, or test teardown.
 The package records the exact checked-out HEAD and merge base, emulator/API/screen/density/locale/
 animation values, Android tools, demo APK SHA-256, video duration and SHA-256, and each checkpoint's
 SHA-256 and timestamp. It does not include the APK, source files, portfolio data, or a PR URL.

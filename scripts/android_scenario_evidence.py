@@ -704,6 +704,21 @@ def screenrecord_pids(adb: str, serial: str) -> list[str]:
     return result.stdout.split() if result.returncode == 0 else []
 
 
+def stop_screenrecord(adb: str, serial: str, recorder, recorder_pid: str) -> str:
+    if recorder.poll() is None:
+        pids = screenrecord_pids(adb, serial)
+        require(recorder_pid in pids, "task-owned screenrecord process disappeared")
+        adb_command(adb, serial, "shell", "kill", "-INT", recorder_pid)
+    try:
+        output = recorder.communicate(timeout=10)[0] or ""
+    except subprocess.TimeoutExpired:
+        recorder.kill()
+        output = recorder.communicate()[0] or ""
+        raise EvidenceError("screenrecord did not stop cleanly")
+    require(recorder.returncode == 0, "screenrecord did not finish successfully: " + output[-500:])
+    return output
+
+
 def capture(run_id: str, serial: str, probe_failure: bool) -> tuple[int, Path]:
     repo_identity()
     head, base = parse_git_identity()
@@ -740,6 +755,7 @@ def capture(run_id: str, serial: str, probe_failure: bool) -> tuple[int, Path]:
     gradle_process = None
     gradle_log = None
     checkpoint_results = {}
+    recorder_output = None
     try:
         removed = cleanup_expired()
         if removed:
@@ -786,6 +802,8 @@ def capture(run_id: str, serial: str, probe_failure: bool) -> tuple[int, Path]:
                     value = app_checkpoint(adb, serial, run_id, checkpoint)
                     if value is not None:
                         checkpoint_results[checkpoint] = value
+            if set(checkpoint_results) == set(checkpoint_ids) and recorder_output is None:
+                recorder_output = stop_screenrecord(adb, serial, recorder, recorder_pid)
             if len(checkpoint_results) < len(checkpoint_ids):
                 time.sleep(0.1)
         try:
@@ -826,17 +844,8 @@ def capture(run_id: str, serial: str, probe_failure: bool) -> tuple[int, Path]:
             require(test_status == "passed" and test_exit == 0,
                     "the Espresso test did not pass")
 
-        if recorder.poll() is None:
-            pids = screenrecord_pids(adb, serial)
-            require(recorder_pid in pids, "task-owned screenrecord process disappeared")
-            adb_command(adb, serial, "shell", "kill", "-INT", recorder_pid)
-        try:
-            output = recorder.communicate(timeout=10)[0] or ""
-        except subprocess.TimeoutExpired:
-            recorder.kill()
-            output = recorder.communicate()[0] or ""
-            raise EvidenceError("screenrecord did not stop cleanly")
-        require(recorder.returncode == 0, "screenrecord did not finish successfully: " + output[-500:])
+        if recorder_output is None:
+            recorder_output = stop_screenrecord(adb, serial, recorder, recorder_pid)
         require(adb_text(adb, serial, "shell", "test", "-s", remote_video) == "",
                 "screenrecord did not create a video")
 
