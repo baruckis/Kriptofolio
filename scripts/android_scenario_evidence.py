@@ -590,6 +590,13 @@ def foreground_package(adb: str, serial: str) -> str | None:
     return resumed_activity_package(value)
 
 
+def app_cache_marker_exists(adb: str, serial: str, marker: str) -> bool:
+    result = subprocess.run(
+        [adb, "-s", serial, "shell", "run-as", APP_ID, "test", "-f", marker],
+        capture_output=True, text=True, timeout=5, check=False)
+    return result.returncode == 0
+
+
 def app_checkpoint(adb: str, serial: str, run_id: str, checkpoint: str):
     package_path = f"cache/scenario-evidence-{run_id}-{checkpoint}"
     timestamp = subprocess.run(
@@ -719,6 +726,7 @@ def capture(run_id: str, serial: str, probe_failure: bool) -> tuple[int, Path]:
 
     run_started = datetime.now(timezone.utc).replace(microsecond=0)
     remote_video = f"/sdcard/Download/kriptofolio-scenario-evidence-{run_id}.mp4"
+    screen_ready_marker = f"cache/scenario-evidence-{run_id}-screen-ready"
     recording_marker = f"cache/scenario-evidence-{run_id}-recording-ready"
     recorder = None
     recorder_pid = None
@@ -757,7 +765,8 @@ def capture(run_id: str, serial: str, probe_failure: bool) -> tuple[int, Path]:
         recording_ready = False
         while gradle_process.poll() is None and len(checkpoint_results) < len(checkpoint_ids) and \
                 time.monotonic() < test_deadline:
-            if recorder is None and foreground_package(adb, serial) == APP_ID:
+            if recorder is None and foreground_package(adb, serial) == APP_ID and \
+                    app_cache_marker_exists(adb, serial, screen_ready_marker):
                 recorder = subprocess.Popen(
                     [adb, "-s", serial, "shell", "screenrecord", "--time-limit", "90",
                      "--size", f"{device['width']}x{device['height']}", "--bit-rate", "750000",
@@ -973,6 +982,8 @@ def capture(run_id: str, serial: str, probe_failure: bool) -> tuple[int, Path]:
             package_path = f"cache/scenario-evidence-{run_id}-{checkpoint}"
             best_effort_cleanup([adb, "-s", serial, "shell", "run-as", APP_ID, "rm", "-f",
                                  package_path + ".png", package_path + ".ms"])
+        best_effort_cleanup([adb, "-s", serial, "shell", "run-as", APP_ID, "rm", "-f",
+                             screen_ready_marker])
         best_effort_cleanup([adb, "-s", serial, "shell", "run-as", APP_ID, "rm", "-f",
                              recording_marker])
         restore_errors = cleanup_errors

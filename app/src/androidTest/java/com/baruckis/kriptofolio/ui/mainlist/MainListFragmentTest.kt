@@ -62,10 +62,10 @@ class MainListFragmentTest {
             if (!evidenceRunId.matches(Regex("run-[A-Za-z0-9-]{1,80}"))) {
                 throw AssertionError("Invalid scenario evidence run ID")
             }
-            awaitScenarioEvidenceRecorder(evidenceRunId)
-
             onView(withId(R.id.fab)).check(matches(isDisplayed()))
             onView(withId(R.id.layout_fragment_main_list_empty)).check(matches(isDisplayed()))
+            publishScenarioEvidenceMarker(evidenceRunId, "screen-ready")
+            awaitScenarioEvidenceRecorder(evidenceRunId)
             saveEvidenceCheckpoint(evidenceRunId, "before-main-list")
         }
 
@@ -81,6 +81,14 @@ class MainListFragmentTest {
                     "assertion-failure") {
                 throw AssertionError("Scenario evidence intentional failure probe")
             }
+        }
+    }
+
+    private fun publishScenarioEvidenceMarker(runId: String, markerId: String) {
+        val marker = File(InstrumentationRegistry.getTargetContext().cacheDir,
+                "scenario-evidence-$runId-$markerId")
+        if (!marker.createNewFile() && !marker.isFile) {
+            throw AssertionError("Scenario evidence screen-ready marker could not be created")
         }
     }
 
