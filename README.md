@@ -26,7 +26,8 @@ https://kriptofolio.app
 
 For current development, see [Contributing](CONTRIBUTING.md) and [AGENTS.md](AGENTS.md).
 The original tutorial above describes the 2018–2019 implementation; it is not the current
-modernization procedure.
+modernization procedure. The current behavior contract is in [BEHAVIOUR.md](docs/BEHAVIOUR.md),
+and its documented public screenshots are in the [UI inventory](docs/ui-inventory.md).
 
 See [SUPPORT.md](SUPPORT.md) for help, privacy-safe bug reports, and security reports.
 
