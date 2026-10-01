@@ -179,6 +179,23 @@ class AndroidScenarioEvidenceTests(unittest.TestCase):
     def test_ignores_activity_dump_without_a_resumed_component(self):
         self.assertIsNone(evidence.resumed_activity_package("mResumedActivity: none\n"))
 
+    def test_detects_when_instrumentation_uninstalls_the_demo_app(self):
+        with patch.object(evidence, "adb_text", return_value="") as adb_text:
+            self.assertFalse(evidence.app_is_installed("adb", "emulator-5554"))
+        adb_text.assert_called_once_with("adb", "emulator-5554", "shell", "pm", "path",
+                                         evidence.APP_ID)
+
+    def test_detects_an_installed_demo_app_for_private_file_cleanup(self):
+        with patch.object(evidence, "adb_text",
+                          return_value="package:/data/app/demo/base.apk"):
+            self.assertTrue(evidence.app_is_installed("adb", "emulator-5554"))
+
+    def test_rejects_an_unexpected_package_path_response(self):
+        with patch.object(evidence, "adb_text", return_value="not-a-package-path"):
+            with self.assertRaisesRegex(evidence.EvidenceError,
+                                        "could not determine whether the demo app is installed"):
+                evidence.app_is_installed("adb", "emulator-5554")
+
     def test_accepts_complete_passed_android_package(self):
         self.assertEqual(self.validate()[:2], (1, 2))
 

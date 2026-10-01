@@ -649,6 +649,16 @@ def app_cache_marker_exists(adb: str, serial: str, marker: str) -> bool:
     return result.returncode == 0
 
 
+def app_is_installed(adb: str, serial: str) -> bool:
+    output = adb_text(adb, serial, "shell", "pm", "path", APP_ID)
+    if not output:
+        return False
+    paths = output.splitlines()
+    require(all(path.startswith("package:/") and len(path) > len("package:/")
+                for path in paths), "could not determine whether the demo app is installed")
+    return True
+
+
 def app_checkpoint(adb: str, serial: str, run_id: str, checkpoint: str):
     package_path = f"cache/scenario-evidence-{run_id}-{checkpoint}"
     timestamp = subprocess.run(
@@ -1069,14 +1079,18 @@ def capture(run_id: str, serial: str, probe_failure: bool) -> tuple[int, Path]:
                     else:
                         cleanup_errors.append(f"ADB screenrecord required forced cleanup: {error}")
             best_effort_cleanup([adb, "-s", serial, "shell", "rm", "-f", remote_video])
-            for checkpoint in ("before-main-list", "add-search-screen"):
-                package_path = f"cache/scenario-evidence-{run_id}-{checkpoint}"
-                best_effort_cleanup([adb, "-s", serial, "shell", "run-as", APP_ID, "rm", "-f",
-                                     package_path + ".png", package_path + ".ms"])
-            best_effort_cleanup([adb, "-s", serial, "shell", "run-as", APP_ID, "rm", "-f",
-                                 screen_ready_marker])
-            best_effort_cleanup([adb, "-s", serial, "shell", "run-as", APP_ID, "rm", "-f",
-                                 recording_marker])
+            try:
+                if app_is_installed(adb, serial):
+                    for checkpoint in ("before-main-list", "add-search-screen"):
+                        package_path = f"cache/scenario-evidence-{run_id}-{checkpoint}"
+                        best_effort_cleanup([adb, "-s", serial, "shell", "run-as", APP_ID, "rm", "-f",
+                                             package_path + ".png", package_path + ".ms"])
+                    best_effort_cleanup([adb, "-s", serial, "shell", "run-as", APP_ID, "rm", "-f",
+                                         screen_ready_marker])
+                    best_effort_cleanup([adb, "-s", serial, "shell", "run-as", APP_ID, "rm", "-f",
+                                         recording_marker])
+            except EvidenceError as error:
+                cleanup_errors.append(f"Android app cleanup state check failed: {error}")
             restore_errors = restore_emulator_network_state(
                 adb, serial, wifi_was_enabled, mobile_data_was_enabled)
             if cleanup_errors or restore_errors:

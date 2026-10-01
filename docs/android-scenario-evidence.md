@@ -73,7 +73,10 @@ for this command; the failed package is not passing feature evidence. Other test
 the recording. It refuses to start if it cannot read the emulator's Wi-Fi or mobile-data state. On
 normal success, test failure, Ctrl-C (`SIGINT`), or `SIGTERM`, the script stops its task-owned recorder,
 removes temporary emulator video/checkpoint files, and restores the observed network states before
-exiting. It ignores further interrupt signals while cleanup is running. If temporary-file cleanup or
+exiting. Android's connected-test runner may uninstall the demo app after the test; in that case Android
+also removes its private checkpoint markers, and the script skips `run-as` cleanup for the absent package.
+If the demo app remains installed, the script removes those markers directly. It ignores further
+interrupt signals while cleanup is running. If temporary-file cleanup or
 network restoration cannot be verified, the command exits nonzero, attempts to discard its local evidence
 package, and reports the previously observed Wi-Fi and mobile-data states so they can be restored manually.
 If the package itself cannot be removed, the error says not to use it.
