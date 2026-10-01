@@ -7,8 +7,10 @@ You do not need a private method repository, paid playbook or the author's revie
 1. Agree on a small change and its acceptance criteria. Preserve the original tutorial branches.
 2. Create a separate branch and working copy from the intended target branch. Do not mix another
    contributor's work into the change.
-3. Implement the change and run the applicable build and test commands from `AGENTS.md`.
-   Report the actual results, toolchain and any checks you could not run. Documentation-only
+3. Implement the change and run the applicable build and test commands from `AGENTS.md` with
+   the documented JDK 21 and a configured Android SDK. Keep the exact commands, toolchain,
+   actual results and any checks you could not run in the pull request. The two narrow lint
+   exceptions and their reasons are in `app/lint.xml`; do not add a baseline. Documentation-only
    evidence should check the instructions and links, without claiming an Android build was run.
 4. Open a pull request with the problem, resulting behavior, evidence and remaining limitations.
 5. Ask a teammate or a fresh agent session to review the exact HEAD using the target branch's
