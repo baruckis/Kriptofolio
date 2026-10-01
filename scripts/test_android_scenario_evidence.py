@@ -182,16 +182,21 @@ class AndroidScenarioEvidenceTests(unittest.TestCase):
     def test_detects_when_instrumentation_uninstalls_the_demo_app(self):
         with patch.object(evidence, "adb_text", return_value="") as adb_text:
             self.assertFalse(evidence.app_is_installed("adb", "emulator-5554"))
-        adb_text.assert_called_once_with("adb", "emulator-5554", "shell", "pm", "path",
-                                         evidence.APP_ID)
+        adb_text.assert_called_once_with("adb", "emulator-5554", "shell", "pm", "list",
+                                         "packages", evidence.APP_ID)
 
     def test_detects_an_installed_demo_app_for_private_file_cleanup(self):
         with patch.object(evidence, "adb_text",
-                          return_value="package:/data/app/demo/base.apk"):
+                          return_value="package:" + evidence.APP_ID):
             self.assertTrue(evidence.app_is_installed("adb", "emulator-5554"))
 
-    def test_rejects_an_unexpected_package_path_response(self):
-        with patch.object(evidence, "adb_text", return_value="not-a-package-path"):
+    def test_matches_the_exact_demo_package_id(self):
+        with patch.object(evidence, "adb_text",
+                          return_value="package:" + evidence.APP_ID + ".other"):
+            self.assertFalse(evidence.app_is_installed("adb", "emulator-5554"))
+
+    def test_rejects_an_unexpected_package_list_response(self):
+        with patch.object(evidence, "adb_text", return_value="not-a-package-name"):
             with self.assertRaisesRegex(evidence.EvidenceError,
                                         "could not determine whether the demo app is installed"):
                 evidence.app_is_installed("adb", "emulator-5554")

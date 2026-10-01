@@ -650,13 +650,14 @@ def app_cache_marker_exists(adb: str, serial: str, marker: str) -> bool:
 
 
 def app_is_installed(adb: str, serial: str) -> bool:
-    output = adb_text(adb, serial, "shell", "pm", "path", APP_ID)
+    output = adb_text(adb, serial, "shell", "pm", "list", "packages", APP_ID)
     if not output:
         return False
-    paths = output.splitlines()
-    require(all(path.startswith("package:/") and len(path) > len("package:/")
-                for path in paths), "could not determine whether the demo app is installed")
-    return True
+    packages = output.splitlines()
+    require(all(re.fullmatch(r"package:[A-Za-z][A-Za-z0-9_.]*", package) is not None
+                for package in packages),
+            "could not determine whether the demo app is installed")
+    return "package:" + APP_ID in packages
 
 
 def app_checkpoint(adb: str, serial: str, run_id: str, checkpoint: str):
