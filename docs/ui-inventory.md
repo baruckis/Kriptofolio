@@ -23,11 +23,12 @@ remains 1.2.3, but its build identity is the source commit and variant listed he
 flavor's sandbox service is retired; network access was disabled, so no API request or credential
 was used. The full flavor still has no production API key in this public repository.
 
-The database file used for the populated states is proposed in PR #24, with SHA-256
-`50860db1cf9a2035d63828963b335f39159e0a21f3acd9dddcff4adff40b2da2`. At base `master` SHA
-`0b77c42cfeedd5de61ddbd1ee6d9624caac19da9`, that file is not present yet. PR #24 must merge
-before a reader can follow the fixture-copy step from `master`; while it is open, the PR link
-above exposes the candidate file. This document does not claim the fixture is already in `master`.
+The database file used for the populated states was added by [PR #24](https://github.com/baruckis/Kriptofolio/pull/24)
+and is now available from `master` after merge commit
+[a123008](https://github.com/baruckis/Kriptofolio/commit/a12300803badb300babbc3d37c1d56e6aa720f5c).
+Its SHA-256 is `50860db1cf9a2035d63828963b335f39159e0a21f3acd9dddcff4adff40b2da2`. The
+screenshots still identify their app source commit and demo build separately; adding the fixture
+to `master` did not change application code or the captures.
 
 ## Public captures
 
@@ -50,7 +51,7 @@ historical inventory are deliberately not represented by these images.
 ## Reproduce the public subset
 
 Use a new disposable API 34 `default` arm64 emulator. Do not use a personal device or an emulator
-containing user data. Run the commands from a clean Kriptofolio checkout after PR #24 has merged.
+containing user data. Run the commands from a clean Kriptofolio checkout based on `master`; it now contains the PR #24 fixture.
 The `default` image supports `adb root`, which is needed to install the synthetic database file.
 
 Build and install the demo variant, then capture the empty portfolio before seeding it:
