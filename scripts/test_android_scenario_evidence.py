@@ -260,34 +260,37 @@ class AndroidScenarioEvidenceTests(unittest.TestCase):
                 self.validate()
 
     def test_cleanup_removes_an_owned_older_package(self):
-        output_root = Path(self.temporary.name) / "outputs"
+        workspace = (Path(self.temporary.name) / "workspace").resolve()
+        output_root = workspace / evidence.OUTPUT_RELATIVE_ROOT
         run_id = "run-123"
         package = output_root / run_id
-        output_root.mkdir()
+        output_root.mkdir(parents=True)
         shutil.copytree(self.root, package)
-        with patch.object(evidence, "OUTPUT_ROOT", output_root):
+        with patch.object(evidence, "ROOT", workspace), patch.object(evidence, "OUTPUT_ROOT", output_root):
             self.assertTrue(evidence.cleanup_run(run_id))
         self.assertFalse(package.exists())
 
     def test_cleanup_refuses_unlisted_file(self):
-        output_root = Path(self.temporary.name) / "outputs"
+        workspace = (Path(self.temporary.name) / "workspace").resolve()
+        output_root = workspace / evidence.OUTPUT_RELATIVE_ROOT
         run_id = "run-123"
         package = output_root / run_id
-        output_root.mkdir()
+        output_root.mkdir(parents=True)
         shutil.copytree(self.root, package)
         extra = package / "frames/extra.png"
         extra.write_bytes(tiny_png())
-        with patch.object(evidence, "OUTPUT_ROOT", output_root):
+        with patch.object(evidence, "ROOT", workspace), patch.object(evidence, "OUTPUT_ROOT", output_root):
             with self.assertRaisesRegex(evidence.EvidenceError, "missing or undeclared files"):
                 evidence.cleanup_run(run_id)
         self.assertTrue(package.is_dir())
         self.assertTrue(extra.is_file())
 
     def test_cleanup_refuses_unreadable_directory(self):
-        output_root = Path(self.temporary.name) / "outputs"
+        workspace = (Path(self.temporary.name) / "workspace").resolve()
+        output_root = workspace / evidence.OUTPUT_RELATIVE_ROOT
         run_id = "run-123"
         package = output_root / run_id
-        output_root.mkdir()
+        output_root.mkdir(parents=True)
         shutil.copytree(self.root, package)
 
         def fail_on_unreadable(top, *, followlinks, onerror):
@@ -295,7 +298,8 @@ class AndroidScenarioEvidenceTests(unittest.TestCase):
                 onerror(PermissionError(13, "permission denied", str(package / "frames")))
             return iter(())
 
-        with patch.object(evidence, "OUTPUT_ROOT", output_root), \
+        with patch.object(evidence, "ROOT", workspace), \
+                patch.object(evidence, "OUTPUT_ROOT", output_root), \
                 patch.object(evidence.os, "walk", side_effect=fail_on_unreadable):
             with self.assertRaisesRegex(evidence.EvidenceError,
                                         "unable to read package directory.*frames"):
@@ -303,7 +307,8 @@ class AndroidScenarioEvidenceTests(unittest.TestCase):
         self.assertTrue(package.is_dir())
 
     def test_cleanup_refuses_a_foreign_package(self):
-        output_root = Path(self.temporary.name) / "outputs"
+        workspace = (Path(self.temporary.name) / "workspace").resolve()
+        output_root = workspace / evidence.OUTPUT_RELATIVE_ROOT
         run_id = "run-123"
         package = output_root / run_id
         package.mkdir(parents=True)
@@ -311,10 +316,28 @@ class AndroidScenarioEvidenceTests(unittest.TestCase):
             "repository": "someone/else",
             "run": {"id": run_id, "kind": "local"},
         }), encoding="utf-8")
-        with patch.object(evidence, "OUTPUT_ROOT", output_root):
+        with patch.object(evidence, "ROOT", workspace), patch.object(evidence, "OUTPUT_ROOT", output_root):
             with self.assertRaisesRegex(evidence.EvidenceError, "not owned by this tool"):
                 evidence.cleanup_run(run_id)
         self.assertTrue(package.is_dir())
+
+    def test_cleanup_refuses_symlinked_output_parent(self):
+        workspace = (Path(self.temporary.name) / "workspace").resolve()
+        external = Path(self.temporary.name) / "external"
+        (workspace / "app").mkdir(parents=True)
+        external.mkdir()
+        (workspace / "app/build").symlink_to(external, target_is_directory=True)
+        output_root = workspace / evidence.OUTPUT_RELATIVE_ROOT
+        package = output_root / "run-123"
+        package.mkdir(parents=True)
+        shutil.copytree(self.root, package, dirs_exist_ok=True)
+
+        with patch.object(evidence, "ROOT", workspace), patch.object(evidence, "OUTPUT_ROOT", output_root):
+            with self.assertRaisesRegex(evidence.EvidenceError, "output path cannot contain symlinks"):
+                evidence.cleanup_run("run-123")
+
+        self.assertTrue((package / "scenario-evidence.json").is_file())
+        self.assertTrue((external / "outputs/android-scenario-evidence/run-123").is_dir())
 
     def test_strips_emulator_color_metadata_for_factory_contract(self):
         sanitized = evidence.strip_png_metadata(png_with_color_metadata(), "test frame")

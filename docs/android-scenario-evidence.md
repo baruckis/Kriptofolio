@@ -89,7 +89,8 @@ If the package itself cannot be removed, the error says not to use it.
   than 24 hours old. Cleanup can remove an older package even when a newer validator no longer
   accepts its format, but it still checks the package's declared video and frame inventory. It
   refuses to remove a package if a directory cannot be read or if it contains undeclared files;
-  inspect or move those files before retrying cleanup:
+  it also refuses cleanup if any output-directory ancestor is a symlink. Inspect or move those
+  files before retrying cleanup:
 
   ```sh
   python3 scripts/android_scenario_evidence.py cleanup --run-id <run-id>

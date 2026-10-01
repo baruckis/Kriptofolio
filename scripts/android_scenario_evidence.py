@@ -22,7 +22,8 @@ from xml.etree import ElementTree
 
 
 ROOT = Path(__file__).resolve().parents[1]
-OUTPUT_ROOT = ROOT / "app" / "build" / "outputs" / "android-scenario-evidence"
+OUTPUT_RELATIVE_ROOT = Path("app") / "build" / "outputs" / "android-scenario-evidence"
+OUTPUT_ROOT = ROOT / OUTPUT_RELATIVE_ROOT
 REPOSITORY = "baruckis/Kriptofolio"
 SCENARIO_ID = "mainlist-add-search"
 TEST_CLASS = "com.baruckis.kriptofolio.ui.mainlist.MainListFragmentTest"
@@ -716,11 +717,22 @@ def gradle_apk_facts() -> tuple[str, str]:
     return hashlib.sha256(apk.read_bytes()).hexdigest(), version.group(1) + "; AGP " + plugin.group(1)
 
 
+def checked_output_root() -> Path:
+    root = ROOT.resolve()
+    expected = root / OUTPUT_RELATIVE_ROOT
+    require(OUTPUT_ROOT == expected, "evidence output root is not the repository output path")
+    current = root
+    for part in OUTPUT_RELATIVE_ROOT.parts:
+        current = current / part
+        require(not current.is_symlink(), "evidence output path cannot contain symlinks")
+    require(current.resolve() == current, "evidence output path resolves outside the repository")
+    return current
+
+
 def owned_run_directory(run_id: str) -> Path:
     require(RUN_ID_RE.fullmatch(run_id) is not None, "run ID is invalid")
-    require(not OUTPUT_ROOT.is_symlink(), "evidence output root cannot be a symlink")
-    root = OUTPUT_ROOT.resolve()
-    path = OUTPUT_ROOT / run_id
+    root = checked_output_root()
+    path = root / run_id
     require(path.parent.resolve() == root and not path.is_symlink(), "run directory is not owned")
     return path
 
@@ -743,12 +755,12 @@ def cleanup_run(run_id: str) -> bool:
 
 
 def cleanup_expired(now=None) -> list[str]:
-    if not OUTPUT_ROOT.exists():
+    output_root = checked_output_root()
+    if not output_root.exists():
         return []
-    require(not OUTPUT_ROOT.is_symlink(), "evidence output root cannot be a symlink")
     removed = []
     cutoff = (time.time() if now is None else now) - 24 * 60 * 60
-    for path in OUTPUT_ROOT.iterdir():
+    for path in output_root.iterdir():
         if path.is_dir() and not path.is_symlink() and path.stat().st_mtime < cutoff:
             if cleanup_run(path.name):
                 removed.append(path.name)
@@ -756,9 +768,10 @@ def cleanup_expired(now=None) -> list[str]:
 
 
 def local_occupied_bytes() -> int:
-    if not OUTPUT_ROOT.exists():
+    output_root = checked_output_root()
+    if not output_root.exists():
         return 0
-    return sum(path.stat().st_size for path in OUTPUT_ROOT.rglob("*")
+    return sum(path.stat().st_size for path in output_root.rglob("*")
                if path.is_file() and not path.is_symlink())
 
 
