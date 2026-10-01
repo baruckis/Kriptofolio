@@ -244,4 +244,9 @@ dependencies {
     testImplementation "org.mockito:mockito-core:$versions.mockito"
 
     testImplementation "androidx.arch.core:core-testing:$versions.arch_core"
+
+    // SQLite on the JVM, used only by the characterization tests to open the real database files
+    // recorded from released versions (src/test/resources/db) and check them against the Room
+    // schema without an emulator.
+    testImplementation "org.xerial:sqlite-jdbc:$versions.sqlite_jdbc"
 }

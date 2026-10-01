@@ -79,13 +79,22 @@ branch; it does not delete `master`, protected exhibit branches, tags, or commit
 
 ## Build commands
 
+Use JDK 21 for this project; the reason and the tested boundary are recorded in
+[`UPGRADE-NOTES.md`, section 6](UPGRADE-NOTES.md). Configure `JAVA_HOME` and the Android SDK
+through your local Android development setup before running Gradle. Keep machine-specific SDK
+paths out of project documentation and commits.
+
 ```bash
 ./gradlew clean
-./gradlew assembleFullDebug assembleDemoDebug     # both flavors must compile
-./gradlew testFullDebugUnitTest                   # unit tests
-./gradlew lintFullDebug                           # lint
+./gradlew assembleFullDebug assembleDemoDebug testFullDebugUnitTest testDemoDebugUnitTest lintFullDebug --stacktrace
 ./gradlew bundleFullRelease                       # AAB (signing is done by the human)
 ```
+
+The lint gate has two documented, narrow exceptions in `app/lint.xml`: `NotificationPermission`
+from the unused Glide notification class, and `SuspiciousIndentation` only at the existing
+feedback-subject expression in `SettingsFragment.kt`. They preserve current behavior and do not
+declare or request a notification permission. Keep new findings visible; do not replace these
+entries with a lint baseline.
 
 Signing, Play Console uploads, and merging PRs are always done by the human.
 
@@ -123,3 +132,7 @@ to owner and contributor work.
 
 These rules preserve the existing protections for history, user data, signing and human
 merge decisions.
+
+## Renovate dashboard (information only)
+
+Renovate runs daily at 05:17 UTC and can also be started from **Actions → Renovate dependency updates → Run workflow** on `master`. Its [issue dashboard](https://github.com/baruckis/Kriptofolio/issues) is informational: every update waits for an explicit dashboard selection. Vulnerability auto-fix PRs, automerge, and platform automerge are disabled. An unselected dashboard run should not create dependency branches or pull requests. To enable it, set the repository Actions variables `RENOVATE_ENABLED=true` and `RENOVATE_APP_CLIENT_ID`, plus the secret `RENOVATE_APP_PRIVATE_KEY`; install the writer App only in this repository. Set `RENOVATE_ENABLED=false` or remove it to pause runs. The maintainer owns App settings and must never commit its private key.

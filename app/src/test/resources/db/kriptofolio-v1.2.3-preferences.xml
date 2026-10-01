@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8' standalone='yes' ?>
+<map>
+    <boolean name="preference 24h switch" value="false" />
+    <string name="preference language">EN</string>
+    <string name="preference date format">MM/dd/yyyy</string>
+    <string name="preference fiat currency">USD</string>
+</map>
