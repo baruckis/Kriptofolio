@@ -79,13 +79,22 @@ branch; it does not delete `master`, protected exhibit branches, tags, or commit
 
 ## Build commands
 
+Use JDK 21 for this project; the reason and the tested boundary are recorded in
+[`UPGRADE-NOTES.md`, section 6](UPGRADE-NOTES.md). Configure `JAVA_HOME` and the Android SDK
+through your local Android development setup before running Gradle. Keep machine-specific SDK
+paths out of project documentation and commits.
+
 ```bash
 ./gradlew clean
-./gradlew assembleFullDebug assembleDemoDebug     # both flavors must compile
-./gradlew testFullDebugUnitTest                   # unit tests
-./gradlew lintFullDebug                           # lint
+./gradlew assembleFullDebug assembleDemoDebug testFullDebugUnitTest testDemoDebugUnitTest lintFullDebug --stacktrace
 ./gradlew bundleFullRelease                       # AAB (signing is done by the human)
 ```
+
+The lint gate has two documented, narrow exceptions in `app/lint.xml`: `NotificationPermission`
+from the unused Glide notification class, and `SuspiciousIndentation` only at the existing
+feedback-subject expression in `SettingsFragment.kt`. They preserve current behavior and do not
+declare or request a notification permission. Keep new findings visible; do not replace these
+entries with a lint baseline.
 
 Signing, Play Console uploads, and merging PRs are always done by the human.
 
