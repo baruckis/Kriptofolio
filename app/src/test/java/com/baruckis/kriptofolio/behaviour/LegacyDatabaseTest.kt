@@ -29,7 +29,9 @@ import org.junit.runners.Parameterized
 import java.io.File
 import java.sql.Connection
 import java.sql.DriverManager
+import javax.xml.XMLConstants
 import javax.xml.parsers.DocumentBuilderFactory
+import org.xml.sax.SAXException
 
 /**
  * Reads two synthetic-portfolio database files produced by released builds (see
@@ -62,6 +64,22 @@ class LegacyDatabaseTest(private val version: String, private val fiat: String) 
     /** The "database" object of app/schemas/.../1.json, read with the Gson this project already has. */
     private fun schemaJson(): JsonObject =
             JsonParser().parse(Fixtures.schemaFile().readText()).asJsonObject.getAsJsonObject("database")
+
+    private fun secureXmlFactory(): DocumentBuilderFactory {
+        val factory = DocumentBuilderFactory.newInstance()
+        factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true)
+        factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true)
+        factory.setFeature("http://xml.org/sax/features/external-general-entities", false)
+        factory.setFeature("http://xml.org/sax/features/external-parameter-entities", false)
+        factory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false)
+        // Use the JAXP property URIs directly because this test source is compiled
+        // against an Android API where the matching XMLConstants fields are absent.
+        factory.setAttribute("http://javax.xml.XMLConstants/property/accessExternalDTD", "")
+        factory.setAttribute("http://javax.xml.XMLConstants/property/accessExternalSchema", "")
+        factory.isXIncludeAware = false
+        factory.isExpandEntityReferences = false
+        return factory
+    }
 
     private fun open(): Connection {
         // Copy the resource to a temporary file so the test never writes into the resource
@@ -195,7 +213,7 @@ class LegacyDatabaseTest(private val version: String, private val fiat: String) 
     @Test
     fun `the preference file of the same install carries the four keys with their exact names`() {
         val xml = Fixtures.resourceText("db/kriptofolio-v$version-preferences.xml")
-        val doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(xml.byteInputStream())
+        val doc = secureXmlFactory().newDocumentBuilder().parse(xml.byteInputStream())
         val entries = HashMap<String, Pair<String, String>>() // name -> (type, value)
         val nodes = doc.documentElement.childNodes
         for (i in 0 until nodes.length) {
@@ -211,5 +229,23 @@ class LegacyDatabaseTest(private val version: String, private val fiat: String) 
         val dateFormat = entries.getValue("preference date format").second
         assertTrue("$dateFormat is one of the three allowed patterns",
                 StringsXml.forLanguage("EN").array("pref_date_format_list_values").contains(dateFormat))
+    }
+
+    @Test
+    fun `the preference parser rejects a document type with an external entity`() {
+        val target = File.createTempFile("kriptofolio-xml-entity-", ".txt")
+        try {
+            target.writeText("synthetic external entity sentinel")
+            val xml = "<!DOCTYPE map [<!ENTITY local SYSTEM \"${target.toURI()}\">]>" +
+                    "<map><string>&local;</string></map>"
+            try {
+                secureXmlFactory().newDocumentBuilder().parse(xml.byteInputStream())
+                throw AssertionError("preference XML accepted a document type")
+            } catch (_: SAXException) {
+                // DTDs are rejected before an external entity can read the synthetic file.
+            }
+        } finally {
+            target.delete()
+        }
     }
 }
