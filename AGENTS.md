@@ -67,7 +67,7 @@ branch; it does not delete `master`, protected exhibit branches, tags, or commit
 - Match the existing 2019-era code style of whatever file you touch.
 - When a dependency upgrade is needed, upgrade to the OLDEST version that solves the problem.
   Every tempting-but-not-required upgrade goes into `UPGRADE-NOTES.md` as a note for the
-  planned 2.0 rewrite instead of being done now.
+  modernization steps in `docs/roadmap.md` instead of being done now.
 - One logical step per commit. Commit messages follow this repository's established
   convention, based on the Udacity Git Commit Message Style Guide
   (https://udacity.github.io/git-styleguide/): `type: Capitalized summary.` with type one of
@@ -76,6 +76,35 @@ branch; it does not delete `master`, protected exhibit branches, tags, or commit
   This project teaches the Android community good practices; the standard is not optional.
 - Run the relevant build/tests after every step; never stack changes on a red build.
 - If something is ambiguous or destructive, stop and ask the human.
+
+## Modernization track
+
+`docs/roadmap.md` modernizes this app in place, one bounded, reviewed step at a time; the reasons are
+`docs/decisions/001`–`003`. The keep-alive rules in "Working style" above govern any pull request
+that is not a roadmap step; a roadmap step follows these rules instead.
+
+- One step is one pull request with acceptance criteria, behaviour preserved as in
+  `docs/BEHAVIOUR.md` unless a decision record says otherwise, and evidence from a clean checkout.
+- Touch only what the step needs. New and rewritten code uses current conventions (Kotlin 2 with
+  KSP, Hilt, Compose, Room with an exported schema, Ktor client with kotlinx.serialization, a
+  version catalog); do not restyle files the step does not change.
+- Shared logic lives in `shared/` Kotlin Multiplatform modules, consumed by `app/`. The iOS shell
+  `iosApp/` arrives in stage 6.
+- `applicationId com.baruckis.kriptofolio` and the signing key never change. The database rule
+  applies to every step: the real v1 files in `app/src/test/resources/db/` must open through a
+  tested migration, with no destructive fallback.
+- **Merged is not released.** A merge never publishes anything. Version bumps, tags, signing and
+  store uploads are done by the human in the release PR and procedure (`UPGRADE-NOTES.md` section 7,
+  later `RELEASING.md`). `master` must stay releasable: both flavors build, tests and migration
+  tests pass.
+- Flavors: `full` and `demo` today; stage 5 replaces them with `play` (Google Play Billing) and
+  `foss` (no Google libraries, everything unlocked) by a recorded decision.
+- No provider key anywhere in the repository. Users supply their own key at runtime; tests use
+  recorded responses from `app/src/test/resources/api/` and new fixtures.
+- Parity is measured against `docs/BEHAVIOUR.md` and `docs/ui-inventory.md`; deliberate deviations
+  go in `docs/decisions/` and `docs/behaviour-parity.md`.
+- Gate for a step: the build command below, plus once the modules exist
+  `./gradlew :shared:allTests`, and for iOS (stage 6) the `xcodebuild` result of the iOS shell.
 
 ## Build commands
 
