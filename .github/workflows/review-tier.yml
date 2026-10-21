@@ -37,17 +37,24 @@ jobs:
           script: |
             // Files that instruct people and agents, or define the behaviour contract and the plan.
             const RULE_FILES = new Set([
-              'AGENTS.md', 'CLAUDE.md', 'CONTRIBUTING.md', 'RELEASING.md', 'UPGRADE-NOTES.md',
-              'SUPPORT.md', 'LICENSE', 'renovate.json',
+              'CONTRIBUTING.md', 'RELEASING.md', 'UPGRADE-NOTES.md', 'SUPPORT.md', 'LICENSE',
+              'renovate.json',
               'docs/roadmap.md', 'docs/BEHAVIOUR.md', 'docs/behaviour-parity.md', 'docs/ui-inventory.md',
             ]);
-            const RULE_DIRS = ['config/', 'docs/decisions/', '.github/'];
-            // Documentation that is not a rule: other Markdown, docs/ and store listing texts and images.
+            // Agent instructions at any depth.
+            const RULE_NAMES = new Set(['AGENTS.md', 'CLAUDE.md']);
+            const RULE_DIRS = ['config/', 'docs/decisions/', 'docs/ui-evidence/', '.github/', '.claude/'];
+            // Documentation that is not a rule: Markdown in the repository root, docs/ and store
+            // listing texts and images. Markdown anywhere else (an app resource, a test fixture) is code.
             const DOC_DIRS = ['docs/', 'fastlane/metadata/'];
 
             const tierOf = (path) => {
-              if (RULE_FILES.has(path) || RULE_DIRS.some((d) => path.startsWith(d))) return 'rules';
-              if (path.endsWith('.md') || DOC_DIRS.some((d) => path.startsWith(d))) return 'docs';
+              const name = path.split('/').pop();
+              if (RULE_FILES.has(path) || RULE_NAMES.has(name) || RULE_DIRS.some((d) => path.startsWith(d))) {
+                return 'rules';
+              }
+              const rootMarkdown = !path.includes('/') && path.endsWith('.md');
+              if (rootMarkdown || DOC_DIRS.some((d) => path.startsWith(d))) return 'docs';
               return 'code';
             };
 

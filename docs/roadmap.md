@@ -109,7 +109,8 @@ fdroiddata is filed when 2.0.0 is in production. Metadata lives in `fastlane/met
 - No analytics or telemetry, no account, no server that knows who you are. The starter feed
   serves the same table to everyone and keeps no identifiers.
 - No paid data plan on the author's side, no "live" subscription, no ads.
-- No second code base beside `app/` and `shared/`, no big-bang rewrite.
+- No second code base beside `app/`, `shared/` (including the Compose Multiplatform UI) and, from
+  stage 6, the `iosApp/` shell; no big-bang rewrite.
 - No feature added to 2.0.0 outside its frozen list without a new decision record.
 - No web version before the review after 2.0.0.
 - No rewriting of history: the `Part-1`–`Part-5` and `legacy` branches stay frozen, and so will

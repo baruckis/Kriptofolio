@@ -33,6 +33,11 @@ that it stays on the device.
 
 - The exact devices and OS versions supported by each platform model at implementation time.
 - The wording of the disclaimer and the tone of the prompt, in the owner's voice.
+- Accepting this record adds, in the same pull request, an explicit exception to review criterion 7
+  (no portfolio data leaving the device) for the anonymized summary sent to the endpoint the user
+  chose in the fallback.
+- The proposed Insights section of `docs/BEHAVIOUR.md`, written for an earlier plan, is aligned
+  with this record; for example, the fake engine runs in fixtures mode instead of the `demo` flavor.
 
 ## Reopen when
 

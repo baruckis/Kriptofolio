@@ -30,8 +30,9 @@ become a paid one, and changing the `applicationId` would orphan every install a
    `play` flavor, StoreKit 2 on iOS, and an always-Pro implementation in the Android `foss`
    flavor, which contains no Google libraries. If you build the app yourself, Pro is yours: you pay
    for convenience, updates and a maintained store listing, not for secrets.
-5. **Trademark.** The Kriptofolio name and logo are not licensed. A fork must ship under a
-   different name and icon. This is stated in `README.md`.
+5. **Trademark.** Apache-2.0 grants no trademark rights (section 6). The Kriptofolio name and logo
+   identify the author's builds, so a fork must ship under a different name and icon. This is
+   stated in `README.md`.
 
 ## What we do not do
 

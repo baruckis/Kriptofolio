@@ -26,7 +26,7 @@ to renovate: carefully, reversibly, and without touching the exhibits.
 
 The branch list in this repository is documentation. Someone arriving from the 2018 article
 series sees `Part-1`…`Part-5` and immediately understands where they have landed. That signal
-only survives while the list stays short, so every branch here is one of two kinds.
+only survives while the list stays short, so every branch here is one of three kinds.
 
 **Exhibits — kept forever.** `Part-1`…`Part-5` contain commits that are not on `master` and
 never will be; deleting one destroys history that the published articles link to. `legacy`
@@ -41,7 +41,8 @@ Deleting it after 2.0.0 is the owner's decision.
 a fix, a documentation change, a CI change. Nothing is lost by deleting one. Its commits stay
 reachable from `master`, and the pull request keeps the full diff, the review and the
 discussion — GitHub can restore the branch from the pull request page at any time. The
-durable markers for a release are tags (`v1.2.1`, `v1.2.2`), never branches.
+durable markers for a release are tags (`v1.2.1`, `v1.2.2`); the only branches tied to a release
+are the exhibit `modernization-2026` and the maintenance branch `release/1.3` described above.
 
 GitHub `delete_branch_on_merge` is enabled. It removes only the merged pull request's head
 branch; it does not delete `master`, protected exhibit branches, tags, or commits in history. So:
@@ -97,8 +98,8 @@ that is not a roadmap step; a roadmap step follows these rules instead.
   exported schema, Ktor client with kotlinx.serialization, DataStore, a version catalog); do not
   restyle files the step does not change.
 - Shared logic and ViewModels live in `shared/` Kotlin Multiplatform modules, consumed by `app/`.
-  Compose screens are written in a Compose Multiplatform module that targets only Android until
-  stage 6, when the iOS targets and the iOS shell `iosApp/` arrive.
+  Compose screens are written in a Compose Multiplatform module under `shared/` that targets only
+  Android until stage 6, when the iOS targets and the iOS shell `iosApp/` arrive.
 - Dependency injection is Koin (`docs/decisions/005`); every Koin module is covered by the module
   verification test. No Hilt.
 - A feature that is not on the frozen 2.0.0 list goes to the backlog with the `later` label; do not
@@ -111,9 +112,12 @@ that is not a roadmap step; a roadmap step follows these rules instead.
   later `RELEASING.md`). `master` must stay releasable: both flavors build, tests and migration
   tests pass.
 - Flavors: `full` and `demo` through 1.3.0; stage 7 replaces them with `play` (Google Play Billing)
-  and `foss` (no Google libraries, everything unlocked), as `docs/decisions/003` records.
-- No provider key anywhere in the repository. Until 2.0.0 the owner supplies the 1.x key only to
-  the release build; from stage 5 users supply their own key at runtime. Tests use recorded
+  and `foss` (no Google libraries, everything unlocked), as `docs/decisions/003` records. From then
+  on, the rules that name `full` and `demo` ("Project facts" above and review criteria 3 and 4)
+  apply to `play` and `foss`, and the `.demo` suffix retires with the `demo` flavor.
+- No new provider key in the repository; the documented CoinMarketCap sandbox key of the `demo`
+  flavor stays until that flavor retires (review criterion 6). Until 2.0.0 the owner supplies the
+  1.x key only to the release build; from stage 5 users supply their own key at runtime. Tests use recorded
   responses from `app/src/test/resources/api/` and new fixtures.
 - Parity is measured against `docs/BEHAVIOUR.md` and `docs/ui-inventory.md`; deliberate deviations
   go in `docs/decisions/` and `docs/behaviour-parity.md`.
@@ -150,7 +154,7 @@ Whether a pull request needs an independent review depends on its tier, decided 
 changes and shown as a `review: docs`, `review: rules` or `review: code` label
 ([`CONTRIBUTING.md`](CONTRIBUTING.md), step 5). A `docs` pull request needs no independent
 review; `rules` and `code` pull requests do. A change to this file, to the review criteria or to a
-decision record is always `rules`. Never change a tier label by hand to avoid a review.
+decision record is at least `rules`. Never change a tier label by hand to avoid a review.
 
 ## Reproducible modernization
 

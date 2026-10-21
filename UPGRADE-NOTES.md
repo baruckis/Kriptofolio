@@ -443,7 +443,9 @@ it ever was.
 
 ## 8. 2.0 backlog
 
-Things that were noticed while doing this stage and deliberately not done.
+Things that were noticed while doing this stage and deliberately not done. The steps in
+`docs/roadmap.md` resolve them; "2.0" here means the modernization, which now ships as 1.3.0
+and 2.0.0.
 
 ### Must be done before the app can target 36
 
@@ -482,7 +484,7 @@ Things that were noticed while doing this stage and deliberately not done.
 | `eu.davidea:flipview` | 1.2.0 | **Highest priority.** In March 2026 the same version number was republished on Maven Central as a completely different artifact — different bytecode level, new `minCompileSdk`, new transitive dependency. A version coordinate that can change under you is a supply chain hazard. It is two Java files; vendor them, or replace the flipping icon with something maintained. |
 | `androidx.lifecycle` | declared 2.2.0-rc03, resolves to 2.6.1 | Declare what actually resolves, and drop `lifecycle-extensions` — it is deprecated, and nothing in this app imports anything from it. |
 | `android.arch.navigation` | 1.0.0 | Still the pre-AndroidX group name, only working because Jetifier rewrites it to `androidx.navigation:2.0.0`. Moving to a current `androidx.navigation` is what would finally allow `android.enableJetifier=false`. |
-| `com.google.dagger` | 2.23.2 | Works on the new toolchain, but `dagger-android` is deprecated upstream. Hilt is the migration target. |
+| `com.google.dagger` | 2.23.2 | Works on the new toolchain, but `dagger-android` is deprecated upstream. Hilt is the migration target. (Superseded: `docs/decisions/005` chose Koin, because the shared code must also run on iOS.) |
 | `androidx.room` | 2.2.3 | Also set `exportSchema = true`, commit the schema JSON, and add a real migration test against an old database file — today the schema is unversioned and `fallbackToDestructiveMigration()` is a loaded gun. |
 | `com.github.bumptech.glide` | 4.11.0 | Fine today; the move off kapt to KSP is the reason to upgrade. |
 | `androidx.constraintlayout` | 2.0.0-beta4 | A beta from 2019 is shipping in production. |

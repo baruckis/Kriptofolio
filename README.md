@@ -45,8 +45,9 @@ decisions are recorded in [docs/decisions/](docs/decisions/README.md).
 
 ## Trademark
 
-The source code is licensed under Apache-2.0 (below). The Kriptofolio name and logo are not covered
-by that license: a fork must ship under a different name and icon.
+The source code is licensed under Apache-2.0 (below), which grants no rights to use the Kriptofolio
+name or logo as trademarks (section 6 of the license). A fork must ship under a different name and
+icon.
 
 ## License
 

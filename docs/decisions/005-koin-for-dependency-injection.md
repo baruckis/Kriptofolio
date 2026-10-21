@@ -2,6 +2,7 @@
 
 - **Status:** accepted
 - **Date:** 2026-10-21
+- **Supersedes:** the note "Hilt is the migration target" in `UPGRADE-NOTES.md` section 8
 
 ## Context
 

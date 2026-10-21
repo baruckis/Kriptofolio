@@ -21,13 +21,14 @@ code would contradict that, and would discard the safety net stage 1 built.
 2. Target stack, reached step by step: Kotlin 2.x with KSP; Koin for dependency injection
    (ADR-005); Room KMP with an exported schema; Ktor client with kotlinx.serialization; DataStore
    for settings; Coil 3 for images; Compose Multiplatform with MVVM (ADR-004); a version catalog
-   and dependency verification metadata; a JDK 21 toolchain. Where the structure matches, it
-   follows the public `baruckis/ai-news` app. The navigation library is chosen in the stage 4
+   and dependency verification metadata; a JDK 21 toolchain. Its module layout (`app`, `core`,
+   `feature`) and version catalog follow the public `baruckis/ai-news` app; its MVI presentation
+   layer does not (ADR-004). The navigation library is chosen in the stage 4
    spike and recorded in a new decision.
 3. Shared logic is extracted into Kotlin Multiplatform modules under `shared/` (model, data with
    Room KMP, network and market-data sources), consumed by `app/` as soon as each module exists.
    Screens move from XML to Compose one at a time, written from the start in a Compose
-   Multiplatform module that targets only Android until stage 6, with their ViewModels in shared
+   Multiplatform module under `shared/` that targets only Android until stage 6, with their ViewModels in shared
    code. Stage 6 adds the iOS targets and the iOS shell (`iosApp/`).
 4. The modernization of the existing app ships as **1.3.0** (Android). The new product features,
    iOS, Pro and the F-Droid build ship together as **2.0.0** (ADR-006).
@@ -43,10 +44,15 @@ code would contradict that, and would discard the safety net stage 1 built.
    released.
 8. Parity is measured against `BEHAVIOUR.md` and `ui-inventory.md`; deliberate deviations are
    recorded in `docs/decisions/` and mapped in `docs/behaviour-parity.md`.
+9. **One deliberate deviation in 1.3.0: the licenses screens.** Google's `OssLicensesMenuActivity`
+   and the hand-written list of 28 libraries (`BEHAVIOUR.md` section 8) are replaced by one
+   screen that AboutLibraries generates at build time, so the app no longer needs a Google Play
+   Services library for it. The app's own Apache 2.0 notice stays. The parity table records it.
 
 ## What we do not do
 
-- No second code base beside `app/` and `shared/`, and no big-bang switch.
+- No second code base beside `app/`, `shared/` (which also holds the Compose Multiplatform UI)
+  and, from stage 6, the `iosApp/` shell; no big-bang switch.
 - No desktop or web target before the review after 2.0.0.
 - No changes to `Part-1`–`Part-5`, `legacy` or the tag `v1.2.1-legacy`.
 - No rules copied into tool-specific files; `AGENTS.md` remains the single entry point.
@@ -62,7 +68,8 @@ code would contradict that, and would discard the safety net stage 1 built.
   of moving screens. The stage 4 spike must first prove that Compose Multiplatform resources keep
   the four locales, `values-iw`, right-to-left layout and the Android per-app language setting
   working; if it does not, stage 4 uses Android Compose and the screens move in stage 6.
-- The owner accepts the Apple Developer Program fee as the one recurring cost of the product.
+- The owner accepts the Apple Developer Program fee as a new recurring cost of the product; the
+  starter feed of ADR-001 runs on a server the author already pays for.
 - Each step becomes a worked example for the AI-First Android Factory method, reproduced from a
   clean checkout at the reviewed revision.
 

@@ -1,6 +1,6 @@
 # Kriptofolio 1.2.3 — behaviour specification
 
-*The contract the 2.0 rewrite is measured against. Extracted from the code on `master` at
+*The contract the modernization in `docs/roadmap.md` is measured against. Extracted from the code on `master` at
 `0b77c42cfeedd5de61ddbd1ee6d9624caac19da9` (the code that ships as 1.2.3, versionCode 6).
 Since the `v1.2.3` tag exactly one production source file has changed,
 `app/src/main/java/com/baruckis/kriptofolio/db/AppDatabase.kt:32`: `exportSchema` went from `false`
@@ -642,7 +642,7 @@ touches it.
   second line is a dangling expression, so the subject is `Feedback Kriptofolio 1.2.3 for Android`
   rather than including the subtitle. Harmless in the full flavor (its subtitle is empty).
 - **K10 — Adding an owned coin overwrites its amount** instead of adding to it
-  (`app/src/main/java/com/baruckis/kriptofolio/db/MyCryptocurrencyDao.kt:103-105`). This is issue #10, and 2.0 changes it by decision; the new
+  (`app/src/main/java/com/baruckis/kriptofolio/db/MyCryptocurrencyDao.kt:103-105`). This is issue #10, and 1.3.0 changes it by decision (`docs/decisions/006`); the new
   rule is specified in this document before the pull request that implements it.
 - **K11 — A settings-screen currency change can strand the preference.** The preference is
   written before the fetch (§5, *Currency change protocol*); a failed fetch leaves the totals at

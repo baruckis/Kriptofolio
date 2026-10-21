@@ -14,8 +14,9 @@ a boundary that does not move.
 ## Decision
 
 1. **1.3.0 is the modernized Android app.** It contains the 1.x features plus adding to an
-   existing holding ([#10](https://github.com/baruckis/Kriptofolio/issues/10)) and a plain export
-   and import, rebuilt through roadmap stages 2–4. It takes the next `versionCode` after 1.2.3.
+   existing holding ([#10](https://github.com/baruckis/Kriptofolio/issues/10)), a plain export
+   and import, and the licenses screen without Google libraries (ADR-003), rebuilt through roadmap
+   stages 2–4. It takes the next `versionCode` after 1.2.3.
 2. **2.0.0 is the product release**, on Android and iOS at the same time. Its scope is frozen to
    this list: your own key with CoinMarketCap and CoinGecko and the starter feed (ADR-001); iOS;
    Pro with encrypted backup, cost basis and profit or loss, app lock and Insights (ADR-002,
@@ -46,7 +47,8 @@ a boundary that does not move.
   own launch.
 - `AGENTS.md` lists `modernization-2026` as protected once it exists, and `release/1.3` as a
   maintenance branch.
-- Issues carry the `1.3.0` or `2.0.0` milestone; everything else carries the `later` label.
+- Issues carry the `1.3.0` or `2.0.0` milestone; feature requests for after 2.0.0 carry the `later`
+  label. Questions, out-of-scope requests and the dependency dashboard carry neither.
 
 ## Reopen when
 

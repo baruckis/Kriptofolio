@@ -24,7 +24,7 @@ paid for and kept alive.
 4. The app shows how fresh the data is and how much of the user's quota has been used, and sizes
    background refresh to the quota of the user's plan.
 5. A starter feed without a key is served by a small cache the author runs on the provider's
-   free plan, so a new user sees the app work before creating a key. It serves the same delayed
+   free plan, on a server the author already pays for, so a new user sees the app work before creating a key. It serves the same delayed
    top-coin table to everyone, keeps no identifiers, and the key lives only on that server. The
    app works fully without it: the provider may object or withdraw the key at any time, and the
    fallback is always the user's own key, which the app offers from the first screen.
