@@ -15,8 +15,8 @@ a boundary that does not move.
 
 1. **1.3.0 is the modernized Android app.** It contains the 1.x features plus adding to an
    existing holding ([#10](https://github.com/baruckis/Kriptofolio/issues/10)), a plain export
-   and import, and the licenses screen without Google libraries (ADR-003), rebuilt through roadmap
-   stages 2–4. It takes the next `versionCode` after 1.2.3.
+   and import, stricter refresh limits with error messages that name their cause (ADR-001), and
+   the licenses screen without Google libraries (ADR-003), rebuilt through roadmap stages 2–4. It takes the next `versionCode` after 1.2.3.
 2. **2.0.0 is the product release**, on Android and iOS at the same time. Its scope is frozen to
    this list: your own key with CoinMarketCap and CoinGecko and the starter feed (ADR-001); iOS;
    Pro with encrypted backup, cost basis and profit or loss, app lock and Insights (ADR-002,
