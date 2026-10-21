@@ -1,0 +1,81 @@
+# Labels every pull request with its review tier, decided by the paths it changes.
+#
+# CONTRIBUTING.md, step 5, says what each tier needs before merge. In short: "review: docs" needs
+# no independent review, "review: rules" and "review: code" do. This file holds the
+# authoritative path lists; the label only makes the result visible, and a label added by hand
+# never lowers what the paths require.
+#
+# Why pull_request_target: a pull request from a fork gets a read-only token under
+# pull_request, so it could not be labelled. pull_request_target runs this file as it is on the
+# target branch, with a token that may write labels. That is safe here only because nothing from
+# the pull request is checked out or executed: the job reads the list of changed file names
+# through the API and nothing else. Keep it that way; never add actions/checkout of the head.
+
+name: review tier
+
+on:
+  pull_request_target:
+    types: [opened, reopened, synchronize, ready_for_review]
+
+# Reading the pull request's files and writing its labels; nothing else.
+permissions:
+  pull-requests: write
+
+concurrency:
+  group: review-tier-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  label:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      # Pinned to a full commit SHA, with the version it corresponds to in the comment.
+      - name: Classify changed paths and set the label
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        with:
+          script: |
+            // Files that instruct people and agents, or define the behaviour contract and the plan.
+            const RULE_FILES = new Set([
+              'AGENTS.md', 'CLAUDE.md', 'CONTRIBUTING.md', 'RELEASING.md', 'UPGRADE-NOTES.md',
+              'SUPPORT.md', 'LICENSE', 'renovate.json',
+              'docs/roadmap.md', 'docs/BEHAVIOUR.md', 'docs/behaviour-parity.md', 'docs/ui-inventory.md',
+            ]);
+            const RULE_DIRS = ['config/', 'docs/decisions/', '.github/'];
+            // Documentation that is not a rule: other Markdown, docs/ and store listing texts and images.
+            const DOC_DIRS = ['docs/', 'fastlane/metadata/'];
+
+            const tierOf = (path) => {
+              if (RULE_FILES.has(path) || RULE_DIRS.some((d) => path.startsWith(d))) return 'rules';
+              if (path.endsWith('.md') || DOC_DIRS.some((d) => path.startsWith(d))) return 'docs';
+              return 'code';
+            };
+
+            const { owner, repo } = context.repo;
+            const number = context.payload.pull_request.number;
+            const files = await github.paginate(github.rest.pulls.listFiles, {
+              owner, repo, pull_number: number, per_page: 100,
+            });
+            // A rename counts for both its old and its new path.
+            const paths = files.flatMap((f) => [f.filename, f.previous_filename].filter(Boolean));
+            const tiers = new Set(paths.map(tierOf));
+            const tier = tiers.has('code') ? 'code' : tiers.has('rules') ? 'rules' : 'docs';
+
+            const labels = ['review: docs', 'review: rules', 'review: code'];
+            const wanted = `review: ${tier}`;
+            const current = context.payload.pull_request.labels.map((l) => l.name);
+            for (const name of current.filter((n) => labels.includes(n) && n !== wanted)) {
+              await github.rest.issues.removeLabel({ owner, repo, issue_number: number, name });
+            }
+            if (!current.includes(wanted)) {
+              await github.rest.issues.addLabels({ owner, repo, issue_number: number, labels: [wanted] });
+            }
+
+            const needs = tier === 'docs'
+              ? 'No independent review; links and facts checked, the owner reads it before merging.'
+              : 'Independent review of the exact HEAD (CONTRIBUTING.md, step 5).';
+            await core.summary
+              .addHeading(`Review tier: ${tier}`, 3)
+              .addRaw(`${needs}\n\n`)
+              .addList(paths.map((p) => `${tierOf(p)}: ${p}`))
+              .write();

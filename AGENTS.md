@@ -146,6 +146,12 @@ Signing, Play Console uploads, and merging PRs are always done by the human.
 Apply the additional [review criteria](config/review-rules.md) when reviewing a change.
 The reviewer may be a person or a separately chosen tool; no private service is required.
 
+Whether a pull request needs an independent review depends on its tier, decided by the paths it
+changes and shown as a `review: docs`, `review: rules` or `review: code` label
+([`CONTRIBUTING.md`](CONTRIBUTING.md), step 5). A `docs` pull request needs no independent
+review; `rules` and `code` pull requests do. A change to this file, to the review criteria or to a
+decision record is always `rules`. Never change a tier label by hand to avoid a review.
+
 ## Reproducible modernization
 
 `AGENTS.md` is the agent entry point; linked project documents hold the details.
