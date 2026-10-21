@@ -113,12 +113,13 @@ that is not a roadmap step; a roadmap step follows these rules instead.
   tests pass.
 - Flavors: `full` and `demo` through 1.3.0; stage 7 replaces them with `play` (Google Play Billing)
   and `foss` (no Google libraries, everything unlocked), as `docs/decisions/003` records. From then
-  on, the rules that name `full` and `demo` ("Project facts" above and review criteria 3 and 4)
-  apply to `play` and `foss`, and the `.demo` suffix retires with the `demo` flavor.
+  on, the rules that name `full` and `demo` ("Project facts" above and hard rules 3 and 4 of
+  `config/review-rules.md`) apply to `play` and `foss`, and the `.demo` suffix retires with the
+  `demo` flavor.
 - No new provider key in the repository; the documented CoinMarketCap sandbox key of the `demo`
-  flavor stays until that flavor retires (review criterion 6). Until 2.0.0 the owner supplies the
-  1.x key only to the release build; from stage 5 users supply their own key at runtime. Tests use recorded
-  responses from `app/src/test/resources/api/` and new fixtures.
+  flavor stays until that flavor retires (hard rule 6 of `config/review-rules.md`). Until 2.0.0 the
+  owner supplies the 1.x key only to the release build; from stage 5 users supply their own key at
+  runtime. Tests use recorded responses from `app/src/test/resources/api/` and new fixtures.
 - Parity is measured against `docs/BEHAVIOUR.md` and `docs/ui-inventory.md`; deliberate deviations
   go in `docs/decisions/` and `docs/behaviour-parity.md`.
 - Gate for a step: the build command below, plus once the modules exist

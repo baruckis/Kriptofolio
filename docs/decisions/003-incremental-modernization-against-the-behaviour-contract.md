@@ -27,8 +27,8 @@ code would contradict that, and would discard the safety net stage 1 built.
    spike and recorded in a new decision.
 3. Shared logic is extracted into Kotlin Multiplatform modules under `shared/` (model, data with
    Room KMP, network and market-data sources), consumed by `app/` as soon as each module exists.
-   Screens move from XML to Compose one at a time, written from the start in a Compose
-   Multiplatform module under `shared/` that targets only Android until stage 6, with their ViewModels in shared
+   Screens move from XML to Compose one at a time, written from the start in a Compose Multiplatform
+   module under `shared/` that targets only Android until stage 6, with their ViewModels in shared
    code. Stage 6 adds the iOS targets and the iOS shell (`iosApp/`).
 4. The modernization of the existing app ships as **1.3.0** (Android). The new product features,
    iOS, Pro and the F-Droid build ship together as **2.0.0** (ADR-006).
@@ -44,10 +44,12 @@ code would contradict that, and would discard the safety net stage 1 built.
    released.
 8. Parity is measured against `BEHAVIOUR.md` and `ui-inventory.md`; deliberate deviations are
    recorded in `docs/decisions/` and mapped in `docs/behaviour-parity.md`.
-9. **One deliberate deviation in 1.3.0: the licenses screens.** Google's `OssLicensesMenuActivity`
-   and the hand-written list of 28 libraries (`BEHAVIOUR.md` section 8) are replaced by one
-   screen that AboutLibraries generates at build time, so the app no longer needs a Google Play
-   Services library for it. The app's own Apache 2.0 notice stays. The parity table records it.
+9. **Another deliberate deviation in 1.3.0: the licenses screens.** Google's
+   `OssLicensesMenuActivity` and the hand-written list of 28 libraries (`BEHAVIOUR.md` section 8)
+   are replaced by one screen that AboutLibraries generates at build time, so the app no longer
+   needs a Google Play Services library for it. The app's own Apache 2.0 notice stays.
+   `docs/behaviour-parity.md`, which the first Compose screen step creates, records this and the
+   other deviations listed in ADR-006.
 
 ## What we do not do
 

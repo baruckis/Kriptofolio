@@ -21,10 +21,11 @@ You do not need a private method repository, paid playbook or the author's revie
      anywhere else, for example inside the app or its tests, counts as code. No independent
      review is needed: the evidence checks the links and facts, `git diff --check` is clean, and
      the owner reads the change before merging.
-   - **`review: rules`**: any file that instructs people and agents or defines the contract and
-     the plan: `AGENTS.md` and `CLAUDE.md` at any depth, `CONTRIBUTING.md`, `RELEASING.md`,
-     `UPGRADE-NOTES.md`, `SUPPORT.md`, `LICENSE`, `renovate.json`, `config/`, `.github/`,
-     `.claude/`, `docs/decisions/`, `docs/roadmap.md`, `docs/BEHAVIOUR.md`,
+   - **`review: rules`**: any file that instructs people and agents or defines the contract and the
+     plan: `AGENTS.md` and `CLAUDE.md` at any depth and in any letter case (a new agent instruction
+     file is added to this list and to the workflow in the same pull request), `CONTRIBUTING.md`,
+     `RELEASING.md`, `UPGRADE-NOTES.md`, `SUPPORT.md`, `LICENSE`, `renovate.json`, `config/`,
+     `.github/`, `.claude/`, `docs/decisions/`, `docs/roadmap.md`, `docs/BEHAVIOUR.md`,
      `docs/behaviour-parity.md`, `docs/ui-inventory.md` and the captures in `docs/ui-evidence/`.
    - **`review: code`**: anything else. A pull request that mixes tiers takes the strictest one.
 

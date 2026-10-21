@@ -23,10 +23,11 @@ paid for and kept alive.
    learn which coins the user holds. It uses more of the user's quota, and the app says so.
 4. The app shows how fresh the data is and how much of the user's quota has been used, and sizes
    background refresh to the quota of the user's plan.
-5. A starter feed without a key is served by a small cache the author runs on the provider's
-   free plan, on a server the author already pays for, so a new user sees the app work before creating a key. It serves the same delayed
-   top-coin table to everyone, keeps no identifiers, and the key lives only on that server. The
-   app works fully without it: the provider may object or withdraw the key at any time, and the
+5. A starter feed without a key is served by a small cache the author runs on the provider's free
+   plan, on a server the author already pays for, so a new user sees the app work before creating a
+   key. Keeping it running is the author's work, and nothing else depends on it. It serves the same
+   delayed top-coin table to everyone, keeps no identifiers, and the key lives only on that server.
+   The app works fully without it: the provider may object or withdraw the key at any time, and the
    fallback is always the user's own key, which the app offers from the first screen.
 6. Entering a key must take under two minutes: the provider is recognised from the key format, a
    key copied to the clipboard is offered for one-tap paste when the user returns to the app, the

@@ -41,15 +41,16 @@ jobs:
               'renovate.json',
               'docs/roadmap.md', 'docs/BEHAVIOUR.md', 'docs/behaviour-parity.md', 'docs/ui-inventory.md',
             ]);
-            // Agent instructions at any depth.
-            const RULE_NAMES = new Set(['AGENTS.md', 'CLAUDE.md']);
+            // Agent instructions at any depth, in any letter case. A new agent file name joins this
+            // list and CONTRIBUTING.md step 5 in the same pull request.
+            const RULE_NAMES = new Set(['agents.md', 'claude.md']);
             const RULE_DIRS = ['config/', 'docs/decisions/', 'docs/ui-evidence/', '.github/', '.claude/'];
             // Documentation that is not a rule: Markdown in the repository root, docs/ and store
             // listing texts and images. Markdown anywhere else (an app resource, a test fixture) is code.
             const DOC_DIRS = ['docs/', 'fastlane/metadata/'];
 
             const tierOf = (path) => {
-              const name = path.split('/').pop();
+              const name = path.split('/').pop().toLowerCase();
               if (RULE_FILES.has(path) || RULE_NAMES.has(name) || RULE_DIRS.some((d) => path.startsWith(d))) {
                 return 'rules';
               }

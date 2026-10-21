@@ -120,11 +120,12 @@ The rules above protect the app as it is. For a pull request that is a step of `
    or touch signing and store configuration; only the owner's release pull request does.
 4. **`master` stays releasable.** Both flavors build, tests pass, no feature half-enabled for
    users. From stage 7 the flavors are `play` and `foss` (`docs/decisions/003`); hard rules 3 and 4
-   then apply to `play` and `foss`, and the `.demo` suffix retires with the `demo` flavor. The `foss`
-   release build must contain no Google Play or Billing classes. From stage 6 a change to shared code must show that the iOS
-   shell still builds.
+   then apply to `play` and `foss`, and the `.demo` suffix retires with the `demo` flavor. The
+   `foss` release build must contain no Google Play or Billing classes. From stage 6 a change to
+   shared code must show that the iOS shell still builds.
 5. **No key, no header in a log.** A provider key in source, fixtures, logs or screenshots is
-   blocking, except the documented demo sandbox key of hard rule 6 until the `demo` flavor retires, as is logging of the authentication header outside debug builds.
+   blocking, as is logging of the authentication header outside debug builds. The one exception is
+   the documented demo sandbox key of hard rule 6, until the `demo` flavor retires.
 6. **The 2.0.0 scope is frozen.** A pull request that adds a user-visible feature outside the 1.3.0
    scope or the frozen 2.0.0 list of `docs/decisions/006` is blocking unless it cites a newer
    decision record that changes that list.
