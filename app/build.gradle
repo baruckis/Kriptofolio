@@ -14,24 +14,26 @@
  * limitations under the License.
  */
 
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-parcelize' // For the @Parcelize annotation
-apply plugin: 'kotlin-kapt' // For annotation processing
+plugins {
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.parcelize) // For the @Parcelize annotation
+    alias(libs.plugins.kotlin.kapt) // For annotation processing
 
-// Helps fetch & display the open source libraries used within your project.
-apply plugin: 'com.google.android.gms.oss-licenses-plugin'
+    // Helps fetch & display the open source libraries used within your project.
+    alias(libs.plugins.oss.licenses)
+}
 
-// Version values at Project level versions.gradle.
+// Version values in gradle/libs.versions.toml.
 
 android {
     namespace 'com.baruckis.kriptofolio'
-    compileSdkVersion versions.compile_sdk
+    compileSdkVersion libs.versions.compile.sdk.get().toInteger()
 
     defaultConfig {
         applicationId "com.baruckis.kriptofolio"
-        minSdkVersion versions.min_sdk
-        targetSdkVersion versions.target_sdk
+        minSdkVersion libs.versions.min.sdk.get().toInteger()
+        targetSdkVersion libs.versions.target.sdk.get().toInteger()
         versionCode 6
         versionName "1.2.3" // major . minor . patch
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -95,16 +97,16 @@ dependencies {
     /* Kotlin */
 
     // The standard library for Kotlin/JVM and its additional part for JDK 8.
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$versions.kotlin"
+    implementation libs.kotlin.stdlib.jdk8
 
     // Coroutines support libraries for Kotlin.
 
     // Dependencies for coroutines.
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$versions.coroutines"
+    implementation libs.kotlinx.coroutines.core
 
     // Dependency is for the special UI context that can be passed to coroutine builders that use
     // the main thread dispatcher to dispatch events on the main thread.
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$versions.coroutines"
+    implementation libs.kotlinx.coroutines.android
 
     /* Android */
 
@@ -112,42 +114,42 @@ dependencies {
     // development with Kotlin more concise, pleasant, and idiomatic by leveraging Kotlin language
     // features such as extension functions/properties, lambdas, named parameters, and parameter
     // default values.
-    implementation "androidx.core:core-ktx:$versions.ktx"
+    implementation libs.androidx.core.ktx
 
     /* AndroidX - Support Libraries */
 
     // This library adds support for the Action Bar user interface design pattern.
     // It includes support for material design user interface implementations.
-    implementation "androidx.appcompat:appcompat:$versions.app_compat"
+    implementation libs.androidx.appcompat
 
     // This library adds support for the CardView widget, which lets you show information inside
     // cards that have a consistent look on any app.
-    implementation "androidx.cardview:cardview:$versions.cardview"
+    implementation libs.androidx.cardview
 
     // This library allows you to build interactive settings screens, without needing to handle
     // interacting with device storage or managing the user interface.
-    implementation "androidx.preference:preference:$versions.preference"
+    implementation libs.androidx.preference
 
     // RecyclerView - a flexible view for providing a limited window into a large data set.
-    implementation "androidx.recyclerview:recyclerview:$versions.recyclerview"
+    implementation libs.androidx.recyclerview
 
     // A RecyclerView addon library providing support for item selection. The library provides
     // support for both touch and mouse driven selection. Developers retain control over the
     // visual representation, and the policies controlling selection behavior (like which items
     // are eligible for selection, and how many items can be selected.)
-    implementation "androidx.recyclerview:recyclerview-selection:$versions.recyclerview_selection"
+    implementation libs.androidx.recyclerview.selection
 
     /* Constraint Layout Library */
 
     // A ConstraintLayout is a ViewGroup which allows you to position and size widgets in a
     // flexible way.
-    implementation "androidx.constraintlayout:constraintlayout:$versions.constraint_layout"
+    implementation libs.androidx.constraintlayout
 
     /* Material Components */
 
     // Material Components for Android is a static library that you can add to your Android app
     // in order to use APIs that provide implementations of the Material Design specification.
-    implementation "com.google.android.material:material:$versions.design"
+    implementation libs.material
 
     /* Architecture Components */
 
@@ -158,95 +160,95 @@ dependencies {
     // ViewModel and LiveData.
     // The ViewModel class is designed to store and manage UI-related data in a lifecycle conscious
     // way. LiveData is an observable data holder class.
-    implementation "androidx.lifecycle:lifecycle-extensions:$versions.lifecycle"
+    implementation libs.androidx.lifecycle.extensions
 
     // Room is a Database Object Mapping library that makes it easy to access database on Android
     // applications.
-    implementation "androidx.room:room-runtime:$versions.room"
-    kapt "androidx.room:room-compiler:$versions.room"
+    implementation libs.androidx.room.runtime
+    kapt libs.androidx.room.compiler
     // For Kotlin we use kapt instead of annotationProcessor.
 
     // Navigation component simplifies implementing navigation, while also helping you visualize
     // your app's navigation flow.
-    implementation "android.arch.navigation:navigation-fragment-ktx:$versions.navigation"
-    implementation "android.arch.navigation:navigation-ui-ktx:$versions.navigation"
+    implementation libs.navigation.fragment.ktx
+    implementation libs.navigation.ui.ktx
 
     // Chrome Custom Tabs.
-    implementation "androidx.browser:browser:$versions.browser"
+    implementation libs.androidx.browser
 
     /* Other */
 
     // Dagger for dependency injection. It is a fully static, compile-time dependency injection
     // framework for both Java and Android.
-    implementation "com.google.dagger:dagger:$versions.dagger"
-    implementation "com.google.dagger:dagger-android:$versions.dagger"
-    implementation "com.google.dagger:dagger-android-support:$versions.dagger"
-    kapt "com.google.dagger:dagger-compiler:$versions.dagger"
-    kapt "com.google.dagger:dagger-android-processor:$versions.dagger"
+    implementation libs.dagger
+    implementation libs.dagger.android
+    implementation libs.dagger.android.support
+    kapt libs.dagger.compiler
+    kapt libs.dagger.android.processor
 
     // HTTP client - Retrofit with OkHttp.
-    implementation("com.squareup.retrofit2:retrofit:$versions.retrofit") {
+    implementation(libs.retrofit) {
         // Exclude Retrofit’s OkHttp peer-dependency module and define your own module import.
         exclude module: 'okhttp'
     }
 
     // An HTTP & HTTP/2 client for Android and Java applications.
-    implementation "com.squareup.okhttp3:okhttp:$versions.okhttp"
+    implementation libs.okhttp
 
     // For providing logs that can be useful for debugging.
-    implementation "com.squareup.okhttp3:logging-interceptor:$versions.okhttp"
+    implementation libs.okhttp.logging.interceptor
 
     // JSON converter Gson for JSON to Java object mapping.
-    implementation "com.squareup.retrofit2:converter-gson:$versions.retrofit"
+    implementation libs.retrofit.converter.gson
 
     // Glide - an image loading and caching library for Android focused on smooth scrolling.
-    implementation "com.github.bumptech.glide:glide:$versions.glide"
-    kapt "com.github.bumptech.glide:compiler:$versions.glide"
+    implementation libs.glide
+    kapt libs.glide.compiler
 
     // Glide's OkHttp integration library to use OkHttp 3.x to fetch data over http/https in Glide.
-    implementation "com.github.bumptech.glide:okhttp3-integration:$versions.glide" + "@aar"
+    implementation "${libs.glide.okhttp3.integration.get()}@aar"
 
     // UI. FlipView is a ViewGroup (FrameLayout) that is designed to display 2 views/layouts by
     // flipping the front one in favor of the back one, and vice versa. The library is plain Java,
     // its Kotlin standard library dependency is an artifact of how it was republished, and left
     // alone it would drag a much newer Kotlin runtime into the app.
-    implementation("eu.davidea:flipview:$versions.flip_view") {
+    implementation(libs.flipview) {
         exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib'
     }
 
     // Facebook's Stetho project enables you to use Chrome debugging tools to troubleshoot
     // network traffic, database files, and view layouts.
-    implementation "com.facebook.stetho:stetho:$versions.stetho"
+    implementation libs.stetho
 
     // Helps apps to display open source software licenses and notices. When the application builds,
     // the Gradle plugin will process the licenses and add them to the app resources.
-    implementation "com.google.android.gms:play-services-oss-licenses:$versions.oss_licenses"
+    implementation libs.play.services.oss.licenses
 
     /* Testing */
 
     // The AndroidX Test Library provides an extensive framework for testing Android apps.
 
     // Android testing library's runner.
-    androidTestImplementation "androidx.test:runner:$versions.runner"
+    androidTestImplementation libs.androidx.test.runner
 
     // Android testing library's rules.
-    androidTestImplementation "androidx.test:rules:$versions.rules"
+    androidTestImplementation libs.androidx.test.rules
 
     // Espresso UI testing. Use Espresso to write concise, beautiful, and reliable Android UI tests.
-    androidTestImplementation "androidx.test.espresso:espresso-core:$versions.espresso"
+    androidTestImplementation libs.androidx.test.espresso.core
 
     // Room testing with test helpers.
-    androidTestImplementation "androidx.room:room-testing:$versions.room"
+    androidTestImplementation libs.androidx.room.testing
 
     // Dependencies for local unit tests. JUnit is a unit testing framework for Java.
-    testImplementation "junit:junit:$versions.junit"
+    testImplementation libs.junit
 
-    testImplementation "org.mockito:mockito-core:$versions.mockito"
+    testImplementation libs.mockito.core
 
-    testImplementation "androidx.arch.core:core-testing:$versions.arch_core"
+    testImplementation libs.androidx.arch.core.testing
 
     // SQLite on the JVM, used only by the characterization tests to open the real database files
     // recorded from released versions (src/test/resources/db) and check them against the Room
     // schema without an emulator.
-    testImplementation "org.xerial:sqlite-jdbc:$versions.sqlite_jdbc"
+    testImplementation libs.sqlite.jdbc
 }
