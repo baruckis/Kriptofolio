@@ -15,6 +15,8 @@ to renovate: carefully, reversibly, and without touching the exhibits.
 - Branches `Part-1`, `Part-2`, `Part-3`, `Part-4`, `Part-5` — frozen references for the blog
   series. Never commit to, rebase, rename, or delete them.
 - Branch `legacy` and tag `v1.2.1-legacy` — frozen forever.
+- Branch `modernization-2026`, once the owner creates it at the 1.3.0 release — frozen forever
+  (`docs/decisions/006`).
 - `README.md` and all documentation files — do not modify unless the task explicitly says so.
 - Git history — NEVER use `push --force`, `rebase` on pushed branches, or history rewrites.
 - Never push directly to `master`. All work goes through a feature branch and a pull request
@@ -28,8 +30,12 @@ only survives while the list stays short, so every branch here is one of two kin
 
 **Exhibits — kept forever.** `Part-1`…`Part-5` contain commits that are not on `master` and
 never will be; deleting one destroys history that the published articles link to. `legacy`
-marks the state of the app before the modernization. These are the protected branches listed
-above.
+marks the state of the app before the modernization; `modernization-2026` will mark the state
+after it, at the 1.3.0 release. These are the protected branches listed above.
+
+**Maintenance branch — kept until 2.0.0 is in production.** `release/1.3`, created by the owner
+from the tag `v1.3.0`, receives 1.3.x hotfix pull requests; each fix is cherry-picked to `master`.
+Deleting it after 2.0.0 is the owner's decision.
 
 **Working branches — deleted automatically once their pull request is merged.** Everything else: a feature,
 a fix, a documentation change, a CI change. Nothing is lost by deleting one. Its commits stay
@@ -80,16 +86,23 @@ branch; it does not delete `master`, protected exhibit branches, tags, or commit
 ## Modernization track
 
 `docs/roadmap.md` modernizes this app in place, one bounded, reviewed step at a time; the reasons are
-`docs/decisions/001`–`003`. The keep-alive rules in "Working style" above govern any pull request
+in `docs/decisions/`. Stages 2–4 lead to release 1.3.0, stages 5–7 to release 2.0.0, whose scope is
+frozen (`docs/decisions/006`). The keep-alive rules in "Working style" above govern any pull request
 that is not a roadmap step; a roadmap step follows these rules instead.
 
 - One step is one pull request with acceptance criteria, behaviour preserved as in
   `docs/BEHAVIOUR.md` unless a decision record says otherwise, and evidence from a clean checkout.
 - Touch only what the step needs. New and rewritten code uses current conventions (Kotlin 2 with
-  KSP, Hilt, Compose, Room with an exported schema, Ktor client with kotlinx.serialization, a
-  version catalog); do not restyle files the step does not change.
-- Shared logic lives in `shared/` Kotlin Multiplatform modules, consumed by `app/`. The iOS shell
-  `iosApp/` arrives in stage 6.
+  KSP, Koin, Compose Multiplatform with the MVVM rules of `docs/decisions/004`, Room KMP with an
+  exported schema, Ktor client with kotlinx.serialization, DataStore, a version catalog); do not
+  restyle files the step does not change.
+- Shared logic and ViewModels live in `shared/` Kotlin Multiplatform modules, consumed by `app/`.
+  Compose screens are written in a Compose Multiplatform module that targets only Android until
+  stage 6, when the iOS targets and the iOS shell `iosApp/` arrive.
+- Dependency injection is Koin (`docs/decisions/005`); every Koin module is covered by the module
+  verification test. No Hilt.
+- A feature that is not on the frozen 2.0.0 list goes to the backlog with the `later` label; do not
+  implement it without a new decision record.
 - `applicationId com.baruckis.kriptofolio` and the signing key never change. The database rule
   applies to every step: the real v1 files in `app/src/test/resources/db/` must open through a
   tested migration, with no destructive fallback.
@@ -97,10 +110,11 @@ that is not a roadmap step; a roadmap step follows these rules instead.
   store uploads are done by the human in the release PR and procedure (`UPGRADE-NOTES.md` section 7,
   later `RELEASING.md`). `master` must stay releasable: both flavors build, tests and migration
   tests pass.
-- Flavors: `full` and `demo` today; stage 5 replaces them with `play` (Google Play Billing) and
-  `foss` (no Google libraries, everything unlocked) by a recorded decision.
-- No provider key anywhere in the repository. Users supply their own key at runtime; tests use
-  recorded responses from `app/src/test/resources/api/` and new fixtures.
+- Flavors: `full` and `demo` through 1.3.0; stage 7 replaces them with `play` (Google Play Billing)
+  and `foss` (no Google libraries, everything unlocked), as `docs/decisions/003` records.
+- No provider key anywhere in the repository. Until 2.0.0 the owner supplies the 1.x key only to
+  the release build; from stage 5 users supply their own key at runtime. Tests use recorded
+  responses from `app/src/test/resources/api/` and new fixtures.
 - Parity is measured against `docs/BEHAVIOUR.md` and `docs/ui-inventory.md`; deliberate deviations
   go in `docs/decisions/` and `docs/behaviour-parity.md`.
 - Gate for a step: the build command below, plus once the modules exist

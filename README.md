@@ -38,9 +38,10 @@ build directory; this procedure does not upload it to a pull request.
 
 ## Roadmap and decisions
 
-The step-by-step modernization, the free and Pro split, the "your own key" model and the F-Droid build are
-described in [docs/roadmap.md](docs/roadmap.md). Long-lived decisions are recorded in
-[docs/decisions/](docs/decisions/README.md).
+The step-by-step modernization (release 1.3.0) and the 2.0.0 release with your own key, iOS, Pro
+and the F-Droid build are described in [docs/roadmap.md](docs/roadmap.md) and tracked on the public
+[Kriptofolio Modernization](https://github.com/users/baruckis/projects/3) board. Long-lived
+decisions are recorded in [docs/decisions/](docs/decisions/README.md).
 
 ## Trademark
 

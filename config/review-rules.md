@@ -119,8 +119,15 @@ The rules above protect the app as it is. For a pull request that is a step of `
 3. **Merged is not released.** A step must not change `versionName` or `versionCode`, create a tag
    or touch signing and store configuration; only the owner's release pull request does.
 4. **`master` stays releasable.** Both flavors build, tests pass, no feature half-enabled for
-   users. From stage 5 the flavors are `play` and `foss`; the `foss` release build must contain no
+   users. From stage 7 the flavors are `play` and `foss`; the `foss` release build must contain no
    Google Play or Billing classes. From stage 6 a change to shared code must show that the iOS
    shell still builds.
 5. **No key, no header in a log.** A provider key in source, fixtures, logs or screenshots is
    blocking, as is logging of the authentication header outside debug builds.
+6. **The 2.0.0 scope is frozen.** A pull request that adds a user-visible feature outside the 1.3.0
+   scope or the frozen 2.0.0 list of `docs/decisions/006` is blocking unless it cites a newer
+   decision record that changes that list.
+7. **Presentation and wiring follow the records.** New screens follow the eight rules of
+   `docs/decisions/004` (one immutable state, plain ViewModel methods, no navigation in the
+   ViewModel, Room as the single source of truth). New dependencies are Koin definitions covered by
+   the module verification test (`docs/decisions/005`); a Hilt dependency is blocking.
