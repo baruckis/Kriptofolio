@@ -69,7 +69,7 @@ the exhibits.
 
 8. **Stage discipline.** A pull request that declares itself a keep-alive, compliance or
    maintenance change must not contain refactoring, reformatting, renames or opportunistic
-   modernization. Those belong to the planned 2.0 rewrite and are recorded in
+   modernization. Those belong to the modernization steps in `docs/roadmap.md` and are recorded in
    `UPGRADE-NOTES.md`. Scope creep in a minimal release is a real defect: it makes the diff
    unreviewable exactly when reviewability is the point.
 
@@ -88,10 +88,10 @@ in Notes.
   code is deliberately 2019-era so it keeps matching the published articles that walk
   through it line by line. Never comment on formatting, naming style, indentation, or on a
   file "not following modern Kotlin conventions".
-- **Suggestions to modernize existing code.** View binding, Compose, Hilt, KSP, coroutines
-  idioms, newer AndroidX APIs — all of it belongs to the 2.0 backlog in `UPGRADE-NOTES.md`,
-  not to a review finding. If a diff *touches* such code, review the change, not the age of
-  the surrounding code.
+- **Suggestions to modernize existing code.** View binding, Compose, Koin, KSP, coroutines
+  idioms, newer AndroidX APIs — all of it belongs to the modernization steps in `docs/roadmap.md`
+  (backlog in `UPGRADE-NOTES.md` section 8), not to a review finding. If a diff *touches* such
+  code, review the change, not the age of the surrounding code.
 - **Markdown wording.** Documentation phrasing, tone and grammar are the author's.
 - **Anything that cannot be verified from this repository alone.** Claims about the Play
   Console, a live API, a remote artifact, a device or a network are Notes by definition,
@@ -105,3 +105,31 @@ failure scenario — what input or situation produces what wrong outcome. Issues
 Everything else is a **Note**: hardening preferences, hypotheticals, style opinions, and
 anything needing verification outside this repository. Notes never count as unresolved and
 do not become blocking issues merely because a reviewer prefers a different approach.
+
+## Modernization step additions
+
+The rules above protect the app as it is. For a pull request that is a step of `docs/roadmap.md`
+(see `docs/decisions/003-incremental-modernization-against-the-behaviour-contract.md`), also check:
+
+1. **Behaviour is preserved or traced.** A change from `docs/BEHAVIOUR.md` or `docs/ui-inventory.md`
+   is a finding unless the pull request cites the decision record that allows it and updates
+   `docs/behaviour-parity.md`.
+2. **The migration is the exhibit.** Any change to the Room schema must come with the exported
+   schema and a green migration test against the real v1 files in `app/src/test/resources/db/`.
+3. **Merged is not released.** A step must not change `versionName` or `versionCode`, create a tag
+   or touch signing and store configuration; only the owner's release pull request does.
+4. **`master` stays releasable.** Both flavors build, tests pass, no feature half-enabled for
+   users. From stage 7 the flavors are `play` and `foss` (`docs/decisions/003`); hard rules 3 and 4
+   then apply to `play` and `foss`, and the `.demo` suffix retires with the `demo` flavor. The
+   `foss` release build must contain no Google Play or Billing classes. From stage 6 a change to
+   shared code must show that the iOS shell still builds.
+5. **No key, no header in a log.** A provider key in source, fixtures, logs or screenshots is
+   blocking, as is logging of the authentication header outside debug builds. The one exception is
+   the documented demo sandbox key of hard rule 6, until the `demo` flavor retires.
+6. **The 2.0.0 scope is frozen.** A pull request that adds a user-visible feature outside the 1.3.0
+   scope or the frozen 2.0.0 list of `docs/decisions/006` is blocking unless it cites a newer
+   decision record that changes that list.
+7. **Presentation and wiring follow the records.** New screens follow the eight rules of
+   `docs/decisions/004` (one immutable state, plain ViewModel methods, no navigation in the
+   ViewModel, Room as the single source of truth). New dependencies are Koin definitions covered by
+   the module verification test (`docs/decisions/005`); a Hilt dependency is blocking.

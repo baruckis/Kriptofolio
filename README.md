@@ -36,6 +36,19 @@ For a local, synthetic Android UI recording and its limits, see
 build directory; this procedure does not upload it to a pull request.
 
 
+## Roadmap and decisions
+
+The step-by-step modernization (release 1.3.0) and the 2.0.0 release with your own key, iOS, Pro
+and the F-Droid build are described in [docs/roadmap.md](docs/roadmap.md) and tracked on the public
+[Kriptofolio Modernization](https://github.com/users/baruckis/projects/3) board. Long-lived
+decisions are recorded in [docs/decisions/](docs/decisions/README.md).
+
+## Trademark
+
+The source code is licensed under Apache-2.0 (below), which grants no rights to use the Kriptofolio
+name or logo as trademarks (section 6 of the license). A fork must ship under a different name and
+icon.
+
 ## License
 
     Copyright 2018-2023 Andrius Baruckis www.baruckis.com | kriptofolio.app
