@@ -214,8 +214,9 @@ dependencies {
     implementation project(':flipview')
 
     // Facebook's Stetho project enables you to use Chrome debugging tools to troubleshoot
-    // network traffic, database files, and view layouts.
-    implementation libs.stetho
+    // network traffic, database files, and view layouts. Debug builds only; it is initialized
+    // from the debug source set and never ships in a release.
+    debugImplementation libs.stetho
 
     // Helps apps to display open source software licenses and notices. When the application builds,
     // the Gradle plugin will process the licenses and add them to the app resources.

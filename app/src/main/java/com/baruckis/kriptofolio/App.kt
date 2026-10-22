@@ -23,7 +23,6 @@ import android.content.res.Configuration
 import com.baruckis.kriptofolio.dependencyinjection.AppInjector
 import com.baruckis.kriptofolio.utilities.localization.LocalizationManager
 import com.baruckis.kriptofolio.utilities.logConsoleVerbose
-import com.facebook.stetho.Stetho
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
@@ -42,7 +41,7 @@ class App : Application(), HasActivityInjector {
         // Initialize in order to automatically inject activities and fragments if they implement Injectable interface.
         AppInjector.init(this)
 
-        Stetho.initializeWithDefaults(this)
+        DebugTools.init(this)
 
     }
 
