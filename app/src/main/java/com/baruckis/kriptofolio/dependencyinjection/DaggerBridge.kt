@@ -25,4 +25,6 @@ import org.koin.dsl.module
  */
 fun daggerBridgeModule(appComponent: AppComponent) = module {
     single { appComponent.licensesRepository() }
+    single { appComponent.cryptocurrencyRepository() }
+    single { appComponent.stringsLocalization() }
 }

@@ -17,7 +17,9 @@
 package com.baruckis.kriptofolio.dependencyinjection
 
 import com.baruckis.kriptofolio.App
+import com.baruckis.kriptofolio.repository.CryptocurrencyRepository
 import com.baruckis.kriptofolio.repository.LicensesRepository
+import com.baruckis.kriptofolio.utilities.localization.StringsLocalization
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.support.AndroidSupportInjectionModule
@@ -56,4 +58,6 @@ interface AppComponent {
 
     // Objects that Koin takes from Dagger while both run side by side (DaggerBridge.kt).
     fun licensesRepository(): LicensesRepository
+    fun cryptocurrencyRepository(): CryptocurrencyRepository
+    fun stringsLocalization(): StringsLocalization
 }

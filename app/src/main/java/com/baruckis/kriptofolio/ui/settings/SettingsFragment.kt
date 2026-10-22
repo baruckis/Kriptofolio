@@ -35,22 +35,18 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.baruckis.kriptofolio.BuildConfig
 import com.baruckis.kriptofolio.R
-import com.baruckis.kriptofolio.dependencyinjection.Injectable
+import com.baruckis.kriptofolio.dependencyinjection.KoinViewModelFactory
 import com.baruckis.kriptofolio.ui.mainlist.MainActivity
 import com.baruckis.kriptofolio.ui.settings.DonateCryptoDialog.Companion.DIALOG_DONATE_CRYPTO_TAG
 import com.baruckis.kriptofolio.utilities.*
 import java.util.*
-import javax.inject.Inject
 
 const val CHROME_PACKAGE = "com.android.chrome"
 
 /**
  * A simple [Fragment] subclass.
  */
-class SettingsFragment : PreferenceFragmentCompat(), Injectable {
-
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
+class SettingsFragment : PreferenceFragmentCompat() {
 
     private lateinit var viewModel: SettingsViewModel
 
@@ -70,7 +66,7 @@ class SettingsFragment : PreferenceFragmentCompat(), Injectable {
         activity?.let { activity ->
 
             // Obtain ViewModel from ViewModelProvider, using parent activity as LifecycleOwner.
-            viewModel = ViewModelProvider(activity, viewModelFactory)[SettingsViewModel::class.java]
+            viewModel = ViewModelProvider(activity, KoinViewModelFactory)[SettingsViewModel::class.java]
 
 
             val preferenceLanguage = findPreference<Preference>(getString(R.string.pref_language_key))

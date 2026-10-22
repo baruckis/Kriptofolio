@@ -16,7 +16,13 @@
 
 package com.baruckis.kriptofolio.dependencyinjection
 
-import com.baruckis.kriptofolio.utilities.localization.StringsLocalization
+import android.content.Context
+import android.content.SharedPreferences
+import com.baruckis.kriptofolio.api.ApiService
+import com.baruckis.kriptofolio.db.CryptocurrencyDao
+import com.baruckis.kriptofolio.db.MyCryptocurrencyDao
+import com.baruckis.kriptofolio.repository.AppExecutors
+import com.baruckis.kriptofolio.utilities.localization.Localization
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
@@ -43,6 +49,8 @@ class KoinModulesTest {
     fun koinModulesVerify() {
         // Objects that Dagger creates and hands over whole through daggerBridgeModule; Koin never
         // calls their constructors, so their parameters stay Dagger's business.
-        appModules.verify(extraTypes = listOf(StringsLocalization::class))
+        appModules.verify(extraTypes = listOf(
+                Context::class, AppExecutors::class, MyCryptocurrencyDao::class, CryptocurrencyDao::class,
+                ApiService::class, SharedPreferences::class, Localization::class, Map::class))
     }
 }
