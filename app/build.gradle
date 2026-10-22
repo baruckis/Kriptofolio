@@ -196,6 +196,10 @@ dependencies {
     kapt libs.dagger.compiler
     kapt libs.dagger.android.processor
 
+    // Koin, which replaces Dagger screen by screen (docs/decisions/005). Until the last screen moves,
+    // Koin starts after Dagger and gets the objects Dagger still owns through DaggerBridge.
+    implementation libs.koin.core
+
     // HTTP client - Retrofit with OkHttp.
     implementation(libs.retrofit) {
         // Exclude Retrofit’s OkHttp peer-dependency module and define your own module import.
@@ -254,6 +258,9 @@ dependencies {
     testImplementation libs.mockito.core
 
     testImplementation libs.androidx.arch.core.testing
+
+    // Koin's module verification, which checks every Koin module without starting the app.
+    testImplementation libs.koin.test
 
     // SQLite on the JVM, used only by the characterization tests to open the real database files
     // recorded from released versions (src/test/resources/db) and check them against the Room
