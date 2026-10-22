@@ -147,4 +147,8 @@ jobs:
           cache-read-only: ${{ github.event_name == 'pull_request' }}
 
       - name: Assemble both flavors in release mode and bundle full, unsigned
-        run: ./gradlew assembleFullRelease assembleDemoRelease bundleFullRelease --stacktrace
+        run: |
+          set -o pipefail
+          ./gradlew assembleFullRelease assembleDemoRelease bundleFullRelease --stacktrace 2>&1 | tee gradle.log || {
+            grep -E "FAILED|What went wrong|> |error:|e: " gradle.log | grep -v "^\s*at " | head -40 | while IFS= read -r l; do echo "::error::$l"; done
+            exit 1; }
