@@ -3,7 +3,8 @@
 *Last updated 2026-10-21. Owner: Andrius Baruckis. Decisions are recorded in
 [`docs/decisions/`](decisions/README.md). The behaviour contract is [`BEHAVIOUR.md`](BEHAVIOUR.md);
 the public screen states are in [`ui-inventory.md`](ui-inventory.md). Progress is tracked on the
-public [Kriptofolio Modernization](https://github.com/users/baruckis/projects/3) board.*
+public [Kriptofolio Modernization](https://github.com/users/baruckis/projects/3) board, and the
+order in which agents carry out the steps is in [`execution-plan.md`](execution-plan.md).*
 
 ## One app, modernized step by step
 

@@ -38,7 +38,8 @@ jobs:
             // Files that instruct people and agents, or define the behaviour contract and the plan.
             const RULE_FILES = new Set([
               'RELEASING.md', 'UPGRADE-NOTES.md', 'SUPPORT.md', 'renovate.json',
-              'docs/roadmap.md', 'docs/BEHAVIOUR.md', 'docs/behaviour-parity.md', 'docs/ui-inventory.md',
+              'docs/roadmap.md', 'docs/execution-plan.md', 'docs/BEHAVIOUR.md', 'docs/behaviour-parity.md',
+              'docs/ui-inventory.md',
             ]);
             // Agent instructions, contribution rules and licenses at any depth, in any letter case. A
             // new agent file name joins this list and CONTRIBUTING.md step 5 in the same pull request.

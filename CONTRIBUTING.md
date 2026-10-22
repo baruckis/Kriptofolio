@@ -26,8 +26,8 @@ You do not need a private method repository, paid playbook or the author's revie
      and `LICENSE.txt` at any depth and in any letter case (a new agent instruction file is added to
      this list and to the workflow in the same pull request), `RELEASING.md`, `UPGRADE-NOTES.md`,
      `SUPPORT.md`, `renovate.json`, `config/`, `.github/`, `.claude/`, `docs/decisions/`,
-     `docs/roadmap.md`, `docs/BEHAVIOUR.md`, `docs/behaviour-parity.md`, `docs/ui-inventory.md` and
-     the captures in `docs/ui-evidence/`.
+     `docs/roadmap.md`, `docs/execution-plan.md`, `docs/BEHAVIOUR.md`, `docs/behaviour-parity.md`,
+     `docs/ui-inventory.md` and the captures in `docs/ui-evidence/`.
    - **`review: code`**: anything else. A pull request that mixes tiers takes the strictest one,
      and one too large to list completely counts as code.
 
