@@ -263,6 +263,10 @@ Every item on the official list was checked against what this app actually does.
 
 ## 6. How to build this branch
 
+> **Stage 2 update (section 10.2).** The floor below no longer holds: since flipview is built from
+> source, JDK 17.0.19 also builds and tests the app. Java 21 stays the documented version until the
+> Kotlin 2 step verifies a wider range. The rest of this section is the original record.
+
 **This branch needs exactly Java 21 — not 17, and not anything newer.** The window is one
 version wide, and both edges were hit for real. Set it explicitly; do not assume the default
 is right.
@@ -276,6 +280,9 @@ export JAVA_HOME=$(/usr/libexec/java_home -v 21)     # exactly 21 - see the floo
 ```
 
 ### The floor: Java 21, because of a dependency
+
+> **Removed in Stage 2 (section 10.2).** flipview is now built from source; the text below is the
+> original record.
 
 `eu.davidea:flipview:1.2.0` is now published as Java 21 bytecode (class file major version 65),
 data binding generates Java that imports `FlipView`, and javac refuses to read a class file
@@ -479,6 +486,9 @@ and 2.0.0.
 
 ### Dependencies that were tempting and skipped
 
+> **Partly done in Stage 2 (section 10).** `flipview` is vendored and Stetho is debug-only; the
+> table is left as it was written.
+
 | Dependency | Now | Note |
 |---|---|---|
 | `eu.davidea:flipview` | 1.2.0 | **Highest priority.** In March 2026 the same version number was republished on Maven Central as a completely different artifact — different bytecode level, new `minCompileSdk`, new transitive dependency. A version coordinate that can change under you is a supply chain hazard. It is two Java files; vendor them, or replace the flipping icon with something maintained. |
@@ -527,6 +537,7 @@ and 2.0.0.
 4. **JCenter's redirect is what changed `flipview` underneath this project.** Any other
    dependency resolved through that redirect could change the same way. Pinning with a
    dependency lock file, or at minimum verification metadata, belongs on the 2.0 list.
+   (Done in Stage 2: section 10.5.)
 
 ---
 
@@ -807,3 +818,108 @@ before.
   resizability or aspect-ratio restriction, so it has nothing to opt out of — but it also has no
   size or orientation resource qualifiers at all, and stretches one phone layout across a tablet.
 * Everything else already listed in section 8.
+
+---
+
+## 10. Stage 2 — supply chain and APK hygiene (#38)
+
+Roadmap step T2. Started from `master` at `1b7ea01`. Behaviour is unchanged: the same screens, the
+same flipping coin icons, the same database, `versionCode 6` and `versionName 1.2.3`.
+
+### 10.1 What changed, commit by commit
+
+| Commit | What |
+|---|---|
+| `chore: Vendored flipview 1.2.0 as a local module built from source.` | new `:flipview` module, same package `eu.davidea.flipview`; the Maven artifact is gone |
+| `chore: Limited Stetho to debug builds and moved its initialization to the debug source set.` | `debugImplementation`, `DebugTools` in `app/src/debug` and an empty twin in `app/src/release` |
+| `chore: Excluded the encrypted dependency metadata from APKs and kept it in the App Bundle.` | `dependenciesInfo`, issue #29 |
+| `chore: Added Gradle dependency verification.` | `gradle/verification-metadata.xml` and a check tool for the APK signing block |
+| `docs: Documented dependency verification and the Stage 2 changes.` | this section, `CONTRIBUTING.md` step 3 |
+| `fix: Added the Linux and Windows AAPT2 checksums ...` | dependency verification on CI, which runs on Linux |
+| `fix: Made the signing check script override ...` | review notes: `finalizeDsl`, exit code 3 for unreadable files, section 6 note, licence screens |
+
+### 10.2 flipview
+
+The two Java files and the resources are copied unchanged from the `1.2.0` sources jar and AAR
+(`flipview/README.md` records the source and any later change). Built from source, the classes are
+Java 8 bytecode (class file major version 52) instead of 65, and the republished artifact's
+`kotlin-stdlib 2.2.10` no longer enters the build. It needs `androidx.annotation` 1.2.0, the lowest
+version with every annotation it imports (`@ChecksSdkIntAtLeast` arrived in 1.2.0); the app already
+resolves a newer one, so nothing in the APK changes.
+
+This removes the JDK 21 floor of section 6. On JDK 17.0.19, `./gradlew clean assembleFullDebug
+testFullDebugUnitTest` now succeeds. The documented JDK stays 21 until the Kotlin 2 step (T3)
+verifies and documents the wider range.
+
+The Google "open source licenses" screen (`OssLicensesMenuActivity`) is generated from Maven
+metadata, and the plugin does not see project modules. Its list loses FlipView, as well as Stetho
+and Stetho's `FindBugs-jsr305`, which are no longer in the release build (128 entries on `master`,
+125 here, compared with `fullReleaseOssLicensesTask`). The app's own list in Settings, which
+`LicensesRepository` builds from string resources, still credits FlipView with its Apache 2.0
+licence and is unchanged, so the attribution stays. That list also still names Stetho; it was left
+as it is, because changing it is outside this step.
+
+### 10.3 Stetho
+
+Stetho is a debugging tool and is now only in debug builds. `App` calls `DebugTools.init(this)`;
+the debug version initializes Stetho, the release version is empty. A signed `fullRelease` APK built
+from `master` contains Stetho classes; the one from this branch contains none.
+
+### 10.4 The dependency-info block (#29)
+
+By default the Android Gradle plugin writes an encrypted list of dependencies into the signing
+block of every release APK (block ID `0x504b4453`). Only Google can read it, and F-Droid rejects
+APKs that contain it. `dependenciesInfo { includeInApk = false }` removes it from APKs;
+`includeInBundle = true` keeps it in the App Bundle, where Google Play uses it
+(`BUNDLE-METADATA/com.android.tools.build.libraries/dependencies.pb`).
+
+`apksigner` does not show this block, so `tools/apk_signing_blocks.py` lists the blocks of a signed
+APK. Debug APKs never had the block, and an unsigned release APK has no signing block at all, so
+the check needs a signed release. `tools/sign-release-with-debug-key.gradle` signs the release
+build type with your local debug key, for this check only. It is never applied unless passed with
+`-I`, and it sets the signing config in `androidComponents.finalizeDsl`, after the module's own
+build script, so it also works if the release build type gets its own `signingConfig` later:
+
+```bash
+./gradlew -I tools/sign-release-with-debug-key.gradle assembleFullRelease
+python3 tools/apk_signing_blocks.py app/build/outputs/apk/full/release/app-full-release.apk
+```
+
+On `master` it prints `0x504b4453 dependency info` and exits with 1; on this branch it lists only
+the v2 signature and the verity padding and exits with 0. Exit code 2 means an unsigned APK, and 3
+a file that cannot be read or is not a valid APK.
+
+### 10.5 Dependency verification
+
+`gradle/verification-metadata.xml` holds the SHA-256 checksum of every dependency and plugin
+artifact the build resolves. Gradle checks each download against it and stops the build when one
+does not match, for example when a version is republished with different contents, as happened to
+flipview. Tested by changing one checksum: `assembleFullDebug` failed with "Dependency verification
+failed ... retrofit-2.7.1.jar".
+
+Sources and javadoc jars are trusted without checksums (`<trusted-artifacts>`), because Android
+Studio downloads them on demand and the build never uses them.
+
+One artifact differs per operating system: AAPT2, the Android resource compiler, comes as
+`aapt2-<version>-osx.jar`, `-linux.jar` and `-windows.jar`. Gradle only writes the one for the
+machine it runs on, so the Linux and Windows checksums were added by hand from Google Maven, after
+checking that each file's SHA-1 matches the `.sha1` published next to it. Regenerating keeps
+existing entries, so this has to be repeated only when the Android Gradle plugin version changes.
+
+When a pull request adds or upgrades a dependency, regenerate the file with the same tasks the
+build gate runs, plus the release tasks, and commit it with the change:
+
+```bash
+./gradlew --write-verification-metadata sha256 clean assembleFullDebug assembleDemoDebug assembleFullRelease assembleDemoRelease bundleFullRelease testFullDebugUnitTest testDemoDebugUnitTest testFullReleaseUnitTest lintFullDebug
+```
+
+Review the diff: new entries should match only the dependency you changed. A checksum that changes
+for a version that was already listed means the artifact itself changed, and needs an explanation
+before it is accepted. Signature verification is off for now; checksums already catch a republished
+artifact, and checking signatures needs a list of trusted keys that is not worth keeping before the
+dependencies are upgraded in the later steps. Whether Renovate regenerates this file in its pull
+requests has not been tested here.
+
+### 10.6 Verification
+
+Recorded in the pull request for this step.

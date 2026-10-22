@@ -1,0 +1,23 @@
+plugins {
+    alias(libs.plugins.android.library)
+}
+
+// FlipView 1.2.0 by Davide Steduto, vendored from source (see README.md in this folder).
+
+android {
+    namespace 'eu.davidea.flipview'
+    compileSdkVersion libs.versions.compile.sdk.get().toInteger()
+
+    defaultConfig {
+        minSdkVersion libs.versions.min.sdk.get().toInteger()
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    implementation libs.androidx.annotation
+}

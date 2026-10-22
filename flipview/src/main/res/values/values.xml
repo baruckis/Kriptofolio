@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="FlipView">
+		
+		<attr format="boolean" name="checked"/>
+		
+		<attr format="integer" name="animationDuration"/>
+		
+		<attr format="integer" name="anticipateInAnimationTime"/>
+		
+		<attr format="boolean" name="animateDesignLayoutOnly"/>
+		
+		<attr format="boolean" name="enableInitialAnimation"/>
+		
+		<attr format="reference" name="initialLayoutAnimation"/>
+		
+		<attr format="integer" name="initialLayoutAnimationDuration"/>
+		
+		<attr format="boolean" name="animateRearImage"/>
+
+		
+		<attr format="reference" name="frontLayout"/>
+		
+		<attr format="reference" name="frontBackground"/>
+		
+		<attr format="color" name="frontBackgroundColor"/>
+		
+		<attr format="reference" name="frontImage"/>
+		
+		<attr format="dimension" name="frontImagePadding"/>
+
+		
+		<attr format="reference" name="rearLayout"/>
+		
+		<attr format="reference" name="rearBackground"/>
+		
+		<attr format="color" name="rearBackgroundColor"/>
+		
+		<attr format="reference" name="rearImage"/>
+		
+		<attr format="dimension" name="rearImagePadding"/>
+		
+		<attr format="reference" name="rearImageAnimation"/>
+		
+		<attr format="integer" name="rearImageAnimationDelay"/>
+		
+		<attr format="integer" name="rearImageAnimationDuration"/>
+	</declare-styleable>
+</resources>

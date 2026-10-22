@@ -1,0 +1,10 @@
+// Evidence only: signs the release build type with the local debug key so the APK has a signing block.
+allprojects {
+    plugins.withId('com.android.application') {
+        // finalizeDsl runs after the module's own build script, so this also replaces a
+        // signingConfig that the release build type sets itself.
+        project.extensions.getByName('androidComponents').finalizeDsl { android ->
+            android.buildTypes.release.signingConfig = android.signingConfigs.debug
+        }
+    }
+}

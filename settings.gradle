@@ -31,3 +31,4 @@ pluginManagement {
 }
 
 include ':app'
+include ':flipview'

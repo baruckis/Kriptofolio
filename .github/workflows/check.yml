@@ -50,10 +50,10 @@ jobs:
           # No credentialed git is needed after checkout: this job never pushes.
           persist-credentials: false
 
-      # EXACTLY JDK 21. The code on master builds on Java 21 and on nothing else: 17 fails
-      # because a dependency ships Java 21 bytecode, 25 fails inside kapt with Kotlin 1.9.25.
-      # Both edges were hit for real and are recorded in UPGRADE-NOTES.md section 6. Do not
-      # "modernize" this number; the rewrite (JDK toolchain 17, KSP) is what changes it.
+      # EXACTLY JDK 21. The code on master was verified on Java 21 only: 17 failed because a
+      # dependency shipped Java 21 bytecode (fixed in Stage 2, UPGRADE-NOTES.md section 10.2), 25
+      # fails inside kapt with Kotlin 1.9.25. Both edges are recorded in UPGRADE-NOTES.md
+      # section 6. Do not "modernize" this number; the Kotlin 2 step (KSP) is what changes it.
       - name: Set up JDK 21 (see UPGRADE-NOTES.md section 6)
         uses: actions/setup-java@dd06d9cba3e5552c54d9f8ea23572deb30010f7c # v6.0.0
         with:
