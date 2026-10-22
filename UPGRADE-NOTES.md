@@ -367,6 +367,10 @@ version pinned.
 
 ## 7. Cutting a release
 
+> **Moved to [`RELEASING.md`](RELEASING.md) (Stage 2, #39).** That file is the procedure now, with
+> the owner-only steps marked and the release gates that CI checks. The text below is the record
+> written for 1.2.2 and is not updated.
+
 Everything above describes how to *build* this branch. This section is what has to happen to
 turn that build into a release, in order. It exists because two of these steps are invisible in
 the repository — nothing in the source tree reminds you about them, and the gap between releases
