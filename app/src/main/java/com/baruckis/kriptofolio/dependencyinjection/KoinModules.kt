@@ -19,6 +19,7 @@ package com.baruckis.kriptofolio.dependencyinjection
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.baruckis.kriptofolio.ui.addsearchlist.AddSearchViewModel
+import com.baruckis.kriptofolio.ui.mainlist.MainViewModel
 import com.baruckis.kriptofolio.ui.settings.SettingsViewModel
 import com.baruckis.kriptofolio.ui.settings.thirdpartysoft.LibrariesLicensesViewModel
 import org.koin.core.context.GlobalContext
@@ -28,11 +29,12 @@ import org.koin.dsl.module
 // added here is verified as well.
 fun appKoinModules(appComponent: AppComponent) = listOf(daggerBridgeModule(appComponent), viewModelsKoinModule)
 
-// ViewModels that Koin creates. A screen moves here from ViewModelsModule in one step.
+// ViewModels that Koin creates. Dagger created them unscoped, so they are factories here too.
 val viewModelsKoinModule = module {
     factory { LibrariesLicensesViewModel(get()) }
     factory { SettingsViewModel(get(), get(), get()) }
     factory { AddSearchViewModel(get()) }
+    factory { MainViewModel(get(), get(), get()) }
 }
 
 /**

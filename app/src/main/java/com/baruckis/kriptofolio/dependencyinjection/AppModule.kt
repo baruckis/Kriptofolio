@@ -42,7 +42,7 @@ import javax.inject.Singleton
  * AppModule will provide app-wide dependencies for a part of the application.
  * It should initialize objects used across our application, such as Room database, Retrofit, Shared Preference, etc.
  */
-@Module(includes = [ViewModelsModule::class])
+@Module
 class AppModule() {
 
     @Provides // Annotation informs Dagger compiler that this method is the constructor for the Context return type.

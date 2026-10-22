@@ -16,6 +16,7 @@
 
 package com.baruckis.kriptofolio.dependencyinjection
 
+import android.content.Context
 import com.baruckis.kriptofolio.App
 import com.baruckis.kriptofolio.repository.CryptocurrencyRepository
 import com.baruckis.kriptofolio.repository.LicensesRepository
@@ -37,7 +38,6 @@ import javax.inject.Singleton
             // If you want to use injection in fragment then you should use AndroidSupportInjectionModule.class else use AndroidInjectionModule.
             AndroidSupportInjectionModule::class,
             AppModule::class,
-            ActivityBuildersModule::class,
             LocalizationModule::class
         ]
 )
@@ -60,4 +60,5 @@ interface AppComponent {
     fun licensesRepository(): LicensesRepository
     fun cryptocurrencyRepository(): CryptocurrencyRepository
     fun stringsLocalization(): StringsLocalization
+    fun context(): Context
 }

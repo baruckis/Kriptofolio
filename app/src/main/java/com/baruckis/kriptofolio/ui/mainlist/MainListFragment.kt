@@ -39,7 +39,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.baruckis.kriptofolio.R
 import com.baruckis.kriptofolio.databinding.FragmentMainListBinding
 import com.baruckis.kriptofolio.db.MyCryptocurrency
-import com.baruckis.kriptofolio.dependencyinjection.Injectable
+import com.baruckis.kriptofolio.dependencyinjection.KoinViewModelFactory
 import com.baruckis.kriptofolio.ui.addsearchlist.AddSearchActivity
 import com.baruckis.kriptofolio.ui.common.CustomItemAnimator
 import com.baruckis.kriptofolio.ui.settings.SettingsActivity
@@ -49,13 +49,12 @@ import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import java.util.*
-import javax.inject.Inject
 
 
 /**
  * UI part for main my crypto coins screen. A placeholder fragment containing a simple view.
  */
-class MainListFragment : Fragment(), Injectable, PrimaryActionModeController.PrimaryActionModeListener {
+class MainListFragment : Fragment(), PrimaryActionModeController.PrimaryActionModeListener {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var emptyListView: View
@@ -63,8 +62,6 @@ class MainListFragment : Fragment(), Injectable, PrimaryActionModeController.Pri
 
     private lateinit var spinnerFiatCode: Spinner
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
     private lateinit var viewModel: MainViewModel
 
     lateinit var binding: FragmentMainListBinding
@@ -407,7 +404,7 @@ class MainListFragment : Fragment(), Injectable, PrimaryActionModeController.Pri
     private fun subscribeUi(activity: FragmentActivity) {
 
         // Obtain ViewModel from ViewModelProvider, using parent activity as LifecycleOwner.
-        viewModel = ViewModelProvider(activity, viewModelFactory)[MainViewModel::class.java]
+        viewModel = ViewModelProvider(activity, KoinViewModelFactory)[MainViewModel::class.java]
 
         binding.viewmodel = viewModel
 
