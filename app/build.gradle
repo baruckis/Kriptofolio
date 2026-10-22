@@ -45,6 +45,13 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    // The Android Gradle plugin signs an encrypted list of dependencies into every APK by default.
+    // Only Google can read it, so F-Droid rejects it and it tells users nothing (issue #29).
+    // The App Bundle keeps the block, because Google Play uses it for SDK and security notices.
+    dependenciesInfo {
+        includeInApk = false
+        includeInBundle = true
+    }
     // The Data Binding Library is a support library that allows you to bind UI components in your
     // layouts to data sources in your app using a declarative format rather than programmatically.
     // BuildConfig has to be requested explicitly since Android Gradle plugin 8.
