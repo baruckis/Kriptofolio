@@ -8,12 +8,12 @@ You do not need a private method repository, paid playbook or the author's revie
 2. Create a separate branch and working copy from the intended target branch. Do not mix another
    contributor's work into the change.
 3. Implement the change and run the applicable build and test commands from `AGENTS.md` with
-   the documented JDK 21 and a configured Android SDK. Keep the exact commands, toolchain,
+   a supported JDK (17, 21 or 25; see `AGENTS.md`) and a configured Android SDK. Keep the exact commands, toolchain,
    actual results and any checks you could not run in the pull request. The two narrow lint
    exceptions and their reasons are in `app/lint.xml`; do not add a baseline. Documentation-only
    evidence should check the instructions and links, without claiming an Android build was run.
    A change that adds or upgrades a dependency also regenerates `gradle/verification-metadata.xml`
-   with the command in [`UPGRADE-NOTES.md`, section 10.5](UPGRADE-NOTES.md); the build rejects
+   with the command in [`UPGRADE-NOTES.md`, section 11.5](UPGRADE-NOTES.md); the build rejects
    any artifact whose checksum is not listed there.
 4. Open a pull request with the problem, resulting behavior, evidence and remaining limitations.
 5. Check the pull request's review tier. The paths it changes decide the tier, and the
