@@ -16,13 +16,14 @@ job of the `check` workflow, so `master` stays releasable. Run them locally the 
 
 ```bash
 python3 tools/release_gates.py
-./gradlew assembleFullRelease assembleDemoRelease
+./gradlew assembleFullRelease assembleDemoRelease bundleFullRelease
 ```
 
 1. The CoinMarketCap key constant of the `full` flavor is empty.
 2. Every locale in `fastlane/metadata/android/` has `changelogs/<versionCode>.txt` for the current
    `versionCode`, not empty and at most 500 characters, the limit of Google Play's "What's new".
-3. Both flavors assemble in release mode, unsigned.
+3. Both flavors assemble in release mode, unsigned, and the `full` bundle that goes to Google Play
+   builds.
 
 The gates cannot check the key that goes into the release build, the signature, the upgrade path
 on a device, or what users see in the Play Console. The steps below cover those.
