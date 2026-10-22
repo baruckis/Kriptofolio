@@ -65,7 +65,7 @@ branch; it does not delete `master`, protected exhibit branches, tags, or commit
 - Localization: default (en), `values-lt`, `values-iw` (Hebrew — RTL!), `values-sw-rKE`.
   All four must keep working; if a new user-visible string lacks any of the four translations,
   flag it to the human.
-- Versions live in `versions.gradle` at the project root.
+- Versions live in the version catalog `gradle/libs.versions.toml`.
 
 ## Working style
 
