@@ -12,6 +12,9 @@ You do not need a private method repository, paid playbook or the author's revie
    actual results and any checks you could not run in the pull request. The two narrow lint
    exceptions and their reasons are in `app/lint.xml`; do not add a baseline. Documentation-only
    evidence should check the instructions and links, without claiming an Android build was run.
+   A change that adds or upgrades a dependency also regenerates `gradle/verification-metadata.xml`
+   with the command in [`UPGRADE-NOTES.md`, section 10.5](UPGRADE-NOTES.md); the build rejects
+   any artifact whose checksum is not listed there.
 4. Open a pull request with the problem, resulting behavior, evidence and remaining limitations.
 5. Check the pull request's review tier. The paths it changes decide the tier, and the
    [review tier workflow](.github/workflows/review-tier.yml), which holds the exact path lists,
