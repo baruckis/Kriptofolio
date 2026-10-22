@@ -114,3 +114,36 @@ jobs:
           if-no-files-found: warn
           # Long enough to look at a failed run after a weekend; short enough not to hoard.
           retention-days: 14
+
+  # THE RELEASE GATES (RELEASING.md, "Release gates"). What a machine can check before the owner
+  # cuts a release: no CoinMarketCap key in the full flavor, a changelog for the current
+  # versionCode in every fastlane locale, and both flavors assembling in release mode. master
+  # must stay releasable (AGENTS.md), so this runs on every pull request, not only release ones.
+  # Unsigned on purpose: signing is the owner's step and needs a key CI never sees.
+  release-gates:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      # The key and changelog checks need nothing but the checkout, so they run first and fail
+      # in seconds instead of after a build.
+      - name: Check the key constant and the changelogs
+        run: python3 tools/release_gates.py
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@dd06d9cba3e5552c54d9f8ea23572deb30010f7c # v6.0.0
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@9c971963bec38e04b3d30dcc455b5382be2fdbfb # v6.3.0
+        with:
+          cache-read-only: ${{ github.event_name == 'pull_request' }}
+
+      - name: Assemble both flavors in release mode, unsigned
+        run: ./gradlew assembleFullRelease assembleDemoRelease --stacktrace
