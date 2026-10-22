@@ -1,0 +1,124 @@
+# simple-review.yml (simple-review 2.0.0) — a maintainer-triggered AI review of one pull request
+#
+# Comment `/simple-review` on a pull request (write access required). The review reads the pull
+# request through the API, never checks out or runs its code, and updates one comment with an X/5
+# verdict. It needs the CLAUDE_CODE_OAUTH_TOKEN repository secret; optional settings are
+# repository variables named SIMPLE_REVIEW_*, listed in CONTRIBUTING.md ("Automated review").
+# Read every WHY comment once: each explains a safety decision.
+#
+# Source: AI-First Android Factory, simple-review 2.0.0. Only this header was adapted here.
+
+name: Simple review
+
+# WHY ONLY THESE TRIGGERS. A person asks for a review; nothing runs on every push. A pull request
+# from a fork never starts this workflow by itself, and pull_request_target is not used.
+on:
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: Open pull request number
+        required: true
+        type: string
+  issue_comment:
+    types: [created]
+
+# WHY THESE PERMISSIONS. Read the repository and the pull request, write one issue comment.
+# No content write, no approval and no merge.
+permissions:
+  contents: read
+  issues: write
+  pull-requests: read
+
+env:
+  # WHY A PINNED CLI. A new Claude Code release can change flags or output. Update this version on
+  # purpose, after checking the flags in simple_pr_review.py against `claude --help`.
+  CLAUDE_CODE_VERSION: 2.1.304
+
+jobs:
+  # WHY TWO JOBS. author_association is only a cheap filter: a read-only organization member passes
+  # it. This job checks the exact repository permission through the API, holds no model credential
+  # and joins no concurrency group, so a request from a person without write access can neither
+  # read a secret nor cancel a running review.
+  authorize:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.issue.pull_request &&
+       github.event.comment.body == '/simple-review' &&
+       contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association))
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      # WHY THE DEFAULT BRANCH. Only the trusted script is needed. The pull request's code is never
+      # checked out or executed; the script reads it through the API as data.
+      - name: Checkout trusted base workflow
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          persist-credentials: false
+          fetch-depth: 1
+
+      - name: Verify actor has repository write access
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REVIEW_REPOSITORY: ${{ github.repository }}
+          REVIEW_ACTOR: ${{ github.event.comment.user.login || github.actor }}
+          REVIEW_PR_NUMBER: ${{ github.event.issue.number || inputs.pr_number }}
+        run: python3 .github/simple-review/simple_pr_review.py authorize
+
+  review:
+    needs: authorize
+    # WHY CONCURRENCY ONLY HERE, AFTER THE CHECK. A new authorized request replaces a running review
+    # of an older HEAD. Every other run gets a group of its own, so a reply, a bot comment or a
+    # request that failed the permission check cannot cancel a running review.
+    concurrency:
+      group: >-
+        ${{ needs.authorize.result == 'success'
+        && format('simple-review-{0}', github.event.issue.number || inputs.pr_number)
+        || format('simple-review-ignored-{0}', github.run_id) }}
+      cancel-in-progress: true
+    runs-on: ubuntu-latest
+    # WHY A TIMEOUT. At most two model calls of SIMPLE_REVIEW_TIMEOUT_SECONDS (600 by default, 750
+    # at most) plus about five minutes of setup. For longer calls, raise this and MAX_CALL_SECONDS
+    # in simple_pr_review.py together.
+    timeout-minutes: 30
+    steps:
+      - name: Checkout trusted base workflow
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          persist-credentials: false
+          fetch-depth: 1
+
+      - name: Set up Node.js for Claude Code
+        if: (vars.SIMPLE_REVIEW_ENGINE || 'claude-cli') == 'claude-cli'
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '22'
+          package-manager-cache: false
+
+      - name: Install pinned Claude Code CLI
+        if: (vars.SIMPLE_REVIEW_ENGINE || 'claude-cli') == 'claude-cli'
+        run: |
+          npm install --global --no-audit --no-fund "@anthropic-ai/claude-code@${CLAUDE_CODE_VERSION}"
+          claude --version
+
+      # WHY THE SECRETS ARRIVE ONLY HERE. This job starts only after the permission check passed,
+      # and only the credential of the selected engine is passed. The script gives the Claude Code process
+      # the subscription token alone, in an empty directory with no checkout and no tools.
+      - name: Review current pull request head
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REVIEW_REPOSITORY: ${{ github.repository }}
+          REVIEW_PR_NUMBER: ${{ github.event.issue.number || inputs.pr_number }}
+          REVIEW_ENGINE: ${{ vars.SIMPLE_REVIEW_ENGINE || 'claude-cli' }}
+          REVIEW_MODEL: ${{ vars.SIMPLE_REVIEW_MODEL || 'claude-opus-5-5' }}
+          REVIEW_EFFORT: ${{ vars.SIMPLE_REVIEW_EFFORT || 'high' }}
+          REVIEW_TIMEOUT_SECONDS: ${{ vars.SIMPLE_REVIEW_TIMEOUT_SECONDS || '600' }}
+          REVIEW_RULES_PATH: ${{ vars.SIMPLE_REVIEW_RULES || 'config/review-rules.md' }}
+          REVIEW_MAX_DIFF_BYTES: ${{ vars.SIMPLE_REVIEW_MAX_DIFF_BYTES || '120000' }}
+          REVIEW_MAX_CONTEXT_BYTES: ${{ vars.SIMPLE_REVIEW_MAX_CONTEXT_BYTES || '200000' }}
+          REVIEW_CLAUDE_VERSION: ${{ env.CLAUDE_CODE_VERSION }}
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ (vars.SIMPLE_REVIEW_ENGINE || 'claude-cli') == 'claude-cli' && secrets.CLAUDE_CODE_OAUTH_TOKEN || '' }}
+          REVIEW_API_URL: ${{ vars.SIMPLE_REVIEW_API_URL }}
+          REVIEW_API_KEY: ${{ vars.SIMPLE_REVIEW_ENGINE == 'openai-compatible' && secrets.SIMPLE_REVIEW_API_KEY || '' }}
+        run: python3 .github/simple-review/simple_pr_review.py

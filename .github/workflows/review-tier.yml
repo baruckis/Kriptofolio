@@ -37,13 +37,14 @@ jobs:
           script: |
             // Files that instruct people and agents, or define the behaviour contract and the plan.
             const RULE_FILES = new Set([
-              'CONTRIBUTING.md', 'RELEASING.md', 'UPGRADE-NOTES.md', 'SUPPORT.md', 'LICENSE',
-              'renovate.json',
+              'RELEASING.md', 'UPGRADE-NOTES.md', 'SUPPORT.md', 'renovate.json',
               'docs/roadmap.md', 'docs/BEHAVIOUR.md', 'docs/behaviour-parity.md', 'docs/ui-inventory.md',
             ]);
-            // Agent instructions at any depth, in any letter case. A new agent file name joins this
-            // list and CONTRIBUTING.md step 5 in the same pull request.
-            const RULE_NAMES = new Set(['agents.md', 'claude.md']);
+            // Agent instructions, contribution rules and licenses at any depth, in any letter case. A
+            // new agent file name joins this list and CONTRIBUTING.md step 5 in the same pull request.
+            const RULE_NAMES = new Set([
+              'agents.md', 'claude.md', 'contributing.md', 'license', 'license.md', 'license.txt',
+            ]);
             const RULE_DIRS = ['config/', 'docs/decisions/', 'docs/ui-evidence/', '.github/', '.claude/'];
             // Documentation that is not a rule: Markdown in the repository root, docs/ and store
             // listing texts and images. Markdown anywhere else (an app resource, a test fixture) is code.
@@ -67,13 +68,24 @@ jobs:
             // A rename counts for both its old and its new path.
             const paths = files.flatMap((f) => [f.filename, f.previous_filename].filter(Boolean));
             const tiers = new Set(paths.map(tierOf));
-            const tier = tiers.has('code') ? 'code' : tiers.has('rules') ? 'rules' : 'docs';
+            // The API returns at most 3,000 files. If the list is shorter than the pull request,
+            // unseen files could be code, so the tier fails closed.
+            const truncated = files.length < context.payload.pull_request.changed_files;
+            const tier = truncated || tiers.has('code') ? 'code' : tiers.has('rules') ? 'rules' : 'docs';
 
             const labels = ['review: docs', 'review: rules', 'review: code'];
             const wanted = `review: ${tier}`;
-            const current = context.payload.pull_request.labels.map((l) => l.name);
+            // Reconcile against the labels as they are now, not the event's snapshot.
+            const live = await github.paginate(github.rest.issues.listLabelsOnIssue, {
+              owner, repo, issue_number: number, per_page: 100,
+            });
+            const current = live.map((l) => l.name);
             for (const name of current.filter((n) => labels.includes(n) && n !== wanted)) {
-              await github.rest.issues.removeLabel({ owner, repo, issue_number: number, name });
+              try {
+                await github.rest.issues.removeLabel({ owner, repo, issue_number: number, name });
+              } catch (error) {
+                if (error.status !== 404) throw error; // Already removed by someone else.
+              }
             }
             if (!current.includes(wanted)) {
               await github.rest.issues.addLabels({ owner, repo, issue_number: number, labels: [wanted] });
@@ -82,8 +94,11 @@ jobs:
             const needs = tier === 'docs'
               ? 'No independent review; links and facts checked, the owner reads it before merging.'
               : 'Independent review of the exact HEAD (CONTRIBUTING.md, step 5).';
+            const note = truncated
+              ? `Only ${files.length} of ${context.payload.pull_request.changed_files} changed files could be listed, so the tier is code.\n\n`
+              : '';
             await core.summary
               .addHeading(`Review tier: ${tier}`, 3)
-              .addRaw(`${needs}\n\n`)
+              .addRaw(`${needs}\n\n${note}`)
               .addList(paths.map((p) => `${tierOf(p)}: ${p}`))
               .write();

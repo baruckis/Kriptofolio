@@ -150,6 +150,8 @@ Signing, Play Console uploads, and merging PRs are always done by the human.
 
 Apply the additional [review criteria](config/review-rules.md) when reviewing a change.
 The reviewer may be a person or a separately chosen tool; no private service is required.
+Maintainers can run the repository's own automated review by commenting `/simple-review`
+([`CONTRIBUTING.md`](CONTRIBUTING.md), "Automated review").
 
 Whether a pull request needs an independent review depends on its tier, decided by the paths it
 changes and shown as a `review: docs`, `review: rules` or `review: code` label

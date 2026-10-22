@@ -22,16 +22,18 @@ You do not need a private method repository, paid playbook or the author's revie
      review is needed: the evidence checks the links and facts, `git diff --check` is clean, and
      the owner reads the change before merging.
    - **`review: rules`**: any file that instructs people and agents or defines the contract and the
-     plan: `AGENTS.md` and `CLAUDE.md` at any depth and in any letter case (a new agent instruction
-     file is added to this list and to the workflow in the same pull request), `CONTRIBUTING.md`,
-     `RELEASING.md`, `UPGRADE-NOTES.md`, `SUPPORT.md`, `LICENSE`, `renovate.json`, `config/`,
-     `.github/`, `.claude/`, `docs/decisions/`, `docs/roadmap.md`, `docs/BEHAVIOUR.md`,
+     plan: `AGENTS.md`, `CLAUDE.md`, `CONTRIBUTING.md` and license files at any depth and in any
+     letter case (a new agent instruction file is added to this list and to the workflow in the
+     same pull request), `RELEASING.md`, `UPGRADE-NOTES.md`, `SUPPORT.md`, `renovate.json`,
+     `config/`, `.github/`, `.claude/`, `docs/decisions/`, `docs/roadmap.md`, `docs/BEHAVIOUR.md`,
      `docs/behaviour-parity.md`, `docs/ui-inventory.md` and the captures in `docs/ui-evidence/`.
-   - **`review: code`**: anything else. A pull request that mixes tiers takes the strictest one.
+   - **`review: code`**: anything else. A pull request that mixes tiers takes the strictest one,
+     and one too large to list completely counts as code.
 
    For `rules` and `code`, ask a teammate or a fresh agent session to review the exact HEAD using
-   the target branch's [review rules](config/review-rules.md). Record the reviewed SHA, concrete
-   findings and scope. Automated review is optional; absence of a bot is not a passing review.
+   the target branch's [review rules](config/review-rules.md), or, as a maintainer, comment
+   `/simple-review` (see "Automated review" below). Record the reviewed SHA, concrete findings and
+   scope. Automated review is optional; absence of a bot is not a passing review.
    A label never lowers what the paths require; if the label is missing or wrong, the paths decide.
 6. Fix findings, rerun relevant checks and, for `rules` and `code`, review the new revision. Merge
    requires authorization; signing and publishing an application release remain separate actions.
@@ -49,6 +51,29 @@ flowchart LR
     F -->|No| M[Authorized merge]
     O --> M
 ```
+
+## Automated review
+
+Maintainers with write access can comment `/simple-review` on a pull request. The
+[workflow](.github/workflows/simple-review.yml) reads the pull request, its diff, the changed files
+at HEAD, and `AGENTS.md` and `config/review-rules.md` from the base branch through the API. It never
+checks out or runs the pull request's code. It updates one comment with the reviewed HEAD and BASE,
+the findings and an X/5 verdict, and keeps earlier findings across rounds until they are resolved.
+
+- A result counts as the independent review of step 5 when it names the exact HEAD. The owner
+  merges at **5/5 with no open findings**; after a lower score, fix the findings, push and comment
+  `/simple-review` again.
+- The diff, the changed files and the rules are sent to the model provider of the configured
+  engine. With the default engine that is the owner's Claude subscription, through the
+  `CLAUDE_CODE_OAUTH_TOKEN` repository secret (created with `claude setup-token`).
+- Optional repository variables: `SIMPLE_REVIEW_MODEL` (default `claude-opus-5-5`),
+  `SIMPLE_REVIEW_EFFORT` (default `high`), `SIMPLE_REVIEW_TIMEOUT_SECONDS` (default `600`),
+  `SIMPLE_REVIEW_RULES` (default `config/review-rules.md`), `SIMPLE_REVIEW_MAX_DIFF_BYTES`
+  (default `120000`), `SIMPLE_REVIEW_MAX_CONTEXT_BYTES` (default `200000`), and
+  `SIMPLE_REVIEW_ENGINE` with `SIMPLE_REVIEW_API_URL` and the secret `SIMPLE_REVIEW_API_KEY` for an
+  OpenAI-compatible API.
+- Contributors without the secret use a teammate or a fresh agent session instead; nothing in this
+  repository requires the automated review.
 
 The public repository is the source of application code and reproducible project evidence.
 Any educational product built around it is separate and does not grant merge or release permission.
