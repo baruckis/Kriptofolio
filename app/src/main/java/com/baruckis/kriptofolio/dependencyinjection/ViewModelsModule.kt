@@ -18,7 +18,6 @@ package com.baruckis.kriptofolio.dependencyinjection
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.baruckis.kriptofolio.ui.addsearchlist.AddSearchViewModel
 import com.baruckis.kriptofolio.ui.mainlist.MainViewModel
 import dagger.Binds
 import dagger.Module
@@ -35,11 +34,6 @@ abstract class ViewModelsModule {
     @IntoMap
     @ViewModelKey(MainViewModel::class) // We use a restriction on multibound map defined with @ViewModelKey annotation, and if don't need any, we should use @ClassKey annotation provided by Dagger.
     abstract fun bindMainViewModel(mainViewModel: MainViewModel): ViewModel
-
-    @Binds
-    @IntoMap
-    @ViewModelKey(AddSearchViewModel::class)
-    abstract fun bindAddSearchViewModel(addSearchViewModel: AddSearchViewModel): ViewModel
 
 
     @Binds

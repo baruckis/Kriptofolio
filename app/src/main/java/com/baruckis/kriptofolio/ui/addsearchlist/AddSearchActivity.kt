@@ -35,7 +35,7 @@ import com.baruckis.kriptofolio.R
 import com.baruckis.kriptofolio.databinding.ActivityAddSearchBinding
 import com.baruckis.kriptofolio.db.Cryptocurrency
 import com.baruckis.kriptofolio.db.MyCryptocurrency
-import com.baruckis.kriptofolio.dependencyinjection.Injectable
+import com.baruckis.kriptofolio.dependencyinjection.KoinViewModelFactory
 import com.baruckis.kriptofolio.ui.addsearchlist.CryptocurrencyAmountDialog.Companion.DIALOG_CRYPTOCURRENCY_AMOUNT_TAG
 import com.baruckis.kriptofolio.ui.common.BaseActivity
 import com.baruckis.kriptofolio.ui.common.RetryCallback
@@ -44,16 +44,14 @@ import com.baruckis.kriptofolio.utilities.localization.StringsLocalization
 import com.baruckis.kriptofolio.vo.Status
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.*
-import javax.inject.Inject
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 
 /**
  * UI for add crypto coins screen.
  */
-class AddSearchActivity : BaseActivity(), Injectable, CryptocurrencyAmountDialog.CryptocurrencyAmountDialogListener {
-
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
+class AddSearchActivity : BaseActivity(), KoinComponent, CryptocurrencyAmountDialog.CryptocurrencyAmountDialogListener {
 
     private lateinit var viewModel: AddSearchViewModel
 
@@ -69,8 +67,7 @@ class AddSearchActivity : BaseActivity(), Injectable, CryptocurrencyAmountDialog
     private var searchView: SearchView? = null
     private var searchQuery: String? = null
 
-    @Inject
-    lateinit var stringsLocalization: StringsLocalization
+    val stringsLocalization: StringsLocalization by inject()
 
 
     companion object {
@@ -212,7 +209,7 @@ class AddSearchActivity : BaseActivity(), Injectable, CryptocurrencyAmountDialog
     private fun subscribeUi() {
 
         // Obtain ViewModel from ViewModelProvider, using parent activity as LifecycleOwner.
-        viewModel = ViewModelProvider(this, viewModelFactory)[AddSearchViewModel::class.java]
+        viewModel = ViewModelProvider(this, KoinViewModelFactory)[AddSearchViewModel::class.java]
 
         // Update the list when the data changes by observing data on the ViewModel, exposed as a LiveData.
         viewModel.mediatorLiveDataCryptocurrencyResourceList.observe(this, Observer { listResource ->

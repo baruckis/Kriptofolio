@@ -25,9 +25,8 @@ import com.baruckis.kriptofolio.ui.common.BaseViewModel
 import com.baruckis.kriptofolio.utilities.SERVER_CALL_DELAY_MILLISECONDS
 import com.baruckis.kriptofolio.utilities.TimeFormat
 import com.baruckis.kriptofolio.vo.Resource
-import javax.inject.Inject
 
-class AddSearchViewModel @Inject constructor(var cryptocurrencyRepository: CryptocurrencyRepository) : BaseViewModel() {
+class AddSearchViewModel(var cryptocurrencyRepository: CryptocurrencyRepository) : BaseViewModel() {
 
     val mediatorLiveDataCryptocurrencyResourceList = MediatorLiveData<Resource<List<Cryptocurrency>>>()
     private var liveDataCryptocurrencyResourceList: LiveData<Resource<List<Cryptocurrency>>> =

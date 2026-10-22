@@ -18,6 +18,7 @@ package com.baruckis.kriptofolio.dependencyinjection
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.baruckis.kriptofolio.ui.addsearchlist.AddSearchViewModel
 import com.baruckis.kriptofolio.ui.settings.SettingsViewModel
 import com.baruckis.kriptofolio.ui.settings.thirdpartysoft.LibrariesLicensesViewModel
 import org.koin.core.context.GlobalContext
@@ -31,6 +32,7 @@ fun appKoinModules(appComponent: AppComponent) = listOf(daggerBridgeModule(appCo
 val viewModelsKoinModule = module {
     factory { LibrariesLicensesViewModel(get()) }
     factory { SettingsViewModel(get(), get(), get()) }
+    factory { AddSearchViewModel(get()) }
 }
 
 /**

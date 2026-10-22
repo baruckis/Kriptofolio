@@ -16,7 +16,6 @@
 
 package com.baruckis.kriptofolio.dependencyinjection
 
-import com.baruckis.kriptofolio.ui.addsearchlist.AddSearchActivity
 import com.baruckis.kriptofolio.ui.mainlist.MainActivity
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
@@ -29,7 +28,4 @@ abstract class ActivityBuildersModule {
 
     @ContributesAndroidInjector(modules = [MainListFragmetBuildersModule::class]) // Where to apply the injection.
     abstract fun contributeMainActivity(): MainActivity
-
-    @ContributesAndroidInjector
-    abstract fun contributeAddSearchActivity(): AddSearchActivity
 }
