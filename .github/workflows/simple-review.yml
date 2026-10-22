@@ -6,7 +6,8 @@
 # repository variables named SIMPLE_REVIEW_*, listed in CONTRIBUTING.md ("Automated review").
 # Read every WHY comment once: each explains a safety decision.
 #
-# Source: AI-First Android Factory, simple-review 2.0.0. Only this header was adapted here.
+# Source: AI-First Android Factory, simple-review 2.0.0. Adapted here: this header, write
+# permissions on the review job only, and GitHub's error message in a failed run's log.
 
 name: Simple review
 
@@ -22,12 +23,10 @@ on:
   issue_comment:
     types: [created]
 
-# WHY THESE PERMISSIONS. Read the repository and the pull request, write one issue comment.
-# No content write, no approval and no merge.
+# WHY READ-ONLY BY DEFAULT. Every job reads the repository; only the review job below writes, and
+# only its one comment. No job can push, merge or change content.
 permissions:
   contents: read
-  issues: write
-  pull-requests: read
 
 env:
   # WHY A PINNED CLI. A new Claude Code release can change flags or output. Update this version on
@@ -67,6 +66,13 @@ jobs:
 
   review:
     needs: authorize
+    # WHY WRITE HERE ONLY. This job writes one comment on the pull request. In the first live run
+    # (run 39719676916) that comment was refused with HTTP 403 while the token had issues: write and
+    # pull-requests: read, so the job also gets pull-requests: write. Still no content write.
+    permissions:
+      contents: read
+      issues: write
+      pull-requests: write
     # WHY CONCURRENCY ONLY HERE, AFTER THE CHECK. A new authorized request replaces a running review
     # of an older HEAD. Every other run gets a group of its own, so a reply, a bot comment or a
     # request that failed the permission check cannot cancel a running review.
