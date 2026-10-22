@@ -263,6 +263,10 @@ Every item on the official list was checked against what this app actually does.
 
 ## 6. How to build this branch
 
+> **Stage 2 update (section 10.2).** The floor below no longer holds: since flipview is built from
+> source, JDK 17.0.19 also builds and tests the app. Java 21 stays the documented version until the
+> Kotlin 2 step verifies a wider range. The rest of this section is the original record.
+
 **This branch needs exactly Java 21 — not 17, and not anything newer.** The window is one
 version wide, and both edges were hit for real. Set it explicitly; do not assume the default
 is right.
@@ -831,6 +835,8 @@ same flipping coin icons, the same database, `versionCode 6` and `versionName 1.
 | `chore: Excluded the encrypted dependency metadata from APKs and kept it in the App Bundle.` | `dependenciesInfo`, issue #29 |
 | `chore: Added Gradle dependency verification.` | `gradle/verification-metadata.xml` and a check tool for the APK signing block |
 | `docs: Documented dependency verification and the Stage 2 changes.` | this section, `CONTRIBUTING.md` step 3 |
+| `fix: Added the Linux and Windows AAPT2 checksums ...` | dependency verification on CI, which runs on Linux |
+| `fix: Made the signing check script override ...` | review notes: `finalizeDsl`, exit code 3 for unreadable files, section 6 note, licence screens |
 
 ### 10.2 flipview
 
@@ -844,6 +850,14 @@ resolves a newer one, so nothing in the APK changes.
 This removes the JDK 21 floor of section 6. On JDK 17.0.19, `./gradlew clean assembleFullDebug
 testFullDebugUnitTest` now succeeds. The documented JDK stays 21 until the Kotlin 2 step (T3)
 verifies and documents the wider range.
+
+The Google "open source licenses" screen (`OssLicensesMenuActivity`) is generated from Maven
+metadata, and the plugin does not see project modules. Its list loses FlipView, as well as Stetho
+and Stetho's `FindBugs-jsr305`, which are no longer in the release build (128 entries on `master`,
+125 here, compared with `fullReleaseOssLicensesTask`). The app's own list in Settings, which
+`LicensesRepository` builds from string resources, still credits FlipView with its Apache 2.0
+licence and is unchanged, so the attribution stays. That list also still names Stetho; it was left
+as it is, because changing it is outside this step.
 
 ### 10.3 Stetho
 
@@ -862,7 +876,9 @@ APKs that contain it. `dependenciesInfo { includeInApk = false }` removes it fro
 `apksigner` does not show this block, so `tools/apk_signing_blocks.py` lists the blocks of a signed
 APK. Debug APKs never had the block, and an unsigned release APK has no signing block at all, so
 the check needs a signed release. `tools/sign-release-with-debug-key.gradle` signs the release
-build type with your local debug key, for this check only:
+build type with your local debug key, for this check only. It is never applied unless passed with
+`-I`, and it sets the signing config in `androidComponents.finalizeDsl`, after the module's own
+build script, so it also works if the release build type gets its own `signingConfig` later:
 
 ```bash
 ./gradlew -I tools/sign-release-with-debug-key.gradle assembleFullRelease
@@ -870,7 +886,8 @@ python3 tools/apk_signing_blocks.py app/build/outputs/apk/full/release/app-full-
 ```
 
 On `master` it prints `0x504b4453 dependency info` and exits with 1; on this branch it lists only
-the v2 signature and the verity padding and exits with 0.
+the v2 signature and the verity padding and exits with 0. Exit code 2 means an unsigned APK, and 3
+a file that cannot be read or is not a valid APK.
 
 ### 10.5 Dependency verification
 

@@ -21,7 +21,8 @@ signing block (block ID 0x504b4453) unless `dependenciesInfo { includeInApk = fa
 https://source.android.com/docs/security/features/apksigning/v2#apk-signing-block
 
 Usage: python3 tools/apk_signing_blocks.py path/to/app.apk
-Exit code 0: no dependency-info block. 1: block found. 2: no signing block (unsigned APK).
+Exit code 0: no dependency-info block. 1: block found. 2: no signing block (unsigned APK) or
+wrong usage. 3: the file cannot be read or is not a valid APK.
 """
 
 import struct
@@ -61,8 +62,12 @@ def main():
     if len(sys.argv) != 2:
         print("Usage: python3 tools/apk_signing_blocks.py path/to/app.apk")
         return 2
-    with open(sys.argv[1], "rb") as apk:
-        ids = block_ids(apk.read())
+    try:
+        with open(sys.argv[1], "rb") as apk:
+            ids = block_ids(apk.read())
+    except (OSError, ValueError, struct.error) as error:
+        print("ERROR: cannot read the APK signing block: %s" % error)
+        return 3
     if ids is None:
         print("No APK signing block: the APK is unsigned, so there is nothing to check.")
         return 2
