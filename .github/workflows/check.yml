@@ -147,9 +147,4 @@ jobs:
           cache-read-only: ${{ github.event_name == 'pull_request' }}
 
       - name: Assemble both flavors in release mode and bundle full, unsigned
-        run: |
-          set -o pipefail
-          ./gradlew assembleFullRelease assembleDemoRelease bundleFullRelease --stacktrace 2>&1 | tee gradle.log || {
-            msg=$( { grep -E "^> Task .* FAILED|^e: |error:" gradle.log | head -30; grep -A25 "What went wrong" gradle.log | grep -v "^\s*at "; } | head -70 | sed ':a;N;$!ba;s/%/%25/g;s/\r//g;s/\n/%0A/g')
-            echo "::error title=release-gates::$msg"
-            exit 1; }
+        run: ./gradlew assembleFullRelease assembleDemoRelease bundleFullRelease --stacktrace
