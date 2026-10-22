@@ -21,8 +21,7 @@ import android.app.Application
 import android.content.Context
 import android.content.res.Configuration
 import com.baruckis.kriptofolio.dependencyinjection.AppInjector
-import com.baruckis.kriptofolio.dependencyinjection.daggerBridgeModule
-import com.baruckis.kriptofolio.dependencyinjection.viewModelsKoinModule
+import com.baruckis.kriptofolio.dependencyinjection.appKoinModules
 import com.baruckis.kriptofolio.utilities.localization.LocalizationManager
 import com.baruckis.kriptofolio.utilities.logConsoleVerbose
 import dagger.android.AndroidInjector
@@ -45,7 +44,7 @@ class App : Application(), HasActivityInjector {
         val appComponent = AppInjector.init(this)
         // Koin starts after Dagger and takes from it the objects Dagger still owns (docs/decisions/005).
         startKoin {
-            modules(daggerBridgeModule(appComponent), viewModelsKoinModule)
+            modules(appKoinModules(appComponent))
         }
 
         DebugTools.init(this)

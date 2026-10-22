@@ -28,21 +28,21 @@ import org.mockito.Mockito.mock
 /**
  * Koin's module verification: every constructor parameter of every Koin definition must be
  * defined in the app's Koin modules. It runs on the JVM without starting the app, so a missing
- * definition fails the unit test gate instead of crashing a screen. Every Koin module the app
- * starts belongs in [appKoinModules].
+ * definition fails the unit test gate instead of crashing a screen. It checks the same list of
+ * modules that App starts, [appKoinModules].
  */
 @OptIn(KoinExperimentalAPI::class)
 @RunWith(JUnit4::class)
 class KoinModulesTest {
 
-    private val appKoinModules = module {
-        includes(daggerBridgeModule(mock(AppComponent::class.java)), viewModelsKoinModule)
+    private val appModules = module {
+        includes(appKoinModules(mock(AppComponent::class.java)))
     }
 
     @Test
     fun koinModulesVerify() {
         // Objects that Dagger creates and hands over whole through daggerBridgeModule; Koin never
         // calls their constructors, so their parameters stay Dagger's business.
-        appKoinModules.verify(extraTypes = listOf(StringsLocalization::class))
+        appModules.verify(extraTypes = listOf(StringsLocalization::class))
     }
 }
