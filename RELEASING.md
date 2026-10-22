@@ -34,7 +34,8 @@ on a device, or what users see in the Play Console. The steps below cover those.
 
 A pull request into `master` (for a 1.3.x hotfix, into `release/1.3`; see step 9) that:
 
-- raises `versionCode` by one and sets `versionName` in `app/build.gradle`;
+- sets `versionCode` one higher than every `versionCode` ever uploaded to Google Play, from any
+  branch including `release/1.3`, and sets `versionName` in `app/build.gradle`;
 - adds `fastlane/metadata/android/<locale>/changelogs/<versionCode>.txt` for every locale
   (currently `en-US` and `lt-LT`). F-Droid and its downstream repositories read these files; a
   missing file means no release notes for those users, as issue #4 showed from 2020 to 2026.
@@ -109,7 +110,10 @@ and is not released from until 2.0.0.
 ### 9. 1.3.x hotfixes
 
 A hotfix is a pull request into `release/1.3`, reviewed like any other change, then released with
-steps 1 to 6 from that branch. The same fix is cherry-picked to `master` in its own pull request.
+steps 1 to 6 from that branch. The same fix is cherry-picked to `master` in its own pull request,
+together with the hotfix's changelog files, so `master` keeps the record of every published
+`versionCode`. `master` keeps its own `versionCode`; the 2.0.0 release pull request counts from the
+highest one published (step 1).
 No 2.0.0 work is released through 1.3.x. Deleting `release/1.3` after 2.0.0 is in production is the
 owner's decision.
 
