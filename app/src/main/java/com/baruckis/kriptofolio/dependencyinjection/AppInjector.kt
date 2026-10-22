@@ -32,9 +32,10 @@ import dagger.android.support.HasSupportFragmentInjector
  * It is simple helper class to avoid calling inject method on each activity or fragment.
  */
 object AppInjector {
-    fun init(app: App) {
+    fun init(app: App): AppComponent {
         // Here we initialize Dagger. DaggerAppComponent is auto-generated from AppComponent.
-        DaggerAppComponent.builder().application(app).build().inject(app)
+        val appComponent = DaggerAppComponent.builder().application(app).build()
+        appComponent.inject(app)
 
         app.registerActivityLifecycleCallbacks(object : Application.ActivityLifecycleCallbacks {
             override fun onActivityPaused(activity: Activity) {
@@ -65,6 +66,8 @@ object AppInjector {
                 handleActivity(activity)
             }
         })
+
+        return appComponent
     }
 
     private fun handleActivity(activity: Activity) {
