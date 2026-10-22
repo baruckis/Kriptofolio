@@ -101,8 +101,9 @@ criteria and a link to the decision record. The scope is frozen
 | T52 | 7 | F-Droid metadata, reproducibility comparison, request text | Sonnet / `high` |
 | T53 | R2 | 2.0.0 release preparation and update tests on both platforms | Sonnet / `high`; the owner releases |
 
-Order: stage 5 (T34–T40); stage 7 from T41 to T46, which can start after T39; stage 6 (T47–T50)
-after T42, because StoreKit builds on `Entitlements`; then T51, T52 and T53. Store accounts,
+Order: stage 5 (T34–T40); stage 7 from T41 to T46, which can start after T39; stage 6 (T47–T49)
+after T34, whose key storage the iOS shell implements with Keychain; T50 after T42 and T48, because
+StoreKit builds on `Entitlements` and needs the iOS shell; then T51, T52 and T53. Store accounts,
 products, data-safety forms and the F-Droid request are the owner's actions. Task numbers T18–T33
 belong to work outside this repository and are tracked elsewhere.
 
