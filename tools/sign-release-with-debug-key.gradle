@@ -1,0 +1,7 @@
+// Evidence only: signs the release build type with the local debug key so the APK has a signing block.
+allprojects {
+    plugins.withId('com.android.application') {
+        def android = project.extensions.getByName('android')
+        android.buildTypes.release.signingConfig = android.signingConfigs.debug
+    }
+}
