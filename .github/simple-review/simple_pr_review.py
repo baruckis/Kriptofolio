@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Review one GitHub pull request without checking out or executing its code.
 
-simple-review 2.0.0 from AI-First Android Factory; only this docstring was adapted here.
+simple-review 2.0.0 from AI-First Android Factory; adapted here: this docstring, and GitHub's
+error message and endpoint in the log of a failed run.
 
 Installed as `.github/simple-review/simple_pr_review.py` next to
 `.github/workflows/simple-review.yml`. Every setting comes from the environment that the
@@ -1247,6 +1248,16 @@ def main() -> int:
             return authorize()
         require(len(sys.argv) == 1, "usage: simple_pr_review.py [--version | authorize]")
         return review()
+    except urllib.error.HTTPError as error:
+        # WHY THE DETAIL. A bare "HTTP Error 403" does not say which call failed or why. GitHub's
+        # error message and the endpoint carry no secret; the token travels only in a header.
+        message, codes = github_error(error)
+        detail = f": {message}" if message else ""
+        if codes:
+            detail += f" ({', '.join(codes)})"
+        print(f"simple review failed: HTTP {error.code} {error.reason}{detail} at {error.url}",
+              file=sys.stderr)
+        return 1
     except (
         ValueError,
         KeyError,
