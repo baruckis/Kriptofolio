@@ -176,7 +176,7 @@ dependencies {
     // applications.
     implementation libs.androidx.room.runtime
     ksp libs.androidx.room.compiler
-    // For Kotlin we use kapt instead of annotationProcessor.
+    // For Kotlin we use KSP instead of annotationProcessor.
 
     // Navigation component simplifies implementing navigation, while also helping you visualize
     // your app's navigation flow.

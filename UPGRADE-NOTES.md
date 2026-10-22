@@ -949,6 +949,8 @@ Roadmap step T3. Started from `master` at `9cf0aa2`. Behaviour is unchanged: `ve
 | `chore: Ran the CI gate on JDK 17, 21 and 25.` | `.github/workflows/check.yml` matrix |
 | `docs: Documented the Kotlin 2 step and the JDK range.` | this section, `AGENTS.md`, `CONTRIBUTING.md` |
 | `fix: Added the dependency metadata files that a cold CI build resolves to the verification metadata.` | the first CI run failed before configuration, see 11.5 |
+| `docs: Recorded the CI-only metadata files in the Kotlin 2 notes.` | 11.5 |
+| `chore: Pinned the Gradle distribution checksum. docs: ...` | review notes: wrapper checksum, `clean` flag, comment, fragment risk wording |
 
 The toolchain commit cannot be split into green steps. Gradle 9 cannot configure the AGP 8.6 and
 Kotlin 1.9.25 build ("`Configuration.fileCollection(Spec)`" no longer exists). AGP 9 builds Kotlin itself and needs a
@@ -959,7 +961,7 @@ was tried in that order; the commit is the smallest set that builds.
 
 | Item | Before | After | Why |
 |---|---|---|---|
-| Gradle wrapper | 8.8 | 9.8.2 | current; AGP 9.4 needs Gradle 9 |
+| Gradle wrapper | 8.8 | 9.8.2 | current; AGP 9.4 needs Gradle 9. `distributionSha256Sum` now pins the distribution (the published `.sha256`, equal to the downloaded file's) |
 | Android Gradle plugin | 8.6.0 | 9.4.1 | current; supports compileSdk 36, so `android.suppressUnsupportedCompileSdk` is gone |
 | Kotlin | 1.9.25 | 2.4.21, K2 | AGP 9 brings Kotlin Gradle plugin 2.2.10; the declared `kotlin-android` plugin version (not applied) replaces it |
 | KSP | — | 2.3.12 | Room and Glide |
@@ -967,7 +969,7 @@ was tried in that order; the commit is the smallest set that builds.
 | Room | 2.2.3 (kapt) | 2.6.1 (KSP) | last release before Room KMP. 2.3.0 to 2.6.0 also compile on KSP |
 | Glide | 4.11.0 (kapt) | 4.16.0 (KSP) | the KSP processor exists from 4.14; the `ksp` artifact for 4.14.0 could not be resolved |
 | oss-licenses plugin | 0.10.6 | 0.10.8 | 0.10.6 uses `applicationVariants`, which AGP 9 removed |
-| Mockito (tests) | 5.3.1 | 5.18.0 | the oldest that can mock `android.text.Editable` on JDK 25; 5.14.2, 5.16.1 and 5.17.0 fail |
+| Mockito (tests) | 5.3.1 | 5.18.0 | the release after 5.17.0, which cannot mock `android.text.Editable` on JDK 25; 5.14.2 and 5.16.1 fail too |
 | Dagger | 2.23.2 | 2.23.2 | unchanged; it works on kapt with Kotlin 2.4 |
 
 Transitive changes on the `fullRelease` runtime classpath, from `:app:dependencies`: Kotlin stdlib
@@ -975,7 +977,10 @@ Transitive changes on the `fullRelease` runtime classpath, from `:app:dependenci
 and Glide as above. Room 2.6.1 and Glide 4.16.0 also pull `androidx.activity` 1.1.0-rc01 to
 1.2.4, `androidx.fragment` 1.2.0-rc01 to 1.3.6, `androidx.sqlite` 2.0.1 to 2.4.0 and
 `androidx.exifinterface` 1.0.0 to 1.3.6. The fragment and activity changes are the ones with a
-behaviour risk; section 11.6 lists how they were checked.
+behaviour risk. The code still uses `onActivityCreated`, `startActivityForResult` with
+`onActivityResult`, and (through preference 1.1.0) `setTargetFragment` dialogs; all are deprecated
+in these versions but still present. Section 11.6 lists what was run on a device; the settings
+dialogs and the activity-result path were not exercised there.
 
 ### 11.3 Source and build file changes
 
@@ -1011,7 +1016,7 @@ entry is left. It has 434 components, plus the Linux and Windows AAPT2 9.4.1 jar
 (SHA-1 checked against Google Maven, as in section 10.5). New command:
 
 ```bash
-./gradlew clean
+./gradlew clean --dependency-verification=off
 ./gradlew --write-verification-metadata sha256 assembleFullDebug assembleDemoDebug assembleFullRelease assembleDemoRelease bundleFullRelease testFullDebugUnitTest testDemoDebugUnitTest lintFullDebug
 ```
 
@@ -1025,7 +1030,9 @@ set: let CI run before merging a change to it.
 
 AGP 9 creates unit test tasks only for the debug build type, and `clean` in the same invocation as
 the build collides with the licence plugin's `OssLicensesCleanUp` task ("Input file does not
-exist"). Run `clean` on its own.
+exist"). Run `clean` on its own. When the metadata misses entries, for example after emptying
+the component list or adding a plugin, strict verification stops even `clean`, hence the flag;
+writing metadata records checksums instead of enforcing them, so the second command needs none.
 
 ### 11.6 Verification
 
