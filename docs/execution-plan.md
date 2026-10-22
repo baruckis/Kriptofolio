@@ -187,8 +187,8 @@ The agent stops and reports if:
 - the Room identity hash of an existing schema version would change, or a real v1 file would not
   open (a new schema version is allowed only in T41, with an exported schema and a migration
   tested on the real v1 files);
-- the `applicationId`, the signing key or `versionCode` would change outside the release pull
-  request;
+- the `applicationId` or the signing key would change (never allowed);
+- `versionName` or `versionCode` would change outside the release pull request;
 - a key, password or paid account is needed;
 - a spike says no-go;
 - the task leaves the 1.3.0 scope or the frozen 2.0.0 list;
