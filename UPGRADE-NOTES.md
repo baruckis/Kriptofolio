@@ -880,8 +880,14 @@ does not match, for example when a version is republished with different content
 flipview. Tested by changing one checksum: `assembleFullDebug` failed with "Dependency verification
 failed ... retrofit-2.7.1.jar".
 
-Sources and javadoc jars are trusted without checksums, because Android Studio downloads them
-on demand and the build never uses them.
+Sources and javadoc jars are trusted without checksums (`<trusted-artifacts>`), because Android
+Studio downloads them on demand and the build never uses them.
+
+One artifact differs per operating system: AAPT2, the Android resource compiler, comes as
+`aapt2-<version>-osx.jar`, `-linux.jar` and `-windows.jar`. Gradle only writes the one for the
+machine it runs on, so the Linux and Windows checksums were added by hand from Google Maven, after
+checking that each file's SHA-1 matches the `.sha1` published next to it. Regenerating keeps
+existing entries, so this has to be repeated only when the Android Gradle plugin version changes.
 
 When a pull request adds or upgrades a dependency, regenerate the file with the same tasks the
 build gate runs, plus the release tasks, and commit it with the change:
