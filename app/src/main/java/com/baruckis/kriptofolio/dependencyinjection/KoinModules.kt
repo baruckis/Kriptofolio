@@ -22,6 +22,10 @@ import com.baruckis.kriptofolio.ui.settings.thirdpartysoft.LibrariesLicensesView
 import org.koin.core.context.GlobalContext
 import org.koin.dsl.module
 
+// Every Koin module the app starts. App.onCreate and KoinModulesTest both use this list, so a module
+// added here is verified as well.
+fun appKoinModules(appComponent: AppComponent) = listOf(daggerBridgeModule(appComponent), viewModelsKoinModule)
+
 // ViewModels that Koin creates. A screen moves here from ViewModelsModule in one step.
 val viewModelsKoinModule = module {
     factory { LibrariesLicensesViewModel(get()) }
