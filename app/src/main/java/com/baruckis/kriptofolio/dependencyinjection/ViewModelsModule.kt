@@ -20,7 +20,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.baruckis.kriptofolio.ui.addsearchlist.AddSearchViewModel
 import com.baruckis.kriptofolio.ui.mainlist.MainViewModel
-import com.baruckis.kriptofolio.ui.settings.thirdpartysoft.LibrariesLicensesViewModel
 import com.baruckis.kriptofolio.ui.settings.SettingsViewModel
 import dagger.Binds
 import dagger.Module
@@ -47,11 +46,6 @@ abstract class ViewModelsModule {
     @IntoMap
     @ViewModelKey(SettingsViewModel::class)
     abstract fun bindSettingsViewModel(settingsViewModel: SettingsViewModel): ViewModel
-
-    @Binds
-    @IntoMap
-    @ViewModelKey(LibrariesLicensesViewModel::class)
-    abstract fun bindLibrariesLicensesViewModel(librariesLicensesViewModel: LibrariesLicensesViewModel): ViewModel
 
 
     @Binds

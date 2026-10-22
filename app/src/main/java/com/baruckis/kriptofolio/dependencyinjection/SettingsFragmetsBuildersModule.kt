@@ -16,7 +16,6 @@
 
 package com.baruckis.kriptofolio.dependencyinjection
 
-import com.baruckis.kriptofolio.ui.settings.thirdpartysoft.LibrariesLicensesListFragment
 import com.baruckis.kriptofolio.ui.settings.SettingsFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
@@ -29,7 +28,4 @@ abstract class SettingsFragmetsBuildersModule {
 
     @ContributesAndroidInjector() // Attaches fragment to Dagger graph.
     abstract fun contributeSettingsFragment(): SettingsFragment
-
-    @ContributesAndroidInjector() // Attaches fragment to Dagger graph.
-    abstract fun contributeLibrariesLicensesListFragment(): LibrariesLicensesListFragment
 }

@@ -32,16 +32,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.baruckis.kriptofolio.R
 import com.baruckis.kriptofolio.databinding.FragmentLibrariesLicensesListBinding
-import com.baruckis.kriptofolio.dependencyinjection.Injectable
+import com.baruckis.kriptofolio.dependencyinjection.KoinViewModelFactory
 import com.baruckis.kriptofolio.ui.settings.LicenseFragment
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
-import javax.inject.Inject
 
 
-class LibrariesLicensesListFragment : Fragment(), Injectable {
-
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
+class LibrariesLicensesListFragment : Fragment() {
 
     private lateinit var viewModel: LibrariesLicensesViewModel
 
@@ -57,7 +53,7 @@ class LibrariesLicensesListFragment : Fragment(), Injectable {
         activity?.let { activity ->
 
             // Obtain ViewModel from ViewModelProvider, using parent activity as LifecycleOwner.
-            viewModel = ViewModelProvider(activity, viewModelFactory)[LibrariesLicensesViewModel::class.java]
+            viewModel = ViewModelProvider(activity, KoinViewModelFactory)[LibrariesLicensesViewModel::class.java]
 
             activity.title = viewModel.stringsLocalization.getString(R.string.fragment_libraries_licenses_list_title)
             if (activity is AppCompatActivity) activity.supportActionBar?.subtitle = viewModel.stringsLocalization.getString(R.string.fragment_libraries_licenses_list_subtitle)

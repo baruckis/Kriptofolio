@@ -17,6 +17,7 @@
 package com.baruckis.kriptofolio.dependencyinjection
 
 import com.baruckis.kriptofolio.App
+import com.baruckis.kriptofolio.repository.LicensesRepository
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.support.AndroidSupportInjectionModule
@@ -52,4 +53,7 @@ interface AppComponent {
     // The application which is allowed to request the dependencies declared by the modules
     // (by means of the @Inject annotation) should be declared here with individual inject() methods.
     fun inject(app: App)
+
+    // Objects that Koin takes from Dagger while both run side by side (DaggerBridge.kt).
+    fun licensesRepository(): LicensesRepository
 }
