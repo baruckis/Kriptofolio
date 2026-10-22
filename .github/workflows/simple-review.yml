@@ -6,9 +6,7 @@
 # repository variables named SIMPLE_REVIEW_*, listed in CONTRIBUTING.md ("Automated review").
 # Read every WHY comment once: each explains a safety decision.
 #
-# Source: AI-First Android Factory, simple-review 2.0.0. Adapted here: this header, write
-# permissions on the review job only (the authorize job reads only), and GitHub's error message
-# in a failed run's log.
+# Source: AI-First Android Factory, simple-review 2.0.0. Only this header is adapted here.
 
 name: Simple review
 
@@ -71,7 +69,7 @@ jobs:
   review:
     needs: authorize
     # WHY WRITE HERE ONLY. This job writes one comment on the pull request. In the first live run
-    # (run 39719676916) that comment was refused with HTTP 403 while the token had issues: write and
+    # that comment was refused with HTTP 403 while the token had issues: write and
     # pull-requests: read, so the job also gets pull-requests: write. Still no content write.
     permissions:
       contents: read

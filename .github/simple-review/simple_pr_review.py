@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 """Review one GitHub pull request without checking out or executing its code.
 
-simple-review 2.0.0 from AI-First Android Factory; adapted here: this docstring, and GitHub's
-error message and endpoint in the log of a failed run.
+simple-review 2.0.0 from AI-First Android Factory; only this docstring is adapted here.
 
 Installed as `.github/simple-review/simple_pr_review.py` next to
 `.github/workflows/simple-review.yml`. Every setting comes from the environment that the
@@ -73,6 +72,7 @@ SHA = re.compile(r"[0-9a-f]{40}")
 FINDING_ID = re.compile(r"F[1-9][0-9]{0,3}")
 NODE_ID = re.compile(r"[a-z][a-z0-9_]{0,15}")
 LABEL = re.compile(r"[A-Za-z0-9.,:/_+()-](?:[A-Za-z0-9 .,:/_+()-]{0,38}[A-Za-z0-9.,:/_+()-])?")
+LABEL_CHAR = re.compile(r"[A-Za-z0-9 .,:/_+()-]")
 MODEL_ID = re.compile(r"[A-Za-z0-9._:/@-]{1,100}")
 LINE_NUMBER = re.compile(r"^\s*[0-9]+\s*\|\s?")
 
@@ -619,31 +619,57 @@ def validate_review(value, earlier_ids: list[str]) -> dict:
     }
 
 
+def clean_label(value) -> str:
+    """Keep only the label characters the renderer allows; anything else becomes a space."""
+    if not isinstance(value, str):
+        return ""
+    kept = "".join(char if LABEL_CHAR.fullmatch(char) else " " for char in value)
+    return " ".join(kept.split())[:40].strip()
+
+
 def validate_diagram(value: dict):
-    """Return (diagram, problem). Bad labels drop the diagram; they never fail the review."""
+    """Return (diagram, message).
+
+    A repairable diagram is repaired: labels keep only the allowed characters, and edges to
+    unknown nodes are dropped; the message then says what changed. A diagram that cannot be drawn
+    safely is left out and the message says why. Neither case fails the review.
+    """
     if not (isinstance(value, dict) and set(value) == {"nodes", "edges"}):
         return None, "the diagram has an invalid shape"
     nodes, edges = value["nodes"], value["edges"]
     if not nodes and not edges:
         return None, None
-    if not (isinstance(nodes, list) and isinstance(edges, list)
-            and 3 <= len(nodes) <= 8 and len(edges) <= 10):
-        return None, "the diagram needs 3 to 8 nodes and at most 10 edges"
-    ids = []
+    if not (isinstance(nodes, list) and isinstance(edges, list) and 3 <= len(nodes) <= 8):
+        return None, "the diagram needs 3 to 8 nodes"
+    ids, clean_nodes, cleaned = [], [], 0
     for node in nodes:
         if not (isinstance(node, dict) and set(node) == {"id", "label"}
                 and isinstance(node["id"], str) and NODE_ID.fullmatch(node["id"])
-                and isinstance(node["label"], str) and LABEL.fullmatch(node["label"])
                 and node["id"] not in ids):
-            return None, "a diagram node has an invalid id or label"
+            return None, "a diagram node has an invalid or repeated id"
+        label = clean_label(node["label"]) or node["id"]
+        cleaned += label != node["label"]
         ids.append(node["id"])
+        clean_nodes.append({"id": node["id"], "label": label})
+    clean_edges, dropped = [], 0
     for edge in edges:
         if not (isinstance(edge, dict) and set(edge) == {"from", "to", "label"}
-                and edge["from"] in ids and edge["to"] in ids
-                and isinstance(edge["label"], str)
-                and (edge["label"] == "" or LABEL.fullmatch(edge["label"]))):
-            return None, "a diagram edge has an unknown node or an invalid label"
-    return {"nodes": nodes, "edges": edges}, None
+                and edge["from"] in ids and edge["to"] in ids):
+            dropped += 1
+            continue
+        label = clean_label(edge["label"])
+        cleaned += label != edge["label"]
+        clean_edges.append({"from": edge["from"], "to": edge["to"], "label": label})
+    dropped += max(0, len(clean_edges) - 10)
+    clean_edges = clean_edges[:10]
+    changes = []
+    if cleaned:
+        changes.append(f"{cleaned} label{'s' if cleaned != 1 else ''} lost characters the diagram "
+                       "does not allow")
+    if dropped:
+        changes.append(f"{dropped} edge{'s' if dropped != 1 else ''} to an unknown node or over the "
+                       "limit of 10 dropped")
+    return {"nodes": clean_nodes, "edges": clean_edges}, "; ".join(changes) or None
 
 
 def render_diagram(diagram: dict) -> list[str]:
@@ -976,6 +1002,8 @@ def build_comment(outcome: dict, *, head: str, base: str, engine: str, rule_path
     ]
     if outcome["diagram"]:
         lines += ["", *render_diagram(outcome["diagram"])]
+        if outcome["diagram_problem"]:
+            lines += ["", f"_Diagram adjusted: {markdown(outcome['diagram_problem'])}._"]
     elif outcome["diagram_problem"]:
         lines += ["", f"_Diagram omitted: {markdown(outcome['diagram_problem'])}._"]
     if not outcome["complete"]:
