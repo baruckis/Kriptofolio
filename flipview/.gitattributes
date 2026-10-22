@@ -1,0 +1,2 @@
+# Vendored upstream files keep their original whitespace-only lines, so diffs against upstream stay exact.
+src/** -whitespace

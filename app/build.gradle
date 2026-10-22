@@ -209,12 +209,9 @@ dependencies {
     implementation "${libs.glide.okhttp3.integration.get()}@aar"
 
     // UI. FlipView is a ViewGroup (FrameLayout) that is designed to display 2 views/layouts by
-    // flipping the front one in favor of the back one, and vice versa. The library is plain Java,
-    // its Kotlin standard library dependency is an artifact of how it was republished, and left
-    // alone it would drag a much newer Kotlin runtime into the app.
-    implementation(libs.flipview) {
-        exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib'
-    }
+    // flipping the front one in favor of the back one, and vice versa. Built from source in the
+    // :flipview module, because the republished artifact is Java 21 bytecode (flipview/README.md).
+    implementation project(':flipview')
 
     // Facebook's Stetho project enables you to use Chrome debugging tools to troubleshoot
     // network traffic, database files, and view layouts.
