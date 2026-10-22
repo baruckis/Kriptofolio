@@ -206,16 +206,28 @@ def request_text(url: str, token: str, *, accept: str, max_bytes: int) -> bytes:
 
 
 def github_error(error: urllib.error.HTTPError) -> tuple[str, list[str]]:
-    """Return (message, error codes) from a GitHub error body, or empty values."""
+    """Return (message, error codes) from a GitHub error body, or empty values.
+
+    The body can be read only once, and the same error may be inspected first where it happens
+    and again in main(), so the parsed result is kept on the error object.
+    """
+    cached = getattr(error, "simple_review_detail", None)
+    if cached is not None:
+        return cached
+    result: tuple[str, list[str]] = ("", [])
     try:
         value = json.loads(error.read(65_536).decode("utf-8"))
     except (OSError, ValueError, AttributeError):
-        return "", []
-    if not isinstance(value, dict):
-        return "", []
-    errors = value.get("errors") if isinstance(value.get("errors"), list) else []
-    codes = [item.get("code") for item in errors if isinstance(item, dict)]
-    return str(value.get("message", "")), [code for code in codes if isinstance(code, str)]
+        value = None
+    if isinstance(value, dict):
+        errors = value.get("errors") if isinstance(value.get("errors"), list) else []
+        codes = [item.get("code") for item in errors if isinstance(item, dict)]
+        result = (str(value.get("message", "")), [code for code in codes if isinstance(code, str)])
+    try:
+        error.simple_review_detail = result
+    except AttributeError:
+        pass
+    return result
 
 
 def rate_limited(error: urllib.error.HTTPError, message: str) -> bool:
