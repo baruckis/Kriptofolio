@@ -451,7 +451,7 @@ class MainListFragment : Fragment(), Injectable, PrimaryActionModeController.Pri
                     swipeRefreshLayout.isRefreshing = false
                     spinnerFiatCode.isEnabled = true
 
-                    snackbarUnableRefresh = this.view!!.showSnackbar(R.string.unable_refresh) {
+                    snackbarUnableRefresh = this.requireView().showSnackbar(R.string.unable_refresh) {
                         onActionButtonClick {
                             viewModel.isSwipeRefreshing = true
                             swipeRefreshLayout.isRefreshing = true

@@ -16,9 +16,9 @@
 
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.parcelize) // For the @Parcelize annotation
-    alias(libs.plugins.kotlin.kapt) // For annotation processing
+    alias(libs.plugins.android.legacy.kapt) // Dagger still needs kapt until Koin replaces it
+    alias(libs.plugins.ksp) // Room and Glide
 
     // Helps fetch & display the open source libraries used within your project.
     alias(libs.plugins.oss.licenses)
@@ -37,12 +37,15 @@ android {
         versionCode 6
         versionName "1.2.3" // major . minor . patch
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        // The about screen shows the version name. No flavor overrides it, so every variant has
+        // the same value; the variant API that used to add it was removed in AGP 9.
+        resValue "string", "versionName", versionName
     }
 
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
     // The Android Gradle plugin signs an encrypted list of dependencies into every APK by default.
@@ -58,18 +61,14 @@ android {
     buildFeatures {
         dataBinding true
         buildConfig true
+        // Off by default since AGP 9; the flavors and defaultConfig define resource values.
+        resValues = true
     }
     // Configure only for each module that uses Java 8 language features
     // (either in its source code or through dependencies).
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
-    }
-
-    // To avoid: Cannot inline bytecode built with JVM target 1.8 into bytecode that is being
-    // built with JVM target 1.6.
-    kotlinOptions {
-        jvmTarget = "1.8"
     }
 
     flavorDimensions "version"
@@ -86,16 +85,20 @@ android {
         }
     }
 
-    applicationVariants.configureEach { variant ->
-        variant.resValue "string", "versionName", variant.versionName }
+}
+
+// To avoid: Cannot inline bytecode built with JVM target 1.8 into bytecode that is being
+// built with JVM target 1.6. Kotlin is built into the Android Gradle plugin since 9.0.
+kotlin {
+    compilerOptions {
+        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_1_8
+    }
 }
 
 // Where Room writes the exported schema. The directory is committed, so a change to the database
 // contract shows up in a diff like any other change.
-kapt {
-    arguments {
-        arg("room.schemaLocation", "$projectDir/schemas")
-    }
+ksp {
+    arg("room.schemaLocation", "$projectDir/schemas")
 }
 
 dependencies {
@@ -172,8 +175,8 @@ dependencies {
     // Room is a Database Object Mapping library that makes it easy to access database on Android
     // applications.
     implementation libs.androidx.room.runtime
-    kapt libs.androidx.room.compiler
-    // For Kotlin we use kapt instead of annotationProcessor.
+    ksp libs.androidx.room.compiler
+    // For Kotlin we use KSP instead of annotationProcessor.
 
     // Navigation component simplifies implementing navigation, while also helping you visualize
     // your app's navigation flow.
@@ -210,7 +213,7 @@ dependencies {
 
     // Glide - an image loading and caching library for Android focused on smooth scrolling.
     implementation libs.glide
-    kapt libs.glide.compiler
+    ksp libs.glide.ksp
 
     // Glide's OkHttp integration library to use OkHttp 3.x to fetch data over http/https in Glide.
     implementation "${libs.glide.okhttp3.integration.get()}@aar"

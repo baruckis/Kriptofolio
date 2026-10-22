@@ -127,10 +127,10 @@ that is not a roadmap step; a roadmap step follows these rules instead.
 
 ## Build commands
 
-Use JDK 21 for this project; the reason and the tested boundary are recorded in
-[`UPGRADE-NOTES.md`, section 6](UPGRADE-NOTES.md). Configure `JAVA_HOME` and the Android SDK
-through your local Android development setup before running Gradle. Keep machine-specific SDK
-paths out of project documentation and commits.
+Use JDK 17, 21 or 25 for this project; CI runs the gate on all three, and 21 is the default.
+The tested range and its history are recorded in [`UPGRADE-NOTES.md`, section 11](UPGRADE-NOTES.md).
+Configure `JAVA_HOME` and the Android SDK through your local Android development setup before
+running Gradle. Keep machine-specific SDK paths out of project documentation and commits.
 
 ```bash
 ./gradlew clean

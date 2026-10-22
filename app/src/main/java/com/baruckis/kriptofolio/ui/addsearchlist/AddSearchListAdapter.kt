@@ -28,7 +28,7 @@ import androidx.databinding.DataBindingUtil
 import com.baruckis.kriptofolio.R
 import com.baruckis.kriptofolio.databinding.ActivityAddSearchListItemBinding
 import com.baruckis.kriptofolio.db.Cryptocurrency
-import com.baruckis.kriptofolio.dependencyinjection.GlideApp
+import com.bumptech.glide.Glide
 import com.baruckis.kriptofolio.utilities.*
 import com.baruckis.kriptofolio.utilities.glide.WhiteBackground
 import com.bumptech.glide.load.MultiTransformation
@@ -81,8 +81,8 @@ class AddSearchListAdapter(val context: Context, private val cryptocurrencyClick
                 .appendPath(cryptocurrency.id.toString() + CRYPTOCURRENCY_IMAGE_FILE)
                 .build()
 
-        // Glide generated API from AppGlideModule.
-        GlideApp
+        // Glide, configured by AppGlideModule (the KSP processor generates no GlideApp API).
+        Glide
                 // We need to provide context to make a call.
                 .with(itemBinding.root)
                 // Here you specify which image should be loaded by providing Uri.

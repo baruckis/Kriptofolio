@@ -266,6 +266,9 @@ Every item on the official list was checked against what this app actually does.
 > **Stage 2 update (section 10.2).** The floor below no longer holds: since flipview is built from
 > source, JDK 17.0.19 also builds and tests the app. Java 21 stays the documented version until the
 > Kotlin 2 step verifies a wider range. The rest of this section is the original record.
+>
+> **Kotlin 2 step (section 11).** The ceiling is gone too: the gate passes on JDK 17, 21 and 25,
+> and CI runs it on all three.
 
 **This branch needs exactly Java 21 — not 17, and not anything newer.** The window is one
 version wide, and both edges were hit for real. Set it explicitly; do not assume the default
@@ -466,7 +469,7 @@ and 2.0.0.
    stopped at 35.
 2. **Stop relying on `Window.setStatusBarColor`** in `PrimaryActionModeController` — it is
    deprecated and only still works because of the opt-out above.
-3. **Widen the supported JDK range.** The build is verified on exactly one Java version
+3. **Widen the supported JDK range.** *(Done in Stage 2: section 11.)* The build is verified on exactly one Java version
    (section 6), which is brittle: it breaks the moment a contributor, a CI image or Android
    Studio's bundled runtime moves on. Raising the ceiling means a newer Gradle, and eventually a
    newer Android Gradle plugin — they move together, not separately. A newer Kotlin is part of
@@ -477,7 +480,8 @@ and 2.0.0.
    true long after this stage is history. Moving it out, and having CI check the parts a machine
    can check (is the API key empty on `master`? does a changelog exist for the current
    versionCode?), turns three of those steps from discipline into automation.
-5. **Expect the IDE to keep pushing the Gradle floor up.** The wrapper had to move from 8.7 to
+5. **Expect the IDE to keep pushing the Gradle floor up.** *(Gradle 9.8.2, AGP 9.4.1 and a JDK
+   matrix in CI since Stage 2: section 11.)* The wrapper had to move from 8.7 to
    8.8 purely because Android Studio injects an init script using a Gradle API that 8.7 lacks
    (section 3). That pressure is continuous — each IDE release may assume a newer Gradle than
    the one pinned here — and there is no CI to catch it. Whoever owns 2.0 should expect to track
@@ -913,6 +917,10 @@ build gate runs, plus the release tasks, and commit it with the change:
 ./gradlew --write-verification-metadata sha256 clean assembleFullDebug assembleDemoDebug assembleFullRelease assembleDemoRelease bundleFullRelease testFullDebugUnitTest testDemoDebugUnitTest testFullReleaseUnitTest lintFullDebug
 ```
 
+> **Changed in Stage 2, Kotlin 2 step (section 11.5).** On AGP 9 the command above no longer
+> works: `testFullReleaseUnitTest` does not exist, and `clean` in the same invocation collides with
+> the licence plugin's clean-up task. Use the command in section 11.5.
+
 Review the diff: new entries should match only the dependency you changed. A checksum that changes
 for a version that was already listed means the artifact itself changed, and needs an explanation
 before it is accepted. Signature verification is off for now; checksums already catch a republished
@@ -923,3 +931,129 @@ requests has not been tested here.
 ### 10.6 Verification
 
 Recorded in the pull request for this step.
+
+---
+
+## 11. Stage 2 — Kotlin 2, KSP, Gradle 9 and AGP 9 (#34)
+
+Roadmap step T3. Started from `master` at `9cf0aa2`. Behaviour is unchanged: `versionCode 6`,
+`versionName 1.2.3`, the same screens, and the same database contract (identity hash
+`ad1c80913f23361aa985d56ecf84d645`).
+
+### 11.1 What changed, commit by commit
+
+| Commit | What |
+|---|---|
+| `fix: Used requireView() for the refresh snackbar, as newer fragment lint requires.` | the only new lint error, `UseRequireInsteadOfGet` |
+| `chore: Upgraded to Gradle 9.8.2, AGP 9.4.1 and Kotlin 2.4.21 with K2. refactor: Moved Room 2.6.1 and Glide 4.16.0 from kapt to KSP; Dagger stays on kapt.` | the toolchain, in one commit because none of the pieces builds alone |
+| `chore: Ran the CI gate on JDK 17, 21 and 25.` | `.github/workflows/check.yml` matrix |
+| `docs: Documented the Kotlin 2 step and the JDK range.` | this section, `AGENTS.md`, `CONTRIBUTING.md` |
+| `fix: Added the dependency metadata files that a cold CI build resolves to the verification metadata.` | the first CI run failed before configuration, see 11.5 |
+| `docs: Recorded the CI-only metadata files in the Kotlin 2 notes.` | 11.5 |
+| `chore: Pinned the Gradle distribution checksum. docs: ...` | review notes: wrapper checksum, `clean` flag, comment, fragment risk wording |
+
+The toolchain commit cannot be split into green steps. Gradle 9 cannot configure the AGP 8.6 and
+Kotlin 1.9.25 build ("`Configuration.fileCollection(Spec)`" no longer exists). AGP 9 builds Kotlin itself and needs a
+Kotlin 2 compiler. The old Room 2.2.3 and Glide 4.11 processors only exist for kapt. Each of these
+was tried in that order; the commit is the smallest set that builds.
+
+### 11.2 Versions
+
+| Item | Before | After | Why |
+|---|---|---|---|
+| Gradle wrapper | 8.8 | 9.8.2 | current; AGP 9.4 needs Gradle 9. `distributionSha256Sum` now pins the distribution (the published `.sha256`, equal to the downloaded file's) |
+| Android Gradle plugin | 8.6.0 | 9.4.1 | current; supports compileSdk 36, so `android.suppressUnsupportedCompileSdk` is gone |
+| Kotlin | 1.9.25 | 2.4.21, K2 | AGP 9 brings Kotlin Gradle plugin 2.2.10; the declared `kotlin-android` plugin version (not applied) replaces it |
+| KSP | — | 2.3.12 | Room and Glide |
+| kapt | `org.jetbrains.kotlin.kapt` | `com.android.legacy-kapt` | AGP 9's kapt for built-in Kotlin; only Dagger uses it, until Koin |
+| Room | 2.2.3 (kapt) | 2.6.1 (KSP) | last release before Room KMP. 2.3.0 to 2.6.0 also compile on KSP |
+| Glide | 4.11.0 (kapt) | 4.16.0 (KSP) | the KSP processor exists from 4.14; the `ksp` artifact for 4.14.0 could not be resolved |
+| oss-licenses plugin | 0.10.6 | 0.10.8 | 0.10.6 uses `applicationVariants`, which AGP 9 removed |
+| Mockito (tests) | 5.3.1 | 5.18.0 | the release after 5.17.0, which cannot mock `android.text.Editable` on JDK 25; 5.14.2 and 5.16.1 fail too |
+| Dagger | 2.23.2 | 2.23.2 | unchanged; it works on kapt with Kotlin 2.4 |
+
+Transitive changes on the `fullRelease` runtime classpath, from `:app:dependencies`: Kotlin stdlib
+1.9.25 to 2.4.21; data binding 8.6.0 to 9.4.1; `kotlin-android-extensions-runtime` removed; Room
+and Glide as above. Room 2.6.1 and Glide 4.16.0 also pull `androidx.activity` 1.1.0-rc01 to
+1.2.4, `androidx.fragment` 1.2.0-rc01 to 1.3.6, `androidx.sqlite` 2.0.1 to 2.4.0 and
+`androidx.exifinterface` 1.0.0 to 1.3.6. The fragment and activity changes are the ones with a
+behaviour risk. The code still uses `onActivityCreated`, `startActivityForResult` with
+`onActivityResult`, and (through preference 1.1.0) `setTargetFragment` dialogs; all are deprecated
+in these versions but still present. Section 11.6 lists what was run on a device; the settings
+dialogs and the activity-result path were not exercised there.
+
+### 11.3 Source and build file changes
+
+- `kotlinOptions` (removed in AGP 9) becomes `kotlin { compilerOptions { jvmTarget = JVM_1_8 } }`.
+- `applicationVariants` (removed) added the `versionName` string resource to every variant. No
+  flavor overrides `versionName`, so `defaultConfig` now adds it directly. Settings shows `1.2.3`
+  as before.
+- `buildFeatures { resValues = true }`: AGP 9 turns resource values off by default.
+- `proguard-android.txt` is rejected by AGP 9. The release build type now names
+  `proguard-android-optimize.txt`; `minifyEnabled` is still `false`, so nothing is shrunk or
+  optimized.
+- `android.uniquePackageNames=false` in `gradle.properties`. AGP 9 rejects two libraries with
+  the same namespace. Navigation 1.0, rewritten by Jetifier to `androidx.navigation` 2.0.0, ships
+  `navigation-runtime-ktx` and `navigation-common-ktx` with one namespace. The plan allows moving
+  to `androidx.navigation` here; a property is the smaller change, and the Compose screens replace
+  navigation in stage 4.
+- Glide's KSP processor generates the module registration, including the OkHttp integration, but
+  not the `GlideApp` API. The two adapters call `Glide.with(...)`; the request chain is the same.
+- `MainListFragment` uses `requireView()` instead of `view!!`. Both fail when the view is gone;
+  only the exception type differs.
+
+### 11.4 The Room schema
+
+`app/schemas/.../1.json` is unchanged. After deleting it and rerunning `kspFullDebugKotlin`, Room
+2.6.1 writes the same identity hash, and the only difference is the key order inside
+`primaryKey` (`autoGenerate` first). Room 2.6.1 does not rewrite a file that is semantically equal,
+so a normal build leaves the committed file as it is, and the CI schema gate keeps working.
+
+### 11.5 Dependency verification on AGP 9
+
+`gradle/verification-metadata.xml` was regenerated from an empty component list, so no AGP 8.6
+entry is left. It has 434 components, plus the Linux and Windows AAPT2 9.4.1 jars added by hand
+(SHA-1 checked against Google Maven, as in section 10.5). New command:
+
+```bash
+./gradlew clean --dependency-verification=off
+./gradlew --write-verification-metadata sha256 assembleFullDebug assembleDemoDebug assembleFullRelease assembleDemoRelease bundleFullRelease testFullDebugUnitTest testDemoDebugUnitTest lintFullDebug
+```
+
+The first CI run on all three JDKs failed while resolving the root build script classpath: 5
+metadata files (`guava-parent` 33.3.1-jre and 33.4.0-jre, `junit-bom` 5.10.2 and 5.11.0-M2 as
+`.module`, `kotlinx-coroutines-bom` 1.8.0) were not in the file. A local run with an empty
+`GRADLE_USER_HOME` did not request them; it only added `kotlinx-coroutines-bom` 1.10.2. They were
+added from Maven Central after checking each SHA-1 against the published `.sha1`, and the next CI
+run passed on JDK 17, 21 and 25. So a locally generated file is not proof that CI resolves the same
+set: let CI run before merging a change to it.
+
+AGP 9 creates unit test tasks only for the debug build type, and `clean` in the same invocation as
+the build collides with the licence plugin's `OssLicensesCleanUp` task ("Input file does not
+exist"). Run `clean` on its own. When the metadata misses entries, for example after emptying
+the component list or adding a plugin, strict verification stops even `clean`, hence the flag;
+writing metadata records checksums instead of enforcing them, so the second command needs none.
+
+### 11.6 Verification
+
+| Check | Result |
+|---|---|
+| Gate (`clean`, then the `AGENTS.md` command plus `bundleFullRelease`), strict dependency verification, JDK Temurin 21.0.11 | green; 1642 test cases, 0 failures; lint 0 errors, 85 warnings |
+| Same, Temurin 17.0.19 | green; same counts |
+| Same, JetBrains Runtime 25.0.3 (Android Studio's) | green; same counts. With Mockito 5.3.1, 5 tests failed |
+| `assembleFullRelease`, `assembleDemoRelease` | green |
+| Lint compared with `master` | 126 → 86 issues. Gone: `GradleDependency` 81 → 19, `AndroidGradlePluginVersion` 6 → 0, `KaptUsageInsteadOfKsp` 2 → 0, `CutPasteId` 1 → 0. New: `NewerVersionAvailable` 18, `UseKtx` 13. The one new error was fixed in source |
+| Device, `Kriptofolio_API34` (Android 14) | `master`'s `fullDebug` installed, the real v1.2.3 database file from `app/src/test/resources/db/` and its preferences placed in the app's data, then this branch installed over it: 4 portfolio rows and 5000 coins kept, same identity hash in `room_master_table`. The main screen is byte-identical to `master`'s on the same data. Long-press selection flips the icon; the add-coin list loads its Glide icons; Settings opens and shows `1.2.3`; no crash in the log |
+
+Not checked: the demo flavor on a device (its sandbox API is gone, section 8); Android 16; a
+signed release on a device.
+
+### 11.7 Still deferred
+
+- Gradle 10 removes the space-assignment syntax (`namespace 'x'`, `dataBinding true`) that the
+  existing build files use; `--warning-mode all` lists each one. Rewriting them is a build file
+  restyle, left for a step that touches those lines anyway.
+- `android.enableJetifier` and `android.nonFinalResIds=false` are deprecated on AGP 9. Jetifier
+  stays until `dagger-android-support`, Stetho and navigation 1.0 are gone.
+- Java source and target 8 are deprecated by the JDK compiler. Raising them is a separate change.
+- Room KMP (T7) and Koin (T5, T6) remove the last kapt processor.
