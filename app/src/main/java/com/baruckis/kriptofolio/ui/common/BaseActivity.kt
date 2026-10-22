@@ -37,8 +37,8 @@ abstract class BaseActivity : AppCompatActivity() {
     override fun attachBaseContext(newBase: Context) {
         // All invocations of getResources will be delegated to the new resources instead of the
         // top level instance.
-        // Cannot use Dagger @Inject for LocalizationManager to pass parameters because injections
-        // happen after attachBaseContext.
+        // Cannot inject LocalizationManager to pass parameters because injections happen after
+        // attachBaseContext.
         super.attachBaseContext(LocalizationManager.setLocale(newBase))
         logConsoleVerbose("attachBaseContext " + this@BaseActivity.toString())
     }

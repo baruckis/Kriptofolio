@@ -17,12 +17,6 @@
 package com.baruckis.kriptofolio.dependencyinjection
 
 import android.content.Context
-import android.content.SharedPreferences
-import com.baruckis.kriptofolio.api.ApiService
-import com.baruckis.kriptofolio.db.CryptocurrencyDao
-import com.baruckis.kriptofolio.db.MyCryptocurrencyDao
-import com.baruckis.kriptofolio.repository.AppExecutors
-import com.baruckis.kriptofolio.utilities.localization.Localization
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
@@ -30,6 +24,7 @@ import org.koin.core.annotation.KoinExperimentalAPI
 import org.koin.dsl.module
 import org.koin.test.verify.verify
 import org.mockito.Mockito.mock
+import java.util.concurrent.Executor
 
 /**
  * Koin's module verification: every constructor parameter of every Koin definition must be
@@ -42,15 +37,13 @@ import org.mockito.Mockito.mock
 class KoinModulesTest {
 
     private val appModules = module {
-        includes(appKoinModules(mock(AppComponent::class.java)))
+        includes(appKoinModules(mock(Context::class.java)))
     }
 
     @Test
     fun koinModulesVerify() {
-        // Objects that Dagger creates and hands over whole through daggerBridgeModule; Koin never
-        // calls their constructors, so their parameters stay Dagger's business.
-        appModules.verify(extraTypes = listOf(
-                Context::class, AppExecutors::class, MyCryptocurrencyDao::class, CryptocurrencyDao::class,
-                ApiService::class, SharedPreferences::class, Localization::class, Map::class))
+        // AppExecutors also has a constructor that takes three executors, kept for tests that run
+        // everything on one thread. Koin calls only the constructor without parameters.
+        appModules.verify(extraTypes = listOf(Executor::class))
     }
 }

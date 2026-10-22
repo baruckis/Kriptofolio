@@ -17,7 +17,6 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.parcelize) // For the @Parcelize annotation
-    alias(libs.plugins.android.legacy.kapt) // Dagger still needs kapt until Koin replaces it
     alias(libs.plugins.ksp) // Room and Glide
 
     // Helps fetch & display the open source libraries used within your project.
@@ -188,16 +187,8 @@ dependencies {
 
     /* Other */
 
-    // Dagger for dependency injection. It is a fully static, compile-time dependency injection
-    // framework for both Java and Android.
-    implementation libs.dagger
-    implementation libs.dagger.android
-    implementation libs.dagger.android.support
-    kapt libs.dagger.compiler
-    kapt libs.dagger.android.processor
-
-    // Koin, which replaces Dagger screen by screen (docs/decisions/005). Until the last screen moves,
-    // Koin starts after Dagger and gets the objects Dagger still owns through DaggerBridge.
+    // Koin for dependency injection, declared with its Kotlin DSL and resolved at run time; the
+    // module verification test checks the graph instead of a compiler (docs/decisions/005).
     implementation libs.koin.core
 
     // HTTP client - Retrofit with OkHttp.

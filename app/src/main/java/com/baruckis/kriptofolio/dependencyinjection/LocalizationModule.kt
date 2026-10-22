@@ -17,57 +17,37 @@
 package com.baruckis.kriptofolio.dependencyinjection
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.content.res.Resources
 import com.baruckis.kriptofolio.utilities.localization.Localization
 import com.baruckis.kriptofolio.utilities.localization.LocalizationLanguage
-import dagger.Module
-import dagger.Provides
-import dagger.multibindings.IntoMap
+import com.baruckis.kriptofolio.utilities.localization.StringsLocalization
+import org.koin.dsl.module
 import java.util.*
-import javax.inject.Singleton
-
-// We can generate a map of resources for each language and for that we use Dagger map multibindings.
-@Module
-class LocalizationModule {
-
-    @Provides
-    @IntoMap
-    @LanguageKey(Language.English)
-    fun provideEnglishResources(context: Context): Resources =
-            getLocalizedResources(context, Language.English.locale)
-
-    @Provides
-    @IntoMap
-    @LanguageKey(Language.Hebrew)
-    fun provideHebrewResources(context: Context): Resources =
-            getLocalizedResources(context, Language.Hebrew.locale)
-
-    @Provides
-    @IntoMap
-    @LanguageKey(Language.Lithuanian)
-    fun provideLithuanianResources(context: Context): Resources =
-            getLocalizedResources(context, Language.Lithuanian.locale)
-
-    @Provides
-    @IntoMap
-    @LanguageKey(Language.Swahili)
-    fun provideSwahiliResources(context: Context): Resources =
-            getLocalizedResources(context, Language.Swahili.locale)
 
 
-    @Provides
-    @Singleton
-    fun provideLocalization(context: Context, sharedPreferences: SharedPreferences): Localization =
-            LocalizationLanguage(context, sharedPreferences)
+// We generate a map of resources for each language. It used to come from map multibindings; in Koin
+// the map is one definition, with the languages in the same order.
+val localizationModule = module {
 
-
-    private fun getLocalizedResources(context: Context, locale: Locale): Resources {
-        val configuration = Configuration(context.resources.configuration)
-        configuration.setLocale(locale)
-        val localizedContext = context.createConfigurationContext(configuration)
-        return localizedContext.resources
+    single<Map<Language, Resources>> {
+        val context: Context = get()
+        mapOf(
+                Language.English to getLocalizedResources(context, Language.English.locale),
+                Language.Hebrew to getLocalizedResources(context, Language.Hebrew.locale),
+                Language.Lithuanian to getLocalizedResources(context, Language.Lithuanian.locale),
+                Language.Swahili to getLocalizedResources(context, Language.Swahili.locale))
     }
 
+    single<Localization> { LocalizationLanguage(get(), get()) }
+
+    single { StringsLocalization(get(), get()) }
+}
+
+
+private fun getLocalizedResources(context: Context, locale: Locale): Resources {
+    val configuration = Configuration(context.resources.configuration)
+    configuration.setLocale(locale)
+    val localizedContext = context.createConfigurationContext(configuration)
+    return localizedContext.resources
 }

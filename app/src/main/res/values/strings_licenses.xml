@@ -33,8 +33,8 @@ Copyright 2016-2020 JetBrains s.r.o.
 Copyright 2020 The Android Open Source Project, Inc.
     </string>
 
-    <string name="license_dagger_apache_v2_copyright" translatable="false">"
-Copyright 2012 The Dagger Authors
+    <string name="license_koin_apache_v2_copyright" translatable="false">"
+Copyright 2017-Present the original author or authors.
     </string>
 
     <string name="license_retrofit_apache_v2_copyright" translatable="false">"
