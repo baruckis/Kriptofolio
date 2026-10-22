@@ -30,6 +30,9 @@ import com.bumptech.glide.module.AppGlideModule
  *
  * Although both of these tasks can be accomplished by hand by writing custom subclasses of
  * RequestOptions, doing so is challenging and produces a less fluent API.
+ *
+ * Since Kotlin 2 the processor runs through KSP, which generates the module registration that
+ * includes the OkHttp integration but not the GlideApp API, so the code calls Glide directly.
  */
 @GlideModule
 class AppGlideModule : AppGlideModule()
