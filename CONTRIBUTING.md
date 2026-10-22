@@ -68,10 +68,11 @@ the findings and an X/5 verdict, and keeps earlier findings across rounds until 
 - A passing review is not merge approval. The build and tests must still be green, and the merge
   stays the owner's decision.
 - What is sent to the model provider of the configured engine: the pull request's title and body,
-  the diff, the changed files at HEAD, `AGENTS.md` and the review rules from BASE, the findings of
-  the previous round, and up to 8 line ranges of at most 400 lines from any file at HEAD that the
-  model asks for. With the default engine that provider is the owner's Claude subscription, through
-  the `CLAUDE_CODE_OAUTH_TOKEN` repository secret (created with `claude setup-token`).
+  the diff, the changed files at HEAD, the full HEAD content of any other file named in an open
+  finding of an earlier round, `AGENTS.md` and the review rules from BASE, the findings of the
+  previous round, and up to 8 line ranges of at most 400 lines from any file at HEAD that the model
+  asks for. With the default engine that provider is the owner's Claude subscription, through the
+  `CLAUDE_CODE_OAUTH_TOKEN` repository secret (created with `claude setup-token`).
 - The comment must be exactly `/simple-review`, with nothing else in it. Without the secret, or
   with a wrong engine setting, the run fails in the Actions tab and posts no comment.
 - Optional repository variables: `SIMPLE_REVIEW_MODEL` (default `claude-opus-5-5`),
