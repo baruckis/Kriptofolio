@@ -6,7 +6,8 @@
 # repository variables named SIMPLE_REVIEW_*, listed in CONTRIBUTING.md ("Automated review").
 # Read every WHY comment once: each explains a safety decision.
 #
-# Source: AI-First Android Factory, simple-review 2.0.0. Only this header was adapted here.
+# Source: AI-First Android Factory, simple-review 2.0.0. Adapted here: this header, and
+# pull-requests: write, without which the first live run could not post its comment.
 
 name: Simple review
 
@@ -22,12 +23,13 @@ on:
   issue_comment:
     types: [created]
 
-# WHY THESE PERMISSIONS. Read the repository and the pull request, write one issue comment.
-# No content write, no approval and no merge.
+# WHY THESE PERMISSIONS. Read the repository and the pull request, write one comment on it.
+# GitHub refuses a comment on a pull request (HTTP 403) unless the token has pull-requests: write;
+# issues: write alone covers only plain issues. No content write, so no push and no merge.
 permissions:
   contents: read
   issues: write
-  pull-requests: read
+  pull-requests: write
 
 env:
   # WHY A PINNED CLI. A new Claude Code release can change flags or output. Update this version on
