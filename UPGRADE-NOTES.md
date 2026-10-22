@@ -948,6 +948,7 @@ Roadmap step T3. Started from `master` at `9cf0aa2`. Behaviour is unchanged: `ve
 | `chore: Upgraded to Gradle 9.8.2, AGP 9.4.1 and Kotlin 2.4.21 with K2. refactor: Moved Room 2.6.1 and Glide 4.16.0 from kapt to KSP; Dagger stays on kapt.` | the toolchain, in one commit because none of the pieces builds alone |
 | `chore: Ran the CI gate on JDK 17, 21 and 25.` | `.github/workflows/check.yml` matrix |
 | `docs: Documented the Kotlin 2 step and the JDK range.` | this section, `AGENTS.md`, `CONTRIBUTING.md` |
+| `fix: Added the dependency metadata files that a cold CI build resolves to the verification metadata.` | the first CI run failed before configuration, see 11.5 |
 
 The toolchain commit cannot be split into green steps. Gradle 9 cannot configure the AGP 8.6 and
 Kotlin 1.9.25 build ("`Configuration.fileCollection(Spec)`" no longer exists). AGP 9 builds Kotlin itself and needs a
@@ -1013,6 +1014,14 @@ entry is left. It has 434 components, plus the Linux and Windows AAPT2 9.4.1 jar
 ./gradlew clean
 ./gradlew --write-verification-metadata sha256 assembleFullDebug assembleDemoDebug assembleFullRelease assembleDemoRelease bundleFullRelease testFullDebugUnitTest testDemoDebugUnitTest lintFullDebug
 ```
+
+The first CI run on all three JDKs failed while resolving the root build script classpath: 5
+metadata files (`guava-parent` 33.3.1-jre and 33.4.0-jre, `junit-bom` 5.10.2 and 5.11.0-M2 as
+`.module`, `kotlinx-coroutines-bom` 1.8.0) were not in the file. A local run with an empty
+`GRADLE_USER_HOME` did not request them; it only added `kotlinx-coroutines-bom` 1.10.2. They were
+added from Maven Central after checking each SHA-1 against the published `.sha1`, and the next CI
+run passed on JDK 17, 21 and 25. So a locally generated file is not proof that CI resolves the same
+set: let CI run before merging a change to it.
 
 AGP 9 creates unit test tasks only for the debug build type, and `clean` in the same invocation as
 the build collides with the licence plugin's `OssLicensesCleanUp` task ("Input file does not
