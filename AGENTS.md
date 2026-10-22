@@ -108,9 +108,9 @@ that is not a roadmap step; a roadmap step follows these rules instead.
   applies to every step: the real v1 files in `app/src/test/resources/db/` must open through a
   tested migration, with no destructive fallback.
 - **Merged is not released.** A merge never publishes anything. Version bumps, tags, signing and
-  store uploads are done by the human in the release PR and procedure (`UPGRADE-NOTES.md` section 7,
-  later `RELEASING.md`). `master` must stay releasable: both flavors build, tests and migration
-  tests pass.
+  store uploads are done by the human in the release PR and procedure (`RELEASING.md`). `master`
+  must stay releasable: both flavors build, tests and migration tests pass, and the release gates
+  of `RELEASING.md` are green.
 - Flavors: `full` and `demo` through 1.3.0; stage 7 replaces them with `play` (Google Play Billing)
   and `foss` (no Google libraries, everything unlocked), as `docs/decisions/003` records. From then
   on, the rules that name `full` and `demo` ("Project facts" above and hard rules 3 and 4 of
