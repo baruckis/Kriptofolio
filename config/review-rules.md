@@ -2,8 +2,8 @@
 
 Read [AGENTS.md](../AGENTS.md) first. This file adds review-specific criteria for any
 reviewer: a person, a separate agent session, or an automation chosen by the contributor.
-There is no required hosted service or AI provider. The old automated workflow is removed;
-its absence is not a passing review. Record the reviewed revision, findings and limitations
+There is no required hosted service or AI provider. The former hosted review workflow was
+removed; its absence is not a passing review. Record the reviewed revision, findings and limitations
 in the pull request, alongside actual build/test evidence.
 
 Rules are written as *the rule, and why it exists*. The reason matters: a reviewer that

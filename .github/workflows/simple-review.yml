@@ -6,7 +6,8 @@
 # repository variables named SIMPLE_REVIEW_*, listed in CONTRIBUTING.md ("Automated review").
 # Read every WHY comment once: each explains a safety decision.
 #
-# Source: AI-First Android Factory, simple-review 2.0.0. Only this header was adapted here.
+# Source: AI-First Android Factory, simple-review 2.0.0. Adapted here: this header, and read-only
+# permissions for the authorize job.
 
 name: Simple review
 
@@ -47,6 +48,9 @@ jobs:
        contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association))
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    # WHY READ-ONLY HERE. This job only reads the actor's permission; it writes nothing.
+    permissions:
+      contents: read
     steps:
       # WHY THE DEFAULT BRANCH. Only the trusted script is needed. The pull request's code is never
       # checked out or executed; the script reads it through the API as data.
