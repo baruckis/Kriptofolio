@@ -1249,14 +1249,22 @@ def main() -> int:
         require(len(sys.argv) == 1, "usage: simple_pr_review.py [--version | authorize]")
         return review()
     except urllib.error.HTTPError as error:
-        # WHY THE DETAIL. A bare "HTTP Error 403" does not say which call failed or why. GitHub's
-        # error message and the endpoint carry no secret; the token travels only in a header.
-        message, codes = github_error(error)
-        detail = f": {message}" if message else ""
-        if codes:
-            detail += f" ({', '.join(codes)})"
-        print(f"simple review failed: HTTP {error.code} {error.reason}{detail} at {error.url}",
-              file=sys.stderr)
+        # WHY THE DETAIL, AND ONLY FOR GITHUB. A bare "HTTP Error 403" does not say which call
+        # failed or why. For api.github.com the error message and the endpoint carry no secret; the
+        # token travels only in a header. A model provider's URL or error text may carry anything,
+        # and Actions logs of a public repository are public, so those errors keep the short form.
+        parsed = urllib.parse.urlparse(error.url or "")
+        if parsed.scheme == "https" and parsed.netloc == "api.github.com":
+            message, codes = github_error(error)
+            detail = f": {message}" if message else ""
+            if codes:
+                detail += f" ({', '.join(codes)})"
+            line = f"HTTP {error.code} {error.reason}{detail} at {parsed.path}"
+            line = " ".join(line.split())[:300]
+            print(f"simple review failed: {line}", file=sys.stderr)
+        else:
+            print(f"simple review failed: HTTP {error.code} from the model provider",
+                  file=sys.stderr)
         return 1
     except (
         ValueError,
