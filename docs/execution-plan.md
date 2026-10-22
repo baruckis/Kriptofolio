@@ -11,7 +11,8 @@ and releases are in [`roadmap.md`](roadmap.md). Status is on the
 ## How one task runs
 
 1. Take the next task in the order below and move it to "In progress" on the board. One task is in
-   progress at a time.
+   progress at a time, except a task marked "alongside" in the Depends on column, which may run
+   in parallel with the task it names because the two touch different files.
 2. Open a new agent session with the model and effort in the table, and give it the brief below. If
    the issue and this plan are not enough, fix them, not the conversation.
 3. The agent works in its own worktree, opens one pull request and stops before merge.
