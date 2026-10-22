@@ -6,9 +6,10 @@
 #
 # Two rules are worth stating up front:
 #
-#   * ONE JOB, ONE GRADLE COMMAND. The command below is the whole gate and it is the same
-#     command a developer runs locally (AGENTS.md, "Build commands"). If it passes here it
-#     passes there, and there is nothing to keep in sync.
+#   * ONE GRADLE COMMAND PER JOB. The build job's command is the whole build gate and it is
+#     the same command a developer runs locally (AGENTS.md, "Build commands"). If it passes
+#     here it passes there, and there is nothing to keep in sync. The release-gates job runs
+#     the checks of RELEASING.md, "Release gates", which a developer runs the same way.
 #
 #   * TRIGGER ONLY ON master AND ON PULL REQUESTS. The Part-1…Part-5 and legacy branches are
 #     exhibits (AGENTS.md, "Branches"): their code predates this toolchain and is not meant to
@@ -145,5 +146,5 @@ jobs:
         with:
           cache-read-only: ${{ github.event_name == 'pull_request' }}
 
-      - name: Assemble both flavors in release mode, unsigned
-        run: ./gradlew assembleFullRelease assembleDemoRelease --stacktrace
+      - name: Assemble both flavors in release mode and bundle full, unsigned
+        run: ./gradlew assembleFullRelease assembleDemoRelease bundleFullRelease --stacktrace

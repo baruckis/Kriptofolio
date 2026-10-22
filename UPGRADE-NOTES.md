@@ -5,7 +5,8 @@ Working notes for the smallest change sets that keep Kriptofolio releasable on G
 * **Stage 0** (sections 1-8) — compileSdk / targetSdk **35**, released as **1.2.2**, versionCode 5.
 * **Stage 0.5** (section 9) — compileSdk / targetSdk **36**, prepared as **1.2.3**, versionCode 6.
 
-Sections 6 and 7 - how to build, and how to cut a release - apply to both and are kept current.
+Section 6 - how to build - applies to both and is kept current. Section 7 - how to cut a release -
+moved to [`RELEASING.md`](RELEASING.md) in Stage 2 and stays here as the 1.2.2 record.
 
 ---
 
@@ -479,7 +480,8 @@ and 2.0.0.
    newer Android Gradle plugin — they move together, not separately. A newer Kotlin is part of
    it too: kapt is what actually failed on the newer JVM here, so moving to KSP removes that
    particular constraint entirely.
-4. **Promote section 7 to a real `RELEASING.md`.** The release procedure currently lives inside
+4. **Promote section 7 to a real `RELEASING.md`.** *(Done in Stage 2: `RELEASING.md` and the
+   release gates, #39.)* The release procedure currently lives inside
    a document about one specific upgrade, which is the wrong home for it — it will keep being
    true long after this stage is history. Moving it out, and having CI check the parts a machine
    can check (is the API key empty on `master`? does a changelog exist for the current
