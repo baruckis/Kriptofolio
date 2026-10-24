@@ -16,44 +16,28 @@
 
 package com.baruckis.kriptofolio
 
-import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.content.res.Configuration
-import com.baruckis.kriptofolio.dependencyinjection.AppInjector
 import com.baruckis.kriptofolio.dependencyinjection.appKoinModules
 import com.baruckis.kriptofolio.utilities.localization.LocalizationManager
 import com.baruckis.kriptofolio.utilities.logConsoleVerbose
-import dagger.android.AndroidInjector
-import dagger.android.DispatchingAndroidInjector
-import dagger.android.HasActivityInjector
 import org.koin.core.context.startKoin
-import javax.inject.Inject
 
 
-class App : Application(), HasActivityInjector {
-
-    @Inject // It implements Dagger machinery of finding appropriate injector factory for a type.
-    lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Activity>
-
+class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
 
-        // Initialize in order to automatically inject activities and fragments if they implement Injectable interface.
-        val appComponent = AppInjector.init(this)
-        // Koin starts after Dagger and takes from it the objects Dagger still owns (docs/decisions/005).
+        // Start Koin, which provides the app-wide objects and the ViewModels (docs/decisions/005).
         startKoin {
-            modules(appKoinModules(appComponent))
+            modules(appKoinModules(this@App))
         }
 
         DebugTools.init(this)
 
     }
-
-
-    // This is required by HasActivityInjector interface to setup Dagger for Activity.
-    override fun activityInjector(): AndroidInjector<Activity> = dispatchingAndroidInjector
 
 
     // Android resets the locale for the top level resources back to the device default on every

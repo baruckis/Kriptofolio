@@ -35,7 +35,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.*
-import javax.inject.Inject
 
 
 /**
@@ -43,10 +42,10 @@ import javax.inject.Inject
  * The ViewModel class allows data to survive configuration changes such as screen rotations.
  */
 
-// ViewModel will require a CryptocurrencyRepository so we add @Inject code into ViewModel constructor.
-class MainViewModel @Inject constructor(private val context: Context,
-                                        private val cryptocurrencyRepository: CryptocurrencyRepository,
-                                        private val stringsLocalization: StringsLocalization) : BaseViewModel() {
+// ViewModel will require a CryptocurrencyRepository, which Koin passes to the constructor.
+class MainViewModel(private val context: Context,
+                    private val cryptocurrencyRepository: CryptocurrencyRepository,
+                    private val stringsLocalization: StringsLocalization) : BaseViewModel() {
 
     private var currentCryptoCurrencyCode: String
     private var currentCryptoCurrencySign: String

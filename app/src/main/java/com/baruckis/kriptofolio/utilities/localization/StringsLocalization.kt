@@ -22,12 +22,9 @@ import com.baruckis.kriptofolio.dependencyinjection.Language
 import com.baruckis.kriptofolio.utilities.logConsoleError
 import com.baruckis.kriptofolio.utilities.logConsoleWarn
 import java.util.*
-import javax.inject.Inject
-import javax.inject.Singleton
 
 // Helper class that will provide string resources from the generated map.
-@Singleton
-class StringsLocalization @Inject constructor(
+class StringsLocalization(
         private val localization: Localization,
         private val resMap: Map<Language, @JvmSuppressWildcards Resources>
 ) {

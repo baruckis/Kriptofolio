@@ -26,6 +26,8 @@
 
         <import type="com.baruckis.kriptofolio.vo.Resource" />
 
+        <import type="android.view.View" />
+
         <variable
             name="listResource"
             type="Resource&lt;Object&gt;" />
@@ -141,7 +143,7 @@
         </androidx.cardview.widget.CardView>
 
 
-        <!-- emptyList is a boxed field but needs to be un-boxed to execute app:visibleGone.
+        <!-- emptyList is a boxed field but needs to be un-boxed to set the visibility.
              This may cause NPE so Data Binding will safely unbox it. That is why we wrap emptyList
              with safeUnbox() to prevent the warning. -->
         <LinearLayout
@@ -159,7 +161,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/cardview_labels"
-            app:visibleGone="@{safeUnbox(emptyList)}">
+            android:visibility="@{safeUnbox(emptyList) ? View.VISIBLE : View.GONE}">
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/text_primary_empty"
@@ -195,7 +197,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/cardview_labels"
-            app:visibleGone="@{listResource.data != null}">
+            android:visibility="@{listResource.data != null ? View.VISIBLE : View.GONE}">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerview_fragment_main_list"

@@ -16,19 +16,26 @@
 
 package com.baruckis.kriptofolio.dependencyinjection
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.baruckis.kriptofolio.ui.addsearchlist.AddSearchViewModel
+import com.baruckis.kriptofolio.ui.mainlist.MainViewModel
+import com.baruckis.kriptofolio.ui.settings.SettingsViewModel
 import com.baruckis.kriptofolio.ui.settings.thirdpartysoft.LibrariesLicensesViewModel
 import org.koin.core.context.GlobalContext
 import org.koin.dsl.module
 
 // Every Koin module the app starts. App.onCreate and KoinModulesTest both use this list, so a module
 // added here is verified as well.
-fun appKoinModules(appComponent: AppComponent) = listOf(daggerBridgeModule(appComponent), viewModelsKoinModule)
+fun appKoinModules(context: Context) = listOf(appModule(context), localizationModule, viewModelsKoinModule)
 
-// ViewModels that Koin creates. A screen moves here from ViewModelsModule in one step.
+// ViewModels are factories: ViewModelProvider keeps the one instance per screen.
 val viewModelsKoinModule = module {
     factory { LibrariesLicensesViewModel(get()) }
+    factory { SettingsViewModel(get(), get(), get()) }
+    factory { AddSearchViewModel(get()) }
+    factory { MainViewModel(get(), get(), get()) }
 }
 
 /**

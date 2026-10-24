@@ -743,10 +743,10 @@
     <string name="library_link_android_navigation" translatable="false">"https://developer.android.com/topic/libraries/architecture/navigation.html"</string>
     <string name="library_license_name_android_navigation" translatable="false">@string/library_license_name_apache_v2</string>
 
-    <string name="library_title_dagger" translatable="false">"Dagger"</string>
-    <string name="library_developer_dagger" translatable="false">"Square / Google"</string>
-    <string name="library_link_dagger" translatable="false">"https://google.github.io/dagger"</string>
-    <string name="library_license_name_dagger" translatable="false">@string/library_license_name_apache_v2</string>
+    <string name="library_title_koin" translatable="false">"Koin"</string>
+    <string name="library_developer_koin" translatable="false">"Kotzilla"</string>
+    <string name="library_link_koin" translatable="false">"https://insert-koin.io"</string>
+    <string name="library_license_name_koin" translatable="false">@string/library_license_name_apache_v2</string>
 
     <string name="library_title_retrofit" translatable="false">"Retrofit"</string>
     <string name="library_developer_retrofit" translatable="false">"Square"</string>

@@ -24,6 +24,8 @@
 
         <import type="com.baruckis.kriptofolio.vo.Resource" />
 
+        <import type="android.view.View" />
+
         <variable
             name="listResource"
             type="Resource&lt;Object&gt;" />
@@ -53,7 +55,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:visibleGone="@{listResource.data != null}"
+            android:visibility="@{listResource.data != null ? View.VISIBLE : View.GONE}"
             tools:text="@string/sample_text_info_last_updated_on_date_time" />
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -62,7 +64,7 @@
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/info_activity_add_search"
-            app:visibleGone="@{listResource.data != null}">
+            android:visibility="@{listResource.data != null ? View.VISIBLE : View.GONE}">
 
             <ListView
                 android:id="@+id/listview_activity_add_search"

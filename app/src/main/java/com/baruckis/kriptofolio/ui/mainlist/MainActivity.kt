@@ -22,31 +22,20 @@ import android.text.SpannableString
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.preference.PreferenceManager
 import com.baruckis.kriptofolio.R
+import com.baruckis.kriptofolio.dependencyinjection.KoinViewModelFactory
 import com.baruckis.kriptofolio.ui.common.BaseActivity
 import com.baruckis.kriptofolio.ui.settings.SettingsActivity
-import dagger.android.AndroidInjector
-import dagger.android.DispatchingAndroidInjector
-import dagger.android.support.HasSupportFragmentInjector
-import javax.inject.Inject
 
 /**
  * UI for main my crypto coins screen.
  */
 
-// To support injecting fragments which belongs to this activity we need to implement HasSupportFragmentInjector.
-// We would not need to implement it, if our activity did not contain any fragments or the fragments did not need to inject anything.
-class MainActivity : BaseActivity(), HasSupportFragmentInjector {
+class MainActivity : BaseActivity() {
 
-    @Inject
-    lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Fragment>
-
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
     private lateinit var viewModel: MainViewModel
 
 
@@ -54,7 +43,7 @@ class MainActivity : BaseActivity(), HasSupportFragmentInjector {
         super.onCreate(savedInstanceState)
 
         // Obtain ViewModel from ViewModelProvider, using this activity as LifecycleOwner.
-        viewModel = ViewModelProvider(this, viewModelFactory)[MainViewModel::class.java]
+        viewModel = ViewModelProvider(this, KoinViewModelFactory)[MainViewModel::class.java]
 
         // Load the default values only for the first time when the user still hasn't used the preferences-screen.
         PreferenceManager.setDefaultValues(this, R.xml.pref_main, false)
@@ -87,8 +76,6 @@ class MainActivity : BaseActivity(), HasSupportFragmentInjector {
             else -> super.onOptionsItemSelected(item)
         }
     }
-
-    override fun supportFragmentInjector(): AndroidInjector<Fragment> = dispatchingAndroidInjector
 
 
     // Update the all these separate text fields when the data changes by observing data on the ViewModel, exposed as a LiveData.

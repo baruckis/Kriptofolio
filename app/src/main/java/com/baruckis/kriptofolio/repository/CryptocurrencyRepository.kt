@@ -32,8 +32,6 @@ import com.baruckis.kriptofolio.utilities.*
 import com.baruckis.kriptofolio.utilities.localization.StringsLocalization
 import com.baruckis.kriptofolio.vo.Resource
 import java.util.*
-import javax.inject.Inject
-import javax.inject.Singleton
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
@@ -41,8 +39,7 @@ import kotlin.collections.HashMap
 /**
  * The class for managing multiple data sources.
  */
-@Singleton
-class CryptocurrencyRepository @Inject constructor(
+class CryptocurrencyRepository(
         private val context: Context,
         private val appExecutors: AppExecutors,
         private val myCryptocurrencyDao: MyCryptocurrencyDao,

@@ -19,11 +19,8 @@ package com.baruckis.kriptofolio.repository
 import com.baruckis.kriptofolio.R
 import com.baruckis.kriptofolio.db.LibraryLicenseInfo
 import com.baruckis.kriptofolio.utilities.localization.StringsLocalization
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-class LicensesRepository @Inject constructor(
+class LicensesRepository(
         private val stringsLocalization: StringsLocalization
 ) {
 
@@ -173,11 +170,11 @@ class LicensesRepository @Inject constructor(
 
 
         data.add(LibraryLicenseInfo(
-                stringsLocalization.getString(R.string.library_title_dagger),
-                stringsLocalization.getString(R.string.library_developer_dagger),
-                stringsLocalization.getString(R.string.library_link_dagger),
-                stringsLocalization.getString(R.string.library_license_name_dagger),
-                stringsLocalization.getString(R.string.license_dagger_apache_v2_copyright) +
+                stringsLocalization.getString(R.string.library_title_koin),
+                stringsLocalization.getString(R.string.library_developer_koin),
+                stringsLocalization.getString(R.string.library_link_koin),
+                stringsLocalization.getString(R.string.library_license_name_koin),
+                stringsLocalization.getString(R.string.license_koin_apache_v2_copyright) +
                         stringsLocalization.getString(R.string.license_apache_v2_boilerplate_notice) +
                         stringsLocalization.getString(R.string.license_apache_v2)))
 
