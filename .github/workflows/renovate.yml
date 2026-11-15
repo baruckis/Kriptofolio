@@ -2,7 +2,7 @@ name: Renovate dependency updates
 
 on:
   schedule:
-    - cron: '17 5 * * *'
+    - cron: '57 0 * * *'
   workflow_dispatch:
 
 permissions:

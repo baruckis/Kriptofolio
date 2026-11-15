@@ -1,5 +1,8 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "timezone": "Europe/Vilnius",
+  "schedule": ["* 1-5 * * *"],
+  "updateNotScheduled": false,
   "dependencyDashboard": true,
   "automerge": false,
   "platformAutomerge": false,
